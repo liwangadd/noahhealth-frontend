@@ -1,13 +1,12 @@
-import {clearSession} from './App/public.js'
+import {clearSession} from './App/PublicMethod.js'
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App/App.js';
 import Login from './Login/Login.js';
 import Register from './Register/Register.js';
 import UserHome from './UserHome/UserHome.js';
-import $ from 'jquery';
 import {message} from 'antd'
-import {Router, Route, IndexRoute, browserHistory} from 'react-router';
+import {Router, Route, browserHistory} from 'react-router';
 
 
 //认证
@@ -29,14 +28,20 @@ var requestAuth = function(nextState, replace){
     }
 };
 
+class AppRouter extends React.Component {
+  render() {
+    return (<Router history={browserHistory}>
+              <Route path="/" component={App}>
+                <Route onEnter={requestAuth}>
+                  <Route path="/user_home" component={UserHome}/>
+                </Route>
+                <Route path="/login" component={Login}/>
+                <Route path="/register" component={Register}/>
+              </Route>
+          </Router>);
+  }
+}
 
-ReactDOM.render(<Router history={browserHistory}>
-                    <Route path="/" component={App}>
-                        <Route onEnter={requestAuth}>
-                            <Route path="/user_home" component={UserHome}/>
-                        </Route>
-                        <Route path="/login" component={Login}/>
-                        <Route path="/register" component={Register}/>
-                    </Route>
-                </Router>
-                , document.getElementById('root'));
+
+
+ReactDOM.render(<AppRouter />, document.getElementById('root'));

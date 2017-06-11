@@ -1,5 +1,5 @@
-import './../App/public.css';
-import {SERVER, REGEX} from './../App/public.js';
+import {SERVER} from './../App/PublicConstant.js';
+import {REGEX} from './../App/PublicRegex.js';
 import React from 'react';
 import {Form, Icon, Input, Button, message} from 'antd';
 import { browserHistory } from 'react-router';
@@ -34,7 +34,7 @@ class VerticalRegisterForm_ extends React.Component {
             dataType : 'json',
             success : (result) => {
                 console.log(result);
-                if(result.code == "SUCCESS") {
+                if(result.code === "SUCCESS") {
                     message.success(result.reason, 2);
                     browserHistory.push('/login');
                     return;
@@ -73,7 +73,7 @@ class VerticalRegisterForm_ extends React.Component {
                               sendSmsBtnStr: '重新发送 ' + (--this.state.countDown),
                           });
 
-                          if(this.state.countDown == 0) {
+                          if(this.state.countDown === 0) {
                               this.setState({
                                   isSendSmsBtnDisabled: false,
                                   sendSmsBtnStr: '重新发送',
@@ -100,7 +100,7 @@ class VerticalRegisterForm_ extends React.Component {
 
       let password = this.props.form.getFieldValue('password');
       let confirmPassword = this.props.form.getFieldValue('confirmPassword');
-      if(confirmPassword == '' || password !== confirmPassword) {
+      if(confirmPassword === '' || password !== confirmPassword) {
           callback("两次密码输入不一致");
       }
       callback();

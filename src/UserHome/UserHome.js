@@ -1,30 +1,11 @@
-import './../App/public.css';
 import './UserHome.css';
-import {SERVER, clearSession} from './../App/public.js';
+import {SERVER} from './../App/PublicConstant.js';
+import {clearSession} from './../App/PublicMethod.js'
 import React from 'react';
-import { Layout, Menu, Breadcrumb, Icon, message, Avatar, Dropdown, notification, Button} from 'antd';
+import { Layout, Menu, Icon, message, Avatar, Dropdown, notification, Button} from 'antd';
 import $ from 'jquery';
 import {browserHistory, Link} from 'react-router'
 const { Header, Content, Footer, Sider } = Layout;
-
-
-class UserOperationDropdownMenu extends React.Component {
-  render() {
-    return (
-      <Menu>
-        <Menu.Item>
-          <Link target="_blank" rel="noopener noreferrer" href="http://www.alipay.com/">编辑账户信息</Link>
-        </Menu.Item>
-        <Menu.Item>
-          <Link target="_blank" rel="noopener noreferrer" href="http://www.taobao.com/">修改密码</Link>
-        </Menu.Item>
-        <Menu.Item>
-          <Link target="_blank" rel="noopener noreferrer" href="http://www.tmall.com/">退出系统</Link>
-        </Menu.Item>
-      </Menu>
-    );
-  }
-}
 
 var close = () => {
   console.log('Notification was closed. Either the close button was clicked or duration time elapsed.');
@@ -55,7 +36,7 @@ class UserHome extends React.Component {
         success : (result) => {
 
             console.log(result);
-            if(result.code != "SUCCESS") {
+            if(result.code !== "SUCCESS") {
                 message.error(result.reason, 2);
                 browserHistory.push('/login');
                 return;

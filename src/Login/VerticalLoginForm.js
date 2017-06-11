@@ -1,7 +1,7 @@
 import './Login.css';
-import {SERVER} from './../App/public.js';
+import {SERVER} from './../App/PublicConstant.js';
 import React from 'react';
-import { Layout,Form, Icon, Input, Button, message} from 'antd';
+import {Form, Icon, Input, Button, message} from 'antd';
 import $ from 'jquery';
 import { browserHistory } from 'react-router';
 const FormItem = Form.Item;
@@ -14,7 +14,7 @@ class VerticalLoginForm_ extends React.Component {
 
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        console.log('Received values of form: ', values);
+        console.log('表单值: ', values);
 
         //在这里用正则验证输入合法性!!
         $.ajax({
@@ -25,7 +25,7 @@ class VerticalLoginForm_ extends React.Component {
             dataType : 'json',
             success : (result) => {
                 console.log(result);
-                if(result.code == "SUCCESS") {
+                if(result.code === "SUCCESS") {
 
                     //保存状态信息
                     sessionStorage.setItem("token", result.content.token);
@@ -57,8 +57,6 @@ class VerticalLoginForm_ extends React.Component {
 
   handleRegister = (e) => {
       e.preventDefault();
-      let token = sessionStorage.getItem("token");
-
       browserHistory.push('/register');
   }
 
