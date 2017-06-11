@@ -1,5 +1,6 @@
+import './../App/public.css';
 import './UserHome.css';
-import {SERVER} from './../App/public.js';
+import {SERVER, clearSession} from './../App/public.js';
 import React from 'react';
 import { Layout, Menu, Breadcrumb, Icon, message, Avatar, Dropdown, notification, Button} from 'antd';
 import $ from 'jquery';
@@ -79,6 +80,7 @@ class UserHome extends React.Component {
     const key = `open${Date.now()}`;
     const btnClick = function () {
 
+      clearSession();
       notification.close(key);
       browserHistory.push("/login");
     };

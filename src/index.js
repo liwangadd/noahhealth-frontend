@@ -1,3 +1,4 @@
+import {clearSession} from './App/public.js'
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App/App.js';
@@ -27,18 +28,6 @@ var requestAuth = function(nextState, replace){
         }
     }
 };
-
-//清空登录状态信息
-var clearSession = function() {
-
-    sessionStorage.removeItem("token");
-    sessionStorage.removeItem("phone");
-    sessionStorage.removeItem("role");
-    sessionStorage.removeItem("expiredTime");
-}
-
-
-
 
 
 ReactDOM.render(<Router history={browserHistory}>
