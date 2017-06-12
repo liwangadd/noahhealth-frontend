@@ -38,11 +38,11 @@ class Register extends React.Component {
 
     return (
         <Spin spinning={this.state.loading} delay={LOADING_DELAY_TIME} tip='注册中'>
-          <Layout>
+          <Layout style={{background:'#fff'}}>
               <Header className='header'>
                 医海慈航
               </Header>
-              <Layout className='content'>
+              <Layout className='content' style={{background:'#fff'}}>
                   <Content style={{ margin: '50px 0px 50px 50px',padding:'50px 0px 50px 0px', width:'70%', minHeight:600}}>
                     <Carousel autoplay>
                         <div style={{height:400}}><img src='carousel_1.jpeg' style={{width:'100%', height:'100%'}} alt=""/></div>
