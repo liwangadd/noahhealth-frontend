@@ -1,0 +1,41 @@
+.introduce-text {
+  margin-top: 30px;
+  margin-left:15px;
+  margin-right:15px;
+  margin-bottom: 30px;
+}
+
+.introduce-content{
+  color:#5a5a5a;
+  font-weight: normal;
+  margin-top:10px;
+}
+
+
+.card {
+  width:23%;
+  height:240px;
+  float:left;
+  margin-left: 15px;
+  margin-bottom: 30px;
+}
+
+.custom-image {
+  text-align: center;
+  padding-left:20px;
+  padding-right:20px;
+  padding-top:35px;
+  padding-bottom:20px;
+}
+
+.custom-image img {
+
+  width: 50%;
+}
+.custom-card {
+  padding: 10px 16px;
+  text-align: center;
+}
+.custom-card p {
+  color: #999;
+}

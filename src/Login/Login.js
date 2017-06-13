@@ -18,15 +18,6 @@ class Login extends React.Component {
     });
   }
 
-  handleSubmit = (e) => {
-    e.preventDefault();
-    this.props.form.validateFields((err, values) => {
-      if (!err) {
-        console.log('Received values of form: ', values);
-      }
-    });
-  }
-
   handleLoading = (onoff) => {
     // e.preventDefault();
     this.setState({
@@ -46,10 +37,10 @@ class Login extends React.Component {
               <Layout className='content' style={{background:'#fff'}}>
                   <Content style={{ margin: '50px 0px 50px 50px',padding:'50px 0px 50px 0px', width:'70%', minHeight:600}}>
                     <Carousel autoplay>
-                      <div style={{height:400}}><img src='carousel_1.jpeg' style={{width:'100%', height:'100%'}} alt=""/></div>
-                      <div style={{height:400}}><img src='carousel_2.jpeg' style={{width:'100%', height:'100%'}} alt=""/></div>
-                      <div style={{height:400}}><img src='carousel_3.jpeg' style={{width:'100%', height:'100%'}} alt=""/></div>
-                      <div style={{height:400}}><img src='carousel_4.jpeg' style={{width:'100%', height:'100%'}} alt=""/></div>
+                      <div style={{height:400}}><img src='/LoginRegister/carousel_1.jpeg' style={{width:'100%', height:'100%'}} alt=""/></div>
+                      <div style={{height:400}}><img src='/LoginRegister/carousel_2.jpeg' style={{width:'100%', height:'100%'}} alt=""/></div>
+                      <div style={{height:400}}><img src='/LoginRegister/carousel_3.jpeg' style={{width:'100%', height:'100%'}} alt=""/></div>
+                      <div style={{height:400}}><img src='/LoginRegister/carousel_4.jpeg' style={{width:'100%', height:'100%'}} alt=""/></div>
                      </Carousel>
                   </Content>
                   <Sider style={{margin: '50px 0px',padding:'50px 50px', minWidth:'30%', minHeight:540, backgroundColor:'#fff'}}>

@@ -1,5 +1,5 @@
 import './Login.css';
-import {SERVER} from './../App/PublicConstant.js';
+import {SERVER, URL, SESSION, RESULT} from './../App/PublicConstant.js';
 import React from 'react';
 import {Form, Icon, Input, Button, message} from 'antd';
 import $ from 'jquery';
@@ -9,6 +9,7 @@ const FormItem = Form.Item;
 
 //登录表单
 class VerticalLoginForm_ extends React.Component {
+
   handleLogin = (e) => {
     e.preventDefault();
 
@@ -25,21 +26,25 @@ class VerticalLoginForm_ extends React.Component {
             dataType : 'json',
             success : (result) => {
                 console.log(result);
-                if(result.code === "SUCCESS") {
+                if(result.code === RESULT.SUCCESS) {
 
                     //保存状态信息
-                    sessionStorage.setItem("token", result.content.token);
-                    sessionStorage.setItem("phone", result.content.phone);
-                    sessionStorage.setItem("role", result.content.role);
-                    sessionStorage.setItem("expiredTime", result.content.duration);
+                    sessionStorage.setItem(SESSION.TOKEN, result.content.token);
+                    sessionStorage.setItem(SESSION.USER_ID, result.content.id);
+                    sessionStorage.setItem(SESSION.PHONE, result.content.phone);
+                    sessionStorage.setItem(SESSION.ROLE, result.content.role);
+                    sessionStorage.setItem(SESSION.NAME, result.content.name);
+                    sessionStorage.setItem(SESSION.EXPIRED_TIME, result.content.duration);
 
+                    //跳转
+                    browserHistory.push(URL.HOME);
                     message.success(result.reason, 2);
-                    browserHistory.push('/user_home');
                     return;
                 } else {
 
                     this.props.handleLoading(false); //关闭进度条
                     message.error(result.reason, 2);
+                    return;
                 }
             },
             error : () => {
@@ -57,7 +62,7 @@ class VerticalLoginForm_ extends React.Component {
 
   handleRegister = (e) => {
       e.preventDefault();
-      browserHistory.push('/register');
+      browserHistory.push(URL.REGISTER);
   }
 
   render() {

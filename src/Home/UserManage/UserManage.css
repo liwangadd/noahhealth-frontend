@@ -1,0 +1,16 @@
+.user-table{
+  margin-top: 25px;
+}
+
+.user-table-delete{
+  color:#f46e65;
+}
+
+.user-table-delete:hover{
+  color:#f79992;
+}
+
+.user-table-pager {
+  float:right;
+  margin-top: 20px;
+}

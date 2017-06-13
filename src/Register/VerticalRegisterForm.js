@@ -1,4 +1,4 @@
-import {SERVER} from './../App/PublicConstant.js';
+import {SERVER, URL, RESULT} from './../App/PublicConstant.js';
 import {REGEX} from './../App/PublicRegex.js';
 import React from 'react';
 import {Form, Icon, Input, Button, message} from 'antd';
@@ -22,21 +22,22 @@ class VerticalRegisterForm_ extends React.Component {
 
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        console.log('Received values of form: ', values);
+        console.log('表单值: ', values);
 
         $.ajax({
             url : SERVER + '/api/auth/register',
             type : 'POST',
             contentType: 'application/json',
-            data : JSON.stringify({phone : values.phone,
+            data : JSON.stringify({name : values.name,
+                                   phone : values.phone,
                                    password : values.password,
                                    inputCode : values.inputCode}),
             dataType : 'json',
             success : (result) => {
                 console.log(result);
-                if(result.code === "SUCCESS") {
+                if(result.code === RESULT.SUCCESS) {
                     message.success(result.reason, 2);
-                    browserHistory.push('/login');
+                    browserHistory.push(URL.LOGIN);
                     return;
                 } else {
 
@@ -58,14 +59,14 @@ class VerticalRegisterForm_ extends React.Component {
 
       this.props.form.validateFields((err, values) => {
 
-          if (!err) {
-              $.ajax({
-                  url : SERVER + '/api/auth/send_sms',
-                  type : 'POST',
-                  contentType: 'application/json',
-                  data : JSON.stringify({phone : values.phone}),
-                  dataType : 'json',
-                  success : () => {
+        if (!err) {
+          $.ajax({
+              url : SERVER + '/api/auth/send_sms',
+              type : 'POST',
+              contentType: 'application/json',
+              data : JSON.stringify({phone : values.phone}),
+              dataType : 'json',
+              success : () => {
                       console.log("后端已生成验证码");
                       var timer = setInterval(() => {
                           this.setState({
@@ -92,7 +93,7 @@ class VerticalRegisterForm_ extends React.Component {
 
   handleToLoginPage = (e) => {
       e.preventDefault();
-      browserHistory.push('/login');
+      browserHistory.push(URL.LOGIN);
   }
 
 
@@ -111,9 +112,15 @@ class VerticalRegisterForm_ extends React.Component {
     return (
       <Form onSubmit={this.handleRegister} className="login-form">
         <FormItem>
-            {getFieldDecorator('phone', { rules: [{ required: true, message: '请输入用户名' },{pattern: REGEX.PHONE, message:'请输入合法手机号'}],
+            {getFieldDecorator('name', { rules: [{ required: true, message: '请输入姓名' }],
             })(
-            <Input prefix={<Icon type="user" style={{ fontSize: 13 }} />} placeholder="手机" />
+            <Input prefix={<Icon type="user" style={{ fontSize: 13 }} />} placeholder="姓名" />
+            )}
+        </FormItem>
+        <FormItem>
+            {getFieldDecorator('phone', { rules: [{ required: true, message: '请输入手机号' },{pattern: REGEX.PHONE, message:'请输入合法手机号'}],
+            })(
+            <Input prefix={<Icon type="phone" style={{ fontSize: 13 }} />} placeholder="手机" />
             )}
         </FormItem>
         <FormItem>
