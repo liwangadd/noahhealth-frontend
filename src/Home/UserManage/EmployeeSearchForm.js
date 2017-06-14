@@ -1,6 +1,7 @@
 import React from 'react';
-import { ROLE} from './../../App/PublicConstant.js';
+import {SERVER, ROLE, SESSION, RESULT, URL, PAGE_SIZE} from './../../App/PublicConstant.js';
 import { Form, Row, Col, Input, Button, Icon, Select} from 'antd';
+import $ from 'jquery';
 const FormItem = Form.Item;
 const Option = Select.Option;
 
@@ -12,7 +13,8 @@ class EmployeeSearchForm_ extends React.Component {
   handleSearch = (e) => {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
-      console.log('Received values of form: ', values);
+      console.log('表单值', values);
+      this.props.handleSearchEmployeeList(1, values);
     });
   }
 
@@ -23,29 +25,6 @@ class EmployeeSearchForm_ extends React.Component {
   toggle = () => {
     const { expand } = this.state;
     this.setState({ expand: !expand });
-  }
-
-  // To generate mock Form.Item
-  getFields() {
-    const count = this.state.expand ? 10 : 6;
-    const { getFieldDecorator } = this.props.form;
-    const formItemLayout = {
-      labelCol: { span: 5 },
-      wrapperCol: { span: 19 },
-    };
-    const children = [];
-    for (let i = 0; i < 10; i++) {
-      children.push(
-        <Col span={8} key={i} style={{ display: i < count ? 'block' : 'none' }}>
-          <FormItem {...formItemLayout} label={`Field ${i}`}>
-            {getFieldDecorator(`field-${i}`)(
-              <Input placeholder="placeholder" />
-            )}
-          </FormItem>
-        </Col>
-      );
-    }
-    return children;
   }
 
   render() {
@@ -72,7 +51,7 @@ class EmployeeSearchForm_ extends React.Component {
           </Col>
           <Col span={8}>
             <FormItem>
-              {getFieldDecorator('roleCode', {
+              {getFieldDecorator('role', {
                 initialValue: '全部'
               })(
                 <Select>
@@ -99,5 +78,6 @@ class EmployeeSearchForm_ extends React.Component {
   }
 }
 
-const EmployeeSearchForm = Form.create()(EmployeeSearchForm_);
+//当值改变时回调上层修改表单域的值
+const EmployeeSearchForm = Form.create({onValuesChange: (props, values) => props.changeEmployeeQuery(values)})(EmployeeSearchForm_);
 export default EmployeeSearchForm;

@@ -136,9 +136,9 @@ class Home extends React.Component {
     //悬停头像时的下拉菜单
     const userOperationDropdownMenu = (
         <Menu>
-          <Menu.Item>
+          {/* <Menu.Item>
             <Tag color={this.state.roleTagColor} style={{marginLeft:7}}>{role}</Tag>
-          </Menu.Item>
+          </Menu.Item> */}
           <Menu.Item style={{textAlign:'center'}}>
             <Link target="_blank" rel="noopener noreferrer" href="#">编辑信息</Link>
           </Menu.Item>
@@ -155,7 +155,7 @@ class Home extends React.Component {
           collapsible
           collapsed={this.state.collapsed}>
           <div className="logo"/>
-          <Menu theme="dark" mode="inline" onClick={this.handleMenuItemClick}>
+          <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']} onClick={this.handleMenuItemClick}>
             <Menu.Item key="1">
               <Icon type="home" className="menu-item-font"/>
               <span className="nav-text menu-item-font">首页</span>
@@ -173,13 +173,13 @@ class Home extends React.Component {
         <Layout>
           <Header style={{ background: '#fff', padding: 0 ,textAlign: 'center'}}>
             <Icon className="trigger" type={this.state.collapsed ? 'menu-unfold' : 'menu-fold'} onClick={this.toggle} style={{float:'left'}}/>
-            <span style={{fontSize: '20px'}}>医海慈航</span>
-            <Dropdown overlay={userOperationDropdownMenu}>
+            <Dropdown overlay={userOperationDropdownMenu} trigger={['click']}>
               <Avatar shape="square" size="large" src="/logo.png" className="avatar" />
             </Dropdown>
             <a href='#' className='name'>{sessionStorage.getItem(SESSION.NAME)}</a>
+            <Tag color={this.state.roleTagColor} style={{marginLeft:7, float:'right', marginTop:21}}>{role}</Tag>
           </Header>
-          <Content style={{ margin: '24px 16px', padding: 24, background: '#fff', minHeight: 540 }}>
+          <Content style={{ margin: '24px 16px', padding: 24, background: '#fff', minHeight: 840 }}>
             {this.props.children}
           </Content>
           <Footer style={{ textAlign: 'center' }}>

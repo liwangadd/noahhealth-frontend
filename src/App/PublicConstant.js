@@ -2,7 +2,7 @@ const SERVER = 'http://10.109.247.127:8080' //lab
 //const SERVER = 'http://10.108.113.8:8080' //renzilong
 //const SERVER = 'http://localhost:8080' //yaochenkun
 const LOADING_DELAY_TIME = 500 //加载延迟时间，若在0.5s内加载完毕则不显示
-const PAGE_SIZE = 5 //每页条数
+const PAGE_SIZE = 10 //每页条数
 
 //角色
 const ROLE = {
@@ -11,7 +11,7 @@ const ROLE = {
   EMPLOYEE_ARCHIVER : '档案部员工',
   EMPLOYEE_ARCHIVE_MANAGER : '档案部主管',
   EMPLOYEE_ADVISER : '顾问部员工',
-  ADVISE_MANAGER : '顾问部主管',
+  EMPLOYEE_ADVISE_MANAGER : '顾问部主管',
   MEMBER_1 : '一级会员',
   MEMBER_2 : '二级会员',
   MEMBER_3 : '三级会员'

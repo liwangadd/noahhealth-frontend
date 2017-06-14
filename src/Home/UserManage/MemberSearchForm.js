@@ -27,7 +27,6 @@ class MemberSearchForm_ extends React.Component {
     this.setState({ expand: !expand });
   }
 
-  onValuesChange
   render() {
 
     const { getFieldDecorator } = this.props.form;

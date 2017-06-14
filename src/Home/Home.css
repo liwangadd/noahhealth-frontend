@@ -31,9 +31,11 @@
 
 .logo {
   height: 32px;
-  background: #333;
+  background: url('/logo_text.png') no-repeat;
+  background-size: 110px;
   border-radius: 6px;
   margin: 16px;
+  margin-left:20px;
 }
 
 .ant-layout-sider-collapsed .anticon {

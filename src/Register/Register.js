@@ -34,7 +34,7 @@ class Register extends React.Component {
                 医海慈航
               </Header>
               <Layout className='content' style={{background:'#fff'}}>
-                  <Content style={{ margin: '50px 0px 50px 50px',padding:'50px 0px 50px 0px', width:'70%', minHeight:600}}>
+                  <Content style={{ margin: '50px 0px 50px 50px',padding:'50px 0px 50px 0px', width:'70%', minHeight:720}}>
                     <Carousel autoplay>
                         <div style={{height:400}}><img src='/LoginRegister/carousel_1.jpeg' style={{width:'100%', height:'100%'}} alt=""/></div>
                         <div style={{height:400}}><img src='/LoginRegister/carousel_2.jpeg' style={{width:'100%', height:'100%'}} alt=""/></div>
