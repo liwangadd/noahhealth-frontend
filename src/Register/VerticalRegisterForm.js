@@ -1,4 +1,4 @@
-import {SERVER, URL, RESULT} from './../App/PublicConstant.js';
+import {SERVER, ROUTE, RESULT} from './../App/PublicConstant.js';
 import {REGEX} from './../App/PublicRegex.js';
 import React from 'react';
 import {Form, Icon, Input, Button, message} from 'antd';
@@ -37,7 +37,7 @@ class VerticalRegisterForm_ extends React.Component {
                 console.log(result);
                 if(result.code === RESULT.SUCCESS) {
                     message.success(result.reason, 2);
-                    browserHistory.push(URL.LOGIN);
+                    browserHistory.push(ROUTE.LOGIN.URL);
                     return;
                 } else {
 
@@ -93,7 +93,7 @@ class VerticalRegisterForm_ extends React.Component {
 
   handleToLoginPage = (e) => {
       e.preventDefault();
-      browserHistory.push(URL.LOGIN);
+      browserHistory.push(ROUTE.LOGIN.URL);
   }
 
 

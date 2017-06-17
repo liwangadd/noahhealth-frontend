@@ -1,152 +1,490 @@
 import './UserManage.css'
-import {SERVER, SESSION, RESULT, URL, PAGE_SIZE} from './../../App/PublicConstant.js'
+import {SERVER, SESSION, RESULT, PAGE_SIZE, ROLE} from './../../App/PublicConstant.js'
 import React from 'react';
-import {Tabs, Table, Pagination, message} from 'antd';
-import MemberSearchForm from './MemberSearchForm';
-import EmployeeSearchForm from './EmployeeSearchForm';
+import {Tabs, Table, message, Popconfirm} from 'antd';
+import MemberEditModal from './MemberEditModal.js';
+import EmployeeEditModal from './EmployeeEditModal.js';
+import MemberSearchForm from './MemberSearchForm.js';
+import EmployeeSearchForm from './EmployeeSearchForm.js';
 import $ from 'jquery';
 const TabPane = Tabs.TabPane;
-
 
 
 class UserManage extends React.Component {
 
   state = {
 
-    //会员表格相关
-    memberQuery: {name: "", phone: "", role: "全部"},
+    //会员相关
     memberData: [],
-    memberPager: {pageSize: PAGE_SIZE},
+    memberPager: {pageSize: PAGE_SIZE, total: 0},
+    adviserAndManagerData: [],
+
+    memberTableLoading: false,
+    memberEditModalVisible: false,
+    confirmMemberLoading: false,
 
     //职员表格相关
-    employeeQuery: {name: "", phone: "", role: "全部"},
     employeeData: [],
-    employeePager: {pageSize: PAGE_SIZE}
+    employeePager: {pageSize: PAGE_SIZE, total: 0},
+    archiveManagerData: [],
+    adviseManagerData:  [],
+
+    employeeTableLoading: false,
+    employeeEditModalVisible: false,
+    confirmEmployeeLoading: false
+
   };
 
-  //改变选项卡
-  changeTab = (key) => {
+  //保存子组件引用
+  saveMemberSearchFormRef = (form) => {
 
-    switch(key) {
-      case '1':this.handleSearchMemberList(1, this.state.memberQuery);break;
-      case '2':this.handleSearchEmployeeList(1, this.state.employeeQuery);break;
-    }
+    this.memberSearchForm = form;
+    if(form == null) return; //防止卸载时为空
+
+    this.handleSearchMemberList(1);
+  }
+  saveEmployeeSearchFormRef = (form) => {
+    this.employeeSearchForm = form;
+    if(form == null) return; //防止卸载时为空
+
+    this.handleSearchEmployeeList(1);
+  }
+  saveMemberEditFormRef = (form) => {
+    this.memberEditForm = form;
+    console.log(this.memberEditForm);
+  }
+  saveEmployeeEditFormRef = (form) => {
+    this.employeeEditForm = form;
   }
 
 
-  //member表格//////////////////////
-  changeMemberQuery = (values) => {
-    this.setState({
-      memberQuery: values
-    })
+  //翻页
+  changeMemberPager = (pager) => {
+    this.handleSearchMemberList(pager.current);
   }
 
-  changeMemberTable = (pager) => {
+  handleSearchMemberList = (pageNow) => {
 
-      let pageNow = pager.current;
-      this.setState({
-        memberPager: pager
-      })
+    this.memberSearchForm.validateFields((err, values) => {
+      if(!err) {
 
-      //拉取第pageNow页数据
-      this.handleSearchMemeberList(pageNow, this.state.memberQuery);
+        this.setState({ memberTableLoading: true});
+
+        console.log('拉取第'+ pageNow + "页会员信息", values);
+        let token = sessionStorage.getItem(SESSION.TOKEN);
+        $.ajax({
+            url : SERVER + '/api/user/member/list',
+            type : 'POST',
+            contentType: 'application/json',
+            data : JSON.stringify({name : values.name,
+                                   phone : values.phone,
+                                   role : values.role === "全部" ? "" : values.role,
+                                   pageNow: pageNow,
+                                   pageSize: PAGE_SIZE}),
+            dataType : 'json',
+            beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, token),
+            success : (result) => {
+
+                console.log(result);
+                if(result.code !== RESULT.SUCCESS) {
+                    message.error(result.reason, 2);
+                    return;
+                }
+
+                //更新页码
+                const memberPager = this.state.memberPager;
+                memberPager.total = result.content.rowTotal;
+                memberPager.current = pageNow;
+
+                //更新获取到的数据到状态中
+                this.setState({
+                  memberData: result.content.data,
+                  memberPager
+                });
+
+                this.setState({ memberTableLoading: false});
+            }
+        });
+      }
+    });
   }
 
-  handleSearchMemberList = (pageNow, values) => {
+  //翻页
+  changeEmployeePager = (pager) => {
+    this.handleSearchEmployeeList(pager.current);
+  }
+
+  //查询所有职员
+  handleSearchEmployeeList = (pageNow) => {
+
+    this.employeeSearchForm.validateFields((err, values) => {
+      if(!err) {
+
+        this.setState({ employeeTableLoading: true});
+
+        console.log('拉取第'+ pageNow + "页职员信息", values);
+        let token = sessionStorage.getItem(SESSION.TOKEN);
+        $.ajax({
+            url : SERVER + '/api/user/employee/list',
+            type : 'POST',
+            contentType: 'application/json',
+            data : JSON.stringify({name : values.name,
+                                   phone : values.phone,
+                                   role : values.role === "全部" ? "" : values.role,
+                                   pageNow: pageNow,
+                                   pageSize: PAGE_SIZE}),
+            dataType : 'json',
+            beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, token),
+            success : (result) => {
+
+                console.log(result);
+                if(result.code !== RESULT.SUCCESS) {
+                    message.error(result.reason, 2);
+                    return;
+                }
+
+                //更新页码
+                const employeePager = this.state.employeePager;
+                employeePager.total = result.content.rowTotal;
+                employeePager.current = pageNow;
+
+                //更新获取到的数据到状态中
+                this.setState({
+                  employeeData: result.content.data,
+                  employeePager
+                });
+
+                this.setState({ employeeTableLoading: false});
+            }
+        });
+      }
+    });
+  }
+
+  //删除会员
+  handleDeleteMember(record) {
+
+    console.log('删除会员', record);
 
     let token = sessionStorage.getItem(SESSION.TOKEN);
     $.ajax({
-        url : SERVER + '/api/user/member/list',
-        type : 'POST',
-        contentType: 'application/json',
-        data : JSON.stringify({name : values.name,
-                               phone : values.phone,
-                               role : values.role == "全部" ? "" : values.role,
-                               pageNow: pageNow,
-                               pageSize: PAGE_SIZE}),
+        url : SERVER + '/api/user/' + record.id,
+        type : 'DELETE',
         dataType : 'json',
         beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, token),
         success : (result) => {
 
             console.log(result);
-            if(result.code !== RESULT.SUCCESS) {
+            if(result.code === RESULT.SUCCESS) {
+
+                //删除后重查一遍
+                this.handleSearchMemberList(1);
+
+                message.success(result.reason, 2);
+                return;
+            } else {
                 message.error(result.reason, 2);
                 return;
             }
-
-            //更新页码
-            let pager = {
-                total: result.content.rowTotal
-            }
-
-            //更新获取到的数据到状态中
-            this.setState({
-              memberData: result.content.data,
-              memberPager: pager
-            });
         }
     });
   }
 
+  //删除职员
+  handleDeleteEmployee(record) {
 
-  //employee表格//////////////////////
-  changeEmployeeQuery = (values) => {
-    this.setState({
-      employeeQuery: values
-    });
-  }
-
-  changeEmployeeTable = (pager) => {
-
-      let pageNow = pager.current;
-      this.setState({
-        employeePager: pager
-      });
-
-      //拉取第pageNow页数据
-      this.handleSearchEmployeeList(pageNow, this.state.employeeQuery);
-  }
-
-  handleSearchEmployeeList = (pageNow, values) => {
+    console.log('删除职员', record);
 
     let token = sessionStorage.getItem(SESSION.TOKEN);
     $.ajax({
-        url : SERVER + '/api/user/employee/list',
-        type : 'POST',
-        contentType: 'application/json',
-        data : JSON.stringify({name : values.name,
-                               phone : values.phone,
-                               role : values.role == "全部" ? "" : values.role,
-                               pageNow: pageNow,
-                               pageSize: PAGE_SIZE}),
+        url : SERVER + '/api/user/' + record.id,
+        type : 'DELETE',
+        beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, token),
+        success : (result) => {
+
+            console.log(result);
+            if(result.code === RESULT.SUCCESS) {
+
+                //删除后重查一遍
+                this.handleSearchEmployeeList(1);
+                message.success(result.reason, 2);
+                return;
+            } else {
+                message.error(result.reason, 2);
+                return;
+            }
+        }
+    });
+  }
+
+  //查询memberId会员信息显示到对话框内
+  requestMember = (memberId) => {
+
+    console.log('查询会员', memberId);
+
+    let token = sessionStorage.getItem(SESSION.TOKEN);
+    $.ajax({
+        url : SERVER + '/api/user/' + memberId,
+        type : 'GET',
         dataType : 'json',
         beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, token),
         success : (result) => {
 
             console.log(result);
-            if(result.code !== RESULT.SUCCESS) {
+            if(result.code === RESULT.SUCCESS) {
+
+                let member = result.content;
+                this.memberEditForm.setFieldsValue({name: member.name,
+                                                    role: member.role,
+                                                    adviserAndManager: [member.adviseMgrId, Number(member.adviserId)]});
+
+                return;
+            } else {
                 message.error(result.reason, 2);
                 return;
             }
+        }
+    });
+  }
 
-            //更新页码
-            let pager = {
-                total: result.content.rowTotal
-            };
+  //查询memberId会员信息显示到对话框内
+  requestEmployee = (employeeId) => {
 
-            //更新获取到的数据到状态中
-            this.setState({
-              employeeData: result.content.data,
-              employeePager: pager
-            });
+    console.log('查询职员', employeeId);
+
+    let token = sessionStorage.getItem(SESSION.TOKEN);
+    $.ajax({
+        url : SERVER + '/api/user/' + employeeId,
+        type : 'GET',
+        dataType : 'json',
+        beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, token),
+        success : (result) => {
+
+            console.log(result);
+            if(result.code === RESULT.SUCCESS) {
+
+                let employee = result.content;
+                this.employeeEditForm.setFieldsValue({name: employee.name,
+                                                      role: employee.role});
+
+                return;
+            } else {
+                message.error(result.reason, 2);
+                return;
+            }
         }
     });
   }
 
 
-  componentDidMount() {
-    //默认拉取第一页所有会员信息
-    this.handleSearchMemberList(1, this.state.memberQuery);
+  //获取所有顾问、顾问主管填充选择器
+  requestAdviserAndAdviseManager = () => {
+
+    console.log('查询所有顾问员工与顾问主管');
+
+    let token = sessionStorage.getItem(SESSION.TOKEN);
+    $.ajax({
+        url : SERVER + '/api/user/advise/list',
+        type : 'GET',
+        async: false,
+        dataType : 'json',
+        beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, token),
+        success : (result) => {
+
+            console.log(result);
+            if(result.code === RESULT.SUCCESS) {
+
+                //将后端返回的map整理成顾问主管级联列表识别的数据结构
+                let adviseAndManagerData = [];
+                for(let adviseManager in result.content) {
+
+                  //加入顾问主管
+                  let managerData = {value: adviseManager, label: adviseManager + "(主管)", children:[]};
+
+                  //获取旗下所有顾问员工
+                  let advisers = result.content[adviseManager];
+                  for(let i = 0; i < advisers.length; i++) {
+                    managerData.children.push({value: advisers[i].id, label: advisers[i].name + "(员工)"});
+                  }
+
+                  adviseAndManagerData.push(managerData);
+                }
+
+                //通知对话框更新表单的级联选择器
+                this.setState({ adviserAndManagerData: adviseAndManagerData });
+
+                return;
+            } else {
+                message.error(result.reason, 2);
+                return;
+            }
+        }
+    });
+  }
+
+  //获取所有档案部、顾问部主管填充选择器
+  requestArchiveManagerAndAdviseManager = () => {
+
+    console.log('查询所有档案主管与顾问主管');
+    let token = sessionStorage.getItem(SESSION.TOKEN);
+
+    //档案部主管
+    $.ajax({
+        url : SERVER + '/api/user/manager/list',
+        type : 'POST',
+        async: false,
+        contentType: 'application/json',
+        dataType : 'json',
+        data : JSON.stringify({manager : ROLE.EMPLOYEE_ARCHIVE_MANAGER}),
+        beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, token),
+        success : (result) => {
+
+            console.log(result);
+            if(result.code === RESULT.SUCCESS) {
+
+                this.setState({ archiveManagerData: result.content });
+                return;
+            } else {
+                message.error(result.reason, 2);
+                return;
+            }
+        }
+    });
+
+    //顾问部主管
+    $.ajax({
+        url : SERVER + '/api/user/manager/list',
+        type : 'POST',
+        async: false,
+        contentType: 'application/json',
+        dataType : 'json',
+        data : JSON.stringify({manager : ROLE.EMPLOYEE_ADVISE_MANAGER}),
+        beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, token),
+        success : (result) => {
+
+            console.log(result);
+            if(result.code === RESULT.SUCCESS) {
+
+                this.setState({ adviseManagerData: result.content });
+                return;
+            } else {
+                message.error(result.reason, 2);
+                return;
+            }
+        }
+    });
+  }
+
+  //打开编辑对话框
+  showMemberEditModal = (record) => {
+    this.setState({
+      memberEditModalVisible: true
+    });
+
+    this.memberId = record.id //保存当前正在编辑的会员用户名方便提交用
+
+    this.requestAdviserAndAdviseManager();
+    this.requestMember(this.memberId);
+  }
+  showEmployeeEditModal = (record) => {
+    this.setState({
+      employeeEditModalVisible: true
+    });
+
+    this.employeeId = record.id //保存当前正在编辑的职员用户名方便提交用
+
+
+    // this.requestArchiveManagerAndAdviseManager();
+    this.requestEmployee(this.employeeId);
+  }
+
+  closeMemberEditModal = () => {
+    this.setState({
+      memberEditModalVisible: false
+    });
+  }
+  closeEmployeeEditModal = () => {
+    this.setState({
+      employeeEditModalVisible: false
+    });
+  }
+
+  //确认更新信息
+  confirmMemberEditModal = () => {
+
+    //发送ajax后
+    this.memberEditForm.validateFields((err, values) => {
+      if(!err) {
+        console.log('修改职员', values);
+
+        //显示加载圈
+        this.setState({
+          confirmMemberLoading: true
+        });
+
+        let token = sessionStorage.getItem(SESSION.TOKEN);
+        $.ajax({
+            url : SERVER + '/api/user/' + this.memberId,
+            type : 'PUT',
+            contentType: 'application/json',
+            data : JSON.stringify({role: values.role, adviserId: values.adviserAndManager[1]}),
+            dataType : 'json',
+            beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, token),
+            success : (result) => {
+              console.log(result);
+              if(result.code === RESULT.SUCCESS) {
+
+                //重查刷新一遍
+                this.handleSearchMemberList(1);
+                message.success(result.reason, 2);
+              } else {
+                message.error(result.reason, 2);
+              }
+
+              //关闭加载圈、对话框
+              this.setState({
+                memberEditModalVisible: false,
+                confirmMemberLoading: false,
+              });
+            }
+        });
+      }
+    });
+  }
+
+  confirmEmployeeEditModal() {
+    //发送ajax后
+
+    this.setState({
+      confirmEmployeeLoading: true
+    });
+
+    //模拟ajax
+    setTimeout(() => {
+     this.setState({ //成功后的回调
+       employeeEditModalVisible: false,
+       confirmEmployeeLoading: false,
+     });
+   }, 2000);
+
+    this.employeeEditForm.validateFields((err, values) => {
+      if(!err) {
+        console.log(this.employeeId);
+        console.log('修改职员', values);
+        // let token = sessionStorage.getItem(SESSION.TOKEN);
+        // $.ajax({
+        //     url : SERVER + '/api/user/employee/list',
+        //     type : 'POST',
+        //     contentType: 'application/json',
+        //     data : JSON.stringify({}),
+        //     dataType : 'json',
+        //     beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, token),
+        //     success : (result) => {
+        //
+        //     }
+        // });
+      }
+    });
   }
 
   render(){
@@ -156,7 +494,7 @@ class UserManage extends React.Component {
       title: '姓名',
       dataIndex: 'name',
       key: 'name',
-      render: text => <a href="#">{text}</a>,
+      render: text => <a>{text}</a>,
     }, {
       title: '手机',
       dataIndex: 'phone',
@@ -167,20 +505,22 @@ class UserManage extends React.Component {
       key: 'role',
     }, {
       title: '所属顾问',
-      dataIndex: 'adviser',
-      key: 'adviser',
+      dataIndex: 'adviserId',
+      key: 'adviserId',
     }, {
       title: '所属顾问主管',
-      dataIndex: 'adviser_manager',
-      key: 'adviserManager',
+      dataIndex: 'adviseMgrId',
+      key: 'adviseMgrId',
     }, {
       title: '操作',
       key: 'action',
       render: (record) => (
         <span>
-          <a href="#">修改</a>
+          <a onClick={() => this.showMemberEditModal(record)}>修改</a>
           <span className="ant-divider" />
-          <a href="#" className='user-table-delete'>删除</a>
+          <Popconfirm title="请问您确定要删除该会员吗?" onConfirm={() => this.handleDeleteMember(record)} okText="是" cancelText="取消">
+            <a className='user-table-delete'>删除</a>
+          </Popconfirm>
         </span>
       )
     }];
@@ -190,7 +530,7 @@ class UserManage extends React.Component {
       title: '姓名',
       dataIndex: 'name',
       key: 'name',
-      render: text => <a href="#">{text}</a>,
+      render: text => <a>{text}</a>,
     }, {
       title: '手机',
       dataIndex: 'phone',
@@ -204,26 +544,30 @@ class UserManage extends React.Component {
       key: 'action',
       render: (record) => (
         <span>
-          <a href="#">修改</a>
+          <a onClick={() => this.showEmployeeEditModal(record)}>修改</a>
           <span className="ant-divider" />
-          <a href="#" className='user-table-delete'>删除</a>
+          <Popconfirm title="请问您确定要删除该职员吗?" onConfirm={() => this.handleDeleteEmployee(record)} okText="是" cancelText="取消">
+            <a className='user-table-delete'>删除</a>
+          </Popconfirm>
         </span>
       )
     }];
 
-
-
     return (
-        <Tabs defaultActiveKey="1" onChange={this.changeTab}>
-          <TabPane tab="会员管理" key="1">
-            <MemberSearchForm handleSearchMemeberList={this.handleSearchMemberList} changeMemberQuery={this.changeMemberQuery}/>
-            <Table className='user-table' columns={memberColumns} dataSource={this.state.memberData} pagination={this.state.memberPager} onChange={this.changeMemberTable} rowKey='id'/>
-          </TabPane>
-          <TabPane tab="职员管理" key="2">
-            <EmployeeSearchForm handleSearchEmployeeList={this.handleSearchEmployeeList} changeEmployeeQuery={this.changeEmployeeQuery}/>
-            <Table className='user-table' columns={employeeColumns} dataSource={this.state.employeeData} pagination={this.state.employeePager} onChange={this.changeEmployeeTable} rowKey='id'/>
-          </TabPane>
-        </Tabs>
+        <div>
+          <Tabs defaultActiveKey="1" onChange={this.changeTab}>
+            <TabPane tab="会员管理" key="1">
+              <MemberSearchForm ref={this.saveMemberSearchFormRef} handleSearchMemberList={this.handleSearchMemberList}/>
+              <Table className='user-table' columns={memberColumns} dataSource={this.state.memberData} pagination={this.state.memberPager} onChange={this.changeMemberPager} rowKey='id' loading={this.state.memberTableLoading}/>
+            </TabPane>
+            <TabPane tab="职员管理" key="2">
+              <EmployeeSearchForm ref={this.saveEmployeeSearchFormRef} handleSearchEmployeeList={this.handleSearchEmployeeList}/>
+              <Table className='user-table' columns={employeeColumns} dataSource={this.state.employeeData} pagination={this.state.employeePager} onChange={this.changeEmployeePager} rowKey='id' loading={this.state.employeeTableLoading}/>
+            </TabPane>
+          </Tabs>
+          <MemberEditModal ref={this.saveMemberEditFormRef} visible={this.state.memberEditModalVisible} confirmLoading={this.state.confirmMemberLoading} onCancel={this.closeMemberEditModal} onConfirm={this.confirmMemberEditModal} adviserAndManagerData={this.state.adviserAndManagerData} />
+          <EmployeeEditModal ref={this.saveEmployeeEditFormRef} visible={this.state.employeeEditModalVisible} confirmLoading={this.state.confirmEmployeeLoading} onCancel={this.closeEmployeeEditModal} onConfirm={this.confirmEmployeeEditModal} adviseManagerData={this.state.adviseManagerData} archiveManagerData={this.state.archiveManagerData} />
+        </div>
     );
   }
 }

@@ -1,5 +1,5 @@
 import './Login.css';
-import {SERVER, URL, SESSION, RESULT} from './../App/PublicConstant.js';
+import {SERVER, ROUTE, SESSION, RESULT} from './../App/PublicConstant.js';
 import React from 'react';
 import {Form, Icon, Input, Button, message} from 'antd';
 import $ from 'jquery';
@@ -37,7 +37,7 @@ class VerticalLoginForm_ extends React.Component {
                     sessionStorage.setItem(SESSION.EXPIRED_TIME, result.content.duration);
 
                     //跳转
-                    browserHistory.push(URL.HOME);
+                    browserHistory.push(ROUTE.HOME.URL);
                     message.success(result.reason, 2);
                     return;
                 } else {
@@ -62,7 +62,7 @@ class VerticalLoginForm_ extends React.Component {
 
   handleRegister = (e) => {
       e.preventDefault();
-      browserHistory.push(URL.REGISTER);
+      browserHistory.push(ROUTE.REGISTER.URL);
   }
 
   render() {

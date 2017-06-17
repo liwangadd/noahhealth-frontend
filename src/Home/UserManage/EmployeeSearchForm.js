@@ -1,7 +1,6 @@
 import React from 'react';
-import {SERVER, ROLE, SESSION, RESULT, URL, PAGE_SIZE} from './../../App/PublicConstant.js';
-import { Form, Row, Col, Input, Button, Icon, Select} from 'antd';
-import $ from 'jquery';
+import {ROLE} from './../../App/PublicConstant.js';
+import { Form, Row, Col, Input, Button, Select} from 'antd';
 const FormItem = Form.Item;
 const Option = Select.Option;
 
@@ -12,10 +11,7 @@ class EmployeeSearchForm_ extends React.Component {
 
   handleSearch = (e) => {
     e.preventDefault();
-    this.props.form.validateFields((err, values) => {
-      console.log('表单值', values);
-      this.props.handleSearchEmployeeList(1, values);
-    });
+    this.props.handleSearchEmployeeList(1);
   }
 
   handleReset = () => {
@@ -79,5 +75,5 @@ class EmployeeSearchForm_ extends React.Component {
 }
 
 //当值改变时回调上层修改表单域的值
-const EmployeeSearchForm = Form.create({onValuesChange: (props, values) => props.changeEmployeeQuery(values)})(EmployeeSearchForm_);
+const EmployeeSearchForm = Form.create()(EmployeeSearchForm_);
 export default EmployeeSearchForm;
