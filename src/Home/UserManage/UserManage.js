@@ -28,6 +28,7 @@ class UserManage extends React.Component {
     employeePager: {pageSize: PAGE_SIZE, total: 0},
     archiveManagerData: [],
     adviseManagerData:  [],
+    initialEmployeeRole: '',
 
     employeeTableLoading: false,
     employeeEditModalVisible: false,
@@ -51,7 +52,6 @@ class UserManage extends React.Component {
   }
   saveMemberEditFormRef = (form) => {
     this.memberEditForm = form;
-    console.log(this.memberEditForm);
   }
   saveEmployeeEditFormRef = (form) => {
     this.employeeEditForm = form;
@@ -266,6 +266,9 @@ class UserManage extends React.Component {
                 let employee = result.content;
                 this.employeeEditForm.setFieldsValue({name: employee.name,
                                                       role: employee.role});
+
+                //根据职员的初始role去初始渲染 顾问主管、档案主管选择器
+                //this.setState({ initialEmployeeRole: employee.role });
 
                 return;
             } else {
@@ -566,7 +569,7 @@ class UserManage extends React.Component {
             </TabPane>
           </Tabs>
           <MemberEditModal ref={this.saveMemberEditFormRef} visible={this.state.memberEditModalVisible} confirmLoading={this.state.confirmMemberLoading} onCancel={this.closeMemberEditModal} onConfirm={this.confirmMemberEditModal} adviserAndManagerData={this.state.adviserAndManagerData} />
-          <EmployeeEditModal ref={this.saveEmployeeEditFormRef} visible={this.state.employeeEditModalVisible} confirmLoading={this.state.confirmEmployeeLoading} onCancel={this.closeEmployeeEditModal} onConfirm={this.confirmEmployeeEditModal} adviseManagerData={this.state.adviseManagerData} archiveManagerData={this.state.archiveManagerData} />
+          <EmployeeEditModal ref={this.saveEmployeeEditFormRef} visible={this.state.employeeEditModalVisible} confirmLoading={this.state.confirmEmployeeLoading} onCancel={this.closeEmployeeEditModal} onConfirm={this.confirmEmployeeEditModal} adviseManagerData={this.state.adviseManagerData} archiveManagerData={this.state.archiveManagerData} initialRole={this.state.initialEmployeeRole}/>
         </div>
     );
   }

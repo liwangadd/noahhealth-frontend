@@ -1,5 +1,5 @@
 import React from 'react';
-import {ROLE} from './../../App/PublicConstant.js';
+import {ROLE,STYLE} from './../../App/PublicConstant.js';
 import { Form, Input, Select,Modal} from 'antd';
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -8,8 +8,8 @@ const Option = Select.Option;
 class EmployeeEditModal_ extends React.Component {
 
   state = {
-    archiveManagerSelectVisible: false,
-    adviseManagerSelectVisible: false
+    archiveManagerSelectVisible: STYLE.NONE,
+    adviseManagerSelectVisible: STYLE.NONE
   };
 
   //更换角色
@@ -17,16 +17,19 @@ class EmployeeEditModal_ extends React.Component {
 
     //根据 角色级别 决定是否显示 主管选择器
     switch(value) {
-      case ROLE.EMPLOYEE_ARCHIVER:this.setState({archiveManagerSelectVisible : true});break;
-      case ROLE.EMPLOYEE_ADVISER:this.setState({adviseManagerSelectVisible : true});break;
-      default:this.setState({archiveManagerSelectVisible : false, adviseManagerSelectVisible : false});break;
+      case ROLE.EMPLOYEE_ARCHIVER:this.setState({archiveManagerSelectVisible : STYLE.BLOCK});break;
+      case ROLE.EMPLOYEE_ADVISER:this.setState({adviseManagerSelectVisible : STYLE.BLOCK});break;
+      default:this.setState({archiveManagerSelectVisible : STYLE.NONE, adviseManagerSelectVisible : STYLE.NONE});break;
     }
   }
 
+  componentWillMount = () => {
 
+    this.changeRole(this.props.initialEmployeeRole);
+  }
 
   render() {
-
+console.log(3);
     const formItemLayout = {labelCol: { xs: { span: 24 }, sm: { span: 7 },}, wrapperCol: { xs: { span: 24 }, sm: { span: 12 },}};
 
     //生成顾问主管、档案主管的选择器
@@ -44,8 +47,7 @@ class EmployeeEditModal_ extends React.Component {
             )}
           </FormItem>
           <FormItem {...formItemLayout} label="角色级别">
-            {getFieldDecorator('role', { rules: [{ required: true, message: '请输入姓名!' }]
-            })(
+            {getFieldDecorator('role')(
               <Select onChange={this.changeRole}>
                 <Option value={ROLE.EMPLOYEE_ADMIN}>{ROLE.EMPLOYEE_ADMIN}</Option>
                 <Option value={ROLE.EMPLOYEE_FINANCER}>{ROLE.EMPLOYEE_FINANCER}</Option>
