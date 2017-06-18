@@ -1,5 +1,5 @@
 import './UserManage.css'
-import {SERVER, SESSION, RESULT, PAGE_SIZE, ROLE} from './../../App/PublicConstant.js'
+import {SERVER, SESSION, RESULT, PAGE_SIZE, ROLE, STYLE} from './../../App/PublicConstant.js'
 import React from 'react';
 import {Tabs, Table, message, Popconfirm} from 'antd';
 import MemberEditModal from './MemberEditModal.js';
@@ -28,7 +28,8 @@ class UserManage extends React.Component {
     employeePager: {pageSize: PAGE_SIZE, total: 0},
     archiveManagerData: [],
     adviseManagerData:  [],
-    initialEmployeeRole: '',
+    adviseManagerSelectVisible: STYLE.NONE,
+    archiveManagerSelectVisible: STYLE.NONE,
 
     employeeTableLoading: false,
     employeeEditModalVisible: false,
@@ -236,7 +237,7 @@ class UserManage extends React.Component {
                 let member = result.content;
                 this.memberEditForm.setFieldsValue({name: member.name,
                                                     role: member.role,
-                                                    adviserAndManager: [member.adviseMgrId, Number(member.adviserId)]});
+                                                    adviserAndManager: [member.staffMgrId, Number(member.staffId)]});
 
                 return;
             } else {
@@ -247,7 +248,7 @@ class UserManage extends React.Component {
     });
   }
 
-  //查询memberId会员信息显示到对话框内
+  //查询employeeId会员信息显示到对话框内
   requestEmployee = (employeeId) => {
 
     console.log('查询职员', employeeId);
@@ -267,8 +268,10 @@ class UserManage extends React.Component {
                 this.employeeEditForm.setFieldsValue({name: employee.name,
                                                       role: employee.role});
 
-                //根据职员的初始role去初始渲染 顾问主管、档案主管选择器
-                //this.setState({ initialEmployeeRole: employee.role });
+                //如果角色级别目前为档案部员工 or 顾问部员工 则显示出对应的上级选择器
+                if(employee.role === ROLE.EMPLOYEE_ADVISER) this.employeeEditForm.setFieldsValue({adviseManager: employee.staffMgrId});
+                else if(employee.role === ROLE.EMPLOYEE_ARCHIVER) this.employeeEditForm.setFieldsValue({archiveManager: employee.staffMgrId});
+                this.changeRole(employee.role);
 
                 return;
             } else {
@@ -277,6 +280,17 @@ class UserManage extends React.Component {
             }
         }
     });
+  }
+
+  //更换角色
+  changeRole = (role) => {
+
+    //根据 角色级别 决定是否显示 主管选择器
+    switch(role) {
+      case ROLE.EMPLOYEE_ARCHIVER:this.setState({archiveManagerSelectVisible : STYLE.BLOCK, adviseManagerSelectVisible : STYLE.NONE});break;
+      case ROLE.EMPLOYEE_ADVISER:this.setState({archiveManagerSelectVisible : STYLE.NONE, adviseManagerSelectVisible : STYLE.BLOCK});break;
+      default:this.setState({archiveManagerSelectVisible : STYLE.NONE, adviseManagerSelectVisible : STYLE.NONE});break;
+    }
   }
 
 
@@ -345,7 +359,8 @@ class UserManage extends React.Component {
             console.log(result);
             if(result.code === RESULT.SUCCESS) {
 
-                this.setState({ archiveManagerData: result.content });
+                this.setState({ archiveManagerData: result.content }); //默认选上第一项
+                this.employeeEditForm.setFieldsValue({archiveManager: result.content[0].id.toString()});
                 return;
             } else {
                 message.error(result.reason, 2);
@@ -368,7 +383,8 @@ class UserManage extends React.Component {
             console.log(result);
             if(result.code === RESULT.SUCCESS) {
 
-                this.setState({ adviseManagerData: result.content });
+                this.setState({ adviseManagerData: result.content }); //默认选上第一项
+                this.employeeEditForm.setFieldsValue({adviseManager: result.content[0].id.toString()});
                 return;
             } else {
                 message.error(result.reason, 2);
@@ -397,7 +413,7 @@ class UserManage extends React.Component {
     this.employeeId = record.id //保存当前正在编辑的职员用户名方便提交用
 
 
-    // this.requestArchiveManagerAndAdviseManager();
+    this.requestArchiveManagerAndAdviseManager();
     this.requestEmployee(this.employeeId);
   }
 
@@ -415,22 +431,20 @@ class UserManage extends React.Component {
   //确认更新信息
   confirmMemberEditModal = () => {
 
-    //发送ajax后
+    //请求修改会员
     this.memberEditForm.validateFields((err, values) => {
       if(!err) {
-        console.log('修改职员', values);
+        console.log('修改会员', values);
 
         //显示加载圈
-        this.setState({
-          confirmMemberLoading: true
-        });
+        this.setState({ confirmMemberLoading: true });
 
         let token = sessionStorage.getItem(SESSION.TOKEN);
         $.ajax({
             url : SERVER + '/api/user/' + this.memberId,
             type : 'PUT',
             contentType: 'application/json',
-            data : JSON.stringify({role: values.role, adviserId: values.adviserAndManager[1]}),
+            data : JSON.stringify({role: values.role, staffId: values.adviserAndManager[1]}),
             dataType : 'json',
             beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, token),
             success : (result) => {
@@ -439,53 +453,69 @@ class UserManage extends React.Component {
 
                 //重查刷新一遍
                 this.handleSearchMemberList(1);
+
+                //关闭加载圈、对话框
+                this.setState({
+                  memberEditModalVisible: false,
+                  confirmMemberLoading: false,
+                });
                 message.success(result.reason, 2);
               } else {
+
+                //关闭加载圈
+                this.setState({ confirmMemberLoading: false });
                 message.error(result.reason, 2);
               }
-
-              //关闭加载圈、对话框
-              this.setState({
-                memberEditModalVisible: false,
-                confirmMemberLoading: false,
-              });
             }
         });
       }
     });
   }
 
-  confirmEmployeeEditModal() {
-    //发送ajax后
+  confirmEmployeeEditModal = () => {
 
-    this.setState({
-      confirmEmployeeLoading: true
-    });
-
-    //模拟ajax
-    setTimeout(() => {
-     this.setState({ //成功后的回调
-       employeeEditModalVisible: false,
-       confirmEmployeeLoading: false,
-     });
-   }, 2000);
-
+    //请求修改职员
     this.employeeEditForm.validateFields((err, values) => {
       if(!err) {
-        console.log(this.employeeId);
         console.log('修改职员', values);
-        // let token = sessionStorage.getItem(SESSION.TOKEN);
-        // $.ajax({
-        //     url : SERVER + '/api/user/employee/list',
-        //     type : 'POST',
-        //     contentType: 'application/json',
-        //     data : JSON.stringify({}),
-        //     dataType : 'json',
-        //     beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, token),
-        //     success : (result) => {
-        //
-        //     }
-        // });
+
+        //根据角色传递staffMgrId
+        let staffMgrId = null;
+        if(values.role === ROLE.EMPLOYEE_ADVISER) staffMgrId = Number(values.adviseManager);
+        else if(values.role === ROLE.EMPLOYEE_ARCHIVER) staffMgrId = Number(values.archiveManager);
+
+        //显示加载圈
+        this.setState({ confirmEmployeeLoading: true });
+
+        let token = sessionStorage.getItem(SESSION.TOKEN);
+        $.ajax({
+            url : SERVER + '/api/user/' + this.employeeId,
+            type : 'PUT',
+            contentType: 'application/json',
+            data : JSON.stringify({role: values.role, staffMgrId: staffMgrId}),
+            dataType : 'json',
+            beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, token),
+            success : (result) => {
+              console.log(result);
+              if(result.code === RESULT.SUCCESS) {
+
+                //重查刷新一遍
+                this.handleSearchEmployeeList(1);
+
+                //关闭加载圈、对话框
+                this.setState({
+                  employeeEditModalVisible: false,
+                  confirmEmployeeLoading: false,
+                });
+                message.success(result.reason, 2);
+              } else {
+
+                //关闭加载圈
+                this.setState({ confirmEmployeeLoading: false });
+                message.error(result.reason, 2);
+              }
+            }
+        });
       }
     });
   }
@@ -508,12 +538,14 @@ class UserManage extends React.Component {
       key: 'role',
     }, {
       title: '所属顾问',
-      dataIndex: 'adviserId',
-      key: 'adviserId',
+      dataIndex: 'staffId',
+      key: 'staffId',
+      render: (adviser) => adviser === null || adviser.trim() === '' ? "-" : adviser
     }, {
       title: '所属顾问主管',
-      dataIndex: 'adviseMgrId',
-      key: 'adviseMgrId',
+      dataIndex: 'staffMgrId',
+      key: 'staffMgrId',
+      render: (adviseManager) => adviseManager === null || adviseManager.trim() === '' ? "-" : adviseManager
     }, {
       title: '操作',
       key: 'action',
@@ -543,6 +575,11 @@ class UserManage extends React.Component {
       dataIndex: 'role',
       key: 'role',
     }, {
+      title: '所属主管',
+      dataIndex: 'staffMgrId',
+      key: 'staffMgrId',
+      render: (manager) => manager === null || manager.trim() === '' ? "-" : manager
+    }, {
       title: '操作',
       key: 'action',
       render: (record) => (
@@ -558,7 +595,7 @@ class UserManage extends React.Component {
 
     return (
         <div>
-          <Tabs defaultActiveKey="1" onChange={this.changeTab}>
+          <Tabs defaultActiveKey="1">
             <TabPane tab="会员管理" key="1">
               <MemberSearchForm ref={this.saveMemberSearchFormRef} handleSearchMemberList={this.handleSearchMemberList}/>
               <Table className='user-table' columns={memberColumns} dataSource={this.state.memberData} pagination={this.state.memberPager} onChange={this.changeMemberPager} rowKey='id' loading={this.state.memberTableLoading}/>
@@ -569,7 +606,7 @@ class UserManage extends React.Component {
             </TabPane>
           </Tabs>
           <MemberEditModal ref={this.saveMemberEditFormRef} visible={this.state.memberEditModalVisible} confirmLoading={this.state.confirmMemberLoading} onCancel={this.closeMemberEditModal} onConfirm={this.confirmMemberEditModal} adviserAndManagerData={this.state.adviserAndManagerData} />
-          <EmployeeEditModal ref={this.saveEmployeeEditFormRef} visible={this.state.employeeEditModalVisible} confirmLoading={this.state.confirmEmployeeLoading} onCancel={this.closeEmployeeEditModal} onConfirm={this.confirmEmployeeEditModal} adviseManagerData={this.state.adviseManagerData} archiveManagerData={this.state.archiveManagerData} initialRole={this.state.initialEmployeeRole}/>
+          <EmployeeEditModal ref={this.saveEmployeeEditFormRef} visible={this.state.employeeEditModalVisible} confirmLoading={this.state.confirmEmployeeLoading} onCancel={this.closeEmployeeEditModal} onConfirm={this.confirmEmployeeEditModal} adviseManagerData={this.state.adviseManagerData} archiveManagerData={this.state.archiveManagerData} archiveManagerSelectVisible={this.state.archiveManagerSelectVisible} adviseManagerSelectVisible={this.state.adviseManagerSelectVisible} changeRole={this.changeRole}/>
         </div>
     );
   }

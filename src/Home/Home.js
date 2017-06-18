@@ -109,7 +109,7 @@ class Home extends React.Component {
   componentWillMount() {
 
     //根据角色显示不同主色调、侧拉菜单选项
-    this.initLayoutStyleByRole(sessionStorage.getItem(SESSION.ROLE));
+    //this.initLayoutStyleByRole(sessionStorage.getItem(SESSION.ROLE));
   }
 
 
@@ -150,7 +150,7 @@ class Home extends React.Component {
             </Menu.Item>
             <Menu.Item key="3" style={{display: this.state.categoryManageMenuItemDisplay}}>
               <Icon type="medicine-box" className="menu-item-font"/>
-              <span className="nav-text menu-item-font">病类管理</span>
+              <span className="nav-text menu-item-font">检查项目管理</span>
             </Menu.Item>
           </Menu>
         </Sider>

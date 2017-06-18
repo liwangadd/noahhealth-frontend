@@ -7,35 +7,14 @@ const Option = Select.Option;
 //用户编辑对话框的表单
 class EmployeeEditModal_ extends React.Component {
 
-  state = {
-    archiveManagerSelectVisible: STYLE.NONE,
-    adviseManagerSelectVisible: STYLE.NONE
-  };
-
-  //更换角色
-  changeRole = (value) => {
-
-    //根据 角色级别 决定是否显示 主管选择器
-    switch(value) {
-      case ROLE.EMPLOYEE_ARCHIVER:this.setState({archiveManagerSelectVisible : STYLE.BLOCK});break;
-      case ROLE.EMPLOYEE_ADVISER:this.setState({adviseManagerSelectVisible : STYLE.BLOCK});break;
-      default:this.setState({archiveManagerSelectVisible : STYLE.NONE, adviseManagerSelectVisible : STYLE.NONE});break;
-    }
-  }
-
-  componentWillMount = () => {
-
-    this.changeRole(this.props.initialEmployeeRole);
-  }
-
   render() {
-console.log(3);
+
     const formItemLayout = {labelCol: { xs: { span: 24 }, sm: { span: 7 },}, wrapperCol: { xs: { span: 24 }, sm: { span: 12 },}};
 
     //生成顾问主管、档案主管的选择器
-    const archiveManagerOptions = this.props.archiveManagerData.map((manager, index) => <Option value={manager.id} key={index}>{manager.name}</Option>);
-    const adviseManagerOptions = this.props.adviseManagerData.map((manager, index) => <Option value={manager.id} key={index}>{manager.name}</Option>);
-
+    const {archiveManagerData, adviseManagerData} = this.props;
+    const archiveManagerOptions = archiveManagerData.map((manager, index) => <Option value={manager.id.toString()} key={index}>{manager.name}</Option>);
+    const adviseManagerOptions = adviseManagerData.map((manager, index) => <Option value={manager.id.toString()} key={index}>{manager.name}</Option>);
 
     const { getFieldDecorator } = this.props.form;
     return (
@@ -48,7 +27,7 @@ console.log(3);
           </FormItem>
           <FormItem {...formItemLayout} label="角色级别">
             {getFieldDecorator('role')(
-              <Select onChange={this.changeRole}>
+              <Select onChange={(role) => this.props.changeRole(role)}>
                 <Option value={ROLE.EMPLOYEE_ADMIN}>{ROLE.EMPLOYEE_ADMIN}</Option>
                 <Option value={ROLE.EMPLOYEE_FINANCER}>{ROLE.EMPLOYEE_FINANCER}</Option>
                 <Option value={ROLE.EMPLOYEE_ARCHIVER}>{ROLE.EMPLOYEE_ARCHIVER}</Option>
@@ -58,14 +37,14 @@ console.log(3);
               </Select>
             )}
           </FormItem>
-          <FormItem {...formItemLayout} label="所属档案主管" style={{display: this.state.archiveManagerSelectVisible}}>
+          <FormItem {...formItemLayout} label="所属档案主管" style={{display: this.props.archiveManagerSelectVisible}}>
             {getFieldDecorator('archiveManager')(
               <Select>
                 {archiveManagerOptions}
               </Select>
             )}
           </FormItem>
-          <FormItem {...formItemLayout} label="所属顾问主管" style={{display: this.state.adviseManagerSelectVisible}}>
+          <FormItem {...formItemLayout} label="所属顾问主管" style={{display: this.props.adviseManagerSelectVisible}}>
             {getFieldDecorator('adviseManager')(
               <Select>
                 {adviseManagerOptions}
