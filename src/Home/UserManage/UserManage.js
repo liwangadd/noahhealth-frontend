@@ -72,7 +72,7 @@ class UserManage extends React.Component {
         this.setState({ memberTableLoading: true});
 
         console.log('拉取第'+ pageNow + "页会员信息", values);
-        let token = sessionStorage.getItem(SESSION.TOKEN);
+
         $.ajax({
             url : SERVER + '/api/user/member/list',
             type : 'POST',
@@ -83,7 +83,7 @@ class UserManage extends React.Component {
                                    pageNow: pageNow,
                                    pageSize: PAGE_SIZE}),
             dataType : 'json',
-            beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, token),
+            beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
             success : (result) => {
 
                 console.log(result);
@@ -124,7 +124,7 @@ class UserManage extends React.Component {
         this.setState({ employeeTableLoading: true});
 
         console.log('拉取第'+ pageNow + "页职员信息", values);
-        let token = sessionStorage.getItem(SESSION.TOKEN);
+
         $.ajax({
             url : SERVER + '/api/user/employee/list',
             type : 'POST',
@@ -135,7 +135,7 @@ class UserManage extends React.Component {
                                    pageNow: pageNow,
                                    pageSize: PAGE_SIZE}),
             dataType : 'json',
-            beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, token),
+            beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
             success : (result) => {
 
                 console.log(result);
@@ -167,12 +167,11 @@ class UserManage extends React.Component {
 
     console.log('删除会员', record);
 
-    let token = sessionStorage.getItem(SESSION.TOKEN);
     $.ajax({
         url : SERVER + '/api/user/' + record.id,
         type : 'DELETE',
         dataType : 'json',
-        beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, token),
+        beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
         success : (result) => {
 
             console.log(result);
@@ -196,11 +195,10 @@ class UserManage extends React.Component {
 
     console.log('删除职员', record);
 
-    let token = sessionStorage.getItem(SESSION.TOKEN);
     $.ajax({
         url : SERVER + '/api/user/' + record.id,
         type : 'DELETE',
-        beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, token),
+        beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
         success : (result) => {
 
             console.log(result);
@@ -223,12 +221,11 @@ class UserManage extends React.Component {
 
     console.log('查询会员', memberId);
 
-    let token = sessionStorage.getItem(SESSION.TOKEN);
     $.ajax({
         url : SERVER + '/api/user/' + memberId,
         type : 'GET',
         dataType : 'json',
-        beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, token),
+        beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
         success : (result) => {
 
             console.log(result);
@@ -253,12 +250,11 @@ class UserManage extends React.Component {
 
     console.log('查询职员', employeeId);
 
-    let token = sessionStorage.getItem(SESSION.TOKEN);
     $.ajax({
         url : SERVER + '/api/user/' + employeeId,
         type : 'GET',
         dataType : 'json',
-        beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, token),
+        beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
         success : (result) => {
 
             console.log(result);
@@ -299,13 +295,12 @@ class UserManage extends React.Component {
 
     console.log('查询所有顾问员工与顾问主管');
 
-    let token = sessionStorage.getItem(SESSION.TOKEN);
     $.ajax({
         url : SERVER + '/api/user/advise/list',
         type : 'GET',
         async: false,
         dataType : 'json',
-        beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, token),
+        beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
         success : (result) => {
 
             console.log(result);
@@ -343,7 +338,6 @@ class UserManage extends React.Component {
   requestArchiveManagerAndAdviseManager = () => {
 
     console.log('查询所有档案主管与顾问主管');
-    let token = sessionStorage.getItem(SESSION.TOKEN);
 
     //档案部主管
     $.ajax({
@@ -353,7 +347,7 @@ class UserManage extends React.Component {
         contentType: 'application/json',
         dataType : 'json',
         data : JSON.stringify({manager : ROLE.EMPLOYEE_ARCHIVE_MANAGER}),
-        beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, token),
+        beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
         success : (result) => {
 
             console.log(result);
@@ -377,7 +371,7 @@ class UserManage extends React.Component {
         contentType: 'application/json',
         dataType : 'json',
         data : JSON.stringify({manager : ROLE.EMPLOYEE_ADVISE_MANAGER}),
-        beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, token),
+        beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
         success : (result) => {
 
             console.log(result);
@@ -439,14 +433,13 @@ class UserManage extends React.Component {
         //显示加载圈
         this.setState({ confirmMemberLoading: true });
 
-        let token = sessionStorage.getItem(SESSION.TOKEN);
         $.ajax({
             url : SERVER + '/api/user/' + this.memberId,
             type : 'PUT',
             contentType: 'application/json',
             data : JSON.stringify({role: values.role, staffId: values.adviserAndManager[1]}),
             dataType : 'json',
-            beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, token),
+            beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
             success : (result) => {
               console.log(result);
               if(result.code === RESULT.SUCCESS) {
@@ -487,14 +480,13 @@ class UserManage extends React.Component {
         //显示加载圈
         this.setState({ confirmEmployeeLoading: true });
 
-        let token = sessionStorage.getItem(SESSION.TOKEN);
         $.ajax({
             url : SERVER + '/api/user/' + this.employeeId,
             type : 'PUT',
             contentType: 'application/json',
             data : JSON.stringify({role: values.role, staffMgrId: staffMgrId}),
             dataType : 'json',
-            beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, token),
+            beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
             success : (result) => {
               console.log(result);
               if(result.code === RESULT.SUCCESS) {

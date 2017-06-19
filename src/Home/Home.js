@@ -109,7 +109,7 @@ class Home extends React.Component {
   componentWillMount() {
 
     //根据角色显示不同主色调、侧拉菜单选项
-    //this.initLayoutStyleByRole(sessionStorage.getItem(SESSION.ROLE));
+    this.initLayoutStyleByRole(sessionStorage.getItem(SESSION.ROLE));
   }
 
 

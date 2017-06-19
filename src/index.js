@@ -72,13 +72,13 @@ class AppRouter extends React.Component {
   render() {
     return (<Router history={browserHistory}>
               <Route path={ROUTE.ROOT.URL} component={App}>
-                {/* <Route onEnter={certifyAccess}> */}
+                <Route onEnter={certifyAccess}>
                   <Route path={ROUTE.HOME.URL} component={Home}>
                     <IndexRoute component={Welcome}/>
                     <Route path={ROUTE.HOME_USER_MANAGE.URL} component={UserManage}/>
                     <Route path={ROUTE.HOME_CATEGORY_MANAGE.URL} component={CategoryManage}/>
                   </Route>
-                {/* </Route> */}
+                </Route>
                 <Route path={ROUTE.LOGIN.URL} component={Login}/>
                 <Route path={ROUTE.REGISTER.URL} component={Register}/>
               </Route>
