@@ -8,7 +8,7 @@ import Register from './Register/Register.js';
 import Home from './Home/Home.js';
 import Welcome from './Home/Welcome/Welcome.js';
 import UserManage from './Home/UserManage/UserManage.js';
-import CategoryManage from './Home/CategoryManage/CategoryManage.js';
+import FirstCategoryManage from './Home/CategoryManage/FirstCategoryManage.js';
 import {message} from 'antd'
 import {Router, Route, browserHistory, IndexRoute} from 'react-router';
 
@@ -43,7 +43,7 @@ var certifyAccess = function(nextState, replace){
       case ROUTE.REGISTER.URL:certifyRole(replace, role, ROUTE.REGISTER.PERMISSION);break;
       case ROUTE.HOME.URL:certifyRole(replace, role, ROUTE.HOME.PERMISSION);break;
       case ROUTE.HOME_USER_MANAGE.URL:certifyRole(replace, role, ROUTE.HOME_USER_MANAGE.PERMISSION);break;
-      case ROUTE.HOME_CATEGORY_MANAGE.URL:certifyRole(replace, role, ROUTE.HOME_CATEGORY_MANAGE.PERMISSION);break;
+      case ROUTE.HOME_FIRST_CATEGORY_MANAGE.URL:certifyRole(replace, role, ROUTE.HOME_FIRST_CATEGORY_MANAGE.PERMISSION);break;
       default:;break;
     }
 
@@ -76,7 +76,9 @@ class AppRouter extends React.Component {
                   <Route path={ROUTE.HOME.URL} component={Home}>
                     <IndexRoute component={Welcome}/>
                     <Route path={ROUTE.HOME_USER_MANAGE.URL} component={UserManage}/>
-                    <Route path={ROUTE.HOME_CATEGORY_MANAGE.URL} component={CategoryManage}/>
+                    <Route path={ROUTE.HOME_FIRST_CATEGORY_MANAGE.URL} component={FirstCategoryManage}/>
+                    {/* <Route path={ROUTE.HOME_SECOND_CATEGORY_MANAGE.URL/:id} component={SecondCategoryManage}/>
+                    <Route path={ROUTE.HOME_THIRD_CATEGORY_MANAGE.URL/:id} component={SecondCategoryManage}/> */}
                   </Route>
                 </Route>
                 <Route path={ROUTE.LOGIN.URL} component={Login}/>

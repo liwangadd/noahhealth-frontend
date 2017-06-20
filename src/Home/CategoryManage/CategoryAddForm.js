@@ -246,7 +246,7 @@ class CategoryAddForm_ extends React.Component {
       if (!err) {
         console.log('添加'+ values.type + '检查项目' + values.thirdCategoryName);
 
-        let secondId = values.type === '化验' ? Number(values.secondCategoryParentOfAssayId) : Number(values.secondCategoryParentOfTechId);
+        let secondId = values.type === '化验' ? values.secondCategoryParentOfAssayId[1] : values.secondCategoryParentOfTechId[1];
         $.ajax({
             url : SERVER + '/api/third',
             type : 'POST',
