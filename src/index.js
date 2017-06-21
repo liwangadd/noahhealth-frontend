@@ -9,6 +9,8 @@ import Home from './Home/Home.js';
 import Welcome from './Home/Welcome/Welcome.js';
 import UserManage from './Home/UserManage/UserManage.js';
 import FirstCategoryManage from './Home/CategoryManage/FirstCategoryManage.js';
+import SecondCategoryManage from './Home/CategoryManage/SecondCategoryManage.js';
+import ThirdCategoryManage from './Home/CategoryManage/ThirdCategoryManage.js';
 import {message} from 'antd'
 import {Router, Route, browserHistory, IndexRoute} from 'react-router';
 
@@ -77,8 +79,8 @@ class AppRouter extends React.Component {
                     <IndexRoute component={Welcome}/>
                     <Route path={ROUTE.HOME_USER_MANAGE.URL} component={UserManage}/>
                     <Route path={ROUTE.HOME_FIRST_CATEGORY_MANAGE.URL} component={FirstCategoryManage}/>
-                    {/* <Route path={ROUTE.HOME_SECOND_CATEGORY_MANAGE.URL/:id} component={SecondCategoryManage}/>
-                    <Route path={ROUTE.HOME_THIRD_CATEGORY_MANAGE.URL/:id} component={SecondCategoryManage}/> */}
+                    <Route path={ROUTE.HOME_SECOND_CATEGORY_MANAGE.URL} component={SecondCategoryManage}/>
+                    <Route path={ROUTE.HOME_THIRD_CATEGORY_MANAGE.URL} component={ThirdCategoryManage}/>
                   </Route>
                 </Route>
                 <Route path={ROUTE.LOGIN.URL} component={Login}/>

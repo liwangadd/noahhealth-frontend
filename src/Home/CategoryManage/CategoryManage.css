@@ -5,12 +5,19 @@
 .first-category-table {
   width: 60%;
   margin: auto;
+  margin-top: 20px;
 }
 
-.first-category-table .operation-delete {
+.operation-delete {
   color:#f46e65;
 }
 
 .category-path {
   margin-bottom: 20px;
+}
+
+
+.second-category-table {
+  width: 60%;
+  margin: auto;
 }

@@ -25,7 +25,9 @@ const ROUTE = {
   HOME: {URL:'/home', PERMISSION: []},
     HOME_WELCOME: {URL:'/home', PERMISSION: []},
     HOME_USER_MANAGE: {URL:'/home/user_manage', PERMISSION: [ROLE.EMPLOYEE_ADMIN, ROLE.EMPLOYEE_FINANCER]},
-    HOME_FIRST_CATEGORY_MANAGE: {URL:'/home/first_category_manage', PERMISSION: [ROLE.EMPLOYEE_ADMIN]}
+    HOME_FIRST_CATEGORY_MANAGE: {URL:'/home/first_category_manage/:tabKey', URL_PREFIX:'/home/first_category_manage', PERMISSION: [ROLE.EMPLOYEE_ADMIN]},
+    HOME_SECOND_CATEGORY_MANAGE: {URL:'/home/second_category_manage/:tabKey/:firstId/:firstName', URL_PREFIX:'/home/second_category_manage', PERMISSION: [ROLE.EMPLOYEE_ADMIN]},
+    HOME_THIRD_CATEGORY_MANAGE: {URL:'/home/third_category_manage/:tabKey/:firstId/:firstName/:secondId/:secondName', URL_PREFIX:'/home/third_category_manage', PERMISSION: [ROLE.EMPLOYEE_ADMIN]}
 }
 
 //session中常量

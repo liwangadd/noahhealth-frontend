@@ -94,7 +94,7 @@ class Home extends React.Component {
     switch(e.key) {
       case '1': targetUrl = ROUTE.HOME.URL; break;
       case '2': targetUrl = ROUTE.HOME_USER_MANAGE.URL; break;
-      case '3': targetUrl = ROUTE.HOME_FIRST_CATEGORY_MANAGE.URL; break;
+      case '3': targetUrl = ROUTE.HOME_FIRST_CATEGORY_MANAGE.URL_PREFIX + "/1"; break;
       default:;break;
     }
 

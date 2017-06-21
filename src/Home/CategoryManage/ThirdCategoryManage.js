@@ -8,24 +8,24 @@ import {Link} from 'react-router';
 const TabPane = Tabs.TabPane;
 
 
-class SecondCategoryManage extends React.Component {
+class ThirdCategoryManage extends React.Component {
 
   state = {
 
     //亚类
-    secondCategoryData: [],
-    secondCategoryTableLoading: false,
+    thirdCategoryData: [],
+    thirdCategoryTableLoading: false,
     pager: {pageSize: PAGE_SIZE, total: 0}
   };
 
   //拉取firstId下的所有亚类
-  requestSecondCategoryData = (firstId, pageNow) => {
+  requestSecondCategoryData = (secondId, pageNow) => {
 
-    console.log('查询'+ this.props.params.firstName +'下的所有检查亚类');
+    console.log('查询'+ this.props.params.secondName +'下的所有检查项目');
 
-    this.setState({ secondCategoryTableLoading: true});
+    this.setState({ thirdCategoryTableLoading: true});
     $.ajax({
-        url : SERVER + '/api/second/' + firstId + '/list',
+        url : SERVER + '/api/third/' + secondId + '/list',
         type : 'POST',
         contentType: 'application/json',
         dataType : 'json',
@@ -42,35 +42,47 @@ class SecondCategoryManage extends React.Component {
                 pager.current = pageNow;
 
                 this.setState({
-                  secondCategoryData: result.content.data,
+                  thirdCategoryData: result.content.data,
                   pager: pager
                 });
             } else {
                 message.error(result.reason, 2);
             }
 
-            this.setState({ secondCategoryTableLoading: false});
+            this.setState({ thirdCategoryTableLoading: false});
         }
     });
   }
 
   //翻页
   changePager = (pager) => {
-    this.requestSecondCategoryData(this.props.params.firstId, pager.current);
+    this.requestSecondCategoryData(this.props.params.secondId, pager.current);
   }
 
   componentDidMount = () => {
 
-    this.requestSecondCategoryData(this.props.params.firstId, 1);
+    this.requestSecondCategoryData(this.props.params.secondId, 1);
   }
 
   render(){
 
-    const secondCategoryColumns = [{
-      title: '检查亚类名称',
+    const thirdCategoryColumns = [{
+      title: '检查项目名称',
       dataIndex: 'name',
       key: 'name',
-      render: (name, record) => <Link to={ROUTE.HOME_THIRD_CATEGORY_MANAGE.URL_PREFIX + "/" + this.props.params.tabKey + "/" + this.props.params.firstId +"/" + this.props.params.firstName + "/" + record.id + "/" + name}>{name}</Link>,
+      render: (name) => <a>{name}</a>,
+    },{
+      title: '系统分类',
+      dataIndex: 'systemCategory',
+      key: 'systemCategory',
+    },{
+      title: '参考值及单位',
+      dataIndex: 'referenceValue',
+      key: 'referenceValue',
+    },{
+      title: '301医院',
+      dataIndex: 'hospital',
+      key: 'hospital',
     }, {
       title: '操作',
       key: 'action',
@@ -78,7 +90,7 @@ class SecondCategoryManage extends React.Component {
         <span>
           <a onClick={() => this.showMemberEditModal(record)}>修改</a>
           <span className="ant-divider" />
-          <Popconfirm title="您确定要删除该亚类吗?" onConfirm={() => this.handleDeleteMember(record)} okText="是" cancelText="取消">
+          <Popconfirm title="您确定要删除该项目吗?" onConfirm={() => this.handleDeleteMember(record)} okText="是" cancelText="取消">
             <a className='operation-delete'>删除</a>
           </Popconfirm>
         </span>
@@ -90,12 +102,13 @@ class SecondCategoryManage extends React.Component {
         <div>
           <Breadcrumb separator=">" className="category-path">
             <Breadcrumb.Item><Link to={ROUTE.HOME_FIRST_CATEGORY_MANAGE.URL_PREFIX + "/" + this.props.params.tabKey}>首页</Link></Breadcrumb.Item>
-            <Breadcrumb.Item>{this.props.params.firstName}</Breadcrumb.Item>
+            <Breadcrumb.Item><Link to={ROUTE.HOME_SECOND_CATEGORY_MANAGE.URL_PREFIX + "/" + this.props.params.tabKey + "/" + this.props.params.firstId + "/" + this.props.params.firstName}>{this.props.params.firstName}</Link></Breadcrumb.Item>
+            <Breadcrumb.Item>{this.props.params.secondName}</Breadcrumb.Item>
           </Breadcrumb>
-          <Table className='second-category-table' columns={secondCategoryColumns} dataSource={this.state.secondCategoryData} rowKey='id' loading={this.state.secondCategoryTableLoading} pagination={this.state.pager} onChange={this.changePager}/>
+          <Table className='second-category-table' columns={thirdCategoryColumns} dataSource={this.state.thirdCategoryData} rowKey='id' loading={this.state.thirdCategoryTableLoading} pagination={this.state.pager} onChange={this.changePager}/>
         </div>
     );
   }
 }
 
-export default SecondCategoryManage;
+export default ThirdCategoryManage;
