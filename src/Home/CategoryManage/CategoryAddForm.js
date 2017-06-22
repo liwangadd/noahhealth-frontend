@@ -199,9 +199,11 @@ class CategoryAddForm_ extends React.Component {
                 console.log(result);
                 if(result.code === RESULT.SUCCESS) {
 
+                  this.props.refreshFirstCategoryData(values.type);
                   message.success(result.reason, 2);
                 } else {
-                    message.error(result.reason, 2);
+
+                  message.error(result.reason, 2);
                 }
             }
         });
@@ -276,11 +278,8 @@ class CategoryAddForm_ extends React.Component {
     const formItemLayoutWithOutLabel = { wrapperCol: { xs: { span: 24, offset: 0 }, sm: { span: 20, offset: 9 }}};
 
     //生成所属分类下拉列表、所属亚类级联选择器
-    const {firstCategoryParentOfAssayData, firstCategoryParentOfTechData,
-           secondCategoryParentOfAssayData, secondCategoryParentOfTechData} = this.state;
-
-    const firstCategoryOfAssayOptions = firstCategoryParentOfAssayData.map((firstCategory, index) => <Option value={firstCategory.id.toString()} key={index}>{firstCategory.name}</Option>);
-    const firstCategoryOfTechOptions = firstCategoryParentOfTechData.map((firstCategory, index) => <Option value={firstCategory.id.toString()} key={index}>{firstCategory.name}</Option>);
+    const firstCategoryOfAssayOptions = this.state.firstCategoryParentOfAssayData.map((firstCategory, index) => <Option value={firstCategory.id.toString()} key={index}>{firstCategory.name}</Option>);
+    const firstCategoryOfTechOptions = this.state.firstCategoryParentOfTechData.map((firstCategory, index) => <Option value={firstCategory.id.toString()} key={index}>{firstCategory.name}</Option>);
 
 
     const { getFieldDecorator } = this.props.form;

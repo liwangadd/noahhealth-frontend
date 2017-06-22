@@ -17,7 +17,7 @@
 }
 
 
-.second-category-table {
+.second-category-table, .third-category-table {
   width: 60%;
   margin: auto;
 }
