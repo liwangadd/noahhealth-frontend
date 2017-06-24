@@ -1,8 +1,6 @@
 import React from 'react';
-import {ROLE,STYLE} from './../../App/PublicConstant.js';
-import { Form, Input, Select,Modal} from 'antd';
+import { Form, Input,Modal} from 'antd';
 const FormItem = Form.Item;
-const Option = Select.Option;
 
 //用户编辑对话框的表单
 class FirstSecondCategoryEditModal_ extends React.Component {

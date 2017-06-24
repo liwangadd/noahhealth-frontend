@@ -1,12 +1,10 @@
 import './CategoryManage.css'
-import {SERVER, SESSION, RESULT, PAGE_SIZE, ROLE, STYLE, ROUTE} from './../../App/PublicConstant.js'
-import CategoryAddForm from './CategoryAddForm.js'
+import {SERVER, SESSION, RESULT, PAGE_SIZE, ROUTE} from './../../App/PublicConstant.js'
 import React from 'react';
-import {Tabs, Table, message, Popconfirm, Breadcrumb, Button} from 'antd';
+import {Table, message, Popconfirm, Breadcrumb} from 'antd';
 import $ from 'jquery';
 import {Link} from 'react-router';
 import ThirdCategoryEditModal from './ThirdCategoryEditModal.js'
-const TabPane = Tabs.TabPane;
 
 
 class ThirdCategoryManage extends React.Component {
@@ -22,8 +20,8 @@ class ThirdCategoryManage extends React.Component {
     confirmLoading: false
   };
 
-  //拉取firstId下的所有亚类
-  requestSecondCategoryData = (secondId, pageNow) => {
+  //拉取secondId下的所有亚亚类
+  requestThirdCategoryData = (secondId, pageNow) => {
 
     console.log('查询'+ this.props.params.secondName +'下的所有检查项目');
 
@@ -59,9 +57,7 @@ class ThirdCategoryManage extends React.Component {
   }
 
   //翻页
-  changePager = (pager) => {
-    this.requestSecondCategoryData(this.props.params.secondId, pager.current);
-  }
+  changePager = (pager) => this.requestThirdCategoryData(this.props.params.secondId, pager.current)
 
   //删除亚亚类
   handleDelete(record) {
@@ -80,7 +76,7 @@ class ThirdCategoryManage extends React.Component {
             if(result.code === RESULT.SUCCESS) {
 
                 //删除后重查一遍
-                this.requestSecondCategoryData(this.props.params.secondId, 1);
+                this.requestThirdCategoryData(this.props.params.secondId, 1);
 
                 message.success(result.reason, 2);
             } else {
@@ -103,16 +99,8 @@ class ThirdCategoryManage extends React.Component {
     this.requestCategory(this.categoryId);
   }
 
-  closeEditModal = () => {
+  closeEditModal = () => this.setState({editModalVisible: false})
 
-    this.setState({editModalVisible: false});
-  }
-
-  //保存子组件引用
-  saveEditFormRef = (form) => {
-
-    this.editForm = form;
-  }
 
   //查询categoryId类别信息显示到对话框内
   requestCategory = (categoryId) => {
@@ -130,8 +118,7 @@ class ThirdCategoryManage extends React.Component {
             if(result.code === RESULT.SUCCESS) {
 
                 let category = result.content;
-                this.editForm.setFieldsValue({secondId: this.props.params.secondId,
-                                              name: category.name,
+                this.refs.editForm.setFieldsValue({name: category.name,
                                               systemCategory: category.systemCategory,
                                               referenceValue: category.referenceValue,
                                               hospital: category.hospital});
@@ -149,7 +136,7 @@ class ThirdCategoryManage extends React.Component {
   confirmEditModal = () => {
 
     //请求修改亚亚类
-    this.editForm.validateFields((err, values) => {
+    this.refs.editForm.validateFields((err, values) => {
       if(!err) {
         console.log('修改检查项目', values);
 
@@ -160,7 +147,8 @@ class ThirdCategoryManage extends React.Component {
             url : SERVER + '/api/third/' + this.categoryId,
             type : 'PUT',
             contentType: 'application/json',
-            data : JSON.stringify({name: values.name,
+            data : JSON.stringify({secondId: Number(this.props.params.secondId),
+                                   name: values.name,
                                    systemCategory: values.systemCategory,
                                    referenceValue: values.referenceValue,
                                    hospital: values.hospital}),
@@ -171,7 +159,7 @@ class ThirdCategoryManage extends React.Component {
               if(result.code === RESULT.SUCCESS) {
 
                 //重查刷新一遍
-                this.requestSecondCategoryData(this.props.params.secondId, 1);
+                this.requestThirdCategoryData(this.props.params.secondId, this.state.pager.current);
 
                 //关闭加载圈、对话框
                 this.setState({
@@ -192,10 +180,7 @@ class ThirdCategoryManage extends React.Component {
   }
 
 
-  componentDidMount = () => {
-
-    this.requestSecondCategoryData(this.props.params.secondId, 1);
-  }
+  componentDidMount = () => this.requestThirdCategoryData(this.props.params.secondId, 1)
 
   render(){
 
@@ -239,7 +224,7 @@ class ThirdCategoryManage extends React.Component {
             <Breadcrumb.Item>{this.props.params.secondName}</Breadcrumb.Item>
           </Breadcrumb>
           <Table className='third-category-table' columns={thirdCategoryColumns} dataSource={this.state.thirdCategoryData} rowKey='id' loading={this.state.thirdCategoryTableLoading} pagination={this.state.pager} onChange={this.changePager}/>
-          <ThirdCategoryEditModal ref={this.saveEditFormRef} visible={this.state.editModalVisible} confirmLoading={this.state.confirmLoading} onCancel={this.closeEditModal} onConfirm={this.confirmEditModal} />
+          <ThirdCategoryEditModal ref="editForm" visible={this.state.editModalVisible} confirmLoading={this.state.confirmLoading} onCancel={this.closeEditModal} onConfirm={this.confirmEditModal} />
         </div>
     );
   }

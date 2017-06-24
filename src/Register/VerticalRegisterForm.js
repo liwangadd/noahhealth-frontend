@@ -67,26 +67,27 @@ class VerticalRegisterForm_ extends React.Component {
               data : JSON.stringify({phone : values.phone}),
               dataType : 'json',
               success : () => {
-                      console.log("后端已生成验证码");
-                      var timer = setInterval(() => {
+                  console.log("后端已生成验证码");
+                  var timer = setInterval(() => {
+                      this.setState({
+                          isSendSmsBtnDisabled: true,
+                          sendSmsBtnStr: '重新发送 ' + (--this.state.countDown),
+                      });
+
+                      if(this.state.countDown === 0) {
                           this.setState({
-                              isSendSmsBtnDisabled: true,
-                              sendSmsBtnStr: '重新发送 ' + (--this.state.countDown),
+                              isSendSmsBtnDisabled: false,
+                              sendSmsBtnStr: '重新发送',
+                              countDown: 60 //倒计时
                           });
 
-                          if(this.state.countDown === 0) {
-                              this.setState({
-                                  isSendSmsBtnDisabled: false,
-                                  sendSmsBtnStr: '重新发送',
-                                  countDown: 60 //倒计时
-                              });
-
-                              //停止倒计时
-                              clearInterval(timer);
-                          }
-                      }, 1000);
-                  }
-              });
+                          //停止倒计时
+                          clearInterval(timer);
+                      }
+                  }, 1000);
+              },
+              error : () => message.error("内部错误", 2)
+            });
           }
       });
   }

@@ -38,35 +38,27 @@ class UserManage extends React.Component {
   };
 
   //保存子组件引用
-  saveMemberSearchFormRef = (form) => {
-
-    this.memberSearchForm = form;
-    if(form == null) return; //防止卸载时为空
-
-    this.handleSearchMemberList(1);
-  }
-  saveEmployeeSearchFormRef = (form) => {
-    this.employeeSearchForm = form;
-    if(form == null) return; //防止卸载时为空
-
-    this.handleSearchEmployeeList(1);
-  }
-  saveMemberEditFormRef = (form) => {
-    this.memberEditForm = form;
-  }
-  saveEmployeeEditFormRef = (form) => {
-    this.employeeEditForm = form;
-  }
+  // saveMemberSearchFormRef = (form) => {
+  //
+  //   this.memberSearchForm = form;
+  //   if(form == null) return; //防止卸载时为空
+  //
+  //   this.handleSearchMemberList(1);
+  // }
+  // saveEmployeeSearchFormRef = (form) => {
+  //   this.employeeSearchForm = form;
+  //   if(form == null) return; //防止卸载时为空
+  //
+  //   this.handleSearchEmployeeList(1);
+  // }
 
 
   //翻页
-  changeMemberPager = (pager) => {
-    this.handleSearchMemberList(pager.current);
-  }
+  changeMemberPager = (pager) =>  this.handleSearchMemberList(pager.current)
 
   handleSearchMemberList = (pageNow) => {
 
-    this.memberSearchForm.validateFields((err, values) => {
+    this.refs.memberSearchForm.validateFields((err, values) => {
       if(!err) {
 
         this.setState({ memberTableLoading: true});
@@ -111,14 +103,12 @@ class UserManage extends React.Component {
   }
 
   //翻页
-  changeEmployeePager = (pager) => {
-    this.handleSearchEmployeeList(pager.current);
-  }
+  changeEmployeePager = (pager) => this.handleSearchEmployeeList(pager.current)
 
   //查询所有职员
   handleSearchEmployeeList = (pageNow) => {
 
-    this.employeeSearchForm.validateFields((err, values) => {
+    this.refs.employeeSearchForm.validateFields((err, values) => {
       if(!err) {
 
         this.setState({ employeeTableLoading: true});
@@ -232,7 +222,7 @@ class UserManage extends React.Component {
             if(result.code === RESULT.SUCCESS) {
 
                 let member = result.content;
-                this.memberEditForm.setFieldsValue({name: member.name,
+                this.refs.memberEditForm.setFieldsValue({name: member.name,
                                                     role: member.role,
                                                     adviserAndManager: [member.staffMgrId, Number(member.staffId)]});
 
@@ -261,12 +251,12 @@ class UserManage extends React.Component {
             if(result.code === RESULT.SUCCESS) {
 
                 let employee = result.content;
-                this.employeeEditForm.setFieldsValue({name: employee.name,
+                this.refs.employeeEditForm.setFieldsValue({name: employee.name,
                                                       role: employee.role});
 
                 //如果角色级别目前为档案部员工 or 顾问部员工 则显示出对应的上级选择器
-                if(employee.role === ROLE.EMPLOYEE_ADVISER) this.employeeEditForm.setFieldsValue({adviseManager: employee.staffMgrId});
-                else if(employee.role === ROLE.EMPLOYEE_ARCHIVER) this.employeeEditForm.setFieldsValue({archiveManager: employee.staffMgrId});
+                if(employee.role === ROLE.EMPLOYEE_ADVISER) this.refs.employeeEditForm.setFieldsValue({adviseManager: employee.staffMgrId});
+                else if(employee.role === ROLE.EMPLOYEE_ARCHIVER) this.refs.employeeEditForm.setFieldsValue({archiveManager: employee.staffMgrId});
                 this.changeRole(employee.role);
 
                 return;
@@ -354,7 +344,7 @@ class UserManage extends React.Component {
             if(result.code === RESULT.SUCCESS) {
 
                 this.setState({ archiveManagerData: result.content }); //默认选上第一项
-                this.employeeEditForm.setFieldsValue({archiveManager: result.content[0].id.toString()});
+                this.refs.employeeEditForm.setFieldsValue({archiveManager: result.content[0].id.toString()});
                 return;
             } else {
                 message.error(result.reason, 2);
@@ -378,7 +368,7 @@ class UserManage extends React.Component {
             if(result.code === RESULT.SUCCESS) {
 
                 this.setState({ adviseManagerData: result.content }); //默认选上第一项
-                this.employeeEditForm.setFieldsValue({adviseManager: result.content[0].id.toString()});
+                this.refs.employeeEditForm.setFieldsValue({adviseManager: result.content[0].id.toString()});
                 return;
             } else {
                 message.error(result.reason, 2);
@@ -390,43 +380,30 @@ class UserManage extends React.Component {
 
   //打开编辑对话框
   showMemberEditModal = (record) => {
-    this.setState({
-      memberEditModalVisible: true
-    });
+
+    this.setState({memberEditModalVisible: true});
 
     this.memberId = record.id //保存当前正在编辑的会员用户名方便提交用
-
     this.requestAdviserAndAdviseManager();
     this.requestMember(this.memberId);
   }
   showEmployeeEditModal = (record) => {
-    this.setState({
-      employeeEditModalVisible: true
-    });
+
+    this.setState({ employeeEditModalVisible: true});
 
     this.employeeId = record.id //保存当前正在编辑的职员用户名方便提交用
-
-
     this.requestArchiveManagerAndAdviseManager();
     this.requestEmployee(this.employeeId);
   }
 
-  closeMemberEditModal = () => {
-    this.setState({
-      memberEditModalVisible: false
-    });
-  }
-  closeEmployeeEditModal = () => {
-    this.setState({
-      employeeEditModalVisible: false
-    });
-  }
+  closeMemberEditModal = () => this.setState({ memberEditModalVisible: false })
+  closeEmployeeEditModal = () => this.setState({ employeeEditModalVisible: false})
 
   //确认更新信息
   confirmMemberEditModal = () => {
 
     //请求修改会员
-    this.memberEditForm.validateFields((err, values) => {
+    this.refs.memberEditForm.validateFields((err, values) => {
       if(!err) {
         console.log('修改会员', values);
 
@@ -445,7 +422,7 @@ class UserManage extends React.Component {
               if(result.code === RESULT.SUCCESS) {
 
                 //重查刷新一遍
-                this.handleSearchMemberList(1);
+                this.handleSearchMemberList(this.state.memberPager.current);
 
                 //关闭加载圈、对话框
                 this.setState({
@@ -468,7 +445,7 @@ class UserManage extends React.Component {
   confirmEmployeeEditModal = () => {
 
     //请求修改职员
-    this.employeeEditForm.validateFields((err, values) => {
+    this.refs.employeeEditForm.validateFields((err, values) => {
       if(!err) {
         console.log('修改职员', values);
 
@@ -492,7 +469,7 @@ class UserManage extends React.Component {
               if(result.code === RESULT.SUCCESS) {
 
                 //重查刷新一遍
-                this.handleSearchEmployeeList(1);
+                this.handleSearchEmployeeList(this.state.employeePager.current);
 
                 //关闭加载圈、对话框
                 this.setState({
@@ -511,6 +488,18 @@ class UserManage extends React.Component {
       }
     });
   }
+
+
+  componentDidMount = () => this.handleSearchMemberList(1)
+
+  //打开职员管理选项卡
+  componentDidMountOfEmployeeTab = (form) => {
+
+    if(form == null) return;
+    this.refs.employeeSearchForm = form;
+    this.handleSearchEmployeeList(1);
+  }
+
 
   render(){
 
@@ -589,16 +578,16 @@ class UserManage extends React.Component {
         <div>
           <Tabs defaultActiveKey="1">
             <TabPane tab="会员管理" key="1">
-              <MemberSearchForm ref={this.saveMemberSearchFormRef} handleSearchMemberList={this.handleSearchMemberList}/>
+              <MemberSearchForm ref="memberSearchForm" handleSearchMemberList={this.handleSearchMemberList}/>
               <Table className='user-table' columns={memberColumns} dataSource={this.state.memberData} pagination={this.state.memberPager} onChange={this.changeMemberPager} rowKey='id' loading={this.state.memberTableLoading}/>
             </TabPane>
             <TabPane tab="职员管理" key="2">
-              <EmployeeSearchForm ref={this.saveEmployeeSearchFormRef} handleSearchEmployeeList={this.handleSearchEmployeeList}/>
+              <EmployeeSearchForm ref={this.componentDidMountOfEmployeeTab} handleSearchEmployeeList={this.handleSearchEmployeeList}/>
               <Table className='user-table' columns={employeeColumns} dataSource={this.state.employeeData} pagination={this.state.employeePager} onChange={this.changeEmployeePager} rowKey='id' loading={this.state.employeeTableLoading}/>
             </TabPane>
           </Tabs>
-          <MemberEditModal ref={this.saveMemberEditFormRef} visible={this.state.memberEditModalVisible} confirmLoading={this.state.confirmMemberLoading} onCancel={this.closeMemberEditModal} onConfirm={this.confirmMemberEditModal} adviserAndManagerData={this.state.adviserAndManagerData} />
-          <EmployeeEditModal ref={this.saveEmployeeEditFormRef} visible={this.state.employeeEditModalVisible} confirmLoading={this.state.confirmEmployeeLoading} onCancel={this.closeEmployeeEditModal} onConfirm={this.confirmEmployeeEditModal} adviseManagerData={this.state.adviseManagerData} archiveManagerData={this.state.archiveManagerData} archiveManagerSelectVisible={this.state.archiveManagerSelectVisible} adviseManagerSelectVisible={this.state.adviseManagerSelectVisible} changeRole={this.changeRole}/>
+          <MemberEditModal ref="memberEditForm" visible={this.state.memberEditModalVisible} confirmLoading={this.state.confirmMemberLoading} onCancel={this.closeMemberEditModal} onConfirm={this.confirmMemberEditModal} adviserAndManagerData={this.state.adviserAndManagerData} />
+          <EmployeeEditModal ref="employeeEditForm" visible={this.state.employeeEditModalVisible} confirmLoading={this.state.confirmEmployeeLoading} onCancel={this.closeEmployeeEditModal} onConfirm={this.confirmEmployeeEditModal} adviseManagerData={this.state.adviseManagerData} archiveManagerData={this.state.archiveManagerData} archiveManagerSelectVisible={this.state.archiveManagerSelectVisible} adviseManagerSelectVisible={this.state.adviseManagerSelectVisible} changeRole={this.changeRole}/>
         </div>
     );
   }

@@ -1,12 +1,10 @@
 import './CategoryManage.css'
-import {SERVER, SESSION, RESULT, PAGE_SIZE, ROLE, STYLE, ROUTE} from './../../App/PublicConstant.js'
-import CategoryAddForm from './CategoryAddForm.js'
+import {SERVER, SESSION, RESULT, PAGE_SIZE, ROUTE} from './../../App/PublicConstant.js'
 import React from 'react';
-import {Tabs, Table, message, Popconfirm, Breadcrumb, Button} from 'antd';
+import {Table, message, Popconfirm, Breadcrumb} from 'antd';
 import $ from 'jquery';
 import {Link} from 'react-router';
 import FirstSecondCategoryEditModal from './FirstSecondCategoryEditModal.js'
-const TabPane = Tabs.TabPane;
 
 
 class SecondCategoryManage extends React.Component {
@@ -59,9 +57,7 @@ class SecondCategoryManage extends React.Component {
   }
 
   //翻页
-  changePager = (pager) => {
-    this.requestSecondCategoryData(this.props.params.firstId, pager.current);
-  }
+  changePager = (pager) => this.requestSecondCategoryData(this.props.params.firstId, pager.current)
 
 
   //删除亚类
@@ -103,16 +99,7 @@ class SecondCategoryManage extends React.Component {
     this.requestCategory(this.categoryId);
   }
 
-  closeEditModal = () => {
-
-    this.setState({editModalVisible: false});
-  }
-
-  //保存子组件引用
-  saveEditFormRef = (form) => {
-
-    this.editForm = form;
-  }
+  closeEditModal = () => this.setState({editModalVisible: false})
 
   //查询categoryId类别信息显示到对话框内
   requestCategory = (categoryId) => {
@@ -130,7 +117,7 @@ class SecondCategoryManage extends React.Component {
             if(result.code === RESULT.SUCCESS) {
 
                 let category = result.content;
-                this.editForm.setFieldsValue({name: category.name});
+                this.refs.editForm.setFieldsValue({name: category.name});
 
                 return;
             } else {
@@ -141,12 +128,50 @@ class SecondCategoryManage extends React.Component {
     });
   }
 
+  //确认更新信息
+  confirmEditModal = () => {
 
+    //请求修改亚亚类
+    this.refs.editForm.validateFields((err, values) => {
+      if(!err) {
+        console.log('修改检查亚类', values);
 
-  componentDidMount = () => {
+        //显示加载圈
+        this.setState({ confirmLoading: true });
 
-    this.requestSecondCategoryData(this.props.params.firstId, 1);
+        $.ajax({
+            url : SERVER + '/api/second/' + this.categoryId,
+            type : 'PUT',
+            contentType: 'application/json',
+            data : JSON.stringify({firstId: Number(this.props.params.firstId), name: values.name}),
+            dataType : 'json',
+            beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
+            success : (result) => {
+              console.log(result);
+              if(result.code === RESULT.SUCCESS) {
+
+                //重查刷新一遍
+                this.requestSecondCategoryData(this.props.params.firstId, this.state.pager.current);
+
+                //关闭加载圈、对话框
+                this.setState({
+                  editModalVisible: false,
+                  confirmLoading: false,
+                });
+                message.success(result.reason, 2);
+              } else {
+
+                //关闭加载圈
+                this.setState({ confirmLoading: false });
+                message.error(result.reason, 2);
+              }
+            }
+        });
+      }
+    });
   }
+
+  componentDidMount = () => this.requestSecondCategoryData(this.props.params.firstId, 1)
 
   render(){
 
@@ -177,7 +202,7 @@ class SecondCategoryManage extends React.Component {
             <Breadcrumb.Item>{this.props.params.firstName}</Breadcrumb.Item>
           </Breadcrumb>
           <Table className='second-category-table' columns={secondCategoryColumns} dataSource={this.state.secondCategoryData} rowKey='id' loading={this.state.secondCategoryTableLoading} pagination={this.state.pager} onChange={this.changePager}/>
-          <FirstSecondCategoryEditModal ref={this.saveEditFormRef} visible={this.state.editModalVisible} confirmLoading={this.state.confirmLoading} onCancel={this.closeEditModal} onConfirm={this.confirmEditModal} />
+          <FirstSecondCategoryEditModal ref="editForm" visible={this.state.editModalVisible} confirmLoading={this.state.confirmLoading} onCancel={this.closeEditModal} onConfirm={this.confirmEditModal} />
         </div>
     );
   }
