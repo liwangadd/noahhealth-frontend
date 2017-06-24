@@ -3,7 +3,7 @@ import {SERVER, SESSION, RESULT, ROUTE} from './../../App/PublicConstant.js'
 import CategoryAddModal from './CategoryAddModal.js'
 import FirstSecondCategoryEditModal from './FirstSecondCategoryEditModal.js'
 import React from 'react';
-import {Tabs, Table, message, Popconfirm, Button} from 'antd';
+import {Tabs, Table, message, Popconfirm, Button, BackTop} from 'antd';
 import $ from 'jquery';
 import {Link} from 'react-router';
 const TabPane = Tabs.TabPane;
@@ -192,6 +192,7 @@ class FirstCategoryManage extends React.Component {
         url : SERVER + '/api/first/' + type + '/list',
         type : 'GET',
         dataType : 'json',
+        async: false,
         beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
         success : (result) => {
 
@@ -226,6 +227,7 @@ class FirstCategoryManage extends React.Component {
         contentType: 'application/json',
         dataType : 'json',
         data : JSON.stringify({type : type}),
+        async: false,
         beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
         success : (result) => {
 
@@ -452,6 +454,7 @@ class FirstCategoryManage extends React.Component {
 
     return (
       <div>
+        <BackTop visibilityHeight="200"/>
         <Tabs defaultActiveKey={this.props.params.tabKey} tabBarExtraContent={<Button type="primary" onClick={this.showAddModal}>+&nbsp;&nbsp;检查项目</Button>}>
           <TabPane tab="化验检查项目" key="1">
             <Table className='first-category-table' columns={assayColumns} dataSource={this.state.assayData} rowKey='id' loading={this.state.assayTableLoading} pagination={false}/>

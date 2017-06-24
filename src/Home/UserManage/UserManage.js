@@ -1,7 +1,7 @@
 import './UserManage.css'
 import {SERVER, SESSION, RESULT, PAGE_SIZE, ROLE, STYLE} from './../../App/PublicConstant.js'
 import React from 'react';
-import {Tabs, Table, message, Popconfirm} from 'antd';
+import {Tabs, Table, message, Popconfirm, BackTop} from 'antd';
 import MemberEditModal from './MemberEditModal.js';
 import EmployeeEditModal from './EmployeeEditModal.js';
 import MemberSearchForm from './MemberSearchForm.js';
@@ -576,6 +576,7 @@ class UserManage extends React.Component {
 
     return (
         <div>
+          <BackTop visibilityHeight="200"/>
           <Tabs defaultActiveKey="1">
             <TabPane tab="会员管理" key="1">
               <MemberSearchForm ref="memberSearchForm" handleSearchMemberList={this.handleSearchMemberList}/>
