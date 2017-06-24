@@ -37,22 +37,6 @@ class UserManage extends React.Component {
 
   };
 
-  //保存子组件引用
-  // saveMemberSearchFormRef = (form) => {
-  //
-  //   this.memberSearchForm = form;
-  //   if(form == null) return; //防止卸载时为空
-  //
-  //   this.handleSearchMemberList(1);
-  // }
-  // saveEmployeeSearchFormRef = (form) => {
-  //   this.employeeSearchForm = form;
-  //   if(form == null) return; //防止卸载时为空
-  //
-  //   this.handleSearchEmployeeList(1);
-  // }
-
-
   //翻页
   changeMemberPager = (pager) =>  this.handleSearchMemberList(pager.current)
 
@@ -288,7 +272,7 @@ class UserManage extends React.Component {
     $.ajax({
         url : SERVER + '/api/user/advise/list',
         type : 'GET',
-        async: false,
+        // async: false,
         dataType : 'json',
         beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
         success : (result) => {
@@ -333,7 +317,7 @@ class UserManage extends React.Component {
     $.ajax({
         url : SERVER + '/api/user/manager/list',
         type : 'POST',
-        async: false,
+        // async: false,
         contentType: 'application/json',
         dataType : 'json',
         data : JSON.stringify({manager : ROLE.EMPLOYEE_ARCHIVE_MANAGER}),
@@ -357,7 +341,7 @@ class UserManage extends React.Component {
     $.ajax({
         url : SERVER + '/api/user/manager/list',
         type : 'POST',
-        async: false,
+        // async: false,
         contentType: 'application/json',
         dataType : 'json',
         data : JSON.stringify({manager : ROLE.EMPLOYEE_ADVISE_MANAGER}),

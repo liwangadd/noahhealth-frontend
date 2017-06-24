@@ -192,7 +192,7 @@ class FirstCategoryManage extends React.Component {
         url : SERVER + '/api/first/' + type + '/list',
         type : 'GET',
         dataType : 'json',
-        async: false,
+        // async: false,
         beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
         success : (result) => {
 
@@ -202,10 +202,14 @@ class FirstCategoryManage extends React.Component {
                 if(type === "化验") {
 
                   this.setState({firstCategoryParentOfAssayData: result.content});
+
+                  if(this.refs.addForm == null) return;
                   this.refs.addForm.setFieldsValue({firstCategoryParentOfAssayId : result.content.length > 0 ? result.content[0].id.toString() : ''});
                 } else {
 
                   this.setState({firstCategoryParentOfTechData: result.content});
+
+                  if(this.refs.addForm == null) return;
                   this.refs.addForm.setFieldsValue({firstCategoryParentOfTechId : result.content.length > 0 ? result.content[0].id.toString() : ''});
                 }
 
@@ -227,7 +231,7 @@ class FirstCategoryManage extends React.Component {
         contentType: 'application/json',
         dataType : 'json',
         data : JSON.stringify({type : type}),
-        async: false,
+        // async: false,
         beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
         success : (result) => {
 
@@ -253,10 +257,14 @@ class FirstCategoryManage extends React.Component {
                 if(type === "化验") {
 
                   this.setState({secondCategoryParentOfAssayData: secondCategoryParentData});
+
+                  if(this.refs.addForm == null) return;
                   this.refs.addForm.setFieldsValue({secondCategoryParentOfAssayId: secondCategoryParentData.length > 0 ? [secondCategoryParentData[0].value, secondCategoryParentData[0].children[0].value] : []});
                 } else {
 
                   this.setState({secondCategoryParentOfTechData: secondCategoryParentData});
+
+                  if(this.refs.addForm == null) return;
                   this.refs.addForm.setFieldsValue({secondCategoryParentOfTechId: secondCategoryParentData.length > 0 ? [secondCategoryParentData[0].value, secondCategoryParentData[0].children[0].value] : []});
                 }
             } else {
@@ -418,7 +426,7 @@ class FirstCategoryManage extends React.Component {
       title: '检查分类名称',
       dataIndex: 'name',
       key: 'name',
-      render: (name, record) => <Link to={ROUTE.HOME_SECOND_CATEGORY_MANAGE.URL_PREFIX + "/1/" + record.id + "/" + name}>{name}</Link>,
+      render: (name, record) => <Link to={ROUTE.SECOND_CATEGORY_MANAGE.URL_PREFIX + "/" + ROUTE.SECOND_CATEGORY_MANAGE.MENU_KEY + "/1/" + record.id + "/" + name}>{name}</Link>,
     }, {
       title: '操作',
       key: 'action',
@@ -437,7 +445,7 @@ class FirstCategoryManage extends React.Component {
       title: '检查分类名称',
       dataIndex: 'name',
       key: 'name',
-      render: (name, record) => <Link to={ROUTE.HOME_SECOND_CATEGORY_MANAGE.URL_PREFIX + "/2/" + record.id + "/" + name}>{name}</Link>,
+      render: (name, record) => <Link to={ROUTE.SECOND_CATEGORY_MANAGE.URL_PREFIX + "/" + ROUTE.SECOND_CATEGORY_MANAGE.MENU_KEY + "/2/" + record.id + "/" + name}>{name}</Link>,
     }, {
       title: '操作',
       key: 'action',

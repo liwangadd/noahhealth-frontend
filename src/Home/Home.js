@@ -59,10 +59,10 @@ class Home extends React.Component {
 
     if(role === ROLE.EMPLOYEE_ADMIN) layoutStyle = this.getLayoutStyle(COLOR.RED, STYLE.BLOCK, STYLE.BLOCK);
     else if(role === ROLE.EMPLOYEE_FINANCER) layoutStyle = this.getLayoutStyle(COLOR.RED, STYLE.BLOCK, STYLE.NONE);
-    else if(role === ROLE.EMPLOYEE_ARCHIVER) layoutStyle = this.getLayoutStyle(COLOR.PINK, STYLE.NONE, STYLE.NONE);
-    else if(role === ROLE.EMPLOYEE_ARCHIVE_MANAGER) layoutStyle = this.getLayoutStyle(COLOR.PINK, STYLE.NONE, STYLE.NONE);
-    else if(role === ROLE.EMPLOYEE_ADVISER) layoutStyle = this.getLayoutStyle(COLOR.ORANGE, STYLE.NONE, STYLE.NONE);
-    else if(role === ROLE.EMPLOYEE_ADVISE_MANAGER) layoutStyle = this.getLayoutStyle(COLOR.ORANGE, STYLE.NONE, STYLE.NONE);
+    else if(role === ROLE.EMPLOYEE_ARCHIVER) layoutStyle = this.getLayoutStyle(COLOR.PINK, STYLE.NONE, STYLE.BLOCK);
+    else if(role === ROLE.EMPLOYEE_ARCHIVE_MANAGER) layoutStyle = this.getLayoutStyle(COLOR.PINK, STYLE.NONE, STYLE.BLOCK);
+    else if(role === ROLE.EMPLOYEE_ADVISER) layoutStyle = this.getLayoutStyle(COLOR.ORANGE, STYLE.NONE, STYLE.BLOCK);
+    else if(role === ROLE.EMPLOYEE_ADVISE_MANAGER) layoutStyle = this.getLayoutStyle(COLOR.ORANGE, STYLE.NONE, STYLE.BLOCK);
     else if(role === ROLE.MEMBER_1) layoutStyle = this.getLayoutStyle(COLOR.GREEN, STYLE.NONE, STYLE.NONE);
     else if(role=== ROLE.MEMBER_2) layoutStyle = this.getLayoutStyle(COLOR.CYAN, STYLE.NONE, STYLE.NONE);
     else layoutStyle = this.getLayoutStyle(COLOR.BLUE, STYLE.NONE, STYLE.NONE);
@@ -90,16 +90,13 @@ class Home extends React.Component {
 
   handleMenuItemClick = (e) => {
 
-    let targetUrl = ROUTE.HOME.URL;
+    let targetUrl = ROUTE.WELCOME.URL_PREFIX + "/" + ROUTE.WELCOME.MENU_KEY;
     switch(e.key) {
-      case '1': targetUrl = ROUTE.HOME.URL; break;
-      case '2': targetUrl = ROUTE.HOME_USER_MANAGE.URL; break;
-      case '3': targetUrl = ROUTE.HOME_FIRST_CATEGORY_MANAGE.URL_PREFIX + "/1"; break;
+      case ROUTE.WELCOME.MENU_KEY: targetUrl = ROUTE.WELCOME.URL_PREFIX + "/" + ROUTE.WELCOME.MENU_KEY; break;
+      case ROUTE.USER_MANAGE.MENU_KEY: targetUrl = ROUTE.USER_MANAGE.URL_PREFIX + "/" + ROUTE.USER_MANAGE.MENU_KEY; break;
+      case ROUTE.FIRST_CATEGORY_MANAGE.MENU_KEY: targetUrl = ROUTE.FIRST_CATEGORY_MANAGE.URL_PREFIX + "/" + ROUTE.FIRST_CATEGORY_MANAGE.MENU_KEY + "/1"; break;
       default:;break;
     }
-
-    //记录当前按下的菜单项索引
-    sessionStorage.setItem(SESSION.MENUITEM_KEY, e.key);
 
     //跳转
     browserHistory.push(targetUrl);
@@ -118,7 +115,6 @@ class Home extends React.Component {
   render() {
 
     const role = sessionStorage.getItem(SESSION.ROLE);
-    const selectedKey = sessionStorage.getItem(SESSION.MENUITEM_KEY); //避免刷新失去菜单选项
 
     //悬停头像时的下拉菜单
     const userOperationDropdownMenu = (
@@ -139,7 +135,7 @@ class Home extends React.Component {
           collapsible
           collapsed={this.state.collapsed}>
           <div className="logo"/>
-          <Menu theme="dark" mode="inline" selectedKeys={[selectedKey == null ? '1' : selectedKey]} onClick={this.handleMenuItemClick}>
+          <Menu theme="dark" mode="inline" selectedKeys={[this.props.params.menuKey]} onClick={this.handleMenuItemClick}>
             <Menu.Item key="1">
               <Icon type="home" className="menu-item-font"/>
               <span className="nav-text menu-item-font">首页</span>

@@ -21,14 +21,14 @@ const ROLE = {
 //路由(跳转地址 和 可访问的角色,[]表示所有角色均可访问)
 const ROUTE = {
   ROOT: {URL: '/', PERMISSION: []},
-  LOGIN: {URL: '/login', PERMISSION: []},
-  REGISTER: {URL: '/register', PERMISSION: []},
-  HOME: {URL:'/home', PERMISSION: []},
-    HOME_WELCOME: {URL:'/home', PERMISSION: []},
-    HOME_USER_MANAGE: {URL:'/home/user_manage', PERMISSION: [ROLE.EMPLOYEE_ADMIN, ROLE.EMPLOYEE_FINANCER]},
-    HOME_FIRST_CATEGORY_MANAGE: {URL:'/home/first_category_manage/:tabKey', URL_PREFIX:'/home/first_category_manage', PERMISSION: [ROLE.EMPLOYEE_ADMIN]},
-    HOME_SECOND_CATEGORY_MANAGE: {URL:'/home/second_category_manage/:tabKey/:firstId/:firstName', URL_PREFIX:'/home/second_category_manage', PERMISSION: [ROLE.EMPLOYEE_ADMIN]},
-    HOME_THIRD_CATEGORY_MANAGE: {URL:'/home/third_category_manage/:tabKey/:firstId/:firstName/:secondId/:secondName', URL_PREFIX:'/home/third_category_manage', PERMISSION: [ROLE.EMPLOYEE_ADMIN]}
+  LOGIN: {URL: '/login', URL_PREFIX:'/login', PERMISSION: []},
+  REGISTER: {URL: '/register', URL_PREFIX:'/register', PERMISSION: []},
+  HOME: {URL:'/home/:menuKey', URL_PREFIX:'/home', MENU_KEY: '1', PERMISSION: []},
+    WELCOME: {URL:'/home/:menuKey', URL_PREFIX:'/home', MENU_KEY: '1', PERMISSION: []},
+    USER_MANAGE: {URL:'/user_manage/:menuKey', URL_PREFIX:'/user_manage', MENU_KEY: '2', PERMISSION: [ROLE.EMPLOYEE_ADMIN, ROLE.EMPLOYEE_FINANCER]},
+    FIRST_CATEGORY_MANAGE: {URL:'/first_category_manage/:menuKey/:tabKey', URL_PREFIX:'/first_category_manage', MENU_KEY: '3', PERMISSION: [ROLE.EMPLOYEE_ADMIN, ROLE.EMPLOYEE_ARCHIVE_MANAGER, ROLE.EMPLOYEE_ARCHIVER, ROLE.EMPLOYEE_ADVISE_MANAGER, ROLE.EMPLOYEE_ADVISER]},
+    SECOND_CATEGORY_MANAGE: {URL:'/second_category_manage/:menuKey/:tabKey/:firstId/:firstName', URL_PREFIX:'/second_category_manage', MENU_KEY: '3', PERMISSION: [ROLE.EMPLOYEE_ADMIN, ROLE.EMPLOYEE_ARCHIVE_MANAGER, ROLE.EMPLOYEE_ARCHIVER, ROLE.EMPLOYEE_ADVISE_MANAGER, ROLE.EMPLOYEE_ADVISER]},
+    THIRD_CATEGORY_MANAGE: {URL:'/third_category_manage/:menuKey/:tabKey/:firstId/:firstName/:secondId/:secondName', URL_PREFIX:'/third_category_manage', MENU_KEY: '3', PERMISSION: [ROLE.EMPLOYEE_ADMIN, ROLE.EMPLOYEE_ARCHIVE_MANAGER, ROLE.EMPLOYEE_ARCHIVER, ROLE.EMPLOYEE_ADVISE_MANAGER, ROLE.EMPLOYEE_ADVISER]}
 }
 
 //session中常量
@@ -38,8 +38,7 @@ const SESSION = {
   PHONE: 'PHONE',
   ROLE: 'ROLE',
   NAME: 'NAME',
-  EXPIRED_TIME: 'EXPIRED_TIME',
-  MENUITEM_KEY: 'MENUITEM_KEY'
+  EXPIRED_TIME: 'EXPIRED_TIME'
 }
 
 //result

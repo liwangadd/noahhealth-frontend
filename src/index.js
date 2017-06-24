@@ -39,14 +39,16 @@ var certifyAccess = function(nextState, replace){
     }
 
     //判断当前用户的role是否能进入targetUrl页面
-    let targetUrl = nextState.location.pathname;
+    let targetUrl = "/" + nextState.location.pathname.split('/')[1];
     switch(targetUrl) {
-      case ROUTE.LOGIN.URL:certifyRole(replace, role, ROUTE.LOGIN.PERMISSION);break;
-      case ROUTE.REGISTER.URL:certifyRole(replace, role, ROUTE.REGISTER.PERMISSION);break;
-      case ROUTE.HOME.URL:certifyRole(replace, role, ROUTE.HOME.PERMISSION);break;
-      case ROUTE.HOME_USER_MANAGE.URL:certifyRole(replace, role, ROUTE.HOME_USER_MANAGE.PERMISSION);break;
-      case ROUTE.HOME_FIRST_CATEGORY_MANAGE.URL:certifyRole(replace, role, ROUTE.HOME_FIRST_CATEGORY_MANAGE.PERMISSION);break;
-      default:;break;
+      case ROUTE.LOGIN.URL_PREFIX:certifyRole(replace, role, ROUTE.LOGIN.PERMISSION);break;
+      case ROUTE.REGISTER.URL_PREFIX:certifyRole(replace, role, ROUTE.REGISTER.PERMISSION);break;
+      case ROUTE.HOME.URL_PREFIX:certifyRole(replace, role, ROUTE.HOME.PERMISSION);break;
+      case ROUTE.USER_MANAGE.URL_PREFIX:certifyRole(replace, role, ROUTE.USER_MANAGE.PERMISSION);break;
+      case ROUTE.FIRST_CATEGORY_MANAGE.URL_PREFIX:certifyRole(replace, role, ROUTE.FIRST_CATEGORY_MANAGE.PERMISSION);break;
+      case ROUTE.SECOND_CATEGORY_MANAGE.URL_PREFIX:certifyRole(replace, role, ROUTE.SECOND_CATEGORY_MANAGE.PERMISSION);break;
+      case ROUTE.THIRD_CATEGORY_MANAGE.URL_PREFIX:certifyRole(replace, role, ROUTE.THIRD_CATEGORY_MANAGE.PERMISSION);break;
+      default:clearSession();replace({ pathname: ROUTE.LOGIN.URL });message.error('暂无该页面，请重新登录');break;
     }
 
     //放行
@@ -74,17 +76,22 @@ class AppRouter extends React.Component {
   render() {
     return (<Router history={browserHistory}>
               <Route path={ROUTE.ROOT.URL} component={App}>
+
                 <Route onEnter={certifyAccess}>
                   <Route path={ROUTE.HOME.URL} component={Home}>
-                    <IndexRoute component={Welcome}/>
-                    <Route path={ROUTE.HOME_USER_MANAGE.URL} component={UserManage}/>
-                    <Route path={ROUTE.HOME_FIRST_CATEGORY_MANAGE.URL} component={FirstCategoryManage}/>
-                    <Route path={ROUTE.HOME_SECOND_CATEGORY_MANAGE.URL} component={SecondCategoryManage}/>
-                    <Route path={ROUTE.HOME_THIRD_CATEGORY_MANAGE.URL} component={ThirdCategoryManage}/>
+                      <IndexRoute component={Welcome} />
+                      <Route path={ROUTE.USER_MANAGE.URL} component={UserManage}/>
+                      <Route path={ROUTE.FIRST_CATEGORY_MANAGE.URL} component={FirstCategoryManage}/>
+                      <Route path={ROUTE.SECOND_CATEGORY_MANAGE.URL} component={SecondCategoryManage}/>
+                      <Route path={ROUTE.THIRD_CATEGORY_MANAGE.URL} component={ThirdCategoryManage}/>
                   </Route>
                 </Route>
+
                 <Route path={ROUTE.LOGIN.URL} component={Login}/>
                 <Route path={ROUTE.REGISTER.URL} component={Register}/>
+                <Route onEnter={certifyAccess}>
+                  <Route path="*" component={Home}/>
+                </Route>
               </Route>
           </Router>);
   }

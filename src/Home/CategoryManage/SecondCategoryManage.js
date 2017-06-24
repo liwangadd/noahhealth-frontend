@@ -179,7 +179,7 @@ class SecondCategoryManage extends React.Component {
       title: '检查亚类名称',
       dataIndex: 'name',
       key: 'name',
-      render: (name, record) => <Link to={ROUTE.HOME_THIRD_CATEGORY_MANAGE.URL_PREFIX + "/" + this.props.params.tabKey + "/" + this.props.params.firstId +"/" + this.props.params.firstName + "/" + record.id + "/" + name}>{name}</Link>,
+      render: (name, record) => <Link to={ROUTE.THIRD_CATEGORY_MANAGE.URL_PREFIX + "/" + ROUTE.THIRD_CATEGORY_MANAGE.MENU_KEY + "/" + this.props.params.tabKey + "/" + this.props.params.firstId +"/" + this.props.params.firstName + "/" + record.id + "/" + name}>{name}</Link>,
     }, {
       title: '操作',
       key: 'action',
@@ -198,7 +198,7 @@ class SecondCategoryManage extends React.Component {
     return (
         <div>
           <Breadcrumb separator=">" className="category-path">
-            <Breadcrumb.Item><Link to={ROUTE.HOME_FIRST_CATEGORY_MANAGE.URL_PREFIX + "/" + this.props.params.tabKey}>首页</Link></Breadcrumb.Item>
+            <Breadcrumb.Item><Link to={ROUTE.FIRST_CATEGORY_MANAGE.URL_PREFIX + "/" + ROUTE.FIRST_CATEGORY_MANAGE.MENU_KEY + "/" + this.props.params.tabKey}>首页</Link></Breadcrumb.Item>
             <Breadcrumb.Item>{this.props.params.firstName}</Breadcrumb.Item>
           </Breadcrumb>
           <Table className='second-category-table' columns={secondCategoryColumns} dataSource={this.state.secondCategoryData} rowKey='id' loading={this.state.secondCategoryTableLoading} pagination={this.state.pager} onChange={this.changePager}/>
