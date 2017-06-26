@@ -3,18 +3,20 @@ import {SERVER, SESSION, RESULT, ROUTE, PAGE_SIZE} from './../../App/PublicConst
 import {formatDate} from './../../App/PublicUtil.js';
 import OriginResultSearchForm from './OriginResultSearchForm.js';
 import OriginResultUploadModal from './OriginResultUploadModal.js';
+import OriginResultUploadPictureModal from './OriginResultUploadPictureModal.js'
 import React from 'react';
-import {Tabs, Table, message, Popconfirm, Button, BackTop} from 'antd';
+import {Tabs, Table, message, Popconfirm, Button, BackTop, Modal} from 'antd';
 import $ from 'jquery';
 import {Link} from 'react-router';
 const TabPane = Tabs.TabPane;
+const confirm = Modal.confirm;
 
 
 class OriginResultManage extends React.Component {
 
   state = {
 
-    //待审核
+    //执行情况
     originResultData: [],
     originResultTableLoading: false,
     originResultPager: {pageSize: PAGE_SIZE, total: 0},
@@ -22,13 +24,17 @@ class OriginResultManage extends React.Component {
     //添加对话框
     uploadModalVisible: false,
     confirmUploadModalLoading: false,
+    memberUnderEmployeeData: [],
     secondCategoryParentOfAssayData: [],
-    secondCategoryParentOfTechData: []
+    secondCategoryParentOfTechData: [],
+
+    //上传扫描件
+    uploadPictureModalVisible: false
   };
 
 
   /**
-  * 待审核表格
+  * 执行情况表格
   **/
 
   //查表
@@ -82,18 +88,13 @@ class OriginResultManage extends React.Component {
     });
   }
 
+  //翻页
+  changeOriginResultPager = (pager) =>  this.handleSearchOriginResultList(pager.current)
 
 
 
   /**
-  * 待录入表格
-  **/
-
-
-
-
-  /**
-  * 上传原始资料扫描件对话框
+  * 上传原始资料对话框
   **/
   showUploadModal = () => this.setState({ uploadModalVisible: true})
   closeUploadModal = () => this.setState({ uploadModalVisible: false})
@@ -151,22 +152,24 @@ class OriginResultManage extends React.Component {
     });
   }
 
-  //确认更新信息
+  //确认上传原始资料信息
   confirmUploadModal = () => {
 
-    //请求修改亚亚类
     this.refs.uploadForm.validateFields((err, values) => {
       if(!err) {
         console.log('上传一份原始资料', values);
 
         //显示加载圈
         this.setState({ confirmUploadModalLoading: true });
-
+        console.log(values.time);
+        let secondId = values.type === '化验' ? values.secondCategoryParentOfAssayId[1] : values.secondCategoryParentOfTechId[1];
         $.ajax({
             url : SERVER + '/api/origin',
             type : 'POST',
             contentType: 'application/json',
-            data : JSON.stringify({type: this.categoryType, name: values.name}),
+            data : JSON.stringify({userId: Number(values.userId),
+                                   secondId: secondId,
+                                   time: values.time}),
             dataType : 'json',
             beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
             success : (result) => {
@@ -180,7 +183,11 @@ class OriginResultManage extends React.Component {
                   uploadModalVisible: false,
                   confirmUploadModalLoading: false,
                 });
-                message.success(result.reason, 2);
+
+                //询问是否弹出上传对话框继续上传扫描件
+                confirm({title: '添加成功! 是否继续上传原始资料的扫描件?',
+                         onOk: () => this.showUploadPictureModal(result.content)});
+
               } else {
 
                 //关闭加载圈
@@ -193,6 +200,44 @@ class OriginResultManage extends React.Component {
     });
   }
 
+  /**
+  * 上传扫描件图片对话框
+  **/
+
+  showUploadPictureModal = (originResultId) => {
+
+    this.setState({uploadPictureModalVisible: true});
+
+    //record.path对应的图片显示到上传预览组件中
+    
+  }
+
+  closeUploadPictureModal = () => this.setState({uploadPictureModalVisible: false})
+
+  requestMembersUnderEmployee = () => {
+
+      console.log('拉取'+ sessionStorage.getItem(SESSION.NAME) +'旗下的所有会员信息');
+      $.ajax({
+          url : SERVER + '/api/origin/member_under_employee',
+          type : 'GET',
+          dataType : 'json',
+          beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
+          success : (result) => {
+
+              console.log(result);
+              if(result.code !== RESULT.SUCCESS) {
+                  message.error(result.reason, 2);
+                  return;
+              }
+
+              //更新获取到的数据到状态中
+              const memberUnderEmployeeData = result.content;
+              this.setState({ memberUnderEmployeeData: memberUnderEmployeeData});
+              if(this.refs.uploadForm == null) return;
+              this.refs.uploadForm.setFieldsValue({userId: memberUnderEmployeeData.length > 0 ? memberUnderEmployeeData[0].id.toString() : ''});
+          }
+      });
+  }
 
 
   componentDidMount = () => {
@@ -200,6 +245,9 @@ class OriginResultManage extends React.Component {
     this.handleSearchOriginResultList(1);
     this.requestSecondCategoryParentData("化验");
     this.requestSecondCategoryParentData("医技");
+
+    //拉取上传对话框中的会员信息(该employee旗下的)
+    this.requestMembersUnderEmployee();
   }
 
 
@@ -255,10 +303,11 @@ class OriginResultManage extends React.Component {
         <Tabs defaultActiveKey={"1"} tabBarExtraContent={<Button type="primary" onClick={this.showUploadModal}>上传原始资料</Button>}>
           <TabPane tab="执行情况" key="1">
             <OriginResultSearchForm ref="searchForm" handleSearchOriginResultList={this.handleSearchOriginResultList}/>
-            <Table className='origin-result-table' columns={originResultColumns} dataSource={this.state.originResultData} rowKey='id' loading={this.state.originResultTableLoading}/>
+            <Table className='origin-result-table' columns={originResultColumns} dataSource={this.state.originResultData} rowKey='id' loading={this.state.originResultTableLoading} pagination={this.state.originResultPager} onChange={this.changeOriginResultPager}/>
           </TabPane>
         </Tabs>
-        <OriginResultUploadModal ref="uploadForm" visible={this.state.uploadModalVisible} confirmLoading={this.state.confirmUploadModalLoading} onCancel={this.closeUploadModal} onConfirm={this.confirmUploadModal} secondCategoryParentOfAssayData={this.state.secondCategoryParentOfAssayData} secondCategoryParentOfTechData={this.state.secondCategoryParentOfTechData}  />
+        <OriginResultUploadModal ref="uploadForm" visible={this.state.uploadModalVisible} confirmLoading={this.state.confirmUploadModalLoading} onCancel={this.closeUploadModal} onConfirm={this.confirmUploadModal} secondCategoryParentOfAssayData={this.state.secondCategoryParentOfAssayData} secondCategoryParentOfTechData={this.state.secondCategoryParentOfTechData}  memberUnderEmployeeData={this.state.memberUnderEmployeeData}/>
+        <OriginResultUploadPictureModal visible={this.state.uploadPictureModalVisible} onCancel={this.closeUploadPictureModal}/>
       </div>
     );
   }
