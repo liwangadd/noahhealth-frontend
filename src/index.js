@@ -11,6 +11,7 @@ import UserManage from './Home/UserManage/UserManage.js';
 import FirstCategoryManage from './Home/CategoryManage/FirstCategoryManage.js';
 import SecondCategoryManage from './Home/CategoryManage/SecondCategoryManage.js';
 import ThirdCategoryManage from './Home/CategoryManage/ThirdCategoryManage.js';
+import OriginResultManage from './Home/OriginResultManage/OriginResultManage.js';
 import {message} from 'antd'
 import {Router, Route, browserHistory, IndexRoute} from 'react-router';
 
@@ -48,6 +49,7 @@ var certifyAccess = function(nextState, replace){
       case ROUTE.FIRST_CATEGORY_MANAGE.URL_PREFIX:certifyRole(replace, role, ROUTE.FIRST_CATEGORY_MANAGE.PERMISSION);break;
       case ROUTE.SECOND_CATEGORY_MANAGE.URL_PREFIX:certifyRole(replace, role, ROUTE.SECOND_CATEGORY_MANAGE.PERMISSION);break;
       case ROUTE.THIRD_CATEGORY_MANAGE.URL_PREFIX:certifyRole(replace, role, ROUTE.THIRD_CATEGORY_MANAGE.PERMISSION);break;
+      case ROUTE.ORIGIN_RESULT_MANAGE.URL_PREFIX:certifyRole(replace, role, ROUTE.ORIGIN_RESULT_MANAGE.PERMISSION);break;
       default:clearSession();replace({ pathname: ROUTE.LOGIN.URL });message.error('暂无该页面，请重新登录');break;
     }
 
@@ -84,14 +86,13 @@ class AppRouter extends React.Component {
                       <Route path={ROUTE.FIRST_CATEGORY_MANAGE.URL} component={FirstCategoryManage}/>
                       <Route path={ROUTE.SECOND_CATEGORY_MANAGE.URL} component={SecondCategoryManage}/>
                       <Route path={ROUTE.THIRD_CATEGORY_MANAGE.URL} component={ThirdCategoryManage}/>
+                      <Route path={ROUTE.ORIGIN_RESULT_MANAGE.URL} component={OriginResultManage}/>
                   </Route>
                 </Route>
 
                 <Route path={ROUTE.LOGIN.URL} component={Login}/>
                 <Route path={ROUTE.REGISTER.URL} component={Register}/>
-                <Route onEnter={certifyAccess}>
-                  <Route path="*" component={Home}/>
-                </Route>
+                <Route path="*"  onEnter={certifyAccess} />
               </Route>
           </Router>);
   }

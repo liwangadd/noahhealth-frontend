@@ -1,9 +1,10 @@
 import './UserManage.css'
 import {SERVER, SESSION, RESULT, PAGE_SIZE, ROLE, STYLE} from './../../App/PublicConstant.js'
 import React from 'react';
-import {Tabs, Table, message, Popconfirm, BackTop} from 'antd';
+import {Tabs, Table, message, Popconfirm, BackTop, Button} from 'antd';
 import MemberEditModal from './MemberEditModal.js';
 import EmployeeEditModal from './EmployeeEditModal.js';
+import EmployeeAddModal from './EmployeeAddModal.js';
 import MemberSearchForm from './MemberSearchForm.js';
 import EmployeeSearchForm from './EmployeeSearchForm.js';
 import $ from 'jquery';
@@ -28,13 +29,20 @@ class UserManage extends React.Component {
     employeePager: {pageSize: PAGE_SIZE, total: 0},
     archiveManagerData: [],
     adviseManagerData:  [],
-    adviseManagerSelectVisible: STYLE.NONE,
-    archiveManagerSelectVisible: STYLE.NONE,
+    adviseManagerEditModalSelectVisible: STYLE.NONE,
+    archiveManagerEditModalSelectVisible: STYLE.NONE,
 
     employeeTableLoading: false,
-    employeeEditModalVisible: false,
-    confirmEmployeeLoading: false
 
+    //职员编辑对话框
+    employeeEditModalVisible: false,
+    confirmEmployeeEditModalLoading: false,
+
+    //职员添加对话框
+    employeeAddModalVisible: false,
+    confirmEmployeeAddModalLoading: false,
+    adviseManagerAddModalSelectVisible: STYLE.NONE,
+    archiveManagerAddModalSelectVisible: STYLE.NONE,
   };
 
   //翻页
@@ -206,6 +214,8 @@ class UserManage extends React.Component {
             if(result.code === RESULT.SUCCESS) {
 
                 let member = result.content;
+
+                if(this.refs.memberEditForm == null) return;
                 this.refs.memberEditForm.setFieldsValue({name: member.name,
                                                     role: member.role,
                                                     adviserAndManager: [member.staffMgrId, Number(member.staffId)]});
@@ -235,13 +245,15 @@ class UserManage extends React.Component {
             if(result.code === RESULT.SUCCESS) {
 
                 let employee = result.content;
+
+                if(this.refs.employeeEditForm == null) return;
                 this.refs.employeeEditForm.setFieldsValue({name: employee.name,
                                                       role: employee.role});
 
                 //如果角色级别目前为档案部员工 or 顾问部员工 则显示出对应的上级选择器
                 if(employee.role === ROLE.EMPLOYEE_ADVISER) this.refs.employeeEditForm.setFieldsValue({adviseManager: employee.staffMgrId});
                 else if(employee.role === ROLE.EMPLOYEE_ARCHIVER) this.refs.employeeEditForm.setFieldsValue({archiveManager: employee.staffMgrId});
-                this.changeRole(employee.role);
+                this.changeEditModalRole(employee.role);
 
                 return;
             } else {
@@ -252,14 +264,25 @@ class UserManage extends React.Component {
     });
   }
 
-  //更换角色
-  changeRole = (role) => {
+  //更换角色(编辑框)
+  changeEditModalRole = (role) => {
 
     //根据 角色级别 决定是否显示 主管选择器
     switch(role) {
-      case ROLE.EMPLOYEE_ARCHIVER:this.setState({archiveManagerSelectVisible : STYLE.BLOCK, adviseManagerSelectVisible : STYLE.NONE});break;
-      case ROLE.EMPLOYEE_ADVISER:this.setState({archiveManagerSelectVisible : STYLE.NONE, adviseManagerSelectVisible : STYLE.BLOCK});break;
-      default:this.setState({archiveManagerSelectVisible : STYLE.NONE, adviseManagerSelectVisible : STYLE.NONE});break;
+      case ROLE.EMPLOYEE_ARCHIVER:this.setState({archiveManagerEditModalSelectVisible : STYLE.BLOCK, adviseManagerEditModalSelectVisible : STYLE.NONE});break;
+      case ROLE.EMPLOYEE_ADVISER:this.setState({archiveManagerEditModalSelectVisible : STYLE.NONE, adviseManagerEditModalSelectVisible : STYLE.BLOCK});break;
+      default:this.setState({archiveManagerEditModalSelectVisible : STYLE.NONE, adviseManagerEditModalSelectVisible : STYLE.NONE});break;
+    }
+  }
+
+  //更换角色（添加框）
+  changeAddModalRole = (role) => {
+
+    //根据 角色级别 决定是否显示 主管选择器
+    switch(role) {
+      case ROLE.EMPLOYEE_ARCHIVER:this.setState({archiveManagerAddModalSelectVisible : STYLE.BLOCK, adviseManagerAddModalSelectVisible : STYLE.NONE});break;
+      case ROLE.EMPLOYEE_ADVISER:this.setState({archiveManagerAddModalSelectVisible : STYLE.NONE, adviseManagerAddModalSelectVisible : STYLE.BLOCK});break;
+      default:this.setState({archiveManagerAddModalSelectVisible : STYLE.NONE, adviseManagerAddModalSelectVisible : STYLE.NONE});break;
     }
   }
 
@@ -308,7 +331,7 @@ class UserManage extends React.Component {
     });
   }
 
-  //获取所有档案部、顾问部主管填充选择器
+  //获取所有档案部、顾问部主管填充 编辑框、添加框中的选择器
   requestArchiveManagerAndAdviseManager = () => {
 
     console.log('查询所有档案主管与顾问主管');
@@ -329,6 +352,7 @@ class UserManage extends React.Component {
 
                 this.setState({ archiveManagerData: result.content }); //默认选上第一项
                 this.refs.employeeEditForm.setFieldsValue({archiveManager: result.content[0].id.toString()});
+                this.refs.employeeAddForm.setFieldsValue({archiveManager: result.content[0].id.toString()});
                 return;
             } else {
                 message.error(result.reason, 2);
@@ -353,6 +377,7 @@ class UserManage extends React.Component {
 
                 this.setState({ adviseManagerData: result.content }); //默认选上第一项
                 this.refs.employeeEditForm.setFieldsValue({adviseManager: result.content[0].id.toString()});
+                this.refs.employeeAddForm.setFieldsValue({adviseManager: result.content[0].id.toString()});
                 return;
             } else {
                 message.error(result.reason, 2);
@@ -368,7 +393,6 @@ class UserManage extends React.Component {
     this.setState({memberEditModalVisible: true});
 
     this.memberId = record.id //保存当前正在编辑的会员用户名方便提交用
-    this.requestAdviserAndAdviseManager();
     this.requestMember(this.memberId);
   }
   showEmployeeEditModal = (record) => {
@@ -376,7 +400,6 @@ class UserManage extends React.Component {
     this.setState({ employeeEditModalVisible: true});
 
     this.employeeId = record.id //保存当前正在编辑的职员用户名方便提交用
-    this.requestArchiveManagerAndAdviseManager();
     this.requestEmployee(this.employeeId);
   }
 
@@ -439,7 +462,7 @@ class UserManage extends React.Component {
         else if(values.role === ROLE.EMPLOYEE_ARCHIVER) staffMgrId = Number(values.archiveManager);
 
         //显示加载圈
-        this.setState({ confirmEmployeeLoading: true });
+        this.setState({ confirmEmployeeEditModalLoading: true });
 
         $.ajax({
             url : SERVER + '/api/user/' + this.employeeId,
@@ -458,13 +481,67 @@ class UserManage extends React.Component {
                 //关闭加载圈、对话框
                 this.setState({
                   employeeEditModalVisible: false,
-                  confirmEmployeeLoading: false,
+                  confirmEmployeeEditModalLoading: false,
                 });
                 message.success(result.reason, 2);
               } else {
 
                 //关闭加载圈
-                this.setState({ confirmEmployeeLoading: false });
+                this.setState({ confirmEmployeeEditModalLoading: false });
+                message.error(result.reason, 2);
+              }
+            }
+        });
+      }
+    });
+  }
+
+  /**
+  * 添加职员对话框
+  **/
+  showEmployeeAddModal = (record) => this.setState({ employeeAddModalVisible: true})
+
+  closeEmployeeAddModal = () => this.setState({ employeeAddModalVisible: false})
+
+  confirmEmployeeAddModal = () => {
+
+    //请求修改职员
+    this.refs.employeeAddForm.validateFields((err, values) => {
+      if(!err) {
+        console.log('添加职员', values);
+
+        //根据角色传递staffMgrId
+        let staffMgrId = null;
+        if(values.role === ROLE.EMPLOYEE_ADVISER) staffMgrId = Number(values.adviseManager);
+        else if(values.role === ROLE.EMPLOYEE_ARCHIVER) staffMgrId = Number(values.archiveManager);
+
+        //显示加载圈
+        this.setState({ confirmEmployeeAddModalLoading: true });
+
+        $.ajax({
+            url : SERVER + '/api/user',
+            type : 'POST',
+            contentType: 'application/json',
+            data : JSON.stringify({name: values.name, phone: values.phone, role: values.role, staffMgrId: staffMgrId}),
+            dataType : 'json',
+            beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
+            success : (result) => {
+              console.log(result);
+              if(result.code === RESULT.SUCCESS) {
+
+                //重查刷新一遍
+                this.handleSearchEmployeeList(this.state.employeePager.current);
+
+                //关闭加载圈、对话框
+                this.setState({
+                  employeeAddModalVisible: false,
+                  confirmEmployeeAddModalLoading: false,
+                });
+                message.success(result.reason, 2);
+              } else {
+
+                //关闭加载圈
+                this.setState({ confirmEmployeeAddModalLoading: false });
                 message.error(result.reason, 2);
               }
             }
@@ -474,7 +551,15 @@ class UserManage extends React.Component {
   }
 
 
-  componentDidMount = () => this.handleSearchMemberList(1)
+
+
+  componentDidMount = () => {
+
+    this.handleSearchMemberList(1);
+
+    this.requestAdviserAndAdviseManager(); //拉取所有顾问、顾问主管到 会员修改对话框
+    this.requestArchiveManagerAndAdviseManager(); //拉取所有档案主管、顾问主管到 职员修改对话框、职员添加对话框
+  }
 
   //打开职员管理选项卡
   componentDidMountOfEmployeeTab = (form) => {
@@ -561,7 +646,7 @@ class UserManage extends React.Component {
     return (
         <div>
           <BackTop visibilityHeight="200"/>
-          <Tabs defaultActiveKey="1">
+          <Tabs defaultActiveKey="1" tabBarExtraContent={<Button type="primary" onClick={this.showEmployeeAddModal}>添加职员</Button>}>
             <TabPane tab="会员管理" key="1">
               <MemberSearchForm ref="memberSearchForm" handleSearchMemberList={this.handleSearchMemberList}/>
               <Table className='user-table' columns={memberColumns} dataSource={this.state.memberData} pagination={this.state.memberPager} onChange={this.changeMemberPager} rowKey='id' loading={this.state.memberTableLoading}/>
@@ -572,7 +657,8 @@ class UserManage extends React.Component {
             </TabPane>
           </Tabs>
           <MemberEditModal ref="memberEditForm" visible={this.state.memberEditModalVisible} confirmLoading={this.state.confirmMemberLoading} onCancel={this.closeMemberEditModal} onConfirm={this.confirmMemberEditModal} adviserAndManagerData={this.state.adviserAndManagerData} />
-          <EmployeeEditModal ref="employeeEditForm" visible={this.state.employeeEditModalVisible} confirmLoading={this.state.confirmEmployeeLoading} onCancel={this.closeEmployeeEditModal} onConfirm={this.confirmEmployeeEditModal} adviseManagerData={this.state.adviseManagerData} archiveManagerData={this.state.archiveManagerData} archiveManagerSelectVisible={this.state.archiveManagerSelectVisible} adviseManagerSelectVisible={this.state.adviseManagerSelectVisible} changeRole={this.changeRole}/>
+          <EmployeeEditModal ref="employeeEditForm" visible={this.state.employeeEditModalVisible} confirmLoading={this.state.confirmEmployeeEditModalLoading} onCancel={this.closeEmployeeEditModal} onConfirm={this.confirmEmployeeEditModal} adviseManagerData={this.state.adviseManagerData} archiveManagerData={this.state.archiveManagerData} archiveManagerSelectVisible={this.state.archiveManagerEditModalSelectVisible} adviseManagerSelectVisible={this.state.adviseManagerEditModalSelectVisible} changeRole={this.changeEditModalRole}/>
+          <EmployeeAddModal ref="employeeAddForm" visible={this.state.employeeAddModalVisible} confirmLoading={this.state.confirmEmployeeAddModalLoading} onCancel={this.closeEmployeeAddModal} onConfirm={this.confirmEmployeeAddModal} adviseManagerData={this.state.adviseManagerData} archiveManagerData={this.state.archiveManagerData} archiveManagerSelectVisible={this.state.archiveManagerAddModalSelectVisible} adviseManagerSelectVisible={this.state.adviseManagerAddModalSelectVisible} changeRole={this.changeAddModalRole}/>
         </div>
     );
   }

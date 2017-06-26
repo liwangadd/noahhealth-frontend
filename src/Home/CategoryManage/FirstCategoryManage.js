@@ -463,7 +463,7 @@ class FirstCategoryManage extends React.Component {
     return (
       <div>
         <BackTop visibilityHeight="200"/>
-        <Tabs defaultActiveKey={this.props.params.tabKey} tabBarExtraContent={<Button type="primary" onClick={this.showAddModal}>+&nbsp;&nbsp;检查项目</Button>}>
+        <Tabs defaultActiveKey={this.props.params.tabKey} tabBarExtraContent={<Button type="primary" onClick={this.showAddModal}>添加检查项目</Button>}>
           <TabPane tab="化验检查项目" key="1">
             <Table className='first-category-table' columns={assayColumns} dataSource={this.state.assayData} rowKey='id' loading={this.state.assayTableLoading} pagination={false}/>
           </TabPane>
