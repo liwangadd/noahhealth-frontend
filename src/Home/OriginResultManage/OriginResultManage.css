@@ -2,8 +2,13 @@
   margin-top: 25px;
 }
 
-.operation-delete {
+.operation-delete, .unpass {
   color:#f46e65;
+}
+
+.upload-file-warning{
+  color:#f46e65;
+  margin-left: 10px;
 }
 
 .ant-upload-btn{

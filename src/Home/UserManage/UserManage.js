@@ -351,7 +351,11 @@ class UserManage extends React.Component {
             if(result.code === RESULT.SUCCESS) {
 
                 this.setState({ archiveManagerData: result.content }); //默认选上第一项
+
+                if(this.refs.employeeEditForm == null) return;
                 this.refs.employeeEditForm.setFieldsValue({archiveManager: result.content[0].id.toString()});
+
+                if(this.refs.employeeAddForm == null) return;
                 this.refs.employeeAddForm.setFieldsValue({archiveManager: result.content[0].id.toString()});
                 return;
             } else {
@@ -376,7 +380,11 @@ class UserManage extends React.Component {
             if(result.code === RESULT.SUCCESS) {
 
                 this.setState({ adviseManagerData: result.content }); //默认选上第一项
+
+                if(this.refs.employeeEditForm == null) return;
                 this.refs.employeeEditForm.setFieldsValue({adviseManager: result.content[0].id.toString()});
+
+                if(this.refs.employeeAddForm == null) return;
                 this.refs.employeeAddForm.setFieldsValue({adviseManager: result.content[0].id.toString()});
                 return;
             } else {
@@ -590,12 +598,10 @@ class UserManage extends React.Component {
       title: '所属顾问',
       dataIndex: 'staffId',
       key: 'staffId',
-      render: (adviser) => adviser === null || adviser.trim() === '' ? "-" : adviser
     }, {
       title: '所属顾问主管',
       dataIndex: 'staffMgrId',
       key: 'staffMgrId',
-      render: (adviseManager) => adviseManager === null || adviseManager.trim() === '' ? "-" : adviseManager
     }, {
       title: '操作',
       key: 'action',
@@ -628,7 +634,6 @@ class UserManage extends React.Component {
       title: '所属主管',
       dataIndex: 'staffMgrId',
       key: 'staffMgrId',
-      render: (manager) => manager === null || manager.trim() === '' ? "-" : manager
     }, {
       title: '操作',
       key: 'action',

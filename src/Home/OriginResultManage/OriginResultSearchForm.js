@@ -40,13 +40,6 @@ class OriginResultSearchForm_ extends React.Component {
           </Col>
           <Col span={6}>
             <FormItem>
-              {getFieldDecorator('secondName')(
-                <Input placeholder="检查亚类"/>
-              )}
-            </FormItem>
-          </Col>
-          <Col span={6}>
-            <FormItem>
               {getFieldDecorator('uploaderName')(
                 <Input placeholder="上传者"/>
               )}
@@ -56,13 +49,6 @@ class OriginResultSearchForm_ extends React.Component {
             <FormItem>
               {getFieldDecorator('checkerName')(
                 <Input placeholder="审核者"/>
-              )}
-            </FormItem>
-          </Col>
-          <Col span={6}>
-            <FormItem>
-              {getFieldDecorator('inputerName')(
-                <Input placeholder="录入者"/>
               )}
             </FormItem>
           </Col>
@@ -78,10 +64,10 @@ class OriginResultSearchForm_ extends React.Component {
               {getFieldDecorator('status', { initialValue: ''
               })(
                 <Select>
+                  <Option value="上传中">上传中</Option>
                   <Option value="待审核">待审核</Option>
-                  <Option value="待录入">待录入</Option>
                   <Option value="未通过">未通过</Option>
-                  <Option value="已完成">已完成</Option>
+                  <Option value="已录入">已录入</Option>
                   <Option value="">全部</Option>
                 </Select>
               )}

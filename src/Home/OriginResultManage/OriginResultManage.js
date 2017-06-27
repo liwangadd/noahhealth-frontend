@@ -1,16 +1,16 @@
 import './OriginResultManage.css';
-import {SERVER, SESSION, RESULT, ROUTE, PAGE_SIZE} from './../../App/PublicConstant.js';
+import {SERVER, SESSION, RESULT, ROUTE, PAGE_SIZE, ROLE, FILE_SERVER} from './../../App/PublicConstant.js';
 import {formatDate} from './../../App/PublicUtil.js';
 import OriginResultSearchForm from './OriginResultSearchForm.js';
 import OriginResultUploadModal from './OriginResultUploadModal.js';
 import OriginResultUploadPictureModal from './OriginResultUploadPictureModal.js'
 import React from 'react';
-import {Tabs, Table, message, Popconfirm, Button, BackTop, Modal} from 'antd';
+import {Tabs, Table, message, Popconfirm, Button, BackTop, Modal, Tooltip} from 'antd';
 import $ from 'jquery';
 import {Link} from 'react-router';
+
 const TabPane = Tabs.TabPane;
 const confirm = Modal.confirm;
-
 
 class OriginResultManage extends React.Component {
 
@@ -25,11 +25,11 @@ class OriginResultManage extends React.Component {
     uploadModalVisible: false,
     confirmUploadModalLoading: false,
     memberUnderEmployeeData: [],
-    secondCategoryParentOfAssayData: [],
-    secondCategoryParentOfTechData: [],
 
     //上传扫描件
-    uploadPictureModalVisible: false
+    uploadPictureModalVisible: false,
+    originResultId: -1,
+    fileList: []
   };
 
 
@@ -52,10 +52,8 @@ class OriginResultManage extends React.Component {
             type : 'POST',
             contentType: 'application/json',
             data : JSON.stringify({userName : values.userName,
-                                   secondName : values.secondName,
                                    uploaderName : values.uploaderName,
                                    checkerName: values.checkerName,
-                                   inputerName: values.inputerName,
                                    status: values.status,
                                    time: values.time,
                                    pageNow: pageNow,
@@ -99,59 +97,6 @@ class OriginResultManage extends React.Component {
   showUploadModal = () => this.setState({ uploadModalVisible: true})
   closeUploadModal = () => this.setState({ uploadModalVisible: false})
 
-  //拉取系统中所有检查亚类
-  requestSecondCategoryParentData = (type) => {
-
-    console.log('查询所有'+ type +'检查亚类');
-    $.ajax({
-        url : SERVER + '/api/first/level',
-        type : 'POST',
-        contentType: 'application/json',
-        dataType : 'json',
-        data : JSON.stringify({type : type}),
-        // async: false,
-        beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
-        success : (result) => {
-
-            console.log(result);
-            if(result.code === RESULT.SUCCESS) {
-
-                //将后端返回的map整理成级联列表识别的数据结构
-                let secondCategoryParentData = [];
-                for(let firstCategory in result.content) {
-
-                  //加入大类
-                  let firstCategoryData = {value: firstCategory, label: firstCategory, children:[]};
-
-                  //获取旗下所有亚类
-                  let secondCategories = result.content[firstCategory];
-                  for(let i = 0; i < secondCategories.length; i++) {
-                    firstCategoryData.children.push({value: secondCategories[i].id, label: secondCategories[i].name});
-                  }
-
-                  secondCategoryParentData.push(firstCategoryData);
-                }
-
-                if(type === "化验") {
-
-                  this.setState({secondCategoryParentOfAssayData: secondCategoryParentData});
-
-                  if(this.refs.uploadForm == null) return;
-                  this.refs.uploadForm.setFieldsValue({secondCategoryParentOfAssayId: secondCategoryParentData.length > 0 ? [secondCategoryParentData[0].value, secondCategoryParentData[0].children[0].value] : []});
-                } else {
-
-                  this.setState({secondCategoryParentOfTechData: secondCategoryParentData});
-
-                  if(this.refs.uploadForm == null) return;
-                  this.refs.uploadForm.setFieldsValue({secondCategoryParentOfTechId: secondCategoryParentData.length > 0 ? [secondCategoryParentData[0].value, secondCategoryParentData[0].children[0].value] : []});
-                }
-            } else {
-                message.error(result.reason, 2);
-            }
-        }
-    });
-  }
-
   //确认上传原始资料信息
   confirmUploadModal = () => {
 
@@ -161,15 +106,13 @@ class OriginResultManage extends React.Component {
 
         //显示加载圈
         this.setState({ confirmUploadModalLoading: true });
-        console.log(values.time);
-        let secondId = values.type === '化验' ? values.secondCategoryParentOfAssayId[1] : values.secondCategoryParentOfTechId[1];
         $.ajax({
             url : SERVER + '/api/origin',
             type : 'POST',
             contentType: 'application/json',
             data : JSON.stringify({userId: Number(values.userId),
-                                   secondId: secondId,
-                                   time: values.time}),
+                                   time: values.time,
+                                   note: values.note}),
             dataType : 'json',
             beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
             success : (result) => {
@@ -185,8 +128,9 @@ class OriginResultManage extends React.Component {
                 });
 
                 //询问是否弹出上传对话框继续上传扫描件
+                let originResultId = result.content;
                 confirm({title: '添加成功! 是否继续上传原始资料的扫描件?',
-                         onOk: () => this.showUploadPictureModal(result.content)});
+                         onOk: () => this.showUploadPictureModal(originResultId)});
 
               } else {
 
@@ -209,7 +153,100 @@ class OriginResultManage extends React.Component {
     this.setState({uploadPictureModalVisible: true});
 
     //record.path对应的图片显示到上传预览组件中
-    
+    //ajax查询originResult，获得其fileList
+    $.ajax({
+        url : SERVER + '/api/origin/file/' + originResultId,
+        type : 'GET',
+        dataType : 'json',
+        beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
+        success : (result) => {
+
+          console.log(result);
+          if(result.code !== RESULT.SUCCESS) {
+            message.error(result.reason, 2);
+            return;
+          }
+
+          //将文件包装成可被上传控件识别的格式
+          let fileList = result.content;
+          fileList.map((file, index) => {
+            file.uid = index;
+            file.status = 'done';
+            file.url = FILE_SERVER + file.url;
+          });
+
+          //更新状态
+          this.setState({fileList: fileList, originResultId: originResultId});
+        }
+    });
+  }
+
+  //上传文件时的动作响应
+  handleUploadPictureChange = (info) => {
+
+    //显示成功 失败消息提示
+    if (info.file.status !== 'uploading') {
+      console.log(info.file, info.fileList);
+    }
+    console.log(info);
+    if (info.file.status === 'done') {
+
+      if(info.file.response.code === RESULT.SUCCESS) {
+        message.success(`${info.file.name} 上传成功`);
+      } else {
+        message.error(info.file.response.reason);
+      }
+    } else if (info.file.status === 'error') {
+
+      message.error(`${info.file.name} 上传失败.`);
+    } else if (info.file.status === 'removed') {
+
+      //请求删除文件
+      const fileName = info.file.url.split('/')[4];
+      this.requestDeletePicture(this.state.originResultId, fileName);
+    }
+
+    //为上传成功的文件设置超链接
+    let fileList = info.fileList;
+    fileList = fileList.map((file) => {
+
+      let result = file.response;
+      if (result && result.code === RESULT.SUCCESS) {
+        file.url = FILE_SERVER + file.response.content;
+      }
+
+      return file;
+    });
+
+    //通知上传图片对话框更新已有文件列表
+    this.setState({fileList: fileList});
+  }
+
+  requestDeletePicture = (originResultId, fileName) => {
+
+    console.log('删除' + originResultId + '号原始数据记录的扫描件-', fileName);
+
+    $.ajax({
+        url : SERVER + '/api/origin/file/' + originResultId,
+        type : 'DELETE',
+        dataType : 'json',
+        contentType: 'application/json',
+        data : JSON.stringify({fileName: fileName}),
+        beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
+        success : (result) => {
+
+            console.log(result);
+            if(result.code === RESULT.SUCCESS) {
+
+                message.success(result.reason, 2);
+                return;
+            } else {
+                message.error(result.reason, 2);
+                return;
+            }
+        }
+    });
+
   }
 
   closeUploadPictureModal = () => this.setState({uploadPictureModalVisible: false})
@@ -243,8 +280,6 @@ class OriginResultManage extends React.Component {
   componentDidMount = () => {
 
     this.handleSearchOriginResultList(1);
-    this.requestSecondCategoryParentData("化验");
-    this.requestSecondCategoryParentData("医技");
 
     //拉取上传对话框中的会员信息(该employee旗下的)
     this.requestMembersUnderEmployee();
@@ -253,46 +288,103 @@ class OriginResultManage extends React.Component {
 
   render(){
 
+    const role = sessionStorage.getItem(SESSION.ROLE);
+
     const originResultColumns = [{
       title: '会员姓名',
       dataIndex: 'userName',
       key: 'userName',
       render: (name) => <a>{name}</a>,
     },{
-      title: '检查亚类',
-      dataIndex: 'secondName',
-      key: 'secondName'
-    },{
       title: '上传者',
       dataIndex: 'uploaderName',
       key: 'uploaderName'
-    }, {
+    },{
+      title: '上传日期',
+      dataIndex: 'time',
+      key: 'time',
+      render: (time) => formatDate(time)
+    },{
+      title: '备注',
+      dataIndex: 'note',
+      key: 'note'
+    },{
       title: '审核者',
       dataIndex: 'checkerName',
       key: 'checkerName'
     }, {
-      title: '录入者',
-      dataIndex: 'inputerName',
-      key: 'inputerName'
-    },{
-      title: '日期',
-      dataIndex: 'time',
-      key: 'time',
-      render: (time) => formatDate(time)
-    }, {
       title: '执行状态',
       dataIndex: 'status',
-      key: 'status'
+      key: 'status',
+      render: (status, record) => status === '未通过' ? <Tooltip title={record.reason}><span className="unpass">未通过</span></Tooltip> : status
     }, {
       title: '操作',
       key: 'action',
       render: (record) => (
         <span>
-          <a onClick={() => this.showOriginResultEditModal(record)}>查看</a>
-          <span className="ant-divider" />
-          <Popconfirm title="您确定要删除该条执行记录吗?" onConfirm={() => this.handleOriginResultDelete(record)} okText="是" cancelText="取消">
-            <a className='operation-delete'>删除</a>
-          </Popconfirm>
+
+          {
+            (record.status === '待上传' || record.status === '上传中' || record.status === '未通过') && (role === ROLE.EMPLOYEE_ARCHIVER || role === ROLE.EMPLOYEE_ADMIN)
+            ?
+            <span>
+              <a onClick={() => this.showUploadPictureModal(record.id)}>
+                {
+                  record.status === '未通过'
+                  ?
+                  "重新上传扫描件"
+                  :
+                  "上传扫描件"
+                }
+              </a>
+              <span className="ant-divider"/>
+            </span>
+            :
+            null
+          }
+
+          {
+            (record.status === '待审核') && (role === ROLE.EMPLOYEE_ARCHIVE_MANAGER || role === ROLE.EMPLOYEE_ADMIN)
+            ?
+            <span>
+              <a onClick={() => this.showCheckModal(record)}>审核</a>
+              {
+                role === ROLE.EMPLOYEE_ADMIN
+                ?
+                <span className="ant-divider"/>
+                :
+                null
+              }
+            </span>
+            :
+            null
+          }
+
+          {
+            (record.status === '已录入') && (role === ROLE.EMPLOYEE_ADVISER || role === ROLE.EMPLOYEE_ADVISE_MANAGER || role === ROLE.EMPLOYEE_ADMIN)
+            ?
+            <span>
+              <a onClick={() => this.showWatchModal(record)}>查看扫描件</a>
+              {
+                role === ROLE.EMPLOYEE_ADMIN
+                ?
+                <span className="ant-divider"/>
+                :
+                null
+              }
+            </span>
+            :
+            null
+          }
+
+          {
+            ((record.status === '上传中' || record.status === '未通过') && role === ROLE.EMPLOYEE_ARCHIVER) || role === ROLE.EMPLOYEE_ADMIN
+            ?
+            <Popconfirm title="您确定要删除该条原始资料吗?" onConfirm={() => this.handleDelete(record)} okText="是" cancelText="取消">
+              <a className='operation-delete'>删除</a>
+            </Popconfirm>
+            :
+            null
+          }
         </span>
       )
     }];
@@ -300,14 +392,14 @@ class OriginResultManage extends React.Component {
     return (
       <div>
         <BackTop visibilityHeight="200"/>
-        <Tabs defaultActiveKey={"1"} tabBarExtraContent={<Button type="primary" onClick={this.showUploadModal}>上传原始资料</Button>}>
-          <TabPane tab="执行情况" key="1">
+        <Tabs defaultActiveKey={"1"} tabBarExtraContent={role === ROLE.EMPLOYEE_ARCHIVER || role === ROLE.EMPLOYEE_ADMIN ? <Button type="primary" onClick={this.showUploadModal}>上传原始资料</Button> : null}>
+          <TabPane tab="原始资料" key="1">
             <OriginResultSearchForm ref="searchForm" handleSearchOriginResultList={this.handleSearchOriginResultList}/>
             <Table className='origin-result-table' columns={originResultColumns} dataSource={this.state.originResultData} rowKey='id' loading={this.state.originResultTableLoading} pagination={this.state.originResultPager} onChange={this.changeOriginResultPager}/>
           </TabPane>
         </Tabs>
-        <OriginResultUploadModal ref="uploadForm" visible={this.state.uploadModalVisible} confirmLoading={this.state.confirmUploadModalLoading} onCancel={this.closeUploadModal} onConfirm={this.confirmUploadModal} secondCategoryParentOfAssayData={this.state.secondCategoryParentOfAssayData} secondCategoryParentOfTechData={this.state.secondCategoryParentOfTechData}  memberUnderEmployeeData={this.state.memberUnderEmployeeData}/>
-        <OriginResultUploadPictureModal visible={this.state.uploadPictureModalVisible} onCancel={this.closeUploadPictureModal}/>
+        <OriginResultUploadModal ref="uploadForm" visible={this.state.uploadModalVisible} confirmLoading={this.state.confirmUploadModalLoading} onCancel={this.closeUploadModal} onConfirm={this.confirmUploadModal} memberUnderEmployeeData={this.state.memberUnderEmployeeData}/>
+        <OriginResultUploadPictureModal visible={this.state.uploadPictureModalVisible} onCancel={this.closeUploadPictureModal} fileList={this.state.fileList} originResultId={this.state.originResultId} onChange={this.handleUploadPictureChange}/>
       </div>
     );
   }
