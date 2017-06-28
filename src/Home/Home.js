@@ -151,9 +151,9 @@ class Home extends React.Component {
         </Sider>
         <Layout>
           <Header style={{ background: '#fff', padding: 0 ,textAlign: 'center'}}>
-            <Icon className="trigger" type={this.state.collapsed ? 'menu-unfold' : 'menu-fold'} onClick={this.toggle} style={{float:'left'}}/>
+            <Icon className="trigger" type={this.state.collapsed ? 'menu-unfold' : 'menu-fold'} onClick={this.toggle}/>
             <Dropdown overlay={userOperationDropdownMenu} trigger={['click']}>
-              <Avatar shape="square" size="large" src="/logo.png" className="avatar" />
+              <Avatar shape="square" size="large" src="/logo.png" className="avatar" style={{backgroundColor: 'white'}}/>
             </Dropdown>
             <a className='name'>{sessionStorage.getItem(SESSION.NAME)}</a>
             <Tag color={this.state.layoutStyle.roleTagColor} style={{marginLeft:7, float:'right', marginTop:21}}>{role}</Tag>

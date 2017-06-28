@@ -6,8 +6,20 @@
   color:#f46e65;
 }
 
-.upload-file-warning{
+.unpass-confirm {
   color:#f46e65;
+  margin-left: 10px;
+}
+
+.unpass-confirm:hover{
+  color:#f46e65;
+}
+
+.unpass:hover{
+  color:#f46e65;
+}
+
+.upload-file-warning{
   margin-left: 10px;
 }
 

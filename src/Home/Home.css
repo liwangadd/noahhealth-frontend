@@ -11,7 +11,6 @@
 
 .avatar {
   float: right;
-  background-color: white;
   margin-top: 11px;
   margin-right: 15px;
   cursor: pointer;
@@ -23,6 +22,7 @@
   padding: 0 16px;
   cursor: pointer;
   transition: color .3s;
+  float:left;
 }
 
 .trigger:hover {
@@ -36,6 +36,10 @@
   border-radius: 6px;
   margin: 16px;
   margin-left:20px;
+}
+
+.ant-layout-header .anticon {
+  line-height: 64px;
 }
 
 .ant-layout-sider-collapsed .anticon {

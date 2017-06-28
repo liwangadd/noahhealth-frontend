@@ -77,7 +77,7 @@ var certifyRole = function(replace, role, legalRoles) {
 class AppRouter extends React.Component {
   render() {
     return (<Router history={browserHistory}>
-              <Route path={ROUTE.ROOT.URL} component={App}>
+              <Route component={App}>
 
                 <Route onEnter={certifyAccess}>
                   <Route path={ROUTE.HOME.URL} component={Home}>
@@ -92,6 +92,7 @@ class AppRouter extends React.Component {
 
                 <Route path={ROUTE.LOGIN.URL} component={Login}/>
                 <Route path={ROUTE.REGISTER.URL} component={Register}/>
+                
                 <Route path="*"  onEnter={certifyAccess} />
               </Route>
           </Router>);

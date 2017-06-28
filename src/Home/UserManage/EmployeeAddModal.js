@@ -1,7 +1,7 @@
 import React from 'react';
 import {ROLE} from './../../App/PublicConstant.js';
 import {REGEX} from './../../App/PublicRegex.js';
-import { Form, Input, Select,Modal, Icon} from 'antd';
+import { Form, Input, Select,Modal, Icon, Tag} from 'antd';
 const FormItem = Form.Item;
 const Option = Select.Option;
 
@@ -11,6 +11,7 @@ class EmployeeAddModal_ extends React.Component {
   render() {
 
     const formItemLayout = {labelCol: { xs: { span: 24 }, sm: { span: 7 },}, wrapperCol: { xs: { span: 24 }, sm: { span: 12 },}};
+    const formItemLayoutWithoutLabel = {wrapperCol: { xs: { span: 24 , offset: 0}, sm: { span: 12 , offset: 7},}};
 
     //生成顾问主管、档案主管的选择器
     const {archiveManagerData, adviseManagerData} = this.props;
@@ -58,6 +59,9 @@ class EmployeeAddModal_ extends React.Component {
                 {adviseManagerOptions}
               </Select>
             )}
+          </FormItem>
+          <FormItem {...formItemLayoutWithoutLabel}>
+            <Tag color="orange" {...formItemLayoutWithoutLabel}>默认初始密码为123456</Tag>
           </FormItem>
         </Form>
       </Modal>

@@ -3,7 +3,9 @@ import {SERVER, SESSION, RESULT, ROUTE, PAGE_SIZE, ROLE, FILE_SERVER} from './..
 import {formatDate} from './../../App/PublicUtil.js';
 import OriginResultSearchForm from './OriginResultSearchForm.js';
 import OriginResultUploadModal from './OriginResultUploadModal.js';
-import OriginResultUploadPictureModal from './OriginResultUploadPictureModal.js'
+import OriginResultUploadPictureModal from './OriginResultUploadPictureModal.js';
+import OriginResultCheckPictureModal from './OriginResultCheckPictureModal.js';
+import OriginResultWatchPictureModal from './OriginResultWatchPictureModal.js';
 import React from 'react';
 import {Tabs, Table, message, Popconfirm, Button, BackTop, Modal, Tooltip} from 'antd';
 import $ from 'jquery';
@@ -26,10 +28,20 @@ class OriginResultManage extends React.Component {
     confirmUploadModalLoading: false,
     memberUnderEmployeeData: [],
 
-    //上传扫描件
+    //上传扫描件对话框
     uploadPictureModalVisible: false,
+    confirmUploadPictureModalLoading: false,
+
+    //审核扫描件对话框
+    checkPictureModalVisible: false,
+    passLoading: false,
+    unpassLoading: false,
+
+    //查看扫描件对话框
+    watchPictureModalVisible: false,
+
     originResultId: -1,
-    fileList: []
+    fileList: [],
   };
 
 
@@ -151,9 +163,12 @@ class OriginResultManage extends React.Component {
   showUploadPictureModal = (originResultId) => {
 
     this.setState({uploadPictureModalVisible: true});
+    this.requestUploadedPictures(originResultId); //获取originResultId已上传了的文件
+  }
 
-    //record.path对应的图片显示到上传预览组件中
-    //ajax查询originResult，获得其fileList
+  requestUploadedPictures = (originResultId) => {
+
+    console.log("拉取第" + originResultId + "号已上传了的所有文件");
     $.ajax({
         url : SERVER + '/api/origin/file/' + originResultId,
         type : 'GET',
@@ -181,6 +196,7 @@ class OriginResultManage extends React.Component {
     });
   }
 
+
   //上传文件时的动作响应
   handleUploadPictureChange = (info) => {
 
@@ -202,8 +218,10 @@ class OriginResultManage extends React.Component {
     } else if (info.file.status === 'removed') {
 
       //请求删除文件
-      const fileName = info.file.url.split('/')[4];
-      this.requestDeletePicture(this.state.originResultId, fileName);
+      if(info.file.url) {
+        const fileName = info.file.url.split('/')[4];
+        this.requestDeletePicture(this.state.originResultId, fileName);
+      }
     }
 
     //为上传成功的文件设置超链接
@@ -222,6 +240,7 @@ class OriginResultManage extends React.Component {
     this.setState({fileList: fileList});
   }
 
+  //删除上传好的图片（档案部员工）
   requestDeletePicture = (originResultId, fileName) => {
 
     console.log('删除' + originResultId + '号原始数据记录的扫描件-', fileName);
@@ -246,10 +265,180 @@ class OriginResultManage extends React.Component {
             }
         }
     });
+  }
 
+  //提交上传的图片
+  confirmUploadPictureModal = () => {
+
+      console.log('提交一份原始资料,变为待审核', this.state.originResultId);
+
+      //显示加载圈
+      this.setState({ confirmUploadPictureModalLoading: true });
+      $.ajax({
+          url : SERVER + '/api/origin/status/' + this.state.originResultId,
+          type : 'PUT',
+          contentType: 'application/json',
+          dataType : 'json',
+          data : JSON.stringify({status: '待审核'}),
+          beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
+          success : (result) => {
+            console.log(result);
+            if(result.code === RESULT.SUCCESS) {
+
+              this.handleSearchOriginResultList(this.state.originResultPager.current);
+
+              //关闭加载圈、对话框
+              this.setState({
+                uploadPictureModalVisible: false,
+                confirmUploadPictureModalLoading: false,
+              });
+
+              message.success(result.reason, 2);
+
+            } else {
+
+              //关闭加载圈
+              this.setState({ confirmUploadPictureModalLoading: false });
+              message.error(result.reason, 2);
+            }
+          }
+      });
   }
 
   closeUploadPictureModal = () => this.setState({uploadPictureModalVisible: false})
+
+
+  /**
+  * 审核扫描件对话框
+  **/
+  showCheckPictureModal = (originResultId) => {
+
+    this.setState({checkPictureModalVisible: true});
+    this.requestUploadedPictures(originResultId); //获取originResultId已上传了的文件
+  }
+
+  handlePassPicture = () => {
+
+    console.log('通过一份原始资料,变为已通过', this.state.originResultId);
+
+    //显示加载圈
+    this.setState({ passLoading: true });
+    $.ajax({
+        url : SERVER + '/api/origin/status/' + this.state.originResultId,
+        type : 'PUT',
+        contentType: 'application/json',
+        dataType : 'json',
+        data : JSON.stringify({status: '已通过'}),
+        beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
+        success : (result) => {
+          console.log(result);
+          if(result.code === RESULT.SUCCESS) {
+
+            this.handleSearchOriginResultList(this.state.originResultPager.current);
+
+            //关闭加载圈、对话框
+            this.setState({
+              checkPictureModalVisible: false,
+              passLoading: false,
+            });
+
+            message.success(result.reason, 2);
+
+          } else {
+
+            //关闭加载圈
+            this.setState({ passLoading: false });
+            message.error(result.reason, 2);
+          }
+        }
+    });
+  }
+
+  handleUnpassPicture = (unpassReason) => {
+
+    console.log('不通过一份原始资料,变为未通过', this.state.originResultId);
+
+    //显示加载圈
+    this.setState({ unpassLoading: true });
+    $.ajax({
+        url : SERVER + '/api/origin/status/' + this.state.originResultId,
+        type : 'PUT',
+        contentType: 'application/json',
+        dataType : 'json',
+        data : JSON.stringify({status: '未通过', reason: unpassReason}),
+        beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
+        success : (result) => {
+          console.log(result);
+          if(result.code === RESULT.SUCCESS) {
+
+            this.handleSearchOriginResultList(this.state.originResultPager.current);
+
+            //关闭加载圈、对话框
+            this.setState({
+              checkPictureModalVisible: false,
+              unpassLoading: false,
+            });
+
+            message.success(result.reason, 2);
+
+          } else {
+
+            //关闭加载圈
+            this.setState({ unpassLoading: false });
+            message.error(result.reason, 2);
+          }
+        }
+    });
+  }
+
+  closeCheckPictureModal = () => this.setState({checkPictureModalVisible: false})
+
+
+
+  /**
+  * 查看扫描件对话框
+  **/
+  showWatchPictureModal = (originResultId) => {
+
+    this.setState({watchPictureModalVisible: true});
+    this.requestUploadedPictures(originResultId); //获取originResultId已上传了的文件
+  }
+
+  closeWatchPictureModal = () => this.setState({watchPictureModalVisible: false})
+
+
+
+  //删除
+  handleDeleteOriginResult = (originResultId) => {
+
+    console.log('删除一条原始资料信息', originResultId);
+
+    $.ajax({
+        url : SERVER + '/api/origin/' + originResultId,
+        type : 'DELETE',
+        dataType : 'json',
+        beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
+        success : (result) => {
+
+            console.log(result);
+            if(result.code === RESULT.SUCCESS) {
+
+                //删除后重查一遍
+                this.handleSearchOriginResultList(1);
+
+                message.success(result.reason, 2);
+                return;
+            } else {
+                message.error(result.reason, 2);
+                return;
+            }
+        }
+    });
+  }
+
+
+
+
 
   requestMembersUnderEmployee = () => {
 
@@ -346,7 +535,7 @@ class OriginResultManage extends React.Component {
             (record.status === '待审核') && (role === ROLE.EMPLOYEE_ARCHIVE_MANAGER || role === ROLE.EMPLOYEE_ADMIN)
             ?
             <span>
-              <a onClick={() => this.showCheckModal(record)}>审核</a>
+              <a onClick={() => this.showCheckPictureModal(record.id)}>审核扫描件</a>
               {
                 role === ROLE.EMPLOYEE_ADMIN
                 ?
@@ -360,10 +549,10 @@ class OriginResultManage extends React.Component {
           }
 
           {
-            (record.status === '已录入') && (role === ROLE.EMPLOYEE_ADVISER || role === ROLE.EMPLOYEE_ADVISE_MANAGER || role === ROLE.EMPLOYEE_ADMIN)
+            (record.status === '已通过') && (role === ROLE.EMPLOYEE_ADVISER || role === ROLE.EMPLOYEE_ADVISE_MANAGER || role === ROLE.EMPLOYEE_ADMIN)
             ?
             <span>
-              <a onClick={() => this.showWatchModal(record)}>查看扫描件</a>
+              <a onClick={() => this.showWatchPictureModal(record.id)}>查看扫描件</a>
               {
                 role === ROLE.EMPLOYEE_ADMIN
                 ?
@@ -379,7 +568,7 @@ class OriginResultManage extends React.Component {
           {
             ((record.status === '上传中' || record.status === '未通过') && role === ROLE.EMPLOYEE_ARCHIVER) || role === ROLE.EMPLOYEE_ADMIN
             ?
-            <Popconfirm title="您确定要删除该条原始资料吗?" onConfirm={() => this.handleDelete(record)} okText="是" cancelText="取消">
+            <Popconfirm title="您确定要删除该条原始资料吗?" onConfirm={() => this.handleDeleteOriginResult(record.id)} okText="是" cancelText="取消">
               <a className='operation-delete'>删除</a>
             </Popconfirm>
             :
@@ -399,7 +588,9 @@ class OriginResultManage extends React.Component {
           </TabPane>
         </Tabs>
         <OriginResultUploadModal ref="uploadForm" visible={this.state.uploadModalVisible} confirmLoading={this.state.confirmUploadModalLoading} onCancel={this.closeUploadModal} onConfirm={this.confirmUploadModal} memberUnderEmployeeData={this.state.memberUnderEmployeeData}/>
-        <OriginResultUploadPictureModal visible={this.state.uploadPictureModalVisible} onCancel={this.closeUploadPictureModal} fileList={this.state.fileList} originResultId={this.state.originResultId} onChange={this.handleUploadPictureChange}/>
+        <OriginResultUploadPictureModal visible={this.state.uploadPictureModalVisible} onCancel={this.closeUploadPictureModal} confirmLoading={this.state.confirmUploadPictureModalLoading}  onConfirm={this.confirmUploadPictureModal} fileList={this.state.fileList} originResultId={this.state.originResultId} onChange={this.handleUploadPictureChange} />
+        <OriginResultCheckPictureModal visible={this.state.checkPictureModalVisible} onCancel={this.closeCheckPictureModal} passLoading={this.state.passLoading} unpassLoading={this.state.unpassLoading}  onPass={this.handlePassPicture} onUnpass={this.handleUnpassPicture} fileList={this.state.fileList} originResultId={this.state.originResultId}/>
+        <OriginResultWatchPictureModal visible={this.state.watchPictureModalVisible} onCancel={this.closeWatchPictureModal} fileList={this.state.fileList} />
       </div>
     );
   }
