@@ -505,7 +505,15 @@ class OriginResultManage extends React.Component {
       title: '执行状态',
       dataIndex: 'status',
       key: 'status',
-      render: (status, record) => status === '未通过' ? <Tooltip title={record.reason}><span className="unpass">未通过</span></Tooltip> : status
+      render: (status, record) => {
+
+        if(status === '未通过')
+          return <Tooltip title={record.reason}><span className="unpass">未通过</span></Tooltip>;
+        else if(status === '已通过')
+          return <span className="pass">已通过</span>;
+        else
+          return status;
+      }
     }, {
       title: '操作',
       key: 'action',

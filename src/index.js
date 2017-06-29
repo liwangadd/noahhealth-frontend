@@ -92,8 +92,10 @@ class AppRouter extends React.Component {
 
                 <Route path={ROUTE.LOGIN.URL} component={Login}/>
                 <Route path={ROUTE.REGISTER.URL} component={Register}/>
-                
+
+                <Route path={ROUTE.ROOT.URL} component={Login}/>
                 <Route path="*"  onEnter={certifyAccess} />
+
               </Route>
           </Router>);
   }
