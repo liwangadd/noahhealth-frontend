@@ -370,7 +370,7 @@ class FirstCategoryManage extends React.Component {
   //添加检查项目
   requestAddThirdCategory = () => {
 
-    this.refs.addForm.validateFields(['type', 'secondCategoryParentOfAssayId', 'secondCategoryParentOfTechId', 'thirdCategoryName', 'systemCategory', 'referenceValue', 'hospital'], (err, values) => {
+    this.refs.addForm.validateFields(['type', 'secondCategoryParentOfAssayId', 'secondCategoryParentOfTechId', 'thirdCategoryName', 'abbreviation', 'systemCategory', 'referenceValue', 'hospital'], (err, values) => {
       if (!err) {
         console.log('添加'+ values.type + '检查项目' + values.thirdCategoryName);
 
@@ -381,7 +381,11 @@ class FirstCategoryManage extends React.Component {
             type : 'POST',
             contentType: 'application/json',
             dataType : 'json',
-            data : JSON.stringify({secondId : secondId, name: values.thirdCategoryName, systemCategory: values.systemCategory, referenceValue: values.referenceValue, hospital: values.hospital}),
+            data : JSON.stringify({secondId : secondId,
+                                   name: values.thirdCategoryName,
+                                   systemCategory: values.systemCategory,
+                                   referenceValue: values.referenceValue,
+                                   hospital: values.hospital}),
             beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
             success : (result) => {
 

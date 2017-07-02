@@ -57,14 +57,16 @@ class Home extends React.Component {
 
     let layoutStyle;
 
-    if(role === ROLE.EMPLOYEE_ADMIN) layoutStyle = this.getLayoutStyle(COLOR.RED, STYLE.BLOCK, STYLE.BLOCK, STYLE.BLOCK);
-    else if(role === ROLE.EMPLOYEE_FINANCER) layoutStyle = this.getLayoutStyle(COLOR.RED, STYLE.BLOCK, STYLE.NONE, STYLE.NONE);
-    else if(role === ROLE.EMPLOYEE_ARCHIVER) layoutStyle = this.getLayoutStyle(COLOR.PINK, STYLE.NONE, STYLE.BLOCK, STYLE.BLOCK);
-    else if(role === ROLE.EMPLOYEE_ARCHIVE_MANAGER) layoutStyle = this.getLayoutStyle(COLOR.PINK, STYLE.NONE, STYLE.BLOCK, STYLE.BLOCK);
-    else if(role === ROLE.EMPLOYEE_ADVISER) layoutStyle = this.getLayoutStyle(COLOR.ORANGE, STYLE.NONE, STYLE.BLOCK, STYLE.BLOCK);
-    else if(role === ROLE.EMPLOYEE_ADVISE_MANAGER) layoutStyle = this.getLayoutStyle(COLOR.ORANGE, STYLE.NONE, STYLE.BLOCK, STYLE.BLOCK);
+    //主色调、用户管理、检查项目、原始资料、化验/医技数据、健康管理
+    if(role === ROLE.EMPLOYEE_ADMIN) layoutStyle = this.getLayoutStyle(COLOR.RED, STYLE.BLOCK, STYLE.BLOCK, STYLE.BLOCK, STYLE.BLOCK);
+    else if(role === ROLE.EMPLOYEE_FINANCER) layoutStyle = this.getLayoutStyle(COLOR.RED, STYLE.BLOCK, STYLE.NONE, STYLE.NONE, STYLE.NONE);
+    else if(role === ROLE.EMPLOYEE_ARCHIVER) layoutStyle = this.getLayoutStyle(COLOR.PINK, STYLE.NONE, STYLE.BLOCK, STYLE.BLOCK, STYLE.BLOCK);
+    else if(role === ROLE.EMPLOYEE_ARCHIVE_MANAGER) layoutStyle = this.getLayoutStyle(COLOR.PINK, STYLE.NONE, STYLE.BLOCK, STYLE.BLOCK, STYLE.BLOCK);
+    else if(role === ROLE.EMPLOYEE_ADVISER) layoutStyle = this.getLayoutStyle(COLOR.ORANGE, STYLE.NONE, STYLE.BLOCK, STYLE.BLOCK, STYLE.BLOCK);
+    else if(role === ROLE.EMPLOYEE_ADVISE_MANAGER) layoutStyle = this.getLayoutStyle(COLOR.ORANGE, STYLE.NONE, STYLE.BLOCK, STYLE.BLOCK, STYLE.BLOCK);
     else if(role === ROLE.MEMBER_1) layoutStyle = this.getLayoutStyle(COLOR.GREEN, STYLE.NONE, STYLE.NONE, STYLE.NONE);
     else if(role=== ROLE.MEMBER_2) layoutStyle = this.getLayoutStyle(COLOR.CYAN, STYLE.NONE, STYLE.NONE, STYLE.NONE);
+    else if(role=== ROLE.MEMBER_3) layoutStyle = this.getLayoutStyle(COLOR.BLUE, STYLE.NONE, STYLE.NONE, STYLE.NONE);
     else layoutStyle = this.getLayoutStyle(COLOR.BLUE, STYLE.NONE, STYLE.NONE, STYLE.NONE);
 
     this.setState({layoutStyle: layoutStyle});
@@ -73,13 +75,15 @@ class Home extends React.Component {
   getLayoutStyle(roleTagColor,
                  userManageMenuItemDisplay,
                  categoryManageMenuItemDisplay,
-                 originResultMenuItemDisplay) {
+                 originResultMenuItemDisplay,
+                 examResultMenuItemDisplay) {
 
       let layoutStyle = {
         roleTagColor: roleTagColor,
         userManageMenuItemDisplay: userManageMenuItemDisplay,
         categoryManageMenuItemDisplay: categoryManageMenuItemDisplay,
-        originResultMenuItemDisplay: originResultMenuItemDisplay
+        originResultMenuItemDisplay: originResultMenuItemDisplay,
+        examResultMenuItemDisplay: examResultMenuItemDisplay
       };
 
       return layoutStyle;
@@ -94,6 +98,7 @@ class Home extends React.Component {
       case ROUTE.USER_MANAGE.MENU_KEY: targetUrl = ROUTE.USER_MANAGE.URL_PREFIX + "/" + ROUTE.USER_MANAGE.MENU_KEY; break;
       case ROUTE.FIRST_CATEGORY_MANAGE.MENU_KEY: targetUrl = ROUTE.FIRST_CATEGORY_MANAGE.URL_PREFIX + "/" + ROUTE.FIRST_CATEGORY_MANAGE.MENU_KEY + "/1"; break;
       case ROUTE.ORIGIN_RESULT_MANAGE.MENU_KEY: targetUrl = ROUTE.ORIGIN_RESULT_MANAGE.URL_PREFIX + "/" + ROUTE.ORIGIN_RESULT_MANAGE.MENU_KEY; break;
+      case ROUTE.EXAM_RESULT_MANAGE.MENU_KEY: targetUrl = ROUTE.EXAM_RESULT_MANAGE.URL_PREFIX + "/" + ROUTE.EXAM_RESULT_MANAGE.MENU_KEY; break;
       default:;break;
     }
 
@@ -144,8 +149,16 @@ class Home extends React.Component {
               <span className="nav-text menu-item-font">检查项目管理</span>
             </Menu.Item>
             <Menu.Item key={ROUTE.ORIGIN_RESULT_MANAGE.MENU_KEY} style={{display: this.state.layoutStyle.originResultMenuItemDisplay}}>
-              <Icon type="medicine-box" className="menu-item-font"/>
+              <Icon type="file-pdf" className="menu-item-font"/>
               <span className="nav-text menu-item-font">原始资料管理</span>
+            </Menu.Item>
+            <Menu.Item key={ROUTE.EXAM_RESULT_MANAGE.MENU_KEY} style={{display: this.state.layoutStyle.examResultMenuItemDisplay}}>
+              <Icon type="file-text" className="menu-item-font"/>
+              <span className="nav-text menu-item-font">化验/医技数据管理</span>
+            </Menu.Item>
+            <Menu.Item key="9" style={{display: this.state.layoutStyle.examResultMenuItemDisplay}}>
+              <Icon type="file-text" className="menu-item-font"/>
+              <span className="nav-text menu-item-font">健康管理</span>
             </Menu.Item>
           </Menu>
         </Sider>

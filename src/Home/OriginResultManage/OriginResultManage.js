@@ -104,17 +104,17 @@ class OriginResultManage extends React.Component {
 
 
   /**
-  * 上传原始资料对话框
+  * 添加原始资料对话框
   **/
   showUploadModal = () => this.setState({ uploadModalVisible: true})
   closeUploadModal = () => this.setState({ uploadModalVisible: false})
 
-  //确认上传原始资料信息
+  //确认添加原始资料信息
   confirmUploadModal = () => {
 
     this.refs.uploadForm.validateFields((err, values) => {
       if(!err) {
-        console.log('上传一份原始资料', values);
+        console.log('添加一份原始资料', values);
 
         //显示加载圈
         this.setState({ confirmUploadModalLoading: true });
@@ -141,7 +141,7 @@ class OriginResultManage extends React.Component {
 
                 //询问是否弹出上传对话框继续上传扫描件
                 let originResultId = result.content;
-                confirm({title: '添加成功! 是否继续上传原始资料的扫描件?',
+                confirm({title: '添加成功! 是否继续上传该原始资料的扫描件?',
                          onOk: () => this.showUploadPictureModal(originResultId)});
 
               } else {
@@ -521,7 +521,7 @@ class OriginResultManage extends React.Component {
         <span>
 
           {
-            (record.status === '待上传' || record.status === '上传中' || record.status === '未通过') && (role === ROLE.EMPLOYEE_ARCHIVER || role === ROLE.EMPLOYEE_ADMIN)
+            (record.status === '上传中' || record.status === '未通过') && (role === ROLE.EMPLOYEE_ARCHIVER || role === ROLE.EMPLOYEE_ADMIN)
             ?
             <span>
               <a onClick={() => this.showUploadPictureModal(record.id)}>
@@ -589,7 +589,7 @@ class OriginResultManage extends React.Component {
     return (
       <div>
         <BackTop visibilityHeight="200"/>
-        <Tabs defaultActiveKey={"1"} tabBarExtraContent={role === ROLE.EMPLOYEE_ARCHIVER || role === ROLE.EMPLOYEE_ADMIN ? <Button type="primary" onClick={this.showUploadModal}>上传原始资料</Button> : null}>
+        <Tabs defaultActiveKey={"1"} tabBarExtraContent={role === ROLE.EMPLOYEE_ARCHIVER || role === ROLE.EMPLOYEE_ADMIN ? <Button type="primary" onClick={this.showUploadModal}>添加原始资料</Button> : null}>
           <TabPane tab="原始资料" key="1">
             <OriginResultSearchForm ref="searchForm" handleSearchOriginResultList={this.handleSearchOriginResultList}/>
             <Table className='origin-result-table' columns={originResultColumns} dataSource={this.state.originResultData} rowKey='id' loading={this.state.originResultTableLoading} pagination={this.state.originResultPager} onChange={this.changeOriginResultPager}/>

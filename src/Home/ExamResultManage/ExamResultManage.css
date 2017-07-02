@@ -1,0 +1,49 @@
+.exam-result-table {
+  margin-top: 25px;
+}
+
+.operation-delete, .unpass {
+  color:#f46e65;
+}
+
+.unpass-confirm {
+  color:#f46e65;
+  margin-left: 10px;
+}
+
+.unpass-confirm:hover{
+  color:#f46e65;
+}
+
+.unpass:hover{
+  color:#f46e65;
+}
+
+.pass {
+  color:#1DA57A;
+}
+
+.upload-file-warning{
+  margin-left: 10px;
+}
+
+.ant-upload-btn{
+  margin-left: 38px;
+}
+
+
+.ant-upload-icon {
+  font-size:25px;
+  color: #999;
+}
+
+
+.ant-upload-select-picture-card .ant-upload-text {
+  margin-top: 8px;
+  font-size: 12px;
+  color: #999;
+}
+
+.secondName {
+  color:#1DA57A;
+}

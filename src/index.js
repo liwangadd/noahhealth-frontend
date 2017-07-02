@@ -12,6 +12,7 @@ import FirstCategoryManage from './Home/CategoryManage/FirstCategoryManage.js';
 import SecondCategoryManage from './Home/CategoryManage/SecondCategoryManage.js';
 import ThirdCategoryManage from './Home/CategoryManage/ThirdCategoryManage.js';
 import OriginResultManage from './Home/OriginResultManage/OriginResultManage.js';
+import ExamResultManage from './Home/ExamResultManage/ExamResultManage.js';
 import {message} from 'antd'
 import {Router, Route, browserHistory, IndexRoute} from 'react-router';
 
@@ -50,6 +51,7 @@ var certifyAccess = function(nextState, replace){
       case ROUTE.SECOND_CATEGORY_MANAGE.URL_PREFIX:certifyRole(replace, role, ROUTE.SECOND_CATEGORY_MANAGE.PERMISSION);break;
       case ROUTE.THIRD_CATEGORY_MANAGE.URL_PREFIX:certifyRole(replace, role, ROUTE.THIRD_CATEGORY_MANAGE.PERMISSION);break;
       case ROUTE.ORIGIN_RESULT_MANAGE.URL_PREFIX:certifyRole(replace, role, ROUTE.ORIGIN_RESULT_MANAGE.PERMISSION);break;
+      case ROUTE.EXAM_RESULT_MANAGE.URL_PREFIX:certifyRole(replace, role, ROUTE.EXAM_RESULT_MANAGE.PERMISSION);break;
       default:clearSession();replace({ pathname: ROUTE.LOGIN.URL });message.error('暂无该页面，请重新登录');break;
     }
 
@@ -87,6 +89,7 @@ class AppRouter extends React.Component {
                       <Route path={ROUTE.SECOND_CATEGORY_MANAGE.URL} component={SecondCategoryManage}/>
                       <Route path={ROUTE.THIRD_CATEGORY_MANAGE.URL} component={ThirdCategoryManage}/>
                       <Route path={ROUTE.ORIGIN_RESULT_MANAGE.URL} component={OriginResultManage}/>
+                      <Route path={ROUTE.EXAM_RESULT_MANAGE.URL} component={ExamResultManage}/>
                   </Route>
                 </Route>
 

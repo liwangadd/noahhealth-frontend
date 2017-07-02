@@ -141,6 +141,11 @@ class CategoryAddModal_ extends React.Component {
                 <Cascader options={this.props.secondCategoryParentOfTechData} placeholder="" allowClear={false}/>
               )}
             </FormItem>
+            <FormItem {...formItemLayout} label="英文缩写" style={{display: this.state.thirdCategoryLevelVisible}}>
+              {getFieldDecorator('abbreviation', {rules: [{ required: true, message: '请输入英文缩写!' }]})(
+                <Input />
+              )}
+            </FormItem>
             <FormItem {...formItemLayout} label="系统分类" style={{display: this.state.thirdCategoryLevelVisible}}>
               {getFieldDecorator('systemCategory', {rules: [{ required: true, message: '请输入系统分类!' }]})(
                 <Input />
