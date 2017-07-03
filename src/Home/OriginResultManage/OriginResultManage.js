@@ -1,5 +1,5 @@
 import './OriginResultManage.css';
-import {SERVER, SESSION, RESULT, ROUTE, PAGE_SIZE, ROLE, FILE_SERVER} from './../../App/PublicConstant.js';
+import {SERVER, SESSION, RESULT, PAGE_SIZE, ROLE, FILE_SERVER} from './../../App/PublicConstant.js';
 import {formatDate} from './../../App/PublicUtil.js';
 import OriginResultSearchForm from './OriginResultSearchForm.js';
 import OriginResultUploadModal from './OriginResultUploadModal.js';
@@ -9,7 +9,6 @@ import OriginResultWatchPictureModal from './OriginResultWatchPictureModal.js';
 import React from 'react';
 import {Tabs, Table, message, Popconfirm, Button, BackTop, Modal, Tooltip} from 'antd';
 import $ from 'jquery';
-import {Link} from 'react-router';
 
 const TabPane = Tabs.TabPane;
 const confirm = Modal.confirm;
@@ -86,12 +85,7 @@ class OriginResultManage extends React.Component {
                 originResultPager.current = pageNow;
 
                 //更新获取到的数据到状态中
-                this.setState({
-                  originResultData: result.content.data,
-                  originResultPager
-                });
-
-                this.setState({ originResultTableLoading: false});
+                this.setState({ originResultData: result.content.data, originResultTableLoading: false, originResultPager});
             }
         });
       }
@@ -134,10 +128,7 @@ class OriginResultManage extends React.Component {
                 this.handleSearchOriginResultList(this.state.originResultPager.current); //更新表格数据
 
                 //关闭加载圈、对话框
-                this.setState({
-                  uploadModalVisible: false,
-                  confirmUploadModalLoading: false,
-                });
+                this.setState({ uploadModalVisible: false, confirmUploadModalLoading: false});
 
                 //询问是否弹出上传对话框继续上传扫描件
                 let originResultId = result.content;
@@ -184,10 +175,12 @@ class OriginResultManage extends React.Component {
 
           //将文件包装成可被上传控件识别的格式
           let fileList = result.content;
-          fileList.map((file, index) => {
+          fileList = fileList.map((file, index) => {
             file.uid = index;
             file.status = 'done';
             file.url = FILE_SERVER + file.url;
+
+            return file;
           });
 
           //更新状态
@@ -337,13 +330,8 @@ class OriginResultManage extends React.Component {
             this.handleSearchOriginResultList(this.state.originResultPager.current);
 
             //关闭加载圈、对话框
-            this.setState({
-              checkPictureModalVisible: false,
-              passLoading: false,
-            });
-
+            this.setState({ checkPictureModalVisible: false, passLoading: false});
             message.success(result.reason, 2);
-
           } else {
 
             //关闭加载圈
@@ -374,13 +362,8 @@ class OriginResultManage extends React.Component {
             this.handleSearchOriginResultList(this.state.originResultPager.current);
 
             //关闭加载圈、对话框
-            this.setState({
-              checkPictureModalVisible: false,
-              unpassLoading: false,
-            });
-
+            this.setState({ checkPictureModalVisible: false, unpassLoading: false});
             message.success(result.reason, 2);
-
           } else {
 
             //关闭加载圈
@@ -425,7 +408,6 @@ class OriginResultManage extends React.Component {
 
                 //删除后重查一遍
                 this.handleSearchOriginResultList(1);
-
                 message.success(result.reason, 2);
                 return;
             } else {
@@ -557,7 +539,7 @@ class OriginResultManage extends React.Component {
           }
 
           {
-            (record.status === '已通过') && (role === ROLE.EMPLOYEE_ADVISER || role === ROLE.EMPLOYEE_ADVISE_MANAGER || role === ROLE.EMPLOYEE_ADMIN)
+            (record.status === '已通过') && (role === ROLE.EMPLOYEE_ADVISER || role === ROLE.EMPLOYEE_ADVISE_MANAGER || role === ROLE.MEMBER_1 || role === ROLE.MEMBER_2 || role === ROLE.MEMBER_3 || role === ROLE.EMPLOYEE_ADMIN)
             ?
             <span>
               <a onClick={() => this.showWatchPictureModal(record.id)}>查看扫描件</a>

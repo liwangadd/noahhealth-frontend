@@ -1,5 +1,5 @@
 import './ExamResultManage.css';
-import {SERVER, SESSION, RESULT, ROUTE, PAGE_SIZE, ROLE, FILE_SERVER} from './../../App/PublicConstant.js';
+import {SERVER, SESSION, RESULT, PAGE_SIZE, ROLE} from './../../App/PublicConstant.js';
 import {formatDate} from './../../App/PublicUtil.js';
 import ExamResultSearchForm from './ExamResultSearchForm.js';
 import ExamResultInputModal from './ExamResultInputModal.js';
@@ -9,7 +9,6 @@ import ExamResultWatchDetailModal from './ExamResultWatchDetailModal.js';
 import React from 'react';
 import {Tabs, Table, message, Popconfirm, Button, BackTop, Modal, Tooltip} from 'antd';
 import $ from 'jquery';
-import {Link} from 'react-router';
 
 const TabPane = Tabs.TabPane;
 const confirm = Modal.confirm;
@@ -40,6 +39,7 @@ class ExamResultManage extends React.Component {
 
     //查看检查结果对话框
     watchDetailModalVisible: false,
+    downloadLoading: false,
 
     examResultId: -1,
     examResultSecondName: '',
@@ -142,10 +142,7 @@ class ExamResultManage extends React.Component {
                 this.handleSearchExamResultList(this.state.examResultPager.current); //更新表格数据
 
                 //关闭加载圈、对话框
-                this.setState({
-                  inputModalVisible: false,
-                  confirmInputModalLoading: false,
-                });
+                this.setState({ inputModalVisible: false, confirmInputModalLoading: false});
 
                 //询问是否弹出上传对话框继续上传检查结果
                 let examResultId = result.content.resultInputId;
@@ -262,13 +259,8 @@ class ExamResultManage extends React.Component {
               this.handleSearchExamResultList(this.state.examResultPager.current);
 
               //关闭加载圈、对话框
-              this.setState({
-                inputDetailModalVisible: false,
-                submitLoading: false,
-              });
-
+              this.setState({ inputDetailModalVisible: false, submitLoading: false});
               message.success(result.reason, 2);
-
             } else {
 
               //关闭加载圈
@@ -311,13 +303,8 @@ class ExamResultManage extends React.Component {
             this.handleSearchExamResultList(this.state.examResultPager.current);
 
             //关闭加载圈、对话框
-            this.setState({
-              checkDetailModalVisible: false,
-              passLoading: false,
-            });
-
+            this.setState({ checkDetailModalVisible: false, passLoading: false });
             message.success(result.reason, 2);
-
           } else {
 
             //关闭加载圈
@@ -348,13 +335,8 @@ class ExamResultManage extends React.Component {
             this.handleSearchExamResultList(this.state.examResultPager.current);
 
             //关闭加载圈、对话框
-            this.setState({
-              checkDetailModalVisible: false,
-              unpassLoading: false,
-            });
-
+            this.setState({ checkDetailModalVisible: false, unpassLoading: false});
             message.success(result.reason, 2);
-
           } else {
 
             //关闭加载圈
@@ -380,6 +362,36 @@ class ExamResultManage extends React.Component {
 
   closeWatchDetailModal = () => this.setState({watchDetailModalVisible: false})
 
+  //下载
+  handleDownloadDetail = () => {
+
+    console.log('请求下载检查结果', this.state.examResultId);
+
+    //显示加载圈
+    this.setState({ downloadLoading: true });
+    $.ajax({
+        url : SERVER + '/api/input/download',
+        type : 'POST',
+        contentType: 'application/json',
+        dataType : 'json',
+        data : JSON.stringify({id: this.state.examResultId}),
+        beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
+        success : (result) => {
+          console.log(result);
+          if(result.code === RESULT.SUCCESS) {
+
+            //关闭加载圈、对话框
+            this.setState({ watchDetailModalVisible: false, downloadLoading: false});
+            message.success(result.reason, 2);
+          } else {
+
+            //关闭加载圈
+            this.setState({ downloadLoading: false });
+            message.error(result.reason, 2);
+          }
+        }
+    });
+  }
 
 
   //删除
@@ -596,7 +608,7 @@ class ExamResultManage extends React.Component {
           }
 
           {
-            (record.status === '已通过') && (role === ROLE.EMPLOYEE_ADVISER || role === ROLE.EMPLOYEE_ADVISE_MANAGER || role === ROLE.EMPLOYEE_ADMIN)
+            (record.status === '已通过') && (role === ROLE.EMPLOYEE_ADVISER || role === ROLE.EMPLOYEE_ADVISE_MANAGER || role === ROLE.MEMBER_2 || role === ROLE.MEMBER_3 || role === ROLE.EMPLOYEE_ADMIN)
             ?
             <span>
               <a onClick={() => this.showWatchDetailModal(record.id, record.secondName)}>查看录入结果</a>
@@ -637,7 +649,7 @@ class ExamResultManage extends React.Component {
         <ExamResultInputModal ref="inputForm" visible={this.state.inputModalVisible} confirmLoading={this.state.confirmInputModalLoading} onCancel={this.closeInputModal} onConfirm={this.confirmInputModal} memberUnderEmployeeData={this.state.memberUnderEmployeeData} secondCategoryParentOfAssayData={this.state.secondCategoryParentOfAssayData} secondCategoryParentOfTechData={this.state.secondCategoryParentOfTechData}/>
         <ExamResultInputDetailModal ref="inputDetailForm" visible={this.state.inputDetailModalVisible} examResultDetailTableLoading={this.state.examResultDetailTableLoading} onSave={this.saveInputDetail} onSubmit={this.submitInputDetail} onCancel={this.closeInputDetailModal} saveLoading={this.state.saveLoading} submitLoading={this.state.submitLoading}  examResultId={this.state.examResultId} examResultSecondName={this.state.examResultSecondName} examResultDetailData={this.state.examResultDetailData} />
         <ExamResultCheckDetailModal visible={this.state.checkDetailModalVisible} examResultDetailTableLoading={this.state.examResultDetailTableLoading} onCancel={this.closeCheckDetailModal} passLoading={this.state.passLoading} unpassLoading={this.state.unpassLoading}  onPass={this.handlePassDetail} onUnpass={this.handleUnpassDetail} examResultId={this.state.examResultId} examResultSecondName={this.state.examResultSecondName} examResultDetailData={this.state.examResultDetailData} />
-        <ExamResultWatchDetailModal visible={this.state.watchDetailModalVisible} examResultDetailTableLoading={this.state.examResultDetailTableLoading} onCancel={this.closeWatchDetailModal} examResultDetailData={this.state.examResultDetailData} examResultSecondName={this.state.examResultSecondName}/>
+        <ExamResultWatchDetailModal visible={this.state.watchDetailModalVisible} downloadLoading={this.state.downloadLoading} examResultDetailTableLoading={this.state.examResultDetailTableLoading} onDownload={this.handleDownloadDetail} onCancel={this.closeWatchDetailModal} examResultDetailData={this.state.examResultDetailData} examResultSecondName={this.state.examResultSecondName}/>
       </div>
     );
   }

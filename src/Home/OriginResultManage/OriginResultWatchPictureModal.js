@@ -1,9 +1,6 @@
 import './OriginResultManage.css';
-import {STYLE, SESSION, SERVER, FILE_SERVER,RESULT} from './../../App/PublicConstant.js';
 import React from 'react';
-import {Form, Input, Radio, Select, Cascader, Modal, DatePicker, message, Upload, Button, Icon, Tag} from 'antd';
-const FormItem = Form.Item;
-const Option = Select.Option;
+import {Form, Modal, Upload} from 'antd';
 
 //上传扫描件
 class OriginResultWatchPictureModal_ extends React.Component {

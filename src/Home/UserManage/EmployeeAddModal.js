@@ -1,7 +1,7 @@
 import React from 'react';
 import {ROLE} from './../../App/PublicConstant.js';
 import {REGEX} from './../../App/PublicRegex.js';
-import { Form, Input, Select,Modal, Icon, Tag} from 'antd';
+import { Form, Input, Select,Modal, Tag} from 'antd';
 const FormItem = Form.Item;
 const Option = Select.Option;
 

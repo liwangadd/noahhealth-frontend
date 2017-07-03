@@ -1,6 +1,6 @@
 import React from 'react';
-import {ROLE} from './../../App/PublicConstant.js';
-import { Form, Row, Col, Input, Button, Select, DatePicker, Cascader} from 'antd';
+import {ROLE, SESSION, STYLE} from './../../App/PublicConstant.js';
+import { Form, Row, Col, Input, Button, Select, DatePicker} from 'antd';
 const FormItem = Form.Item;
 const Option = Select.Option;
 
@@ -25,27 +25,31 @@ class ExamResultSearchForm_ extends React.Component {
 
   render() {
 
+    //根据当前用户的角色决定是否显示所有筛选项
+    const role = sessionStorage.getItem(SESSION.ROLE);
+    const filtersVisible = (role === ROLE.MEMBER_1 || role === ROLE.MEMBER_2 || role === ROLE.MEMBER_3) ? STYLE.NONE : STYLE.BLOCK;
+
     const { getFieldDecorator } = this.props.form;
     return (
       <Form
         onSubmit={this.handleSearch}
       >
         <Row gutter={40}>
-          <Col span={6}>
+          <Col span={6} style={{display: filtersVisible}}>
             <FormItem>
               {getFieldDecorator('userName')(
                 <Input placeholder="会员姓名" />
               )}
             </FormItem>
           </Col>
-          <Col span={6}>
+          <Col span={6} style={{display: filtersVisible}}>
             <FormItem>
               {getFieldDecorator('uploaderName')(
                 <Input placeholder="录入者"/>
               )}
             </FormItem>
           </Col>
-          <Col span={6}>
+          <Col span={6} style={{display: filtersVisible}}>
             <FormItem>
               {getFieldDecorator('checkerName')(
                 <Input placeholder="审核者"/>
@@ -73,7 +77,7 @@ class ExamResultSearchForm_ extends React.Component {
               )}
             </FormItem>
           </Col>
-          <Col span={6}>
+          <Col span={6} style={{display: filtersVisible}}>
             <FormItem>
               {getFieldDecorator('status', { initialValue: ''
               })(

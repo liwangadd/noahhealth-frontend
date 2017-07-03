@@ -1,7 +1,6 @@
 import './ExamResultManage.css';
-import {STYLE, SESSION, SERVER, FILE_SERVER,RESULT} from './../../App/PublicConstant.js';
 import React from 'react';
-import {Form, Input, Radio, Select, Cascader, Modal, DatePicker, message, Button, Icon, Tag, Table, Popover} from 'antd';
+import {Form, Modal, Table} from 'antd';
 
 //查看检查结果
 class ExamResultWatchDetailModal extends React.Component {
@@ -43,7 +42,7 @@ class ExamResultWatchDetailModal extends React.Component {
 
 
     return (
-        <Modal title="查看检查结果" visible={this.props.visible} onCancel={this.props.onCancel} width={1000} footer={null}>
+        <Modal title="查看检查结果" visible={this.props.visible} confirmLoading={this.props.downloadLoading} onCancel={this.props.onCancel} onOk={this.props.onDownload} width={1000} okText="下载">
           <Form>
             <Table columns={examResultDetailColumns} dataSource={this.props.examResultDetailData} loading={this.props.examResultDetailTableLoading} pagination={false} size="small" rowKey='id'/>
           </Form>

@@ -1,7 +1,6 @@
 import './ExamResultManage.css';
-import {STYLE, SESSION, SERVER, FILE_SERVER,RESULT} from './../../App/PublicConstant.js';
 import React from 'react';
-import {Form, Input, Radio, Select, Cascader, Modal, DatePicker, message, Button, Icon, Tag, Table} from 'antd';
+import {Form, Input, Modal, Button, Table} from 'antd';
 
 //录入检查结果
 class ExamResultInputDetailModal_ extends React.Component {

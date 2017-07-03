@@ -1,7 +1,7 @@
 import './ExamResultManage.css';
-import {STYLE, SESSION, SERVER} from './../../App/PublicConstant.js';
+import {STYLE} from './../../App/PublicConstant.js';
 import React from 'react';
-import {Form, Input, Radio, Select, Cascader, Modal, DatePicker, message, Upload, Button, Icon} from 'antd';
+import {Form, Input, Radio, Select, Cascader, Modal, DatePicker} from 'antd';
 const FormItem = Form.Item;
 const Option = Select.Option;
 
@@ -24,10 +24,7 @@ class ExamResultUploadModal_ extends React.Component {
   render() {
 
     const formItemLayout = {labelCol: { xs: { span: 24 }, sm: { span: 7 },}, wrapperCol: { xs: { span: 24 }, sm: { span: 12 }}};
-    const formItemLayoutWithoutLabel = {wrapperCol: { xs: { span: 24 , offset: 12}, sm: { span: 12 , offset: 8}}};
-
     const memberNameOptions = this.props.memberUnderEmployeeData.map((member, index) => <Option value={member.id.toString()} key={index}>{member.name}</Option>);
-
 
     const { getFieldDecorator } = this.props.form;
     return (
