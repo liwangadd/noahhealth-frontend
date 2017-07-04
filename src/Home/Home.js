@@ -1,9 +1,10 @@
 import './Home.css';
-import {SESSION, ROUTE, ROLE, STYLE, COLOR} from './../App/PublicConstant.js';
-import {clearSession} from './../App/PublicMethod.js'
+import {SESSION, ROUTE, ROLE, STYLE, COLOR, FILE_SERVER} from './../App/PublicConstant.js';
+import {clearSession} from './../App/PublicMethod.js';
 import React from 'react';
 import { Layout, Menu, Icon, Avatar, Dropdown, notification, Button, Tag} from 'antd';
-import {browserHistory, Link} from 'react-router'
+import {browserHistory, Link} from 'react-router';
+import ProfileEditModal from './ProfileEditModal.js'
 const { Header, Content, Footer, Sider} = Layout;
 
 var close = () => {
@@ -15,11 +16,8 @@ class Home extends React.Component {
       collapsed: false,
       mode: 'inline',
 
-      //界面
-      roleTagColor: 'green',
-      layoutStyle: {}
-
-      //数据
+      //个人资料编辑框
+      profileEditModalVisible: false
 
   };
   toggle = () => {
@@ -69,7 +67,7 @@ class Home extends React.Component {
     else if(role=== ROLE.MEMBER_3) layoutStyle = this.getLayoutStyle(COLOR.BLUE, STYLE.NONE, STYLE.NONE, STYLE.BLOCK, STYLE.BLOCK);
     else layoutStyle = this.getLayoutStyle(COLOR.BLUE, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.NONE);
 
-    this.setState({layoutStyle: layoutStyle});
+    return layoutStyle;
   }
 
   getLayoutStyle(roleTagColor,
@@ -106,27 +104,32 @@ class Home extends React.Component {
     browserHistory.push(targetUrl);
   }
 
-  //渲染前预处理界面
-  componentWillMount = () => this.initLayoutStyleByRole(sessionStorage.getItem(SESSION.ROLE))
+  /**
+  * 弹出编辑个人信息对话框
+  */
+  showProfileEditModal = () => {
 
+    this.setState({profileEditModalVisible: true});
+    //拉取该用户USER_ID的基本信息
+  }
 
-
+  closeProfileEditModal = () => this.setState({profileEditModalVisible: false})
 
   render() {
 
     const role = sessionStorage.getItem(SESSION.ROLE);
+    const layoutStyle = this.initLayoutStyleByRole(role);
 
     //悬停头像时的下拉菜单
     const userOperationDropdownMenu = (
         <Menu>
           <Menu.Item style={{textAlign:'center'}}>
-            <Link target="_blank" rel="noopener noreferrer" href="#">编辑信息</Link>
+            <Link onClick={this.showProfileEditModal}>个人资料</Link>
           </Menu.Item>
           <Menu.Item style={{textAlign:'center'}}>
-            <Link target="_blank" rel="noopener noreferrer" href="#" onClick={this.handleLogout}>退出系统</Link>
+            <Link onClick={this.handleLogout}>退出系统</Link>
           </Menu.Item>
         </Menu>);
-
 
     return (
       <Layout>
@@ -140,25 +143,25 @@ class Home extends React.Component {
               <Icon type="home" className="menu-item-font"/>
               <span className="nav-text menu-item-font">首页</span>
             </Menu.Item>
-            <Menu.Item key={ROUTE.USER_MANAGE.MENU_KEY} style={{display: this.state.layoutStyle.userManageMenuItemDisplay}}>
+            <Menu.Item key={ROUTE.USER_MANAGE.MENU_KEY} style={{display: layoutStyle.userManageMenuItemDisplay}}>
               <Icon type="team" className="menu-item-font"/>
               <span className="nav-text menu-item-font">用户管理</span>
             </Menu.Item>
-            <Menu.Item key={ROUTE.FIRST_CATEGORY_MANAGE.MENU_KEY} style={{display: this.state.layoutStyle.categoryManageMenuItemDisplay}}>
+            <Menu.Item key={ROUTE.FIRST_CATEGORY_MANAGE.MENU_KEY} style={{display: layoutStyle.categoryManageMenuItemDisplay}}>
               <Icon type="medicine-box" className="menu-item-font"/>
               <span className="nav-text menu-item-font">检查项目管理</span>
             </Menu.Item>
-            <Menu.Item key={ROUTE.ORIGIN_RESULT_MANAGE.MENU_KEY} style={{display: this.state.layoutStyle.originResultMenuItemDisplay}}>
+            <Menu.Item key={ROUTE.ORIGIN_RESULT_MANAGE.MENU_KEY} style={{display: layoutStyle.originResultMenuItemDisplay}}>
               <Icon type="file-pdf" className="menu-item-font"/>
               <span className="nav-text menu-item-font">原始资料管理</span>
             </Menu.Item>
-            <Menu.Item key={ROUTE.EXAM_RESULT_MANAGE.MENU_KEY} style={{display: this.state.layoutStyle.examResultMenuItemDisplay}}>
+            <Menu.Item key={ROUTE.EXAM_RESULT_MANAGE.MENU_KEY} style={{display: layoutStyle.examResultMenuItemDisplay}}>
               <Icon type="file-text" className="menu-item-font"/>
               <span className="nav-text menu-item-font">化验/医技数据管理</span>
             </Menu.Item>
-            <Menu.Item key="9" style={{display: this.state.layoutStyle.examResultMenuItemDisplay}}>
+            <Menu.Item key="9" style={{display: layoutStyle.examResultMenuItemDisplay}}>
               <Icon type="file-text" className="menu-item-font"/>
-              <span className="nav-text menu-item-font">健康管理</span>
+              <span className="nav-text menu-item-font">健康摘要/体检方案</span>
             </Menu.Item>
           </Menu>
         </Sider>
@@ -166,10 +169,12 @@ class Home extends React.Component {
           <Header style={{ background: '#fff', padding: 0 ,textAlign: 'center'}}>
             <Icon className="trigger" type={this.state.collapsed ? 'menu-unfold' : 'menu-fold'} onClick={this.toggle}/>
             <Dropdown overlay={userOperationDropdownMenu} trigger={['click']}>
-              <Avatar shape="square" size="large" src="/logo.png" className="avatar" style={{backgroundColor: 'white'}}/>
+              <Avatar size="large" src={FILE_SERVER + sessionStorage.getItem(SESSION.AVATAR)} className="avatar-header" style={{backgroundColor: 'white'}}/>
             </Dropdown>
+            <ProfileEditModal ref="profileEditForm" visible={this.state.profileEditModalVisible} onCancel={this.closeProfileEditModal} />
+
             <a className='name'>{sessionStorage.getItem(SESSION.NAME)}</a>
-            <Tag color={this.state.layoutStyle.roleTagColor} style={{marginLeft:7, float:'right', marginTop:21}}>{role}</Tag>
+            <Tag color={layoutStyle.roleTagColor} style={{marginLeft:7, float:'right', marginTop:21}}>{role}</Tag>
           </Header>
           <Content style={{ margin: '24px 16px', padding: 24, background: '#fff', minHeight: 840 }}>
             {this.props.children}

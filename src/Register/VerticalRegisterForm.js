@@ -133,7 +133,7 @@ class VerticalRegisterForm_ extends React.Component {
         </FormItem>
         <FormItem>
             {getFieldDecorator('confirmPassword', {
-            rules: [{validator: this.handleConfirmPassword}],
+            rules: [{required: true, message: '请输入确认密码' }, { validator: this.handleConfirmPassword}],
             })(
             <Input prefix={<Icon type="lock" style={{ fontSize: 13 }} />} type="password" placeholder="确认密码" />
             )}

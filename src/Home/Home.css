@@ -9,7 +9,7 @@
 }
 
 
-.avatar {
+.avatar-header {
   float: right;
   margin-top: 11px;
   margin-right: 15px;
@@ -48,4 +48,47 @@
 
 .ant-layout-sider-collapsed .nav-text {
   display: none;
+}
+
+.timeline-item-form {
+  margin-top: 30px;
+}
+
+.sendsms-form-button{
+  width: 43%;
+  float: right;
+  text-align: center;
+}
+
+.icon{
+  font-size:15px;
+  color:#1DA57A;
+}
+
+.header-text{
+  line-height: 20px;
+  margin-left:5px;
+}
+
+.avatar-uploader,
+.avatar-uploader-trigger,
+.avatar {
+  width: 90px;
+  height: 90px;
+}
+
+.avatar {
+  border: 1px dashed #d9d9d9;
+  border-radius: 6px;
+}
+
+.avatar-uploader {
+  display: block;
+  cursor: pointer;
+}
+.avatar-uploader-trigger {
+  display: table-cell;
+  vertical-align: middle;
+  font-size: 28px;
+  color: #999;
 }

@@ -27,13 +27,14 @@ class VerticalLoginForm_ extends React.Component {
             success : (result) => {
                 console.log(result);
                 if(result.code === RESULT.SUCCESS) {
-
+                  
                     //保存状态信息
                     sessionStorage.setItem(SESSION.TOKEN, result.content.token);
                     sessionStorage.setItem(SESSION.USER_ID, result.content.id);
                     sessionStorage.setItem(SESSION.PHONE, result.content.phone);
                     sessionStorage.setItem(SESSION.ROLE, result.content.role);
                     sessionStorage.setItem(SESSION.NAME, result.content.name);
+                    sessionStorage.setItem(SESSION.AVATAR, result.content.avatar);
                     sessionStorage.setItem(SESSION.EXPIRED_TIME, result.content.duration);
 
                     //跳转

@@ -44,6 +44,7 @@ const SESSION = {
   PHONE: 'PHONE',
   ROLE: 'ROLE',
   NAME: 'NAME',
+  AVATAR: 'AVATAR',
   EXPIRED_TIME: 'EXPIRED_TIME'
 }
 

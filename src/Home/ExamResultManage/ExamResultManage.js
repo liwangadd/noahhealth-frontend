@@ -1,5 +1,5 @@
 import './ExamResultManage.css';
-import {SERVER, SESSION, RESULT, PAGE_SIZE, ROLE} from './../../App/PublicConstant.js';
+import {SERVER, SESSION, RESULT, PAGE_SIZE, ROLE, FILE_SERVER} from './../../App/PublicConstant.js';
 import {formatDate} from './../../App/PublicUtil.js';
 import ExamResultSearchForm from './ExamResultSearchForm.js';
 import ExamResultInputModal from './ExamResultInputModal.js';
@@ -370,18 +370,19 @@ class ExamResultManage extends React.Component {
     //显示加载圈
     this.setState({ downloadLoading: true });
     $.ajax({
-        url : SERVER + '/api/input/download',
-        type : 'POST',
-        contentType: 'application/json',
+        url : SERVER + '/api/input/download/' + this.state.examResultId,
+        type : 'GET',
         dataType : 'json',
-        data : JSON.stringify({id: this.state.examResultId}),
         beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
         success : (result) => {
           console.log(result);
           if(result.code === RESULT.SUCCESS) {
 
+            //下载
+            window.location.href = FILE_SERVER + result.content;
+
             //关闭加载圈、对话框
-            this.setState({ watchDetailModalVisible: false, downloadLoading: false});
+            this.setState({downloadLoading: false});
             message.success(result.reason, 2);
           } else {
 
