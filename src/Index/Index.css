@@ -42,3 +42,17 @@
   margin-bottom: 20px;
   text-align: center;
 }
+
+.index-login-content{
+  padding-top:70px;
+  padding-bottom: 280px;
+  background: url('/Index/login_register_background.jpg') no-repeat;
+  background-size: 100% 100%;
+}
+
+.index-register-content{
+  padding-top:70px;
+  padding-bottom: 80px;
+  background:url('/Index/login_register_background.jpg') no-repeat;
+  background-size: 100% 100%;
+}

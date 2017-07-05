@@ -50,7 +50,7 @@ class Register extends React.Component {
                 </div>
               </Header>
             </Affix>
-            <Content style={{paddingTop:70, paddingBottom:80}} >
+            <Content className="index-register-content">
               <VerticalRegisterForm  handleLoading={this.handleLoading}/>
             </Content>
             <Header className='footer footer-affix'>

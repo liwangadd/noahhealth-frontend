@@ -54,10 +54,10 @@ class Login extends React.Component {
             </Affix>
             <Content>
               <Carousel autoplay effect="fade">
-                <div style={{height:450}}><img src='/LoginRegister/carousel_1.jpeg' style={{width:'100%', height:'100%'}} alt=""/></div>
-                <div style={{height:450}}><img src='/LoginRegister/carousel_2.jpeg' style={{width:'100%', height:'100%'}} alt=""/></div>
-                <div style={{height:450}}><img src='/LoginRegister/carousel_3.jpeg' style={{width:'100%', height:'100%'}} alt=""/></div>
-                <div style={{height:450}}><img src='/LoginRegister/carousel_4.jpeg' style={{width:'100%', height:'100%'}} alt=""/></div>
+                <div style={{height:450}}><img src='/Index/carousel_1.jpeg' style={{width:'100%', height:'100%'}} alt=""/></div>
+                <div style={{height:450}}><img src='/Index/carousel_2.jpeg' style={{width:'100%', height:'100%'}} alt=""/></div>
+                <div style={{height:450}}><img src='/Index/carousel_3.jpeg' style={{width:'100%', height:'100%'}} alt=""/></div>
+                <div style={{height:450}}><img src='/Index/carousel_4.jpeg' style={{width:'100%', height:'100%'}} alt=""/></div>
               </Carousel>
 
               <div style={{paddingLeft:80, paddingRight:80}}>

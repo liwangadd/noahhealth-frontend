@@ -50,7 +50,7 @@ class Login extends React.Component {
                 </div>
               </Header>
             </Affix>
-            <Content style={{paddingTop:70, paddingBottom:280}} >
+            <Content className="index-login-content">
                 <VerticalLoginForm handleLoading={this.handleLoading}/>
             </Content>
             <Header className='footer footer-affix'>
