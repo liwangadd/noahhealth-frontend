@@ -1,0 +1,44 @@
+.header {
+  font-size: 20px;
+  color: white;
+}
+
+.content {
+
+}
+
+.footer {
+  text-align: center;
+  color: white;
+}
+
+.footer-affix {
+  position:fixed;
+  bottom:0px;
+  left:0px;
+  width: 100%;
+}
+
+.index-header-logo {
+  height: 32px;
+  width: 120px;
+  float:left;
+  background: url('/logo_text.png') no-repeat;
+  background-size: 110px;
+  border-radius: 6px;
+  margin: 16px;
+  cursor: pointer;
+}
+
+.index-card{
+  width: 35%;
+  margin: 0 auto;
+  padding-top: 20px;
+}
+
+.index-card .index-card-welcome {
+  color: #1DA57A;
+  font-size: 16px;
+  margin-bottom: 20px;
+  text-align: center;
+}

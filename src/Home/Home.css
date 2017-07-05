@@ -50,12 +50,8 @@
   display: none;
 }
 
-.timeline-item-form {
-  margin-top: 30px;
-}
-
 .sendsms-form-button{
-  width: 43%;
+  width: 60%;
   float: right;
   text-align: center;
 }

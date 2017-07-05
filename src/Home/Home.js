@@ -35,7 +35,7 @@ class Home extends React.Component {
 
       clearSession();
       notification.close(key);
-      browserHistory.push(ROUTE.LOGIN.URL);
+      browserHistory.push(ROUTE.MAIN.URL);
     };
     const btn = (
       <Button type="primary" size="small" onClick={btnClick}>

@@ -2,16 +2,17 @@ import './Home.css'
 import React from 'react';
 import {SERVER, SESSION, FILE_SERVER, RESULT} from './../App/PublicConstant.js';
 import {REGEX} from './../App/PublicRegex.js';
-import { Form, Input,Modal, Icon, Button, Upload, Avatar, message} from 'antd';
+import { Form, Input,Modal, Icon, Button, Upload, Avatar, message, Tabs} from 'antd';
 import $ from 'jquery';
 const FormItem = Form.Item;
+const TabPane = Tabs.TabPane;
 
 //用户编辑对话框的表单
 class ProfileEditModal_ extends React.Component {
 
   state = {
     isSendSmsBtnDisabled: false,
-    sendSmsBtnStr: '发送验证码',
+    sendSmsBtnStr: '发送',
     countDown: 60 ,//倒计时
     imageUrl: FILE_SERVER + sessionStorage.getItem(SESSION.AVATAR),
 
@@ -138,7 +139,32 @@ class ProfileEditModal_ extends React.Component {
     e.preventDefault();
     this.props.form.validateFields(['phone', 'inputCode'], (err, values) => {
       if (!err) {
-        console.log('Received values of form: ', values);
+
+        console.log('修改用户'+ sessionStorage.getItem(SESSION.USER_ID) +'手机号', values);
+
+        this.setState({submitPhoneChangeLoading: true});
+        $.ajax({
+            url : SERVER + '/api/user/' + sessionStorage.getItem(SESSION.USER_ID),
+            type : 'PUT',
+            contentType: 'application/json',
+            dataType : 'json',
+            data : JSON.stringify({phone: values.phone, inputCode: values.inputCode}),
+            beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
+            success : (result) => {
+              console.log(result);
+              if(result.code === RESULT.SUCCESS) {
+
+                //关闭加载圈、对话框
+                this.setState({submitPhoneChangeLoading: false});
+                message.success(result.reason, 2);
+              } else {
+
+                //关闭加载圈
+                this.setState({ submitPhoneChangeLoading: false });
+                message.error(result.reason, 2);
+              }
+            }
+        });
       }
     });
   }
@@ -190,8 +216,10 @@ class ProfileEditModal_ extends React.Component {
     const { getFieldDecorator } = this.props.form;
     return (
       <Modal title="个人资料" visible={this.props.visible} onCancel={this.props.onCancel} footer={null}>
-            <h3><Icon type="user" className="icon"/><span className="header-text">基本信息</span></h3>
-            <Form className="timeline-item-form" onSubmit={this.submitProfileInfo}>
+
+        <Tabs defaultActiveKey="1" tabPosition="left">
+          <TabPane tab={<span><Icon type="user" />基本信息</span>} key="1">
+            <Form onSubmit={this.submitProfileInfo}>
               <FormItem {...formItemLayout} label="头像">
                 <Upload
                   className="avatar-uploader"
@@ -213,12 +241,13 @@ class ProfileEditModal_ extends React.Component {
                 )}
               </FormItem>
               <FormItem {...formItemLayoutWithoutLabel}>
-                <Button type="primary" size="default" htmlType="submit" loading={this.state.submitProfileInfoLoading}>保存</Button>
+                <Button type="primary" htmlType="submit" loading={this.state.submitProfileInfoLoading}>保存</Button>
               </FormItem>
             </Form>
+          </TabPane>
 
-            <h3><Icon type="lock" className="icon"/><span className="header-text">密码更改</span></h3>
-            <Form className="timeline-item-form" onSubmit={this.submitPasswordChange}>
+          <TabPane tab={<span><Icon type="lock" />密码更改</span>} key="2">
+            <Form onSubmit={this.submitPasswordChange}>
               <FormItem {...formItemLayout} label="旧密码">
                   {getFieldDecorator('oldPassword', {rules: [{ required: true, message: '请输入旧密码' }],
                   })(
@@ -238,12 +267,13 @@ class ProfileEditModal_ extends React.Component {
                   )}
               </FormItem>
               <FormItem {...formItemLayoutWithoutLabel}>
-                <Button type="primary" size="default" htmlType="submit" loading={this.state.submitPasswordChangeLoading}>更改</Button>
+                <Button type="primary" htmlType="submit" loading={this.state.submitPasswordChangeLoading}>更改</Button>
               </FormItem>
             </Form>
+          </TabPane>
 
-            <h3><Icon type="phone" className="icon"/><span className="header-text">手机更换</span></h3>
-            <Form className="timeline-item-form" onSubmit={this.submitPhoneChange}>
+          <TabPane tab={<span><Icon type="phone" />手机更换</span>} key="3">
+            <Form onSubmit={this.submitPhoneChange}>
               <FormItem {...formItemLayout} label="手机">
                   {getFieldDecorator('phone', { 'initialValue': sessionStorage.getItem(SESSION.PHONE), rules: [{ required: true, message: '请输入手机号' },{pattern: REGEX.PHONE, message:'请输入合法手机号'}],
                   })(
@@ -252,16 +282,18 @@ class ProfileEditModal_ extends React.Component {
               </FormItem>
               <FormItem {...formItemLayout} label="验证码">
                   {getFieldDecorator('inputCode', { rules: [{ required: true, message: '请输入验证码' }]})(
-                  <Input style={{width:'55%'}}/>
+                  <Input style={{width:'37%'}}/>
                   )}
                   <Button disabled={this.state.isSendSmsBtnDisabled} onClick={this.handleSendSms} className="sendsms-form-button">
                       <span>{this.state.sendSmsBtnStr}</span>
                   </Button>
               </FormItem>
               <FormItem {...formItemLayoutWithoutLabel}>
-                <Button type="primary" size="default" htmlType="submit" loading={this.state.submitPhoneChangeLoading}>更换</Button>
+                <Button type="primary" htmlType="submit" loading={this.state.submitPhoneChangeLoading}>更换</Button>
               </FormItem>
             </Form>
+          </TabPane>
+        </Tabs>
       </Modal>
     );
   }

@@ -3,8 +3,9 @@ import {clearSession, containsElement} from './App/PublicMethod.js'
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App/App.js';
-import Login from './Login/Login.js';
-import Register from './Register/Register.js';
+import Main from './Index/Main/Main.js';
+import Login from './Index/Login/Login.js';
+import Register from './Index/Register/Register.js';
 import Home from './Home/Home.js';
 import Welcome from './Home/Welcome/Welcome.js';
 import UserManage from './Home/UserManage/UserManage.js';
@@ -93,12 +94,12 @@ class AppRouter extends React.Component {
                   </Route>
                 </Route>
 
+                <Route path={ROUTE.ROOT.URL} component={Main}/>
+                <Route path={ROUTE.MAIN.URL} component={Main}/>
                 <Route path={ROUTE.LOGIN.URL} component={Login}/>
                 <Route path={ROUTE.REGISTER.URL} component={Register}/>
 
-                <Route path={ROUTE.ROOT.URL} component={Login}/>
                 <Route path="*"  onEnter={certifyAccess} />
-
               </Route>
           </Router>);
   }
