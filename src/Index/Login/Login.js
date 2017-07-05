@@ -31,7 +31,7 @@ class Login extends React.Component {
     return (
 
         <Spin spinning={this.state.loading} delay={LOADING_DELAY_TIME} tip='登录中'>
-          <Layout style={{position:'relative', minHeight:'100%'}}>
+          <Layout>
             <Affix>
               <Header>
                 <div className="index-header-logo" onClick={() => browserHistory.push(ROUTE.MAIN.URL)}/>
@@ -50,14 +50,12 @@ class Login extends React.Component {
                 </div>
               </Header>
             </Affix>
-            <Content style={{paddingTop:80, paddingBottom:80}} >
+            <Content style={{paddingTop:70, paddingBottom:280}} >
                 <VerticalLoginForm handleLoading={this.handleLoading}/>
             </Content>
-            <Affix>
-              <Header className='footer footer-affix'>
-                医海慈航 ©2017 Created by BUPT
-              </Header>
-            </Affix>
+            <Header className='footer footer-affix'>
+              医海慈航 ©2017 Created by BUPT
+            </Header>
           </Layout>
         </Spin>
     );

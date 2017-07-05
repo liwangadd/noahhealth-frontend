@@ -1,7 +1,7 @@
 //const SERVER = 'http://10.109.247.127:8080' //lab
 //const SERVER = 'http://10.108.113.8:8080' //renzilong
-const SERVER = 'http://localhost:8080' //yaochenkun
-//const SERVER = 'http://118.89.227.189:8080' //tecentcloud
+//const SERVER = 'http://localhost:8080' //yaochenkun
+const SERVER = 'http://118.89.227.189:8080' //tecentcloud
 const FILE_SERVER = 'http://10.109.247.127:8088'
 const LOADING_DELAY_TIME = 500 //加载延迟时间，若在0.5s内加载完毕则不显示
 const PAGE_SIZE = 5 //每页条数
