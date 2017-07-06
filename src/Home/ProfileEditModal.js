@@ -1,8 +1,8 @@
-import './Home.css'
+import './Home.css';
 import React from 'react';
 import {SERVER, SESSION, FILE_SERVER, RESULT} from './../App/PublicConstant.js';
 import {REGEX} from './../App/PublicRegex.js';
-import { Form, Input,Modal, Icon, Button, Upload, Avatar, message, Tabs} from 'antd';
+import { Form, Input,Modal, Icon, Button, Upload, message, Tabs} from 'antd';
 import $ from 'jquery';
 const FormItem = Form.Item;
 const TabPane = Tabs.TabPane;
@@ -231,7 +231,7 @@ class ProfileEditModal_ extends React.Component {
                   beforeUpload={this.beforeUpload}
                   onChange={this.handleChange}
                 >
-                  <Avatar src={this.state.imageUrl} className="avatar" style={{backgroundColor: 'white'}}/>
+                  <img src={this.state.imageUrl} className="avatar" style={{backgroundColor: 'white'}} alt=""/>
                 </Upload>
               </FormItem>
               <FormItem {...formItemLayout} label="姓名">
