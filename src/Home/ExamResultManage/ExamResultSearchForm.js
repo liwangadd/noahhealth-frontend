@@ -1,8 +1,7 @@
 import React from 'react';
 import {ROLE, SESSION, STYLE} from './../../App/PublicConstant.js';
-import { Form, Row, Col, Input, Button, Select, DatePicker} from 'antd';
+import { Form, Row, Col, Input, Button} from 'antd';
 const FormItem = Form.Item;
-const Option = Select.Option;
 
 class ExamResultSearchForm_ extends React.Component {
   state = {
@@ -39,55 +38,6 @@ class ExamResultSearchForm_ extends React.Component {
             <FormItem>
               {getFieldDecorator('userName')(
                 <Input placeholder="会员姓名" />
-              )}
-            </FormItem>
-          </Col>
-          <Col span={6} style={{display: filtersVisible}}>
-            <FormItem>
-              {getFieldDecorator('uploaderName')(
-                <Input placeholder="录入者"/>
-              )}
-            </FormItem>
-          </Col>
-          <Col span={6} style={{display: filtersVisible}}>
-            <FormItem>
-              {getFieldDecorator('checkerName')(
-                <Input placeholder="审核者"/>
-              )}
-            </FormItem>
-          </Col>
-          <Col span={6}>
-            <FormItem>
-              {getFieldDecorator('time')(
-                <DatePicker style={{width:'100%'}}/>
-              )}
-            </FormItem>
-          </Col>
-          <Col span={6}>
-            <FormItem>
-              {getFieldDecorator('secondName')(
-                <Input placeholder="检查亚类"/>
-              )}
-            </FormItem>
-          </Col>
-          <Col span={6}>
-            <FormItem>
-              {getFieldDecorator('hospital')(
-                <Input placeholder="检查医院"/>
-              )}
-            </FormItem>
-          </Col>
-          <Col span={6} style={{display: filtersVisible}}>
-            <FormItem>
-              {getFieldDecorator('status', { initialValue: ''
-              })(
-                <Select>
-                  <Option value="录入中">录入中</Option>
-                  <Option value="待审核">待审核</Option>
-                  <Option value="未通过">未通过</Option>
-                  <Option value="已通过">已通过</Option>
-                  <Option value="">全部</Option>
-                </Select>
               )}
             </FormItem>
           </Col>

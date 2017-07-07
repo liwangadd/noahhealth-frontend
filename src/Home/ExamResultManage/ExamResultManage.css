@@ -6,8 +6,7 @@
   color:#f46e65;
 }
 
-.unpass-confirm {
-  color:#f46e65;
+.unpass-check {
   margin-left: 10px;
 }
 
@@ -46,4 +45,35 @@
 
 .secondName {
   color:#1DA57A;
+}
+
+.exam-result-detail-item-card{
+  width: 300px;
+  margin-top:20px;
+}
+
+.exam-result-detail-item-form{
+  width: 85%;
+  margin-top:20px;
+}
+
+.exam-result-detail-item-form .operation{
+  text-align: right;
+  margin-top: 10px;
+}
+
+.exam-result-detail-item-form .operation .delete{
+  float:left;
+}
+
+.exam-result-detail-item-form .gutter{
+  margin-right: 10px;
+}
+
+.exam-result-detail-anchor{
+
+  position: fixed;
+  top: 150px;
+  left: 87%;
+  z-index:10;
 }

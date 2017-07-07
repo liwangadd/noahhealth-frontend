@@ -1,13 +1,9 @@
 import './ExamResultManage.css';
-import {SERVER, SESSION, RESULT, PAGE_SIZE, ROLE, FILE_SERVER} from './../../App/PublicConstant.js';
-import {formatDate} from './../../App/PublicUtil.js';
+import {SERVER, SESSION, RESULT, PAGE_SIZE, FILE_SERVER, ROUTE} from './../../App/PublicConstant.js';
 import ExamResultSearchForm from './ExamResultSearchForm.js';
-import ExamResultInputModal from './ExamResultInputModal.js';
-import ExamResultInputDetailModal from './ExamResultInputDetailModal.js';
-import ExamResultCheckDetailModal from './ExamResultCheckDetailModal.js';
-import ExamResultWatchDetailModal from './ExamResultWatchDetailModal.js';
 import React from 'react';
-import {Tabs, Table, message, Popconfirm, Button, BackTop, Modal, Tooltip} from 'antd';
+import {Tabs, Table, message, BackTop, Modal} from 'antd';
+import {Link} from 'react-router';
 import $ from 'jquery';
 
 const TabPane = Tabs.TabPane;
@@ -60,19 +56,13 @@ class ExamResultManage extends React.Component {
 
         this.setState({ examResultTableLoading: true});
 
-        console.log('拉取第'+ pageNow + "页原始数据-执行情况信息", values);
+        console.log('拉取第'+ pageNow + "页化验/医技目录", values);
 
         $.ajax({
             url : SERVER + '/api/input/list',
             type : 'POST',
             contentType: 'application/json',
             data : JSON.stringify({userName : values.userName,
-                                   inputerName : values.inputerName,
-                                   checkerName: values.checkerName,
-                                   hospital: values.hospital,
-                                   secondName: values.secondName,
-                                   status: values.status,
-                                   time: values.time,
                                    pageNow: pageNow,
                                    pageSize: PAGE_SIZE}),
             dataType : 'json',
@@ -200,40 +190,7 @@ class ExamResultManage extends React.Component {
     });
   }
 
-  //保存录入的检查结果
-  saveInputDetail = () => {
 
-      console.log('保存录入的检查结果', this.state.examResultId);
-
-      this.refs.inputDetailForm.validateFields((err, values) => {
-        if(!err) {
-
-          //显示加载圈
-          this.setState({ saveLoading: true });
-          $.ajax({
-              url : SERVER + '/api/detail',
-              type : 'PUT',
-              contentType: 'application/json',
-              dataType : 'json',
-              data : JSON.stringify(values),
-              beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
-              success : (result) => {
-                console.log(result);
-                if(result.code === RESULT.SUCCESS) {
-
-                  message.success(result.reason, 2);
-                } else {
-
-                  message.error(result.reason, 2);
-                }
-
-                //关闭加载圈
-                this.setState({ saveLoading: false });
-              }
-          });
-        }
-      });
-  }
 
   //提交录入的检查结果（先请求保存、再请求改变状态）
   submitInputDetail = () => {
@@ -394,39 +351,6 @@ class ExamResultManage extends React.Component {
     });
   }
 
-
-  //删除
-  handleDeleteExamResult = (examResultId) => {
-
-    console.log('删除一条检查记录', examResultId);
-
-    $.ajax({
-        url : SERVER + '/api/input/' + examResultId,
-        type : 'DELETE',
-        dataType : 'json',
-        beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
-        success : (result) => {
-
-            console.log(result);
-            if(result.code === RESULT.SUCCESS) {
-
-                //删除后重查一遍
-                this.handleSearchExamResultList(1);
-
-                message.success(result.reason, 2);
-                return;
-            } else {
-                message.error(result.reason, 2);
-                return;
-            }
-        }
-    });
-  }
-
-
-
-
-
   requestMembersUnderEmployee = () => {
 
       console.log('拉取'+ sessionStorage.getItem(SESSION.NAME) +'旗下的所有会员信息');
@@ -521,119 +445,16 @@ class ExamResultManage extends React.Component {
 
   render(){
 
-    const role = sessionStorage.getItem(SESSION.ROLE);
-
     const examResultColumns = [{
       title: '会员姓名',
-      dataIndex: 'userName',
-      key: 'userName',
-      render: (name) => <a>{name}</a>,
+      dataIndex: 'name',
+      key: 'name'
     },{
-      title: '录入者',
-      dataIndex: 'inputerName',
-      key: 'inputerName'
-    },{
-      title: '检查亚类',
-      dataIndex: 'secondName',
-      key: 'secondName'
-    },{
-      title: '检查医院',
-      dataIndex: 'hospital',
-      key: 'hospital'
-    },{
-      title: '检查日期',
-      dataIndex: 'time',
-      key: 'time',
-      render: (time) => formatDate(time)
-    },{
-      title: '备注',
-      dataIndex: 'note',
-      key: 'note'
-    },{
-      title: '审核者',
-      dataIndex: 'checkerName',
-      key: 'checkerName'
-    }, {
-      title: '执行状态',
-      dataIndex: 'status',
-      key: 'status',
-      render: (status, record) => {
-
-        if(status === '未通过')
-          return <Tooltip title={record.reason}><span className="unpass">未通过</span></Tooltip>;
-        else if(status === '已通过')
-          return <span className="pass">已通过</span>;
-        else
-          return status;
-      }
-    }, {
       title: '操作',
       key: 'action',
       render: (record) => (
         <span>
-
-          {
-            (record.status === '录入中' || record.status === '未通过') && (role === ROLE.EMPLOYEE_ARCHIVER || role === ROLE.EMPLOYEE_ADMIN)
-            ?
-            <span>
-              <a onClick={() => this.showInputDetailModal(record.id, record.secondName)}>
-                {
-                  record.status === '未通过'
-                  ?
-                  "重新录入检查结果"
-                  :
-                  "录入检查结果"
-                }
-              </a>
-              <span className="ant-divider"/>
-            </span>
-            :
-            null
-          }
-
-          {
-            (record.status === '待审核') && (role === ROLE.EMPLOYEE_ARCHIVE_MANAGER || role === ROLE.EMPLOYEE_ADMIN)
-            ?
-            <span>
-              <a onClick={() => this.showCheckDetailModal(record.id, record.secondName)}>审核检查结果</a>
-              {
-                role === ROLE.EMPLOYEE_ADMIN
-                ?
-                <span className="ant-divider"/>
-                :
-                null
-              }
-            </span>
-            :
-            null
-          }
-
-          {
-            (record.status === '已通过') && (role === ROLE.EMPLOYEE_ADVISER || role === ROLE.EMPLOYEE_ADVISE_MANAGER || role === ROLE.MEMBER_2 || role === ROLE.MEMBER_3 || role === ROLE.EMPLOYEE_ADMIN)
-            ?
-            <span>
-              <a onClick={() => this.showWatchDetailModal(record.id, record.secondName)}>查看录入结果</a>
-              {
-                role === ROLE.EMPLOYEE_ADMIN
-                ?
-                <span className="ant-divider"/>
-                :
-                null
-              }
-            </span>
-            :
-            null
-          }
-
-          {
-            ((record.status === '录入中' || record.status === '未通过') && role === ROLE.EMPLOYEE_ARCHIVER) || role === ROLE.EMPLOYEE_ADMIN
-            ?
-            <Popconfirm title="您确定要删除该条检查记录吗?" onConfirm={() => this.handleDeleteExamResult(record.id)} okText="是" cancelText="取消">
-              <a className='operation-delete'>删除</a>
-            </Popconfirm>
-            :
-            null
-          }
+          <Link to={ROUTE.EXAM_RESULT_DETAIL.URL_PREFIX + "/" + ROUTE.EXAM_RESULT_DETAIL.MENU_KEY + "/" + record.id + "/" + record.name}>查看详情</Link>
         </span>
       )
     }];
@@ -641,16 +462,16 @@ class ExamResultManage extends React.Component {
     return (
       <div>
         <BackTop visibilityHeight="200"/>
-        <Tabs defaultActiveKey={"1"} tabBarExtraContent={role === ROLE.EMPLOYEE_ARCHIVER || role === ROLE.EMPLOYEE_ADMIN ? <Button type="primary" onClick={this.showInputModal}>添加检查记录</Button> : null}>
+        <Tabs defaultActiveKey={"1"}>
           <TabPane tab="化验/医技数据" key="1">
             <ExamResultSearchForm ref="searchForm" handleSearchExamResultList={this.handleSearchExamResultList}/>
             <Table className='exam-result-table' columns={examResultColumns} dataSource={this.state.examResultData} rowKey='id' loading={this.state.examResultTableLoading} pagination={this.state.examResultPager} onChange={this.changeExamResultPager}/>
           </TabPane>
         </Tabs>
-        <ExamResultInputModal ref="inputForm" visible={this.state.inputModalVisible} confirmLoading={this.state.confirmInputModalLoading} onCancel={this.closeInputModal} onConfirm={this.confirmInputModal} memberUnderEmployeeData={this.state.memberUnderEmployeeData} secondCategoryParentOfAssayData={this.state.secondCategoryParentOfAssayData} secondCategoryParentOfTechData={this.state.secondCategoryParentOfTechData}/>
+        {/* <ExamResultInputModal ref="inputForm" visible={this.state.inputModalVisible} confirmLoading={this.state.confirmInputModalLoading} onCancel={this.closeInputModal} onConfirm={this.confirmInputModal} memberUnderEmployeeData={this.state.memberUnderEmployeeData} secondCategoryParentOfAssayData={this.state.secondCategoryParentOfAssayData} secondCategoryParentOfTechData={this.state.secondCategoryParentOfTechData}/>
         <ExamResultInputDetailModal ref="inputDetailForm" visible={this.state.inputDetailModalVisible} examResultDetailTableLoading={this.state.examResultDetailTableLoading} onSave={this.saveInputDetail} onSubmit={this.submitInputDetail} onCancel={this.closeInputDetailModal} saveLoading={this.state.saveLoading} submitLoading={this.state.submitLoading}  examResultId={this.state.examResultId} examResultSecondName={this.state.examResultSecondName} examResultDetailData={this.state.examResultDetailData} />
         <ExamResultCheckDetailModal visible={this.state.checkDetailModalVisible} examResultDetailTableLoading={this.state.examResultDetailTableLoading} onCancel={this.closeCheckDetailModal} passLoading={this.state.passLoading} unpassLoading={this.state.unpassLoading}  onPass={this.handlePassDetail} onUnpass={this.handleUnpassDetail} examResultId={this.state.examResultId} examResultSecondName={this.state.examResultSecondName} examResultDetailData={this.state.examResultDetailData} />
-        <ExamResultWatchDetailModal visible={this.state.watchDetailModalVisible} downloadLoading={this.state.downloadLoading} examResultDetailTableLoading={this.state.examResultDetailTableLoading} onDownload={this.handleDownloadDetail} onCancel={this.closeWatchDetailModal} examResultDetailData={this.state.examResultDetailData} examResultSecondName={this.state.examResultSecondName}/>
+        <ExamResultWatchDetailModal visible={this.state.watchDetailModalVisible} downloadLoading={this.state.downloadLoading} examResultDetailTableLoading={this.state.examResultDetailTableLoading} onDownload={this.handleDownloadDetail} onCancel={this.closeWatchDetailModal} examResultDetailData={this.state.examResultDetailData} examResultSecondName={this.state.examResultSecondName}/> */}
       </div>
     );
   }

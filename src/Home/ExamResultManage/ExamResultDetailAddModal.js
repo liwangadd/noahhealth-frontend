@@ -1,12 +1,11 @@
 import './ExamResultManage.css';
 import {STYLE} from './../../App/PublicConstant.js';
 import React from 'react';
-import {Form, Input, Radio, Select, Cascader, Modal, DatePicker} from 'antd';
+import {Form, Input, Radio, Cascader, Modal, DatePicker} from 'antd';
 const FormItem = Form.Item;
-const Option = Select.Option;
 
 //添加原始资料表单
-class ExamResultUploadModal_ extends React.Component {
+class ExamResultDetailAddModal_ extends React.Component {
 
   state = {
     secondCategoryOfAssayVisible: STYLE.BLOCK,
@@ -24,20 +23,11 @@ class ExamResultUploadModal_ extends React.Component {
   render() {
 
     const formItemLayout = {labelCol: { xs: { span: 24 }, sm: { span: 7 },}, wrapperCol: { xs: { span: 24 }, sm: { span: 12 }}};
-    const memberNameOptions = this.props.memberUnderEmployeeData.map((member, index) => <Option value={member.id.toString()} key={index}>{member.name}</Option>);
 
     const { getFieldDecorator } = this.props.form;
     return (
-        <Modal title="录入检查记录" visible={this.props.visible} onOk={this.props.onConfirm} confirmLoading={this.props.confirmLoading} onCancel={this.props.onCancel}>
+        <Modal title="添加检查记录" visible={this.props.visible} onOk={this.props.onConfirm} confirmLoading={this.props.confirmLoading} onCancel={this.props.onCancel}>
           <Form className="add-form">
-
-            <FormItem {...formItemLayout} label="会员姓名">
-              {getFieldDecorator('userId', {rules: [{ required: true, message: '请输入会员姓名!' }]})(
-                <Select showSearch placeholder="" optionFilterProp="children"  filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}>
-                  {memberNameOptions}
-                </Select>
-              )}
-            </FormItem>
 
             <FormItem {...formItemLayout} label="检查类型">
               {getFieldDecorator('type', {rules: [{ required: true, message: '请选择检查类型!' }], initialValue: "化验"})(
@@ -83,5 +73,5 @@ class ExamResultUploadModal_ extends React.Component {
   }
 }
 
-const ExamResultUploadModal = Form.create()(ExamResultUploadModal_);
-export default ExamResultUploadModal;
+const ExamResultDetailAddModal = Form.create()(ExamResultDetailAddModal_);
+export default ExamResultDetailAddModal;

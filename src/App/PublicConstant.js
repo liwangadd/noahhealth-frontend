@@ -1,13 +1,12 @@
 
 //服务器地址
-//const SERVER = 'http://10.109.247.127:8080' //lab
-//const SERVER = 'http://10.108.113.8:8080' //renzilong
+const SERVER = 'http://10.109.247.127:8080' //lab
+//const SERVER = 'http://118.89.227.189:8080' //tecentcloud
 //const SERVER = 'http://localhost:8080' //yaochenkun
-const SERVER = 'http://118.89.227.189:8080' //tecentcloud
 
 //文件服务器地址
-//const FILE_SERVER = 'http://10.109.247.127:8088'
-const FILE_SERVER = 'http://118.89.227.189:8088' //tecentcloud
+const FILE_SERVER = 'http://10.109.247.127:8088'
+//const FILE_SERVER = 'http://118.89.227.189:8088' //tecentcloud
 
 
 
@@ -45,7 +44,9 @@ const ROUTE = {
     THIRD_CATEGORY_MANAGE: {URL:'/third_category_manage/:menuKey/:tabKey/:firstId/:firstName/:secondId/:secondName', URL_PREFIX:'/third_category_manage', MENU_KEY: '3', PERMISSION: [ROLE.EMPLOYEE_ADMIN, ROLE.EMPLOYEE_ARCHIVE_MANAGER, ROLE.EMPLOYEE_ARCHIVER, ROLE.EMPLOYEE_ADVISE_MANAGER, ROLE.EMPLOYEE_ADVISER]},
 
     ORIGIN_RESULT_MANAGE: {URL:'/origin_result_manage/:menuKey', URL_PREFIX:'/origin_result_manage', MENU_KEY: '4', PERMISSION: [ROLE.EMPLOYEE_ADMIN, ROLE.EMPLOYEE_ARCHIVE_MANAGER, ROLE.EMPLOYEE_ARCHIVER, ROLE.EMPLOYEE_ADVISE_MANAGER, ROLE.EMPLOYEE_ADVISER]},
-    EXAM_RESULT_MANAGE: {URL:'/exam_result_manage/:menuKey', URL_PREFIX:'/exam_result_manage', MENU_KEY: '5', PERMISSION: [ROLE.EMPLOYEE_ADMIN, ROLE.EMPLOYEE_ARCHIVE_MANAGER, ROLE.EMPLOYEE_ARCHIVER, ROLE.EMPLOYEE_ADVISE_MANAGER, ROLE.EMPLOYEE_ADVISER]}
+
+    EXAM_RESULT_MANAGE: {URL:'/exam_result_manage/:menuKey', URL_PREFIX:'/exam_result_manage', MENU_KEY: '5', PERMISSION: [ROLE.EMPLOYEE_ADMIN, ROLE.EMPLOYEE_ARCHIVE_MANAGER, ROLE.EMPLOYEE_ARCHIVER, ROLE.EMPLOYEE_ADVISE_MANAGER, ROLE.EMPLOYEE_ADVISER]},
+    EXAM_RESULT_DETAIL: {URL:'/exam_result_detail/:menuKey/:memberId/:memberName', URL_PREFIX:'/exam_result_detail', MENU_KEY: '5', PERMISSION: [ROLE.EMPLOYEE_ADMIN, ROLE.EMPLOYEE_ARCHIVE_MANAGER, ROLE.EMPLOYEE_ARCHIVER, ROLE.EMPLOYEE_ADVISE_MANAGER, ROLE.EMPLOYEE_ADVISER]}
 }
 
 //session中常量

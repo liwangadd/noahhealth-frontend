@@ -14,6 +14,7 @@ import SecondCategoryManage from './Home/CategoryManage/SecondCategoryManage.js'
 import ThirdCategoryManage from './Home/CategoryManage/ThirdCategoryManage.js';
 import OriginResultManage from './Home/OriginResultManage/OriginResultManage.js';
 import ExamResultManage from './Home/ExamResultManage/ExamResultManage.js';
+import ExamResultDetail from './Home/ExamResultManage/ExamResultDetail.js';
 import {message} from 'antd'
 import {Router, Route, browserHistory, IndexRoute} from 'react-router';
 
@@ -47,12 +48,18 @@ var certifyAccess = function(nextState, replace){
       case ROUTE.LOGIN.URL_PREFIX:certifyRole(replace, role, ROUTE.LOGIN.PERMISSION);break;
       case ROUTE.REGISTER.URL_PREFIX:certifyRole(replace, role, ROUTE.REGISTER.PERMISSION);break;
       case ROUTE.HOME.URL_PREFIX:certifyRole(replace, role, ROUTE.HOME.PERMISSION);break;
+
       case ROUTE.USER_MANAGE.URL_PREFIX:certifyRole(replace, role, ROUTE.USER_MANAGE.PERMISSION);break;
+
       case ROUTE.FIRST_CATEGORY_MANAGE.URL_PREFIX:certifyRole(replace, role, ROUTE.FIRST_CATEGORY_MANAGE.PERMISSION);break;
       case ROUTE.SECOND_CATEGORY_MANAGE.URL_PREFIX:certifyRole(replace, role, ROUTE.SECOND_CATEGORY_MANAGE.PERMISSION);break;
       case ROUTE.THIRD_CATEGORY_MANAGE.URL_PREFIX:certifyRole(replace, role, ROUTE.THIRD_CATEGORY_MANAGE.PERMISSION);break;
+
       case ROUTE.ORIGIN_RESULT_MANAGE.URL_PREFIX:certifyRole(replace, role, ROUTE.ORIGIN_RESULT_MANAGE.PERMISSION);break;
+
       case ROUTE.EXAM_RESULT_MANAGE.URL_PREFIX:certifyRole(replace, role, ROUTE.EXAM_RESULT_MANAGE.PERMISSION);break;
+      case ROUTE.EXAM_RESULT_DETAIL.URL_PREFIX:certifyRole(replace, role, ROUTE.EXAM_RESULT_DETAIL.PERMISSION);break;
+
       default:clearSession();replace({ pathname: ROUTE.LOGIN.URL });message.error('暂无该页面，请重新登录');break;
     }
 
@@ -86,11 +93,15 @@ class AppRouter extends React.Component {
                   <Route path={ROUTE.HOME.URL} component={Home}>
                       <IndexRoute component={Welcome} />
                       <Route path={ROUTE.USER_MANAGE.URL} component={UserManage}/>
+
                       <Route path={ROUTE.FIRST_CATEGORY_MANAGE.URL} component={FirstCategoryManage}/>
                       <Route path={ROUTE.SECOND_CATEGORY_MANAGE.URL} component={SecondCategoryManage}/>
                       <Route path={ROUTE.THIRD_CATEGORY_MANAGE.URL} component={ThirdCategoryManage}/>
+
                       <Route path={ROUTE.ORIGIN_RESULT_MANAGE.URL} component={OriginResultManage}/>
+
                       <Route path={ROUTE.EXAM_RESULT_MANAGE.URL} component={ExamResultManage}/>
+                      <Route path={ROUTE.EXAM_RESULT_DETAIL.URL} component={ExamResultDetail}/>
                   </Route>
                 </Route>
 
