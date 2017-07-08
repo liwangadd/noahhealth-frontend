@@ -70,10 +70,6 @@ class MemberSearchForm_ extends React.Component {
     );
   }
 }
-//
-// //当值改变时回调上层修改表单域的值
-// const notifyUpdateMemberQuery = (props, values) => {
-//
-// }
+
 const MemberSearchForm = Form.create()(MemberSearchForm_);
 export default MemberSearchForm;

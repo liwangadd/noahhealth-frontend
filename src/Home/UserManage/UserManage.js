@@ -39,6 +39,7 @@ class UserManage extends React.Component {
     confirmEmployeeEditModalLoading: false,
 
     //职员添加对话框
+    employeeAddBtnVisible: STYLE.BLOCK,
     employeeAddModalVisible: false,
     confirmEmployeeAddModalLoading: false,
     adviseManagerAddModalSelectVisible: STYLE.NONE,
@@ -50,7 +51,7 @@ class UserManage extends React.Component {
 
   handleSearchMemberList = (pageNow) => {
 
-    this.refs.memberSearchForm.validateFields((err, values) => {
+    this.memberSearchForm.validateFields((err, values) => {
       if(!err) {
 
         this.setState({ memberTableLoading: true});
@@ -520,8 +521,18 @@ class UserManage extends React.Component {
 
         //根据角色传递staffMgrId
         let staffMgrId = null;
-        if(values.role === ROLE.EMPLOYEE_ADVISER) staffMgrId = Number(values.adviseManager);
-        else if(values.role === ROLE.EMPLOYEE_ARCHIVER) staffMgrId = Number(values.archiveManager);
+        const role = sessionStorage.getItem(SESSION.ROLE);
+
+        //先判断是管理员 or 主管在添加职员？
+        if(role === ROLE.EMPLOYEE_ADMIN) {
+
+          if(values.role === ROLE.EMPLOYEE_ADVISER) staffMgrId = Number(values.adviseManager);
+          else if(values.role === ROLE.EMPLOYEE_ARCHIVER) staffMgrId = Number(values.archiveManager);
+
+        } else if(role === ROLE.EMPLOYEE_ADVISE_MANAGER || role === ROLE.EMPLOYEE_ARCHIVE_MANAGER){
+
+          staffMgrId = Number(sessionStorage.getItem(SESSION.USER_ID));
+        }
 
         //显示加载圈
         this.setState({ confirmEmployeeAddModalLoading: true });
@@ -558,27 +569,38 @@ class UserManage extends React.Component {
     });
   }
 
+  //切换选项卡
+  changeTab = (tabKey) => {
 
+    if(tabKey === "1") this.setState({employeeAddBtnVisible: STYLE.BLOCK});
+    else if(tabKey === "2") this.setState({employeeAddBtnVisible: STYLE.NONE});
+  }
 
 
   componentDidMount = () => {
 
-    this.handleSearchMemberList(1);
+    const role = sessionStorage.getItem(SESSION.ROLE);
+    if(role === ROLE.EMPLOYEE_ADMIN || role === ROLE.EMPLOYEE_ADVISE_MANAGER || role === ROLE.EMPLOYEE_ARCHIVE_MANAGER) {
 
-    this.requestAdviserAndAdviseManager(); //拉取所有顾问、顾问主管到 会员修改对话框
-    this.requestArchiveManagerAndAdviseManager(); //拉取所有档案主管、顾问主管到 职员修改对话框、职员添加对话框
+      this.handleSearchEmployeeList(1);
+      this.requestArchiveManagerAndAdviseManager(); //拉取所有档案主管、顾问主管到 职员修改对话框、职员添加对话框
+    }
+
+    if(role === ROLE.EMPLOYEE_ADMIN || role === ROLE.EMPLOYEE_FINANCER) this.requestAdviserAndAdviseManager(); //拉取所有顾问、顾问主管到 会员修改对话框
   }
 
   //打开职员管理选项卡
-  componentDidMountOfEmployeeTab = (form) => {
+  componentDidMountOfMemberTab = (form) => {
 
     if(form == null) return;
-    this.refs.employeeSearchForm = form;
-    this.handleSearchEmployeeList(1);
+    this.memberSearchForm = form;
+    this.handleSearchMemberList(1);
   }
 
 
   render(){
+
+    const role = sessionStorage.getItem(SESSION.ROLE);
 
     //member表头//////////
     const memberColumns = [{
@@ -608,10 +630,18 @@ class UserManage extends React.Component {
       render: (record) => (
         <span>
           <a onClick={() => this.showMemberEditModal(record)}>修改</a>
-          <span className="ant-divider" />
-          <Popconfirm title="请问您确定要删除该会员吗?" onConfirm={() => this.handleDeleteMember(record)} okText="是" cancelText="取消">
-            <a className='user-table-delete'>删除</a>
-          </Popconfirm>
+          {
+            role === ROLE.EMPLOYEE_ADMIN
+            ?
+            <span>
+              <span className="ant-divider" />
+              <Popconfirm title="请问您确定要删除该会员吗?" onConfirm={() => this.handleDeleteMember(record)} okText="是" cancelText="取消">
+                <a className='user-table-delete'>删除</a>
+              </Popconfirm>
+            </span>
+            :
+            null
+          }
         </span>
       )
     }];
@@ -640,26 +670,53 @@ class UserManage extends React.Component {
       render: (record) => (
         <span>
           <a onClick={() => this.showEmployeeEditModal(record)}>修改</a>
-          <span className="ant-divider" />
-          <Popconfirm title="请问您确定要删除该职员吗?" onConfirm={() => this.handleDeleteEmployee(record)} okText="是" cancelText="取消">
-            <a className='user-table-delete'>删除</a>
-          </Popconfirm>
+          {
+            role === ROLE.EMPLOYEE_ADMIN
+            ?
+            <span>
+              <span className="ant-divider" />
+              <Popconfirm title="请问您确定要删除该职员吗?" onConfirm={() => this.handleDeleteEmployee(record)} okText="是" cancelText="取消">
+                <a className='user-table-delete'>删除</a>
+              </Popconfirm>
+            </span>
+            :
+            null
+          }
         </span>
       )
     }];
 
+    const defaultTabKey = role === ROLE.EMPLOYEE_FINANCER ? "2" : "1";
     return (
         <div>
           <BackTop visibilityHeight="200"/>
-          <Tabs defaultActiveKey="1" tabBarExtraContent={<Button type="primary" onClick={this.showEmployeeAddModal}>添加职员</Button>}>
-            <TabPane tab="会员管理" key="1">
-              <MemberSearchForm ref="memberSearchForm" handleSearchMemberList={this.handleSearchMemberList}/>
-              <Table className='user-table' columns={memberColumns} dataSource={this.state.memberData} pagination={this.state.memberPager} onChange={this.changeMemberPager} rowKey='id' loading={this.state.memberTableLoading}/>
-            </TabPane>
-            <TabPane tab="职员管理" key="2">
-              <EmployeeSearchForm ref={this.componentDidMountOfEmployeeTab} handleSearchEmployeeList={this.handleSearchEmployeeList}/>
-              <Table className='user-table' columns={employeeColumns} dataSource={this.state.employeeData} pagination={this.state.employeePager} onChange={this.changeEmployeePager} rowKey='id' loading={this.state.employeeTableLoading}/>
-            </TabPane>
+          <Tabs defaultActiveKey={defaultTabKey}
+                onChange={this.changeTab}
+                tabBarExtraContent={role === ROLE.EMPLOYEE_ADMIN || role === ROLE.EMPLOYEE_ADVISE_MANAGER || role === ROLE.EMPLOYEE_ARCHIVE_MANAGER
+                                    ?
+                                    <Button type="primary" onClick={this.showEmployeeAddModal} style={{display: this.state.employeeAddBtnVisible}}>添加职员</Button>
+                                    :
+                                    null}>
+            {
+              role !== ROLE.EMPLOYEE_FINANCER
+              ?
+              <TabPane tab="职员管理" key="1">
+                <EmployeeSearchForm ref="employeeSearchForm" handleSearchEmployeeList={this.handleSearchEmployeeList}/>
+                <Table className='user-table' columns={employeeColumns} dataSource={this.state.employeeData} pagination={this.state.employeePager} onChange={this.changeEmployeePager} rowKey='id' loading={this.state.employeeTableLoading}/>
+              </TabPane>
+              :
+              null
+            }
+            {
+              role === ROLE.EMPLOYEE_FINANCER || role === ROLE.EMPLOYEE_ADMIN
+              ?
+              <TabPane tab="会员管理" key="2">
+                <MemberSearchForm ref={this.componentDidMountOfMemberTab} handleSearchMemberList={this.handleSearchMemberList}/>
+                <Table className='user-table' columns={memberColumns} dataSource={this.state.memberData} pagination={this.state.memberPager} onChange={this.changeMemberPager} rowKey='id' loading={this.state.memberTableLoading}/>
+              </TabPane>
+              :
+              null
+            }
           </Tabs>
           <MemberEditModal ref="memberEditForm" visible={this.state.memberEditModalVisible} confirmLoading={this.state.confirmMemberLoading} onCancel={this.closeMemberEditModal} onConfirm={this.confirmMemberEditModal} adviserAndManagerData={this.state.adviserAndManagerData} />
           <EmployeeEditModal ref="employeeEditForm" visible={this.state.employeeEditModalVisible} confirmLoading={this.state.confirmEmployeeEditModalLoading} onCancel={this.closeEmployeeEditModal} onConfirm={this.confirmEmployeeEditModal} adviseManagerData={this.state.adviseManagerData} archiveManagerData={this.state.archiveManagerData} archiveManagerSelectVisible={this.state.archiveManagerEditModalSelectVisible} adviseManagerSelectVisible={this.state.adviseManagerEditModalSelectVisible} changeRole={this.changeEditModalRole}/>

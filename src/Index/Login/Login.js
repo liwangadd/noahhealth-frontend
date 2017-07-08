@@ -19,12 +19,7 @@ class Login extends React.Component {
     });
   }
 
-  handleLoading = (onoff) => {
-    // e.preventDefault();
-    this.setState({
-      loading : onoff
-    })
-  }
+  handleLoading = (onoff) => this.setState({loading : onoff})
 
   render() {
 

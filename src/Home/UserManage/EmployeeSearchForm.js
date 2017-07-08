@@ -1,5 +1,5 @@
 import React from 'react';
-import {ROLE} from './../../App/PublicConstant.js';
+import {ROLE, SESSION} from './../../App/PublicConstant.js';
 import { Form, Row, Col, Input, Button, Select} from 'antd';
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -24,6 +24,14 @@ class EmployeeSearchForm_ extends React.Component {
   }
 
   render() {
+
+    const role = sessionStorage.getItem(SESSION.ROLE);
+
+    //角色级别选择器
+    let roleData = [];
+    if(role === ROLE.EMPLOYEE_ADMIN) roleData = [ROLE.EMPLOYEE_ADMIN, ROLE.EMPLOYEE_FINANCER, ROLE.EMPLOYEE_ARCHIVE_MANAGER, ROLE.EMPLOYEE_ARCHIVER, ROLE.EMPLOYEE_ADVISE_MANAGER, ROLE.EMPLOYEE_ADVISER];
+    const roleOptions = roleData.map((roleName, index) => <Option value={roleName} key={index}>{roleName}</Option>);
+
 
     const { getFieldDecorator } = this.props.form;
     return (
@@ -51,12 +59,7 @@ class EmployeeSearchForm_ extends React.Component {
                 initialValue: '全部'
               })(
                 <Select>
-                  <Option value={ROLE.EMPLOYEE_ADMIN}>{ROLE.EMPLOYEE_ADMIN}</Option>
-                  <Option value={ROLE.EMPLOYEE_FINANCER}>{ROLE.EMPLOYEE_FINANCER}</Option>
-                  <Option value={ROLE.EMPLOYEE_ARCHIVER}>{ROLE.EMPLOYEE_ARCHIVER}</Option>
-                  <Option value={ROLE.EMPLOYEE_ARCHIVE_MANAGER}>{ROLE.EMPLOYEE_ARCHIVE_MANAGER}</Option>
-                  <Option value={ROLE.EMPLOYEE_ADVISER}>{ROLE.EMPLOYEE_ADVISER}</Option>
-                  <Option value={ROLE.EMPLOYEE_ADVISE_MANAGER}>{ROLE.EMPLOYEE_ADVISE_MANAGER}</Option>
+                  {roleOptions}
                   <Option value="">全部</Option>
                 </Select>
               )}

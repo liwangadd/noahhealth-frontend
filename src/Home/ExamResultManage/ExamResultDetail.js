@@ -4,7 +4,7 @@ import {formatDate} from './../../App/PublicUtil.js';
 import ExamResultDetailAddModal from './ExamResultDetailAddModal.js';
 import ExamResultDetailItem from './ExamResultDetailItem.js';
 import React from 'react';
-import {message, Button, BackTop, Modal, Breadcrumb, Timeline, Anchor} from 'antd';
+import {message, Button, BackTop, Modal, Breadcrumb, Timeline, Anchor, Alert} from 'antd';
 import {Link} from 'react-router';
 import $ from 'jquery';
 
@@ -429,7 +429,15 @@ class ExamResultDetail extends React.Component {
     //1.组装成卡片+表格条目
     //2.组装成锚点目录
     const {examResultDetailData} = this.state;
-    const examResultDetailItems = examResultDetailData.map((detail, index) => <ExamResultDetailItem detail={detail}
+    const examResultDetailItems = examResultDetailData.length <= 0 ?
+                                  <Alert
+                                  message="该会员还没有检查记录"
+                                  description="可点击右上角的按钮进行添加"
+                                  type="warning"
+                                  showIcon
+                                  />
+                                  :
+                                  examResultDetailData.map((detail, index) => <ExamResultDetailItem detail={detail}
                                                                                                     key={index}
 
                                                                                                     onSave={this.saveInputDetail}
@@ -473,14 +481,9 @@ class ExamResultDetail extends React.Component {
         </Anchor>
 
 
-        <Timeline pending={<h4>已到底部</h4>}>
+        <Timeline pending={examResultDetailData.length <= 0 ? null : <h4>已到底部</h4>}>
           {examResultDetailItems}
         </Timeline>
-
-        {/* <ExamResultInputModal ref="inputForm" visible={this.state.inputModalVisible} confirmLoading={this.state.confirmInputModalLoading} onCancel={this.closeInputModal} onConfirm={this.confirmInputModal} memberUnderEmployeeData={this.state.memberUnderEmployeeData} secondCategoryParentOfAssayData={this.state.secondCategoryParentOfAssayData} secondCategoryParentOfTechData={this.state.secondCategoryParentOfTechData}/>
-        <ExamResultInputDetailModal ref="inputDetailForm" visible={this.state.inputDetailModalVisible} examResultDetailTableLoading={this.state.examResultDetailTableLoading} onSave={this.saveInputDetail} onSubmit={this.submitInputDetail} onCancel={this.closeInputDetailModal} saveLoading={this.state.saveLoading} submitLoading={this.state.submitLoading}  examResultId={this.state.examResultId} examResultSecondName={this.state.examResultSecondName} examResultDetailData={this.state.examResultDetailData} />
-        <ExamResultCheckDetailModal visible={this.state.checkDetailModalVisible} examResultDetailTableLoading={this.state.examResultDetailTableLoading} onCancel={this.closeCheckDetailModal} passLoading={this.state.passLoading} unpassLoading={this.state.unpassLoading}  onPass={this.handlePassDetail} onUnpass={this.handleUnpassDetail} examResultId={this.state.examResultId} examResultSecondName={this.state.examResultSecondName} examResultDetailData={this.state.examResultDetailData} />
-        <ExamResultWatchDetailModal visible={this.state.watchDetailModalVisible} downloadLoading={this.state.downloadLoading} examResultDetailTableLoading={this.state.examResultDetailTableLoading} onDownload={this.handleDownloadDetail} onCancel={this.closeWatchDetailModal} examResultDetailData={this.state.examResultDetailData} examResultSecondName={this.state.examResultSecondName}/> */}
       </div>
     );
   }

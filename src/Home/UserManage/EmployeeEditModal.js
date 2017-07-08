@@ -1,5 +1,5 @@
 import React from 'react';
-import {ROLE} from './../../App/PublicConstant.js';
+import {ROLE, SESSION} from './../../App/PublicConstant.js';
 import { Form, Input, Select,Modal} from 'antd';
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -8,6 +8,17 @@ const Option = Select.Option;
 class EmployeeEditModal_ extends React.Component {
 
   render() {
+
+    const role = sessionStorage.getItem(SESSION.ROLE);
+
+
+    //角色级别选择器
+    let roleData = [];
+    if(role === ROLE.EMPLOYEE_ADMIN)  roleData = [ROLE.EMPLOYEE_ADMIN, ROLE.EMPLOYEE_FINANCER, ROLE.EMPLOYEE_ARCHIVE_MANAGER, ROLE.EMPLOYEE_ARCHIVER, ROLE.EMPLOYEE_ADVISE_MANAGER, ROLE.EMPLOYEE_ADVISER];
+    else if(role === ROLE.EMPLOYEE_ADVISE_MANAGER) {roleData = [ROLE.EMPLOYEE_ADVISER];}
+    else if(role === ROLE.EMPLOYEE_ARCHIVE_MANAGER) {roleData = [ROLE.EMPLOYEE_ARCHIVER];}
+    const roleOptions = roleData.map((roleName, index) => <Option value={roleName} key={index}>{roleName}</Option>);
+
 
     const formItemLayout = {labelCol: { xs: { span: 24 }, sm: { span: 7 },}, wrapperCol: { xs: { span: 24 }, sm: { span: 12 },}};
 
@@ -28,12 +39,7 @@ class EmployeeEditModal_ extends React.Component {
           <FormItem {...formItemLayout} label="角色级别">
             {getFieldDecorator('role')(
               <Select onChange={(role) => this.props.changeRole(role)}>
-                <Option value={ROLE.EMPLOYEE_ADMIN}>{ROLE.EMPLOYEE_ADMIN}</Option>
-                <Option value={ROLE.EMPLOYEE_FINANCER}>{ROLE.EMPLOYEE_FINANCER}</Option>
-                <Option value={ROLE.EMPLOYEE_ARCHIVER}>{ROLE.EMPLOYEE_ARCHIVER}</Option>
-                <Option value={ROLE.EMPLOYEE_ARCHIVE_MANAGER}>{ROLE.EMPLOYEE_ARCHIVE_MANAGER}</Option>
-                <Option value={ROLE.EMPLOYEE_ADVISER}>{ROLE.EMPLOYEE_ADVISER}</Option>
-                <Option value={ROLE.EMPLOYEE_ADVISE_MANAGER}>{ROLE.EMPLOYEE_ADVISE_MANAGER}</Option>
+                {roleOptions}
               </Select>
             )}
           </FormItem>

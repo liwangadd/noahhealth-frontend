@@ -1,5 +1,5 @@
 import React from 'react';
-import {ROLE} from './../../App/PublicConstant.js';
+import {ROLE, SESSION} from './../../App/PublicConstant.js';
 import {REGEX} from './../../App/PublicRegex.js';
 import { Form, Input, Select,Modal, Tag} from 'antd';
 const FormItem = Form.Item;
@@ -9,6 +9,17 @@ const Option = Select.Option;
 class EmployeeAddModal_ extends React.Component {
 
   render() {
+
+    const role = sessionStorage.getItem(SESSION.ROLE);
+
+
+    //角色级别选择器
+    let roleData = [];
+    if(role === ROLE.EMPLOYEE_ADMIN)  roleData = [ROLE.EMPLOYEE_ADMIN, ROLE.EMPLOYEE_FINANCER, ROLE.EMPLOYEE_ARCHIVE_MANAGER, ROLE.EMPLOYEE_ARCHIVER, ROLE.EMPLOYEE_ADVISE_MANAGER, ROLE.EMPLOYEE_ADVISER];
+    else if(role === ROLE.EMPLOYEE_ADVISE_MANAGER) {roleData = [ROLE.EMPLOYEE_ADVISER];}
+    else if(role === ROLE.EMPLOYEE_ARCHIVE_MANAGER) {roleData = [ROLE.EMPLOYEE_ARCHIVER];}
+    const roleOptions = roleData.map((roleName, index) => <Option value={roleName} key={index}>{roleName}</Option>);
+
 
     const formItemLayout = {labelCol: { xs: { span: 24 }, sm: { span: 7 },}, wrapperCol: { xs: { span: 24 }, sm: { span: 12 },}};
     const formItemLayoutWithoutLabel = {wrapperCol: { xs: { span: 24 , offset: 0}, sm: { span: 12 , offset: 7},}};
@@ -35,14 +46,9 @@ class EmployeeAddModal_ extends React.Component {
               )}
           </FormItem>
           <FormItem {...formItemLayout} label="角色级别">
-            {getFieldDecorator('role', {initialValue: ROLE.EMPLOYEE_ADMIN})(
+            {getFieldDecorator('role', {initialValue: roleData[0]})(
               <Select onChange={(role) => this.props.changeRole(role)}>
-                <Option value={ROLE.EMPLOYEE_ADMIN}>{ROLE.EMPLOYEE_ADMIN}</Option>
-                <Option value={ROLE.EMPLOYEE_FINANCER}>{ROLE.EMPLOYEE_FINANCER}</Option>
-                <Option value={ROLE.EMPLOYEE_ARCHIVER}>{ROLE.EMPLOYEE_ARCHIVER}</Option>
-                <Option value={ROLE.EMPLOYEE_ARCHIVE_MANAGER}>{ROLE.EMPLOYEE_ARCHIVE_MANAGER}</Option>
-                <Option value={ROLE.EMPLOYEE_ADVISER}>{ROLE.EMPLOYEE_ADVISER}</Option>
-                <Option value={ROLE.EMPLOYEE_ADVISE_MANAGER}>{ROLE.EMPLOYEE_ADVISE_MANAGER}</Option>
+                {roleOptions}
               </Select>
             )}
           </FormItem>
@@ -61,7 +67,7 @@ class EmployeeAddModal_ extends React.Component {
             )}
           </FormItem>
           <FormItem {...formItemLayoutWithoutLabel}>
-            <Tag color="orange" {...formItemLayoutWithoutLabel}>默认初始密码为123456</Tag>
+            <Tag color="orange">默认初始密码为123456</Tag>
           </FormItem>
         </Form>
       </Modal>
