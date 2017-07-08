@@ -17,8 +17,9 @@ class VerticalLoginForm_ extends React.Component {
         console.log('表单值: ', values);
 
         //在这里用正则验证输入合法性!!
+        const authUrl = this.props.roleType === "member" ? '/api/auth/login' : '/api/auth/login';
         $.ajax({
-            url : SERVER + '/api/auth/login',
+            url : SERVER + authUrl,
             type : 'POST',
             contentType: 'application/json',
             data : JSON.stringify({phone : values.phone, password : values.password}),
@@ -74,7 +75,7 @@ class VerticalLoginForm_ extends React.Component {
       <Card className="index-card" bodyStyle={{ padding: 0 }} >
 
         <div className="index-card-welcome">
-          <span>欢迎登录医海慈航</span>
+          <span>{ this.props.roleType === "member" ? "欢迎登录医海慈航会员系统" : "欢迎登录医海慈航后台管理系统"}</span>
         </div>
         <Form onSubmit={this.handleLogin} className="login-form">
           <FormItem {...formItemLayoutWithoutLabel}>
@@ -94,7 +95,13 @@ class VerticalLoginForm_ extends React.Component {
               <Button type="primary" htmlType="submit" className="login-form-button" style={{width:'100%'}}>
                   登&nbsp;&nbsp;录
               </Button>
-              <a href="" onClick={this.handleRegister} style={{float:'right'}}>注册</a>
+              {
+                this.props.roleType === "member"
+                ?
+                <a href="" onClick={this.handleRegister} style={{float:'right'}}>注册</a>
+                :
+                null
+              }
           </FormItem>
         </Form>
       </Card>

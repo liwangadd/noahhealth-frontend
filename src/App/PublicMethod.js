@@ -1,4 +1,4 @@
-import {SESSION} from './PublicConstant.js'
+import {SESSION, ROLE} from './PublicConstant.js'
 
 //清空登录状态信息
 const clearSession = function() {
@@ -12,6 +12,20 @@ const clearSession = function() {
     sessionStorage.removeItem(SESSION.MENUITEM_KEY);
 };
 
+//判断一个用户是否为职员
+const isEmployee = function(role) {
+
+  switch(role){
+
+    case ROLE.EMPLOYEE_ADMIN:
+    case ROLE.EMPLOYEE_FINANCER:
+    case ROLE.EMPLOYEE_ARCHIVER:
+    case ROLE.EMPLOYEE_ARCHIVE_MANAGER:
+    case ROLE.EMPLOYEE_ADVISER:
+    case ROLE.EMPLOYEE_ADVISE_MANAGER: return true;
+    default: return false;
+  }
+}
 
 //判断数组中是否存在obj元素
 const containsElement = function(obj, arr) {
@@ -42,5 +56,6 @@ const isImgExist = function(imgurl) {
 export {
   clearSession,
   containsElement,
-  isImgExist
+  isImgExist,
+  isEmployee
 }

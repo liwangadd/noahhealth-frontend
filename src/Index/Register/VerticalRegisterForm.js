@@ -37,7 +37,7 @@ class VerticalRegisterForm_ extends React.Component {
                 console.log(result);
                 if(result.code === RESULT.SUCCESS) {
                     message.success(result.reason, 2);
-                    browserHistory.push(ROUTE.LOGIN.URL);
+                    browserHistory.push(ROUTE.MEMBER_LOGIN.URL);
                     return;
                 } else {
 
@@ -94,7 +94,7 @@ class VerticalRegisterForm_ extends React.Component {
 
   handleToLoginPage = (e) => {
       e.preventDefault();
-      browserHistory.push(ROUTE.LOGIN.URL);
+      browserHistory.push(ROUTE.MEMBER_LOGIN.URL);
   }
 
 
@@ -117,7 +117,7 @@ class VerticalRegisterForm_ extends React.Component {
 
       <Card className="index-card" bodyStyle={{ padding: 0 }} >
         <div className="index-card-welcome">
-          <span>欢迎注册医海慈航账号</span>
+          <span>欢迎注册医海慈航会员账号</span>
         </div>
         <Form onSubmit={this.handleRegister} className="login-form">
           <FormItem {...formItemLayoutWithoutLabel}>

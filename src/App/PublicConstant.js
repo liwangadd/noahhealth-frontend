@@ -32,7 +32,8 @@ const ROUTE = {
   ROOT: {URL: '/', PERMISSION: []},
   MAIN: {URL: '/main', PERMISSION: []},
   HELP: {URL: '/help', PERMISSION: []},
-  LOGIN: {URL: '/login', URL_PREFIX:'/login', PERMISSION: []},
+  MEMBER_LOGIN: {URL: '/member_login', URL_PREFIX:'/member_login', PERMISSION: []},
+  EMPLOYEE_LOGIN: {URL: '/employee_login', URL_PREFIX:'/employee_login', PERMISSION: []},
   REGISTER: {URL: '/register', URL_PREFIX:'/register', PERMISSION: []},
   HOME: {URL:'/home/:menuKey', URL_PREFIX:'/home', MENU_KEY: '1', PERMISSION: []},
 

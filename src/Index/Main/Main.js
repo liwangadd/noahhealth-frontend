@@ -3,6 +3,7 @@ import {LOADING_DELAY_TIME, ROUTE} from './../../App/PublicConstant.js';
 import React from 'react';
 import { Layout,Carousel, Spin, Menu, Button, Card, BackTop, Affix} from 'antd';
 import {Link, browserHistory} from 'react-router';
+import IndexHeader from './../IndexHeader.js';
 const { Header, Content} = Layout;
 
 class Login extends React.Component {
@@ -33,25 +34,7 @@ class Login extends React.Component {
         <Spin spinning={this.state.loading} delay={LOADING_DELAY_TIME} tip='登录中'>
           <BackTop visibilityHeight="200"/>
           <Layout>
-            <Affix>
-              <Header>
-                <div className="index-header-logo" onClick={() => browserHistory.push(ROUTE.MAIN.URL)}/>
-                <Menu
-                   theme="dark"
-                   mode="horizontal"
-                   defaultSelectedKeys={['1']}
-                   style={{ lineHeight: '64px' , float:'left'}}
-                >
-                  <Menu.Item key="1"><Link to={ROUTE.MAIN.URL}>首页</Link></Menu.Item>
-                  <Menu.Item key="2">功能详情</Menu.Item>
-                  <Menu.Item key="3">帮助</Menu.Item>
-                </Menu>
-                <div style={{ lineHeight: '64px' , float: 'right'}}>
-                 <Button ghost style={{marginRight:10}} onClick={() => browserHistory.push(ROUTE.LOGIN.URL)}>登录</Button>
-                 <Button ghost onClick={() => browserHistory.push(ROUTE.REGISTER.URL)}>注册</Button>
-                </div>
-              </Header>
-            </Affix>
+            <IndexHeader />
             <Content>
               <Carousel autoplay effect="fade">
                 <div style={{height:450}}><img src='/Index/carousel_1.jpeg' style={{width:'100%', height:'100%'}} alt=""/></div>
