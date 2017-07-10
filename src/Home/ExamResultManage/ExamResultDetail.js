@@ -1,16 +1,19 @@
 import './ExamResultManage.css';
-import {SERVER, SESSION, RESULT, PAGE_SIZE, ROLE, FILE_SERVER, ROUTE} from './../../App/PublicConstant.js';
+import {SERVER, SESSION, RESULT, PAGE_SIZE, ROLE, FILE_SERVER, ROUTE, LOADING_DELAY_TIME} from './../../App/PublicConstant.js';
 import {formatDate} from './../../App/PublicUtil.js';
+import {isEmployee} from './../../App/PublicMethod.js';
 import ExamResultDetailAddModal from './ExamResultDetailAddModal.js';
 import ExamResultDetailItem from './ExamResultDetailItem.js';
 import React from 'react';
-import {message, Button, BackTop, Modal, Breadcrumb, Timeline, Anchor, Alert} from 'antd';
+import {message, Button, BackTop, Modal, Breadcrumb, Timeline, Anchor, Alert, Spin} from 'antd';
 import {Link} from 'react-router';
 import $ from 'jquery';
 
 class ExamResultDetail extends React.Component {
 
   state = {
+
+    pageLoading: true,
 
     //执行情况
     examResultData: [],
@@ -44,7 +47,8 @@ class ExamResultDetail extends React.Component {
     examResultDetailTableLoading: false,
 
 
-    examResultDetailData: []
+    examResultDetailData: [],
+    examResultDetailItems: null
   };
 
 
@@ -69,7 +73,8 @@ class ExamResultDetail extends React.Component {
             url : SERVER + '/api/input',
             type : 'POST',
             contentType: 'application/json',
-            data : JSON.stringify({secondId: secondId,
+            data : JSON.stringify({userId: Number(this.props.params.memberId),
+                                   secondId: secondId,
                                    hospital: values.hospital,
                                    time: values.time,
                                    note: values.note}),
@@ -84,10 +89,7 @@ class ExamResultDetail extends React.Component {
                 this.setState({ addModalVisible: false, confirmAddModalLoading: false});
                 this.requestExamResultDetailOfMember(this.props.params.memberId);
 
-                Modal.success({
-                  title: '添加成功!',
-                  content: '您可在页面最底端录入详细检查数据',
-                });
+                message.success(result.reason, 2);
               } else {
 
                 //关闭加载圈
@@ -401,10 +403,41 @@ class ExamResultDetail extends React.Component {
             console.log(result);
             if(result.code === RESULT.SUCCESS) {
 
-              this.setState({examResultDetailData: result.content});
+              const examResultDetailItems = result.content.length <= 0 ?
+                                            <Alert
+                                            message="该会员还没有检查记录"
+                                            description="可点击右上角的按钮进行添加"
+                                            type="warning"
+                                            showIcon
+                                            />
+                                            :
+                                            result.content.map((detail, index) => <ExamResultDetailItem detail={detail}
+                                                                                                        key={index}
 
+                                                                                                        onSave={this.saveInputDetail}
+                                                                                                        saveLoading={this.state.saveLoading}
+
+                                                                                                        onSubmit={this.submitInputDetail}
+                                                                                                        submitLoading={this.state.submitLoading}
+
+                                                                                                        onPass={this.passInputDetail}
+                                                                                                        passLoading={this.state.passLoading}
+
+                                                                                                        onUnpass={this.unpassInputDetail}
+                                                                                                        unpassLoading={this.state.unpassLoading}
+
+                                                                                                        onDownload={this.downloadInputDetail}
+                                                                                                        downloadLoading={this.state.downloadLoading}
+
+                                                                                                        onDelete={this.deleteInputDetail}
+                                                                                                        deleteLoading={this.state.deleteLoading} />);
+
+              this.setState({examResultDetailData: result.content,
+                             examResultDetailItems: examResultDetailItems,
+                             pageLoading: false});
             } else {
               message.error(result.reason, 2);
+              this.setState({pageLoading: false});
             }
         }
     });
@@ -429,51 +462,28 @@ class ExamResultDetail extends React.Component {
     //1.组装成卡片+表格条目
     //2.组装成锚点目录
     const {examResultDetailData} = this.state;
-    const examResultDetailItems = examResultDetailData.length <= 0 ?
-                                  <Alert
-                                  message="该会员还没有检查记录"
-                                  description="可点击右上角的按钮进行添加"
-                                  type="warning"
-                                  showIcon
-                                  />
-                                  :
-                                  examResultDetailData.map((detail, index) => <ExamResultDetailItem detail={detail}
-                                                                                                    key={index}
-
-                                                                                                    onSave={this.saveInputDetail}
-                                                                                                    saveLoading={this.state.saveLoading}
-
-                                                                                                    onSubmit={this.submitInputDetail}
-                                                                                                    submitLoading={this.state.submitLoading}
-
-                                                                                                    onPass={this.passInputDetail}
-                                                                                                    passLoading={this.state.passLoading}
-
-                                                                                                    onUnpass={this.unpassInputDetail}
-                                                                                                    unpassLoading={this.state.unpassLoading}
-
-                                                                                                    onDownload={this.downloadInputDetail}
-                                                                                                    downloadLoading={this.state.downloadLoading}
-
-                                                                                                    onDelete={this.deleteInputDetail}
-                                                                                                    deleteLoading={this.state.deleteLoading} />);
-
     const examResultDetailAnchors = examResultDetailData.map((detail, index) => <Anchor.Link href={"#" + detail.id.toString()} key={index} title={detail.secondName + " " + formatDate(detail.time)}/>);
 
     return (
-      <div>
+      <Spin spinning={this.state.pageLoading} delay={LOADING_DELAY_TIME} tip='加载中'>
         <BackTop visibilityHeight="200"/>
-        <Breadcrumb separator=">" className="category-path" style={{marginBottom:40}}>
-          <Breadcrumb.Item><Link to={ROUTE.EXAM_RESULT_MANAGE.URL_PREFIX + "/" + ROUTE.EXAM_RESULT_MANAGE.MENU_KEY}>首页</Link></Breadcrumb.Item>
-          <Breadcrumb.Item>{this.props.params.memberName}</Breadcrumb.Item>
-          {
-            role === ROLE.EMPLOYEE_ARCHIVER || role === ROLE.EMPLOYEE_ADMIN
-            ?
-            <Breadcrumb.Item style={{float:'right'}}><Button type="primary" onClick={this.showAddModal}>添加检查记录</Button></Breadcrumb.Item>
-            :
-            null
-          }
-        </Breadcrumb>
+        {
+          isEmployee(role)
+          ?
+          <Breadcrumb separator=">" className="category-path" style={{marginBottom:40}}>
+            <Breadcrumb.Item><Link to={ROUTE.EXAM_RESULT_MANAGE.URL_PREFIX + "/" + ROUTE.EXAM_RESULT_MANAGE.MENU_KEY}>首页</Link></Breadcrumb.Item>
+            <Breadcrumb.Item>{this.props.params.memberName}</Breadcrumb.Item>
+            {
+              role === ROLE.EMPLOYEE_ARCHIVER || role === ROLE.EMPLOYEE_ADMIN
+              ?
+              <Breadcrumb.Item style={{float:'right'}}><Button type="primary" onClick={this.showAddModal}>添加检查记录</Button></Breadcrumb.Item>
+              :
+              null
+            }
+          </Breadcrumb>
+          :
+          null
+        }
         <ExamResultDetailAddModal ref="addForm" visible={this.state.addModalVisible} confirmLoading={this.state.confirmAddModalLoading} onCancel={this.closeAddModal} onConfirm={this.confirmAddModal} secondCategoryParentOfAssayData={this.state.secondCategoryParentOfAssayData} secondCategoryParentOfTechData={this.state.secondCategoryParentOfTechData}/>
 
         <Anchor className="exam-result-detail-anchor" offsetTop={10}>
@@ -482,9 +492,9 @@ class ExamResultDetail extends React.Component {
 
 
         <Timeline pending={examResultDetailData.length <= 0 ? null : <h4>已到底部</h4>}>
-          {examResultDetailItems}
+          {this.state.examResultDetailItems}
         </Timeline>
-      </div>
+      </Spin>
     );
   }
 }

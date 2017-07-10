@@ -27,6 +27,18 @@ const isEmployee = function(role) {
   }
 }
 
+//判断一个用户是否为会员
+const isMember = function(role) {
+
+  switch(role){
+
+    case ROLE.MEMBER_1:
+    case ROLE.MEMBER_2:
+    case ROLE.MEMBER_3:return true;
+    default: return false;
+  }
+}
+
 //判断数组中是否存在obj元素
 const containsElement = function(obj, arr) {
 
@@ -57,5 +69,6 @@ export {
   clearSession,
   containsElement,
   isImgExist,
-  isEmployee
+  isEmployee,
+  isMember
 }

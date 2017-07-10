@@ -17,9 +17,9 @@ class VerticalLoginForm_ extends React.Component {
         console.log('表单值: ', values);
 
         //在这里用正则验证输入合法性!!
-        const authUrl = this.props.roleType === "member" ? '/api/auth/login' : '/api/auth/login';
+        //const authUrl = this.props.roleType === "member" ? '/api/auth/login' : '/api/auth/login';
         $.ajax({
-            url : SERVER + authUrl,
+            url : SERVER + '/api/auth/' + this.props.roleType + '/login',
             type : 'POST',
             contentType: 'application/json',
             data : JSON.stringify({phone : values.phone, password : values.password}),

@@ -127,7 +127,6 @@ class ExamResultDetailItem_ extends React.Component {
         <Card title={detail.status} extra={<a onClick={this.switchForm}>{this.state.switchText}</a>} className="exam-result-detail-item-card">
           <p>检查亚类：{detail.secondName}</p>
           <p>检查医院：{detail.hospital}</p>
-          <p>检查日期：{formatDate(detail.time)}</p>
           <p>录入者：{detail.inputerName}</p>
           {detail.status !== "录入中" && detail.status !== "待审核" ? <p>审核者：{detail.checkerName}</p> : null}
           {detail.status === "未通过" ? <p>审核结果：{detail.reason}</p> : null}

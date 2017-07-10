@@ -1,6 +1,6 @@
 import './Home.css';
 import {SESSION, ROUTE, ROLE, STYLE, COLOR, FILE_SERVER} from './../App/PublicConstant.js';
-import {clearSession} from './../App/PublicMethod.js';
+import {clearSession, isEmployee} from './../App/PublicMethod.js';
 import React from 'react';
 import { Layout, Menu, Icon, Avatar, Dropdown, notification, Button, Tag} from 'antd';
 import {browserHistory, Link} from 'react-router';
@@ -42,6 +42,7 @@ class Home extends React.Component {
         确定
       </Button>
     );
+
     notification.open({
       message: '您确定要退出系统吗?',
       btn,
@@ -58,9 +59,9 @@ class Home extends React.Component {
     //主色调、用户管理、检查项目、原始资料、化验/医技数据、健康管理
     if(role === ROLE.EMPLOYEE_ADMIN) layoutStyle = this.getLayoutStyle(COLOR.RED, STYLE.BLOCK, STYLE.BLOCK, STYLE.BLOCK, STYLE.BLOCK);
     else if(role === ROLE.EMPLOYEE_FINANCER) layoutStyle = this.getLayoutStyle(COLOR.RED, STYLE.BLOCK, STYLE.NONE, STYLE.NONE, STYLE.NONE);
-    else if(role === ROLE.EMPLOYEE_ARCHIVER) layoutStyle = this.getLayoutStyle(COLOR.PINK, STYLE.NONE, STYLE.BLOCK, STYLE.BLOCK, STYLE.BLOCK);
+    else if(role === ROLE.EMPLOYEE_ARCHIVER) layoutStyle = this.getLayoutStyle(COLOR.PINK, STYLE.NONE, STYLE.NONE, STYLE.BLOCK, STYLE.BLOCK);
     else if(role === ROLE.EMPLOYEE_ARCHIVE_MANAGER) layoutStyle = this.getLayoutStyle(COLOR.PINK, STYLE.BLOCK, STYLE.BLOCK, STYLE.BLOCK, STYLE.BLOCK);
-    else if(role === ROLE.EMPLOYEE_ADVISER) layoutStyle = this.getLayoutStyle(COLOR.ORANGE, STYLE.NONE, STYLE.BLOCK, STYLE.BLOCK, STYLE.BLOCK);
+    else if(role === ROLE.EMPLOYEE_ADVISER) layoutStyle = this.getLayoutStyle(COLOR.ORANGE, STYLE.NONE, STYLE.NONE, STYLE.BLOCK, STYLE.BLOCK);
     else if(role === ROLE.EMPLOYEE_ADVISE_MANAGER) layoutStyle = this.getLayoutStyle(COLOR.ORANGE, STYLE.BLOCK, STYLE.BLOCK, STYLE.BLOCK, STYLE.BLOCK);
     else if(role === ROLE.MEMBER_1) layoutStyle = this.getLayoutStyle(COLOR.GREEN, STYLE.NONE, STYLE.NONE, STYLE.BLOCK, STYLE.NONE);
     else if(role=== ROLE.MEMBER_2) layoutStyle = this.getLayoutStyle(COLOR.CYAN, STYLE.NONE, STYLE.NONE, STYLE.BLOCK, STYLE.BLOCK);
@@ -90,13 +91,16 @@ class Home extends React.Component {
 
   handleMenuItemClick = (e) => {
 
+    const role = sessionStorage.getItem(SESSION.ROLE);
+    const memberId = sessionStorage.getItem(SESSION.USER_ID);
+    const memberName = sessionStorage.getItem(SESSION.NAME);
     let targetUrl = ROUTE.WELCOME.URL_PREFIX + "/" + ROUTE.WELCOME.MENU_KEY;
     switch(e.key) {
       case ROUTE.WELCOME.MENU_KEY: targetUrl = ROUTE.WELCOME.URL_PREFIX + "/" + ROUTE.WELCOME.MENU_KEY; break;
       case ROUTE.USER_MANAGE.MENU_KEY: targetUrl = ROUTE.USER_MANAGE.URL_PREFIX + "/" + ROUTE.USER_MANAGE.MENU_KEY; break;
       case ROUTE.FIRST_CATEGORY_MANAGE.MENU_KEY: targetUrl = ROUTE.FIRST_CATEGORY_MANAGE.URL_PREFIX + "/" + ROUTE.FIRST_CATEGORY_MANAGE.MENU_KEY + "/1"; break;
       case ROUTE.ORIGIN_RESULT_MANAGE.MENU_KEY: targetUrl = ROUTE.ORIGIN_RESULT_MANAGE.URL_PREFIX + "/" + ROUTE.ORIGIN_RESULT_MANAGE.MENU_KEY; break;
-      case ROUTE.EXAM_RESULT_MANAGE.MENU_KEY: targetUrl = ROUTE.EXAM_RESULT_MANAGE.URL_PREFIX + "/" + ROUTE.EXAM_RESULT_MANAGE.MENU_KEY; break;
+      case ROUTE.EXAM_RESULT_MANAGE.MENU_KEY: targetUrl = isEmployee(role) ? (ROUTE.EXAM_RESULT_MANAGE.URL_PREFIX + "/" + ROUTE.EXAM_RESULT_MANAGE.MENU_KEY) : (ROUTE.EXAM_RESULT_DETAIL.URL_PREFIX + "/" + ROUTE.EXAM_RESULT_DETAIL.MENU_KEY + "/" + memberId + "/" + memberName);break;
       default:;break;
     }
 
@@ -120,21 +124,10 @@ class Home extends React.Component {
     const role = sessionStorage.getItem(SESSION.ROLE);
     const layoutStyle = this.initLayoutStyleByRole(role);
 
-    //悬停头像时的下拉菜单
-    const userOperationDropdownMenu = (
-        <Menu>
-          <Menu.Item style={{textAlign:'center'}}>
-            <Link onClick={this.showProfileEditModal}>个人资料</Link>
-          </Menu.Item>
-          <Menu.Item style={{textAlign:'center'}}>
-            <Link onClick={this.handleLogout}>退出系统</Link>
-          </Menu.Item>
-        </Menu>);
-
     return (
       <Layout>
         <Sider
-          trigger={null}
+          trigger={<Icon type="logout" style={{fontSize:18}} onClick={this.handleLogout}/>}
           collapsible
           collapsed={this.state.collapsed}>
           <div className="logo"/>
@@ -153,11 +146,11 @@ class Home extends React.Component {
             </Menu.Item>
             <Menu.Item key={ROUTE.ORIGIN_RESULT_MANAGE.MENU_KEY} style={{display: layoutStyle.originResultMenuItemDisplay}}>
               <Icon type="file-pdf" className="menu-item-font"/>
-              <span className="nav-text menu-item-font">原始资料管理</span>
+              <span className="nav-text menu-item-font">原始资料</span>
             </Menu.Item>
             <Menu.Item key={ROUTE.EXAM_RESULT_MANAGE.MENU_KEY} style={{display: layoutStyle.examResultMenuItemDisplay}}>
               <Icon type="file-text" className="menu-item-font"/>
-              <span className="nav-text menu-item-font">化验/医技数据管理</span>
+              <span className="nav-text menu-item-font">化验/医技数据</span>
             </Menu.Item>
             <Menu.Item key="9" style={{display: layoutStyle.examResultMenuItemDisplay}}>
               <Icon type="file-text" className="menu-item-font"/>
@@ -168,15 +161,13 @@ class Home extends React.Component {
         <Layout>
           <Header style={{ background: '#fff', padding: 0 ,textAlign: 'center'}}>
             <Icon className="trigger" type={this.state.collapsed ? 'menu-unfold' : 'menu-fold'} onClick={this.toggle}/>
-            <Dropdown overlay={userOperationDropdownMenu} trigger={['click']}>
-              <Avatar size="large" src={FILE_SERVER + sessionStorage.getItem(SESSION.AVATAR)} className="avatar-header" style={{backgroundColor: 'white'}}/>
-            </Dropdown>
+            <Avatar size="large" src={FILE_SERVER + sessionStorage.getItem(SESSION.AVATAR)} className="avatar-header" style={{backgroundColor: 'white'}} onClick={this.showProfileEditModal}/>
             <ProfileEditModal ref="profileEditForm" visible={this.state.profileEditModalVisible} onCancel={this.closeProfileEditModal} />
 
             <a className='name'>{sessionStorage.getItem(SESSION.NAME)}</a>
             <Tag color={layoutStyle.roleTagColor} style={{marginLeft:7, float:'right', marginTop:21}}>{role}</Tag>
           </Header>
-          <Content style={{ margin: '24px 16px', padding: 24, background: '#fff', minHeight: 840 }}>
+          <Content style={{ margin: '24px 16px', padding: 24, background: '#fff', minHeight: 800 }}>
             {this.props.children}
           </Content>
           <Footer style={{ textAlign: 'center' }}>

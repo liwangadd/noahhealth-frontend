@@ -427,10 +427,10 @@ class UserManage extends React.Component {
         this.setState({ confirmMemberLoading: true });
 
         $.ajax({
-            url : SERVER + '/api/user/' + this.memberId,
+            url : SERVER + '/api/user',
             type : 'PUT',
             contentType: 'application/json',
-            data : JSON.stringify({role: values.role, staffId: values.adviserAndManager[1]}),
+            data : JSON.stringify({userId: this.memberId, role: values.role, staffId: values.adviserAndManager[1]}),
             dataType : 'json',
             beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
             success : (result) => {
@@ -474,10 +474,10 @@ class UserManage extends React.Component {
         this.setState({ confirmEmployeeEditModalLoading: true });
 
         $.ajax({
-            url : SERVER + '/api/user/' + this.employeeId,
+            url : SERVER + '/api/user',
             type : 'PUT',
             contentType: 'application/json',
-            data : JSON.stringify({role: values.role, staffMgrId: staffMgrId}),
+            data : JSON.stringify({userId: this.employeeId, role: values.role, staffMgrId: staffMgrId}),
             dataType : 'json',
             beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
             success : (result) => {
