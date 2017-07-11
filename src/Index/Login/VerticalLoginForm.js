@@ -75,7 +75,7 @@ class VerticalLoginForm_ extends React.Component {
       <Card className="index-card" bodyStyle={{ padding: 0 }} >
 
         <div className="index-card-welcome">
-          <span>{ this.props.roleType === "member" ? "欢迎登录医海慈航会员系统" : "欢迎登录医海慈航后台管理系统"}</span>
+          <span>{ this.props.roleType === "member" ? "医海慈航会员登录" : "医海慈航职员登录"}</span>
         </div>
         <Form onSubmit={this.handleLogin} className="login-form">
           <FormItem {...formItemLayoutWithoutLabel}>

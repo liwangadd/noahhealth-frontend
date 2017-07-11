@@ -2,8 +2,8 @@ import './Home.css';
 import {SESSION, ROUTE, ROLE, STYLE, COLOR, FILE_SERVER} from './../App/PublicConstant.js';
 import {clearSession, isEmployee} from './../App/PublicMethod.js';
 import React from 'react';
-import { Layout, Menu, Icon, Avatar, Dropdown, notification, Button, Tag} from 'antd';
-import {browserHistory, Link} from 'react-router';
+import { Layout, Menu, Icon, Avatar, notification, Button, Tag} from 'antd';
+import {browserHistory} from 'react-router';
 import ProfileEditModal from './ProfileEditModal.js'
 const { Header, Content, Footer, Sider} = Layout;
 
@@ -29,26 +29,27 @@ class Home extends React.Component {
   handleLogout = (e) => {
 
     e.preventDefault();
+    browserHistory.push(ROUTE.MAIN.URL);
 
-    const key = `open${Date.now()}`;
-    const btnClick = function () {
-
-      clearSession();
-      notification.close(key);
-      browserHistory.push(ROUTE.MAIN.URL);
-    };
-    const btn = (
-      <Button type="primary" size="small" onClick={btnClick}>
-        确定
-      </Button>
-    );
-
-    notification.open({
-      message: '您确定要退出系统吗?',
-      btn,
-      key,
-      onClose: close,
-    });
+    // const key = `open${Date.now()}`;
+    // const btnClick = function () {
+    //
+    //   clearSession();
+    //   notification.close(key);
+    //   browserHistory.push(ROUTE.MAIN.URL);
+    // };
+    // const btn = (
+    //   <Button type="primary" size="small" onClick={btnClick}>
+    //     确定
+    //   </Button>
+    // );
+    //
+    // notification.open({
+    //   message: '您确定要退出系统吗?',
+    //   btn,
+    //   key,
+    //   onClose: close,
+    // });
   }
 
   //根据角色决定布局
@@ -127,7 +128,7 @@ class Home extends React.Component {
     return (
       <Layout>
         <Sider
-          trigger={<Icon type="logout" style={{fontSize:18}} onClick={this.handleLogout}/>}
+          trigger={null}
           collapsible
           collapsed={this.state.collapsed}>
           <div className="logo"/>
@@ -161,11 +162,15 @@ class Home extends React.Component {
         <Layout>
           <Header style={{ background: '#fff', padding: 0 ,textAlign: 'center'}}>
             <Icon className="trigger" type={this.state.collapsed ? 'menu-unfold' : 'menu-fold'} onClick={this.toggle}/>
+            <Icon type="logout" className="logout-icon" onClick={this.handleLogout}/>
             <Avatar size="large" src={FILE_SERVER + sessionStorage.getItem(SESSION.AVATAR)} className="avatar-header" style={{backgroundColor: 'white'}} onClick={this.showProfileEditModal}/>
             <ProfileEditModal ref="profileEditForm" visible={this.state.profileEditModalVisible} onCancel={this.closeProfileEditModal} />
 
-            <a className='name'>{sessionStorage.getItem(SESSION.NAME)}</a>
+            <a className='name' onClick={this.showProfileEditModal}>{sessionStorage.getItem(SESSION.NAME)}</a>
             <Tag color={layoutStyle.roleTagColor} style={{marginLeft:7, float:'right', marginTop:21}}>{role}</Tag>
+
+
+
           </Header>
           <Content style={{ margin: '24px 16px', padding: 24, background: '#fff', minHeight: 800 }}>
             {this.props.children}

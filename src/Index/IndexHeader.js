@@ -1,7 +1,7 @@
 import {ROUTE} from './../App/PublicConstant.js';
 import React from 'react';
 import {Link, browserHistory} from 'react-router';
-import { Layout, Spin, Affix, Menu, Button} from 'antd';
+import { Layout, Affix, Menu, Button} from 'antd';
 const {Header} = Layout;
 
 class IndexHeader extends React.Component{

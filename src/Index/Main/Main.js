@@ -1,8 +1,7 @@
 import './../Index.css';
-import {LOADING_DELAY_TIME, ROUTE} from './../../App/PublicConstant.js';
+import {LOADING_DELAY_TIME} from './../../App/PublicConstant.js';
 import React from 'react';
-import { Layout,Carousel, Spin, Menu, Button, Card, BackTop, Affix} from 'antd';
-import {Link, browserHistory} from 'react-router';
+import { Layout,Carousel, Spin, Card, BackTop} from 'antd';
 import IndexHeader from './../IndexHeader.js';
 const { Header, Content} = Layout;
 

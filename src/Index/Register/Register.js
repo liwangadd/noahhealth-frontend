@@ -1,7 +1,6 @@
-import {LOADING_DELAY_TIME, ROUTE} from './../../App/PublicConstant.js';
+import {LOADING_DELAY_TIME} from './../../App/PublicConstant.js';
 import React from 'react';
-import {Link, browserHistory} from 'react-router';
-import { Layout, Spin, Affix, Menu, Button} from 'antd';
+import { Layout, Spin} from 'antd';
 import VerticalRegisterForm from './VerticalRegisterForm.js';
 import IndexHeader from './../IndexHeader.js';
 const { Header, Content} = Layout;

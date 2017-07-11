@@ -1,4 +1,4 @@
-import {SESSION, ROUTE, ROLE} from './App/PublicConstant.js';
+import {SESSION, ROUTE} from './App/PublicConstant.js';
 import {clearSession, containsElement, isEmployee} from './App/PublicMethod.js'
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -49,6 +49,7 @@ const certifyAccess = function(nextState, replace){
       case ROUTE.MEMBER_LOGIN.URL_PREFIX:certifyRole(replace, role, ROUTE.MEMBER_LOGIN.PERMISSION);break;
       case ROUTE.EMPLOYEE_LOGIN.URL_PREFIX:certifyRole(replace, role, ROUTE.EMPLOYEE_LOGIN.PERMISSION);break;
       case ROUTE.REGISTER.URL_PREFIX:certifyRole(replace, role, ROUTE.REGISTER.PERMISSION);break;
+
       case ROUTE.HOME.URL_PREFIX:certifyRole(replace, role, ROUTE.HOME.PERMISSION);break;
 
       case ROUTE.USER_MANAGE.URL_PREFIX:certifyRole(replace, role, ROUTE.USER_MANAGE.PERMISSION);break;
@@ -62,10 +63,7 @@ const certifyAccess = function(nextState, replace){
       case ROUTE.EXAM_RESULT_MANAGE.URL_PREFIX:certifyRole(replace, role, ROUTE.EXAM_RESULT_MANAGE.PERMISSION);break;
       case ROUTE.EXAM_RESULT_DETAIL.URL_PREFIX:certifyRole(replace, role, ROUTE.EXAM_RESULT_DETAIL.PERMISSION);break;
 
-      default:{
-        clearSession();
-        isEmployee(role) ? replace({ pathname: ROUTE.EMPLOYEE_LOGIN.URL }) : replace({ pathname: ROUTE.MEMBER_LOGIN.URL });
-        message.error('暂无该页面，请重新登录');}break;
+      default:clearSession(); isEmployee(role) ? replace({ pathname: ROUTE.EMPLOYEE_LOGIN.URL }) : replace({ pathname: ROUTE.MEMBER_LOGIN.URL }); message.error('暂无该页面，请重新登录');break;
     }
 
     //放行

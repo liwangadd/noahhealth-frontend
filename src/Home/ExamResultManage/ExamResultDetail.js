@@ -5,7 +5,7 @@ import {isEmployee} from './../../App/PublicMethod.js';
 import ExamResultDetailAddModal from './ExamResultDetailAddModal.js';
 import ExamResultDetailItem from './ExamResultDetailItem.js';
 import React from 'react';
-import {message, Button, BackTop, Modal, Breadcrumb, Timeline, Anchor, Alert, Spin} from 'antd';
+import {message, Button, BackTop, Breadcrumb, Timeline, Anchor, Alert, Spin} from 'antd';
 import {Link} from 'react-router';
 import $ from 'jquery';
 
@@ -404,12 +404,20 @@ class ExamResultDetail extends React.Component {
             if(result.code === RESULT.SUCCESS) {
 
               const examResultDetailItems = result.content.length <= 0 ?
-                                            <Alert
-                                            message="该会员还没有检查记录"
-                                            description="可点击右上角的按钮进行添加"
-                                            type="warning"
-                                            showIcon
-                                            />
+                                              isEmployee(sessionStorage.getItem(SESSION.ROLE)) ?
+                                              <Alert
+                                              message="该会员还没有检查记录"
+                                              description="可点击右上角的按钮进行添加"
+                                              type="warning"
+                                              showIcon
+                                              />
+                                              :
+                                              <Alert
+                                              message="暂无已通过审核的检查记录"
+                                              description=" "
+                                              type="warning"
+                                              showIcon
+                                              />
                                             :
                                             result.content.map((detail, index) => <ExamResultDetailItem detail={detail}
                                                                                                         key={index}

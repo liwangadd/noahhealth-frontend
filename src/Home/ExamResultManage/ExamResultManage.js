@@ -75,6 +75,10 @@ class ExamResultManage extends React.Component {
       dataIndex: 'name',
       key: 'name'
     },{
+      title: '级别',
+      dataIndex: 'role',
+      key: 'role'
+    },{
       title: '操作',
       key: 'action',
       render: (record) => (

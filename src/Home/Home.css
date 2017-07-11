@@ -88,3 +88,15 @@
   font-size: 28px;
   color: #999;
 }
+
+.logout-icon{
+  font-size:18px;
+  float: right;
+  margin-right: 15px;
+  cursor: pointer;
+  transition: color .3s;
+  margin-left:10px;
+}
+.logout-icon:hover {
+  color: #00a854;
+}
