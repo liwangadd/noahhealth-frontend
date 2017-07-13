@@ -27,6 +27,28 @@ const isEmployee = function(role) {
   }
 }
 
+//判断一个用户是否为顾问员工/主管
+const isAdviser = function(role) {
+
+  switch(role){
+    case ROLE.EMPLOYEE_ADVISER:
+    case ROLE.EMPLOYEE_ADVISE_MANAGER: return true;
+    default: return false;
+  }
+}
+
+//判断一个用户是否为档案员工/主管
+const isArchiver = function(role) {
+
+  switch(role){
+    case ROLE.EMPLOYEE_ARCHIVER:
+    case ROLE.EMPLOYEE_ARCHIVE_MANAGER: return true;
+    default: return false;
+  }
+}
+
+
+
 //判断一个用户是否为会员
 const isMember = function(role) {
 
@@ -70,5 +92,7 @@ export {
   containsElement,
   isImgExist,
   isEmployee,
+  isAdviser,
+  isArchiver,
   isMember
 }

@@ -1,13 +1,14 @@
 
 //服务器地址
-//const SERVER = 'http://10.109.247.127:8080' //lab
-const SERVER = 'http://118.89.227.189:8080' //tecentcloud
 //const SERVER = 'http://localhost:8080' //yaochenkun
+//const SERVER = 'http://10.109.247.127:8080' //lab
+//const SERVER = 'http://118.89.227.189:8080' //tecentcloud
+const SERVER = 'http://47.92.91.99:8080' //alicloud
 
 //文件服务器地址
 //const FILE_SERVER = 'http://10.109.247.127:8088' //lab
-const FILE_SERVER = 'http://118.89.227.189:8088' //tecentcloud
-
+//const FILE_SERVER = 'http://118.89.227.189:8088' //tecentcloud
+const FILE_SERVER = 'http://47.92.91.99:8088' //alicloud
 
 
 

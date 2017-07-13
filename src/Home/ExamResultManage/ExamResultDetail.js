@@ -1,7 +1,7 @@
 import './ExamResultManage.css';
 import {SERVER, SESSION, RESULT, PAGE_SIZE, ROLE, FILE_SERVER, ROUTE, LOADING_DELAY_TIME} from './../../App/PublicConstant.js';
 import {formatDate} from './../../App/PublicUtil.js';
-import {isEmployee} from './../../App/PublicMethod.js';
+import {isEmployee, isAdviser} from './../../App/PublicMethod.js';
 import ExamResultDetailAddModal from './ExamResultDetailAddModal.js';
 import ExamResultDetailItem from './ExamResultDetailItem.js';
 import React from 'react';
@@ -403,8 +403,10 @@ class ExamResultDetail extends React.Component {
             console.log(result);
             if(result.code === RESULT.SUCCESS) {
 
+              const role = sessionStorage.getItem(SESSION.ROLE);
               const examResultDetailItems = result.content.length <= 0 ?
-                                              isEmployee(sessionStorage.getItem(SESSION.ROLE)) ?
+                                              isEmployee(role) && !isAdviser(role)
+                                              ?
                                               <Alert
                                               message="该会员还没有检查记录"
                                               description="可点击右上角的按钮进行添加"
