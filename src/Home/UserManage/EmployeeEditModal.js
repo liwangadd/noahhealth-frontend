@@ -36,21 +36,21 @@ class EmployeeEditModal_ extends React.Component {
             <Input disabled/>
             )}
           </FormItem>
-          <FormItem {...formItemLayout} label="角色级别">
+          <FormItem {...formItemLayout} label="角色级别" hasFeedback={true}>
             {getFieldDecorator('role')(
               <Select onChange={(role) => this.props.changeRole(role)}>
                 {roleOptions}
               </Select>
             )}
           </FormItem>
-          <FormItem {...formItemLayout} label="所属档案主管" style={{display: this.props.archiveManagerSelectVisible}}>
+          <FormItem {...formItemLayout} label="所属档案主管" style={{display: this.props.archiveManagerSelectVisible}} hasFeedback={true}>
             {getFieldDecorator('archiveManager')(
               <Select>
                 {archiveManagerOptions}
               </Select>
             )}
           </FormItem>
-          <FormItem {...formItemLayout} label="所属顾问主管" style={{display: this.props.adviseManagerSelectVisible}}>
+          <FormItem {...formItemLayout} label="所属顾问主管" style={{display: this.props.adviseManagerSelectVisible}} hasFeedback={true}>
             {getFieldDecorator('adviseManager')(
               <Select>
                 {adviseManagerOptions}

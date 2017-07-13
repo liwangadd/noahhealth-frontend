@@ -98,26 +98,26 @@ class CategoryAddModal_ extends React.Component {
             </FormItem>
 
 
-            <FormItem {...formItemLayout} label="检查分类名称" style={{display: this.state.firstCategoryLevelVisible}}>
+            <FormItem {...formItemLayout} label="检查分类名称" style={{display: this.state.firstCategoryLevelVisible}} hasFeedback={true}>
               {getFieldDecorator('firstCategoryName', {rules: [{ required: true, message: '请输入检查分类名称!' }]})(
               <Input />
               )}
             </FormItem>
 
 
-            <FormItem {...formItemLayout} label="检查亚类名称" style={{display: this.state.secondCategoryLevelVisible}}>
+            <FormItem {...formItemLayout} label="检查亚类名称" style={{display: this.state.secondCategoryLevelVisible}} hasFeedback={true}>
               {getFieldDecorator('secondCategoryName', {rules: [{ required: true, message: '请输入检查亚类名称!' }]})(
               <Input />
               )}
             </FormItem>
-            <FormItem {...formItemLayout} label="所属分类" style={{display: this.state.secondCategoryLevelOfAssayVisible}}>
+            <FormItem {...formItemLayout} label="所属分类" style={{display: this.state.secondCategoryLevelOfAssayVisible}} hasFeedback={true}>
               {getFieldDecorator('firstCategoryParentOfAssayId', {rules: [{ required: true, message: '请选择所属分类!' }]})(
                 <Select>
                   {firstCategoryOfAssayOptions}
                 </Select>
               )}
             </FormItem>
-            <FormItem {...formItemLayout} label="所属分类" style={{display: this.state.secondCategoryLevelOfTechVisible}}>
+            <FormItem {...formItemLayout} label="所属分类" style={{display: this.state.secondCategoryLevelOfTechVisible}} hasFeedback={true}>
               {getFieldDecorator('firstCategoryParentOfTechId', {rules: [{ required: true, message: '请选择所属分类!' }]})(
                 <Select>
                   {firstCategoryOfTechOptions}
@@ -126,32 +126,32 @@ class CategoryAddModal_ extends React.Component {
             </FormItem>
 
 
-            <FormItem {...formItemLayout} label="检查项目名称" style={{display: this.state.thirdCategoryLevelVisible}}>
+            <FormItem {...formItemLayout} label="检查项目名称" style={{display: this.state.thirdCategoryLevelVisible}} hasFeedback={true}>
               {getFieldDecorator('thirdCategoryName', {rules: [{ required: true, message: '请输入检查项目名称!' }]})(
               <Input />
               )}
             </FormItem>
-            <FormItem {...formItemLayout} label="所属亚类" style={{display: this.state.thirdCategoryLevelOfAssayVisible}}>
+            <FormItem {...formItemLayout} label="所属亚类" style={{display: this.state.thirdCategoryLevelOfAssayVisible}} hasFeedback={true}>
               {getFieldDecorator('secondCategoryParentOfAssayId', {rules: [{ required: true, message: '请选择所属亚类!' }]})(
                 <Cascader options={this.props.secondCategoryParentOfAssayData} placeholder="" allowClear={false}/>
               )}
             </FormItem>
-            <FormItem {...formItemLayout} label="所属亚类" style={{display: this.state.thirdCategoryLevelOfTechVisible}}>
+            <FormItem {...formItemLayout} label="所属亚类" style={{display: this.state.thirdCategoryLevelOfTechVisible}} hasFeedback={true}>
               {getFieldDecorator('secondCategoryParentOfTechId', {rules: [{ required: true, message: '请选择所属亚类!' }]})(
                 <Cascader options={this.props.secondCategoryParentOfTechData} placeholder="" allowClear={false}/>
               )}
             </FormItem>
-            <FormItem {...formItemLayout} label="英文缩写" style={{display: this.state.thirdCategoryLevelVisible}}>
+            <FormItem {...formItemLayout} label="英文缩写" style={{display: this.state.thirdCategoryLevelVisible}} hasFeedback={true}>
               {getFieldDecorator('abbreviation', {rules: [{ required: true, message: '请输入英文缩写!' }]})(
                 <Input />
               )}
             </FormItem>
-            <FormItem {...formItemLayout} label="系统分类" style={{display: this.state.thirdCategoryLevelVisible}}>
+            <FormItem {...formItemLayout} label="系统分类" style={{display: this.state.thirdCategoryLevelVisible}} hasFeedback={true}>
               {getFieldDecorator('systemCategory', {rules: [{ required: true, message: '请输入系统分类!' }]})(
                 <Input />
               )}
             </FormItem>
-            <FormItem {...formItemLayout} label="参考值及单位" style={{display: this.state.thirdCategoryLevelVisible}}>
+            <FormItem {...formItemLayout} label="参考值及单位" style={{display: this.state.thirdCategoryLevelVisible}} hasFeedback={true}>
               {getFieldDecorator('referenceValue', {rules: [{ required: true, message: '请输入参考值及单位!' }]})(
               <Input />
               )}

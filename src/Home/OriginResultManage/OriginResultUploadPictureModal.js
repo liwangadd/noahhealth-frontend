@@ -1,7 +1,7 @@
 import './OriginResultManage.css';
 import {SESSION, SERVER} from './../../App/PublicConstant.js';
 import React from 'react';
-import {Form, Modal, Upload, Button, Icon, Tag} from 'antd';
+import {Form, Modal, Upload, Button, Icon, Tag, Popconfirm} from 'antd';
 
 //上传扫描件
 class OriginResultUploadPictureModal_ extends React.Component {
@@ -9,7 +9,11 @@ class OriginResultUploadPictureModal_ extends React.Component {
   render() {
 
     return (
-        <Modal title="上传扫描件" visible={this.props.visible} onOk={this.props.onConfirm} onCancel={this.props.onCancel} confirmLoading={this.props.confirmLoading} okText="提交审核">
+        <Modal title="上传扫描件" visible={this.props.visible} onCancel={this.props.onCancel}
+               footer={
+                 <Popconfirm title="您确定要提交审核吗?" placement="bottom" onConfirm={this.props.onSubmit} okText="是" cancelText="取消">
+                   <Button type="primary" size="large" loading={this.props.submitLoading}>提交审核</Button>
+                 </Popconfirm>}>
           <Upload name="file"
                   action= {SERVER + "/api/origin/upload" }
                   data = {{id: this.props.originResultId}}

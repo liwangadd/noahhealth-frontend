@@ -21,7 +21,7 @@ class MemberEditModal_ extends React.Component {
             <Input disabled/>
             )}
           </FormItem>
-          <FormItem {...formItemLayout} label="角色级别">
+          <FormItem {...formItemLayout} label="角色级别" hasFeedback={true}>
             {getFieldDecorator('role')(
               <Select>
                 <Option value={ROLE.MEMBER_1}>{ROLE.MEMBER_1}</Option>
@@ -30,7 +30,7 @@ class MemberEditModal_ extends React.Component {
               </Select>
             )}
           </FormItem>
-          <FormItem {...formItemLayout} label="所属顾问">
+          <FormItem {...formItemLayout} label="所属顾问" hasFeedback={true}>
             {getFieldDecorator('adviserAndManager')(
               <Cascader options={this.props.adviserAndManagerData} placeholder="" allowClear={false}/>
             )}

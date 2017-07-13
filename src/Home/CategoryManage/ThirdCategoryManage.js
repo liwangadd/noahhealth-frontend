@@ -187,8 +187,7 @@ class ThirdCategoryManage extends React.Component {
     const thirdCategoryColumns = [{
       title: '检查项目名称',
       dataIndex: 'name',
-      key: 'name',
-      render: (name) => <a>{name}</a>,
+      key: 'name'
     },{
       title: '系统分类',
       dataIndex: 'systemCategory',

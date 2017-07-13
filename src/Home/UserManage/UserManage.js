@@ -606,12 +606,11 @@ class UserManage extends React.Component {
     const memberColumns = [{
       title: '姓名',
       dataIndex: 'name',
-      key: 'name',
-      render: text => <a>{text}</a>,
+      key: 'name'
     }, {
-      title: '手机',
-      dataIndex: 'phone',
-      key: 'phone',
+      title: '用户名',
+      dataIndex: 'username',
+      key: 'username',
     }, {
       title: '级别',
       dataIndex: 'role',
@@ -635,7 +634,7 @@ class UserManage extends React.Component {
             ?
             <span>
               <span className="ant-divider" />
-              <Popconfirm title="请问您确定要删除该会员吗?" onConfirm={() => this.handleDeleteMember(record)} okText="是" cancelText="取消">
+              <Popconfirm title="您确定要删除该会员吗?" onConfirm={() => this.handleDeleteMember(record)} okText="是" cancelText="取消">
                 <a className='user-table-delete'>删除</a>
               </Popconfirm>
             </span>
@@ -650,12 +649,11 @@ class UserManage extends React.Component {
     const employeeColumns = [{
       title: '姓名',
       dataIndex: 'name',
-      key: 'name',
-      render: text => <a>{text}</a>,
+      key: 'name'
     }, {
-      title: '手机',
-      dataIndex: 'phone',
-      key: 'phone',
+      title: '用户名',
+      dataIndex: 'username',
+      key: 'username',
     }, {
       title: '级别',
       dataIndex: 'role',
@@ -675,7 +673,7 @@ class UserManage extends React.Component {
             ?
             <span>
               <span className="ant-divider" />
-              <Popconfirm title="请问您确定要删除该职员吗?" onConfirm={() => this.handleDeleteEmployee(record)} okText="是" cancelText="取消">
+              <Popconfirm title="您确定要删除该职员吗?" onConfirm={() => this.handleDeleteEmployee(record)} okText="是" cancelText="取消">
                 <a className='user-table-delete'>删除</a>
               </Popconfirm>
             </span>

@@ -1,6 +1,6 @@
 import './OriginResultManage.css';
 import React from 'react';
-import {Form, Input, Modal, Upload, Button, Popover} from 'antd';
+import {Form, Input, Modal, Upload, Button, Popover, Popconfirm} from 'antd';
 
 //上传扫描件
 class OriginResultCheckPictureModal_ extends React.Component {
@@ -26,7 +26,9 @@ class OriginResultCheckPictureModal_ extends React.Component {
     return (
         <Modal title="审核扫描件" visible={this.props.visible} onCancel={this.props.onCancel}
           footer={<div>
-                    <Button type="primary" size="large" onClick={this.props.onPass} loading={this.props.passLoading}>通过</Button>
+                    <Popconfirm title="您确定要通过审核吗?" placement="bottom" onConfirm={this.props.onPass} okText="是" cancelText="取消">
+                      <Button type="primary" size="large" loading={this.props.passLoading}>通过</Button>
+                    </Popconfirm>
                     <Popover content={<div><Input value={this.state.unpassReason} onChange={this.changeUnpassReason} placeholder="未通过原因" style={{width:'80%'}}/><Button shape="circle" type="primary" size="small" icon="check" className="unpass-check" onClick={this.confirmUnpass}/></div>}
                              title={null}
                              trigger="click"

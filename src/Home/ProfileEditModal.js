@@ -127,7 +127,7 @@ class ProfileEditModal_ extends React.Component {
 
       let password = this.props.form.getFieldValue('newPassword');
       let confirmPassword = this.props.form.getFieldValue('confirmPassword');
-      if(confirmPassword === '' || password !== confirmPassword) {
+      if(password !== undefined && confirmPassword !== undefined && password !== confirmPassword) {
           callback("两次密码输入不一致");
       }
       callback();
@@ -182,8 +182,9 @@ class ProfileEditModal_ extends React.Component {
               contentType: 'application/json',
               data : JSON.stringify({phone : values.phone}),
               dataType : 'json',
-              success : () => {
-                  console.log("后端已生成验证码");
+              success : (result) => {
+
+                  message.success(result.reason, 2);
                   var timer = setInterval(() => {
                       this.setState({
                           isSendSmsBtnDisabled: true,
@@ -234,7 +235,7 @@ class ProfileEditModal_ extends React.Component {
                   <img src={this.state.imageUrl} className="avatar" style={{backgroundColor: 'white'}} alt=""/>
                 </Upload>
               </FormItem>
-              <FormItem {...formItemLayout} label="姓名">
+              <FormItem {...formItemLayout} label="姓名" hasFeedback={true}>
                 {getFieldDecorator('name', {'initialValue': sessionStorage.getItem(SESSION.NAME), rules: [{ required: true, message: '请输入姓名' }]
                 })(
                 <Input />
@@ -248,19 +249,19 @@ class ProfileEditModal_ extends React.Component {
 
           <TabPane tab={<span><Icon type="lock" />密码更改</span>} key="2">
             <Form onSubmit={this.submitPasswordChange}>
-              <FormItem {...formItemLayout} label="旧密码">
+              <FormItem {...formItemLayout} label="旧密码" hasFeedback={true}>
                   {getFieldDecorator('oldPassword', {rules: [{ required: true, message: '请输入旧密码' }],
                   })(
                   <Input type="password"/>
                   )}
               </FormItem>
-              <FormItem {...formItemLayout} label="新密码">
-                  {getFieldDecorator('newPassword', {rules: [{ required: true, message: '请输入新密码' }],
+              <FormItem {...formItemLayout} label="新密码" hasFeedback={true}>
+                  {getFieldDecorator('newPassword', {rules: [{ required: true, message: '请输入新密码' }, { validator: this.handleConfirmPassword}],
                   })(
                   <Input type="password"/>
                   )}
               </FormItem>
-              <FormItem {...formItemLayout} label="确认密码">
+              <FormItem {...formItemLayout} label="确认密码" hasFeedback={true}>
                   {getFieldDecorator('confirmPassword', {rules: [{required: true, message: '请输入确认密码' }, {validator: this.handleConfirmPassword}],
                   })(
                   <Input type="password"/>
@@ -274,8 +275,8 @@ class ProfileEditModal_ extends React.Component {
 
           <TabPane tab={<span><Icon type="phone" />手机更换</span>} key="3">
             <Form onSubmit={this.submitPhoneChange}>
-              <FormItem {...formItemLayout} label="手机">
-                  {getFieldDecorator('phone', { 'initialValue': sessionStorage.getItem(SESSION.PHONE), rules: [{ required: true, message: '请输入手机号' },{pattern: REGEX.PHONE, message:'请输入合法手机号'}],
+              <FormItem {...formItemLayout} label="手机" hasFeedback={true}>
+                  {getFieldDecorator('phone', {rules: [{ required: true, message: '请输入手机号' },{pattern: REGEX.PHONE, message:'请输入合法手机号'}],
                   })(
                   <Input />
                   )}

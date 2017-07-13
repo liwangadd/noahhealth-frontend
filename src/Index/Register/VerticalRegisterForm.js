@@ -34,6 +34,7 @@ class VerticalRegisterForm_ extends React.Component {
                                    inputCode : values.inputCode}),
             dataType : 'json',
             success : (result) => {
+
                 console.log(result);
                 if(result.code === RESULT.SUCCESS) {
                     message.success(result.reason, 2);
@@ -66,8 +67,9 @@ class VerticalRegisterForm_ extends React.Component {
               contentType: 'application/json',
               data : JSON.stringify({phone : values.phone}),
               dataType : 'json',
-              success : () => {
-                  console.log("后端已生成验证码");
+              success : (result) => {
+
+                  message.success(result.reason, 2);
                   var timer = setInterval(() => {
                       this.setState({
                           isSendSmsBtnDisabled: true,
@@ -102,7 +104,7 @@ class VerticalRegisterForm_ extends React.Component {
 
       let password = this.props.form.getFieldValue('password');
       let confirmPassword = this.props.form.getFieldValue('confirmPassword');
-      if(confirmPassword === '' || password !== confirmPassword) {
+      if(password !== undefined && confirmPassword !== undefined && password !== confirmPassword) {
           callback("两次密码输入不一致");
       }
       callback();
@@ -120,26 +122,26 @@ class VerticalRegisterForm_ extends React.Component {
           <span>医海慈航会员注册</span>
         </div>
         <Form onSubmit={this.handleRegister} className="login-form">
-          <FormItem {...formItemLayoutWithoutLabel}>
+          <FormItem {...formItemLayoutWithoutLabel} hasFeedback={true}>
               {getFieldDecorator('name', { rules: [{ required: true, message: '请输入姓名' }],
               })(
               <Input prefix={<Icon type="user" style={{ fontSize: 13 }} />} placeholder="姓名" />
               )}
           </FormItem>
-          <FormItem {...formItemLayoutWithoutLabel}>
+          <FormItem {...formItemLayoutWithoutLabel} hasFeedback={true}>
               {getFieldDecorator('phone', { rules: [{ required: true, message: '请输入手机号' },{pattern: REGEX.PHONE, message:'请输入合法手机号'}],
               })(
               <Input prefix={<Icon type="phone" style={{ fontSize: 13 }} />} placeholder="手机" />
               )}
           </FormItem>
-          <FormItem {...formItemLayoutWithoutLabel}>
+          <FormItem {...formItemLayoutWithoutLabel} hasFeedback={true}>
               {getFieldDecorator('password', {
-              rules: [{ required: true, message: '请输入密码' }],
+              rules: [{ required: true, message: '请输入密码' }, { validator: this.handleConfirmPassword}],
               })(
               <Input prefix={<Icon type="lock" style={{ fontSize: 13 }} />} type="password" placeholder="密码" />
               )}
           </FormItem>
-          <FormItem {...formItemLayoutWithoutLabel}>
+          <FormItem {...formItemLayoutWithoutLabel} hasFeedback={true}>
               {getFieldDecorator('confirmPassword', {
               rules: [{required: true, message: '请输入确认密码' }, { validator: this.handleConfirmPassword}],
               })(
@@ -147,7 +149,7 @@ class VerticalRegisterForm_ extends React.Component {
               )}
           </FormItem>
 
-          <FormItem {...formItemLayoutWithoutLabel}>
+          <FormItem {...formItemLayoutWithoutLabel} hasFeedback={true}>
               {getFieldDecorator('inputCode')(
               <Input prefix={<Icon type="mail" style={{ fontSize: 13 }} />} placeholder="验证码" style={{width:'55%', float:'left'}}/>
               )}

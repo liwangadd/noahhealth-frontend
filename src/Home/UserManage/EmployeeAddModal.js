@@ -33,13 +33,13 @@ class EmployeeAddModal_ extends React.Component {
     return (
       <Modal title="添加职员" visible={this.props.visible} onOk={this.props.onConfirm} confirmLoading={this.props.confirmLoading} onCancel={this.props.onCancel}>
         <Form className="login-form">
-          <FormItem {...formItemLayout} label="姓名">
+          <FormItem {...formItemLayout} label="姓名" hasFeedback={true}>
             {getFieldDecorator('name', { rules: [{ required: true, message: '请输入姓名' }]
             })(
             <Input />
             )}
           </FormItem>
-          <FormItem {...formItemLayout} label="手机">
+          <FormItem {...formItemLayout} label="手机" hasFeedback={true}>
               {getFieldDecorator('phone', { rules: [{ required: true, message: '请输入手机号' },{pattern: REGEX.PHONE, message:'请输入合法手机号'}],
               })(
               <Input />

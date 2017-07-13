@@ -38,27 +38,27 @@ class ExamResultDetailAddModal_ extends React.Component {
               )}
             </FormItem>
 
-            <FormItem {...formItemLayout} label="检查亚类" style={{display: this.state.secondCategoryOfAssayVisible}}>
+            <FormItem {...formItemLayout} label="检查亚类" style={{display: this.state.secondCategoryOfAssayVisible}} hasFeedback={true}>
               {getFieldDecorator('secondCategoryParentOfAssayId', {rules: [{ required: true, message: '请选择检查亚类!' }]})(
                 <Cascader options={this.props.secondCategoryParentOfAssayData} placeholder="" allowClear={false}/>
               )}
             </FormItem>
 
-            <FormItem {...formItemLayout} label="检查亚类" style={{display: this.state.secondCategoryOfTechVisible}}>
+            <FormItem {...formItemLayout} label="检查亚类" style={{display: this.state.secondCategoryOfTechVisible}} hasFeedback={true}>
               {getFieldDecorator('secondCategoryParentOfTechId', {rules: [{ required: true, message: '请选择检查亚类!' }]})(
                 <Cascader options={this.props.secondCategoryParentOfTechData} placeholder="" allowClear={false}/>
               )}
             </FormItem>
 
-            <FormItem {...formItemLayout} label="检查医院">
+            <FormItem {...formItemLayout} label="检查医院" hasFeedback={true}>
               {getFieldDecorator('hospital', {rules: [{ required: true, message: '请输入检查医院!' }]})(
                 <Input />
               )}
             </FormItem>
 
-            <FormItem {...formItemLayout} label="检查日期">
+            <FormItem {...formItemLayout} label="检查日期" hasFeedback={true}>
               {getFieldDecorator('time', {rules: [{ required: true, message: '请选择检查日期!' }]})(
-                <DatePicker />
+                <DatePicker style={{width: '100%'}}/>
               )}
             </FormItem>
 

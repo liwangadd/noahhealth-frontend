@@ -13,17 +13,17 @@ class ThirdCategoryEditModal_ extends React.Component {
     return (
       <Modal title="修改信息" visible={this.props.visible} onOk={this.props.onConfirm} confirmLoading={this.props.confirmLoading} onCancel={this.props.onCancel}>
         <Form>
-          <FormItem {...formItemLayout} label="名称">
+          <FormItem {...formItemLayout} label="名称" hasFeedback={true}>
             {getFieldDecorator('name', {rules: [{ required: true, message: '请输入名称!' }]})(
             <Input />
             )}
           </FormItem>
-          <FormItem {...formItemLayout} label="系统分类">
+          <FormItem {...formItemLayout} label="系统分类" hasFeedback={true}>
             {getFieldDecorator('systemCategory', {rules: [{ required: true, message: '请输入系统分类!' }]})(
               <Input />
             )}
           </FormItem>
-          <FormItem {...formItemLayout} label="参考值及单位">
+          <FormItem {...formItemLayout} label="参考值及单位" hasFeedback={true}>
             {getFieldDecorator('referenceValue', {rules: [{ required: true, message: '请输入参考值及单位!' }]})(
             <Input />
             )}

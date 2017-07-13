@@ -29,7 +29,7 @@ class OriginResultManage extends React.Component {
 
     //上传扫描件对话框
     uploadPictureModalVisible: false,
-    confirmUploadPictureModalLoading: false,
+    submitLoading: false,
 
     //审核扫描件对话框
     checkPictureModalVisible: false,
@@ -261,12 +261,12 @@ class OriginResultManage extends React.Component {
   }
 
   //提交上传的图片
-  confirmUploadPictureModal = () => {
+  handleSubmitPicture = () => {
 
       console.log('提交一份原始资料,变为待审核', this.state.originResultId);
 
       //显示加载圈
-      this.setState({ confirmUploadPictureModalLoading: true });
+      this.setState({ submitLoading: true });
       $.ajax({
           url : SERVER + '/api/origin/status/' + this.state.originResultId,
           type : 'PUT',
@@ -283,7 +283,7 @@ class OriginResultManage extends React.Component {
               //关闭加载圈、对话框
               this.setState({
                 uploadPictureModalVisible: false,
-                confirmUploadPictureModalLoading: false,
+                submitLoading: false,
               });
 
               message.success(result.reason, 2);
@@ -291,7 +291,7 @@ class OriginResultManage extends React.Component {
             } else {
 
               //关闭加载圈
-              this.setState({ confirmUploadPictureModalLoading: false });
+              this.setState({ submitLoading: false });
               message.error(result.reason, 2);
             }
           }
@@ -464,8 +464,7 @@ class OriginResultManage extends React.Component {
     const originResultColumns = [{
       title: '会员姓名',
       dataIndex: 'userName',
-      key: 'userName',
-      render: (name) => <a>{name}</a>,
+      key: 'userName'
     },{
       title: '上传者',
       dataIndex: 'uploaderName',
@@ -578,7 +577,7 @@ class OriginResultManage extends React.Component {
           </TabPane>
         </Tabs>
         <OriginResultUploadModal ref="uploadForm" visible={this.state.uploadModalVisible} confirmLoading={this.state.confirmUploadModalLoading} onCancel={this.closeUploadModal} onConfirm={this.confirmUploadModal} memberUnderEmployeeData={this.state.memberUnderEmployeeData}/>
-        <OriginResultUploadPictureModal visible={this.state.uploadPictureModalVisible} onCancel={this.closeUploadPictureModal} confirmLoading={this.state.confirmUploadPictureModalLoading}  onConfirm={this.confirmUploadPictureModal} fileList={this.state.fileList} originResultId={this.state.originResultId} onChange={this.handleUploadPictureChange} />
+        <OriginResultUploadPictureModal visible={this.state.uploadPictureModalVisible} onCancel={this.closeUploadPictureModal} submitLoading={this.state.submitLoading}  onSubmit={this.handleSubmitPicture} fileList={this.state.fileList} originResultId={this.state.originResultId} onChange={this.handleUploadPictureChange} />
         <OriginResultCheckPictureModal visible={this.state.checkPictureModalVisible} onCancel={this.closeCheckPictureModal} passLoading={this.state.passLoading} unpassLoading={this.state.unpassLoading}  onPass={this.handlePassPicture} onUnpass={this.handleUnpassPicture} fileList={this.state.fileList} originResultId={this.state.originResultId}/>
         <OriginResultWatchPictureModal visible={this.state.watchPictureModalVisible} onCancel={this.closeWatchPictureModal} fileList={this.state.fileList} />
       </div>

@@ -76,7 +76,7 @@ class ExamResultDetailItem_ extends React.Component {
     //操作栏
     let detailOperationDelete = sessionStorage.getItem(SESSION.ROLE) === ROLE.EMPLOYEE_ADMIN
                                 ?
-                                <Popconfirm title="您确定要删除该条检查记录吗?" onConfirm={() => this.props.onDelete(detail.id)} okText="是" cancelText="取消">
+                                <Popconfirm title="您确定要删除该条检查记录吗?" placement="bottom" onConfirm={() => this.props.onDelete(detail.id)} okText="是" cancelText="取消">
                                   <Button type="danger" size="default" className="delete" loading={this.props.deleteLoading}>删除</Button>
                                 </Popconfirm>
                                 :
@@ -87,13 +87,17 @@ class ExamResultDetailItem_ extends React.Component {
       <div>
         {detailOperationDelete}
         <Button className="gutter" size="default" onClick={() => this.props.onSave(this.props.form, detail.id)} loading={this.props.saveLoading}>保存</Button>
-        <Button size="default" type="primary" onClick={() => this.props.onSubmit(this.props.form, detail.id)} loading={this.props.submitLoading}>提交审核</Button>
+        <Popconfirm title="您确定要提交审核吗?" placement="bottom" onConfirm={() => this.props.onSubmit(this.props.form, detail.id)} okText="是" cancelText="取消">
+          <Button size="default" type="primary" loading={this.props.submitLoading}>提交审核</Button>
+        </Popconfirm>
       </div>;
     else if(detail.status === "待审核")
       detailOperation =
       <div>
         {detailOperationDelete}
-        <Button className="gutter" type="primary" size="default" onClick={() => this.props.onPass(this.props.form, detail.id)} loading={this.props.passLoading}>通过</Button>
+        <Popconfirm title="您确定要通过审核吗?" placement="bottom" onConfirm={() => this.props.onPass(this.props.form, detail.id)} okText="是" cancelText="取消">
+          <Button className="gutter" type="primary" size="default" loading={this.props.passLoading}>通过</Button>
+        </Popconfirm>
         <Popover content={<div><Input value={this.state.unpassReason} onChange={this.changeUnpassReason} placeholder="未通过原因" style={{width:'80%'}}/><Button shape="circle" type="primary" size="small" icon="check" className="unpass-check" onClick={() => this.confirmUnpass(detail.id)}/></div>}
                  title={null}
                  trigger="click"

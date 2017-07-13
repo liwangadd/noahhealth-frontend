@@ -5,7 +5,7 @@ const clearSession = function() {
 
     sessionStorage.removeItem(SESSION.TOKEN);
     sessionStorage.removeItem(SESSION.USER_ID);
-    sessionStorage.removeItem(SESSION.PHONE);
+    sessionStorage.removeItem(SESSION.USERNAME);
     sessionStorage.removeItem(SESSION.ROLE);
     sessionStorage.removeItem(SESSION.NAME);
     sessionStorage.removeItem(SESSION.EXPIRED_TIME);

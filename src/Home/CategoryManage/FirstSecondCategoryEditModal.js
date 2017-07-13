@@ -13,7 +13,7 @@ class FirstSecondCategoryEditModal_ extends React.Component {
     return (
       <Modal title="修改信息" visible={this.props.visible} onOk={this.props.onConfirm} confirmLoading={this.props.confirmLoading} onCancel={this.props.onCancel}>
         <Form>
-          <FormItem {...formItemLayout} label="名称">
+          <FormItem {...formItemLayout} label="名称" hasFeedback={true}>
             {getFieldDecorator('name', {rules: [{ required: true, message: '请输入名称!' }]})(
             <Input />
             )}

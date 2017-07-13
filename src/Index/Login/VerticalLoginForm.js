@@ -31,7 +31,7 @@ class VerticalLoginForm_ extends React.Component {
                     //保存状态信息
                     sessionStorage.setItem(SESSION.TOKEN, result.content.token);
                     sessionStorage.setItem(SESSION.USER_ID, result.content.id);
-                    sessionStorage.setItem(SESSION.PHONE, result.content.phone);
+                    sessionStorage.setItem(SESSION.USERNAME, result.content.username);
                     sessionStorage.setItem(SESSION.ROLE, result.content.role);
                     sessionStorage.setItem(SESSION.NAME, result.content.name);
                     sessionStorage.setItem(SESSION.AVATAR, result.content.avatar);
@@ -78,13 +78,13 @@ class VerticalLoginForm_ extends React.Component {
           <span>{ this.props.roleType === "member" ? "医海慈航会员登录" : "医海慈航职员登录"}</span>
         </div>
         <Form onSubmit={this.handleLogin} className="login-form">
-          <FormItem {...formItemLayoutWithoutLabel}>
+          <FormItem {...formItemLayoutWithoutLabel} hasFeedback={true}>
               {getFieldDecorator('phone', { rules: [{ required: true, message: '请输入用户名!' }],
               })(
               <Input prefix={<Icon type="user" style={{ fontSize: 13 }} />} placeholder="用户名" />
               )}
           </FormItem>
-          <FormItem {...formItemLayoutWithoutLabel}>
+          <FormItem {...formItemLayoutWithoutLabel} hasFeedback={true}>
               {getFieldDecorator('password', {
               rules: [{ required: true, message: '请输入密码!' }],
               })(

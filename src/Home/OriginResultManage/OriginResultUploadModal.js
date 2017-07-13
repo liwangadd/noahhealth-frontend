@@ -18,7 +18,7 @@ class OriginResultUploadModal_ extends React.Component {
         <Modal title="上传原始资料" visible={this.props.visible} onOk={this.props.onConfirm} confirmLoading={this.props.confirmLoading} onCancel={this.props.onCancel}>
           <Form className="add-form">
 
-            <FormItem {...formItemLayout} label="会员姓名">
+            <FormItem {...formItemLayout} label="会员姓名" hasFeedback={true}>
               {getFieldDecorator('userId', {rules: [{ required: true, message: '请输入会员姓名!' }]})(
                 <Select showSearch placeholder="" optionFilterProp="children"  filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}>
                   {memberNameOptions}
@@ -26,9 +26,9 @@ class OriginResultUploadModal_ extends React.Component {
               )}
             </FormItem>
 
-            <FormItem {...formItemLayout} label="日期">
+            <FormItem {...formItemLayout} label="日期" hasFeedback={true}>
               {getFieldDecorator('time', {rules: [{ required: true, message: '请选择日期!' }]})(
-                <DatePicker />
+                <DatePicker style={{width: '100%'}}/>
               )}
             </FormItem>
 
