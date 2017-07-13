@@ -27,7 +27,7 @@ class OriginResultCheckPictureModal_ extends React.Component {
         <Modal title="审核扫描件" visible={this.props.visible} onCancel={this.props.onCancel}
           footer={<div>
                     <Button type="primary" size="large" onClick={this.props.onPass} loading={this.props.passLoading}>通过</Button>
-                    <Popover content={<div><Input value={this.state.unpassReason} onChange={this.changeUnpassReason} placeholder="未通过原因" style={{width:'80%'}}/><a onClick={this.confirmUnpass} className="unpass-confirm">确定</a></div>}
+                    <Popover content={<div><Input value={this.state.unpassReason} onChange={this.changeUnpassReason} placeholder="未通过原因" style={{width:'80%'}}/><Button shape="circle" type="primary" size="small" icon="check" className="unpass-check" onClick={this.confirmUnpass}/></div>}
                              title={null}
                              trigger="click"
                              placement="bottom"

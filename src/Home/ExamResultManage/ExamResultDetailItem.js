@@ -94,7 +94,7 @@ class ExamResultDetailItem_ extends React.Component {
       <div>
         {detailOperationDelete}
         <Button className="gutter" type="primary" size="default" onClick={() => this.props.onPass(this.props.form, detail.id)} loading={this.props.passLoading}>通过</Button>
-        <Popover content={<div><Input value={this.state.unpassReason} onChange={this.changeUnpassReason} placeholder="未通过原因" style={{width:'80%'}}/><Button shape="circle" type="primary" size="small" icon="check" onClick={() => this.confirmUnpass(detail.id)} className="unpass-check"/></div>}
+        <Popover content={<div><Input value={this.state.unpassReason} onChange={this.changeUnpassReason} placeholder="未通过原因" style={{width:'80%'}}/><Button shape="circle" type="primary" size="small" icon="check" className="unpass-check" onClick={() => this.confirmUnpass(detail.id)}/></div>}
                  title={null}
                  trigger="click"
                  placement="bottom"
