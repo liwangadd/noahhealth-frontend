@@ -187,7 +187,7 @@ class SecondCategoryManage extends React.Component {
         <span>
           <a onClick={() => this.showEditModal(record)}>修改</a>
           <span className="ant-divider" />
-          <Popconfirm title="您确定要删除该亚类吗?" onConfirm={() => this.handleDelete(record)} okText="是" cancelText="取消">
+          <Popconfirm title="您确定要删除该亚类吗?" onConfirm={() => this.handleDelete(record)}>
             <a className='operation-delete'>删除</a>
           </Popconfirm>
         </span>

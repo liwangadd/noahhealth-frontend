@@ -11,7 +11,7 @@ class OriginResultUploadPictureModal_ extends React.Component {
     return (
         <Modal title="上传扫描件" visible={this.props.visible} onCancel={this.props.onCancel}
                footer={
-                 <Popconfirm title="您确定要提交审核吗?" placement="bottom" onConfirm={this.props.onSubmit} okText="是" cancelText="取消">
+                 <Popconfirm title="您确定要提交审核吗?" placement="bottom" onConfirm={this.props.onSubmit}>
                    <Button type="primary" size="large" loading={this.props.submitLoading}>提交审核</Button>
                  </Popconfirm>}>
           <Upload name="file"

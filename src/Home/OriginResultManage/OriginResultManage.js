@@ -557,7 +557,7 @@ class OriginResultManage extends React.Component {
           {
             ((record.status === '上传中' || record.status === '未通过') && role === ROLE.EMPLOYEE_ARCHIVER) || role === ROLE.EMPLOYEE_ADMIN
             ?
-            <Popconfirm title="您确定要删除该条原始资料吗?" onConfirm={() => this.handleDeleteOriginResult(record.id)} okText="是" cancelText="取消">
+            <Popconfirm title="您确定要删除该条原始资料吗?" onConfirm={() => this.handleDeleteOriginResult(record.id)}>
               <a className='operation-delete'>删除</a>
             </Popconfirm>
             :

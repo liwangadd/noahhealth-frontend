@@ -634,7 +634,7 @@ class UserManage extends React.Component {
             ?
             <span>
               <span className="ant-divider" />
-              <Popconfirm title="您确定要删除该会员吗?" onConfirm={() => this.handleDeleteMember(record)} okText="是" cancelText="取消">
+              <Popconfirm title="您确定要删除该会员吗?" onConfirm={() => this.handleDeleteMember(record)}>
                 <a className='user-table-delete'>删除</a>
               </Popconfirm>
             </span>
@@ -673,7 +673,7 @@ class UserManage extends React.Component {
             ?
             <span>
               <span className="ant-divider" />
-              <Popconfirm title="您确定要删除该职员吗?" onConfirm={() => this.handleDeleteEmployee(record)} okText="是" cancelText="取消">
+              <Popconfirm title="您确定要删除该职员吗?" onConfirm={() => this.handleDeleteEmployee(record)}>
                 <a className='user-table-delete'>删除</a>
               </Popconfirm>
             </span>

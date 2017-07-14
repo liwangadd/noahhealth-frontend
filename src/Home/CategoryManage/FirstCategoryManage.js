@@ -438,7 +438,7 @@ class FirstCategoryManage extends React.Component {
         <span>
           <a onClick={() => this.showEditModal(record)}>修改</a>
           <span className="ant-divider" />
-          <Popconfirm title="您确定要删除该分类吗?" onConfirm={() => this.handleDelete(record, "化验")} okText="是" cancelText="取消">
+          <Popconfirm title="您确定要删除该分类吗?" onConfirm={() => this.handleDelete(record, "化验")}>
             <a className='operation-delete'>删除</a>
           </Popconfirm>
         </span>
@@ -457,7 +457,7 @@ class FirstCategoryManage extends React.Component {
         <span>
           <a onClick={() => this.showEditModal(record)}>修改</a>
           <span className="ant-divider" />
-          <Popconfirm title="您确定要删除该分类吗?" onConfirm={() => this.handleDelete(record, "医技")} okText="是" cancelText="取消">
+          <Popconfirm title="您确定要删除该分类吗?" onConfirm={() => this.handleDelete(record, "医技")}>
             <a className='operation-delete'>删除</a>
           </Popconfirm>
         </span>

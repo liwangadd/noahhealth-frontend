@@ -1,5 +1,5 @@
 import './ExamResultManage.css';
-import {SERVER, SESSION, RESULT, PAGE_SIZE, ROLE, FILE_SERVER, ROUTE, LOADING_DELAY_TIME} from './../../App/PublicConstant.js';
+import {SERVER, SESSION, RESULT, ROLE, FILE_SERVER, ROUTE, LOADING_DELAY_TIME} from './../../App/PublicConstant.js';
 import {formatDate} from './../../App/PublicUtil.js';
 import {isEmployee, isAdviser} from './../../App/PublicMethod.js';
 import ExamResultDetailAddModal from './ExamResultDetailAddModal.js';
@@ -15,28 +15,19 @@ class ExamResultDetail extends React.Component {
 
     pageLoading: true,
 
-    //执行情况
-    examResultData: [],
-    examResultTableLoading: false,
-    examResultPager: {pageSize: PAGE_SIZE, total: 0},
-
     //添加检查记录对话框
     addModalVisible: false,
     confirmAddModalLoading: false,
-    memberUnderEmployeeData: [],
 
-    //录入检查结果对话框
-    inputDetailModalVisible: false,
+    //录入检查结果
     saveLoading: false,
     submitLoading: false,
 
-    //审核检查结果对话框
-    checkDetailModalVisible: false,
+    //审核检查结果
     passLoading: false,
     unpassLoading: false,
 
-    //查看检查结果对话框
-    watchDetailModalVisible: false,
+    //查看检查结果
     downloadLoading: false,
 
     //删除
@@ -227,7 +218,7 @@ class ExamResultDetail extends React.Component {
           if(result.code === RESULT.SUCCESS) {
 
             //关闭加载圈、对话框
-            this.setState({ checkDetailModalVisible: false, passLoading: false });
+            this.setState({ passLoading: false });
 
             this.requestExamResultDetailOfMember(this.props.params.memberId);
             message.success(result.reason, 2);
@@ -259,7 +250,7 @@ class ExamResultDetail extends React.Component {
           if(result.code === RESULT.SUCCESS) {
 
             //关闭加载圈、对话框
-            this.setState({ checkDetailModalVisible: false, unpassLoading: false});
+            this.setState({ unpassLoading: false});
 
             this.requestExamResultDetailOfMember(this.props.params.memberId);
             message.success(result.reason, 2);
