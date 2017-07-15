@@ -1,12 +1,12 @@
 
 //服务器地址
 //const SERVER = 'http://localhost:8080' //yaochenkun
-//const SERVER = 'http://10.109.247.127:8080' //lab
-const SERVER = 'http://47.92.91.99:8080' //alicloud
+const SERVER = 'http://10.109.247.127:8080' //lab
+//const SERVER = 'http://47.92.91.99:8080' //alicloud
 
 //文件服务器地址
-//const FILE_SERVER = 'http://10.109.247.127:8088' //lab
-const FILE_SERVER = 'http://47.92.91.99:8088' //alicloud
+const FILE_SERVER = 'http://10.109.247.127:8088' //lab
+//const FILE_SERVER = 'http://47.92.91.99:8088' //alicloud
 
 
 
@@ -34,6 +34,8 @@ const ROUTE = {
   MEMBER_LOGIN: {URL: '/member_login', URL_PREFIX:'/member_login', PERMISSION: []},
   EMPLOYEE_LOGIN: {URL: '/employee_login', URL_PREFIX:'/employee_login', PERMISSION: []},
   REGISTER: {URL: '/register', URL_PREFIX:'/register', PERMISSION: []},
+  FIND_PASSWORD: {URL: '/find_password/:roleType', URL_PREFIX:'/find_password', PERMISSION: []},
+
   HOME: {URL:'/home/:menuKey', URL_PREFIX:'/home', MENU_KEY: '1', PERMISSION: []},
 
     WELCOME: {URL:'/home/:menuKey', URL_PREFIX:'/home', MENU_KEY: '1', PERMISSION: []},
@@ -46,7 +48,7 @@ const ROUTE = {
     ORIGIN_RESULT_MANAGE: {URL:'/origin_result_manage/:menuKey', URL_PREFIX:'/origin_result_manage', MENU_KEY: '4', PERMISSION: [ROLE.EMPLOYEE_ADMIN, ROLE.EMPLOYEE_ARCHIVE_MANAGER, ROLE.EMPLOYEE_ARCHIVER, ROLE.EMPLOYEE_ADVISE_MANAGER, ROLE.EMPLOYEE_ADVISER, ROLE.MEMBER_1, ROLE.MEMBER_2, ROLE.MEMBER_3]},
 
     EXAM_RESULT_MANAGE: {URL:'/exam_result_manage/:menuKey', URL_PREFIX:'/exam_result_manage', MENU_KEY: '5', PERMISSION: [ROLE.EMPLOYEE_ADMIN, ROLE.EMPLOYEE_ARCHIVE_MANAGER, ROLE.EMPLOYEE_ARCHIVER, ROLE.EMPLOYEE_ADVISE_MANAGER, ROLE.EMPLOYEE_ADVISER]},
-    EXAM_RESULT_DETAIL: {URL:'/exam_result_detail/:menuKey/:memberId/:memberName', URL_PREFIX:'/exam_result_detail', MENU_KEY: '5', PERMISSION: [ROLE.EMPLOYEE_ADMIN, ROLE.EMPLOYEE_ARCHIVE_MANAGER, ROLE.EMPLOYEE_ARCHIVER, ROLE.EMPLOYEE_ADVISE_MANAGER, ROLE.EMPLOYEE_ADVISER, ROLE.MEMBER_2, ROLE.MEMBER_3]}
+    EXAM_RESULT_DETAIL: {URL:'/exam_result_detail/:menuKey/:tabKey/:memberId/:memberName', URL_PREFIX:'/exam_result_detail', MENU_KEY: '5', PERMISSION: [ROLE.EMPLOYEE_ADMIN, ROLE.EMPLOYEE_ARCHIVE_MANAGER, ROLE.EMPLOYEE_ARCHIVER, ROLE.EMPLOYEE_ADVISE_MANAGER, ROLE.EMPLOYEE_ADVISER, ROLE.MEMBER_2, ROLE.MEMBER_3]}
 }
 
 //session中常量

@@ -2,7 +2,7 @@ import {SERVER, ROUTE, SESSION, RESULT} from './../../App/PublicConstant.js';
 import React from 'react';
 import {Form, Icon, Input, Button, message, Card} from 'antd';
 import $ from 'jquery';
-import { browserHistory } from 'react-router';
+import { browserHistory, Link } from 'react-router';
 const FormItem = Form.Item;
 
 
@@ -61,11 +61,6 @@ class VerticalLoginForm_ extends React.Component {
     });
   }
 
-  handleRegister = (e) => {
-      e.preventDefault();
-      browserHistory.push(ROUTE.REGISTER.URL);
-  }
-
   render() {
 
     const formItemLayoutWithoutLabel = {wrapperCol: { xs: { span: 24 , offset: 12}, sm: { span: 18 , offset: 3},}};
@@ -84,12 +79,14 @@ class VerticalLoginForm_ extends React.Component {
               <Input prefix={<Icon type="user" style={{ fontSize: 13 }} />} placeholder="用户名" />
               )}
           </FormItem>
-          <FormItem {...formItemLayoutWithoutLabel} hasFeedback={true}>
+          <FormItem {...formItemLayoutWithoutLabel} hasFeedback={true} style={{marginBottom: 10}}>
               {getFieldDecorator('password', {
               rules: [{ required: true, message: '请输入密码!' }],
               })(
               <Input prefix={<Icon type="lock" style={{ fontSize: 13 }} />} type="password" placeholder="密码" />
               )}
+
+              <Link to={ROUTE.FIND_PASSWORD.URL_PREFIX + "/" + this.props.roleType} className="find-password-text">忘记密码?</Link>
           </FormItem>
           <FormItem {...formItemLayoutWithoutLabel}>
               <Button type="primary" htmlType="submit" className="login-form-button" style={{width:'100%'}}>
@@ -98,7 +95,7 @@ class VerticalLoginForm_ extends React.Component {
               {
                 this.props.roleType === "member"
                 ?
-                <a href="" onClick={this.handleRegister} style={{float:'right'}}>注册</a>
+                <Link to={ROUTE.REGISTER.URL} style={{float:'right'}}>注册</Link>
                 :
                 null
               }

@@ -3,6 +3,7 @@ import React from 'react';
 import { Layout, Spin} from 'antd';
 import VerticalRegisterForm from './VerticalRegisterForm.js';
 import IndexHeader from './../IndexHeader.js';
+import IndexFooter from './../IndexFooter.js';
 const { Header, Content} = Layout;
 
 class Register extends React.Component {
@@ -33,12 +34,10 @@ class Register extends React.Component {
         <Spin spinning={this.state.loading} delay={LOADING_DELAY_TIME} tip='注册中'>
           <Layout>
             <IndexHeader />
-            <Content className="index-register-content">
+            <Content className="index-content">
               <VerticalRegisterForm  handleLoading={this.handleLoading}/>
             </Content>
-            <Header className='footer footer-affix'>
-              医海慈航 ©2017 Created by BUPT
-            </Header>
+            <IndexFooter />
           </Layout>
         </Spin>
     );

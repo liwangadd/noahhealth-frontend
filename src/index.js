@@ -4,6 +4,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App/App.js';
 import Main from './Index/Main/Main.js';
+import FindPassword from './Index/FindPassword/FindPassword.js';
 import MemberLogin from './Index/Login/MemberLogin.js';
 import EmployeeLogin from './Index/Login/EmployeeLogin.js';
 import Register from './Index/Register/Register.js';
@@ -49,6 +50,7 @@ const certifyAccess = function(nextState, replace){
       case ROUTE.MEMBER_LOGIN.URL_PREFIX:certifyRole(replace, role, ROUTE.MEMBER_LOGIN.PERMISSION);break;
       case ROUTE.EMPLOYEE_LOGIN.URL_PREFIX:certifyRole(replace, role, ROUTE.EMPLOYEE_LOGIN.PERMISSION);break;
       case ROUTE.REGISTER.URL_PREFIX:certifyRole(replace, role, ROUTE.REGISTER.PERMISSION);break;
+      case ROUTE.FIND_PASSWORD.URL_PREFIX:certifyRole(replace, role, ROUTE.FIND_PASSWORD.PERMISSION);break;
 
       case ROUTE.HOME.URL_PREFIX:certifyRole(replace, role, ROUTE.HOME.PERMISSION);break;
 
@@ -113,6 +115,7 @@ class AppRouter extends React.Component {
                 <Route path={ROUTE.MEMBER_LOGIN.URL} component={MemberLogin}/>
                 <Route path={ROUTE.EMPLOYEE_LOGIN.URL} component={EmployeeLogin}/>
                 <Route path={ROUTE.REGISTER.URL} component={Register}/>
+                <Route path={ROUTE.FIND_PASSWORD.URL} component={FindPassword}/>
 
                 <Route path="*"  onEnter={certifyAccess} />
               </Route>

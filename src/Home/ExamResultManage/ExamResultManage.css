@@ -71,9 +71,20 @@
 }
 
 .exam-result-detail-anchor{
-
-  position: fixed;
-  top: 150px;
+  position: absolute;
   left: 86%;
   z-index:10;
 }
+
+.exam-result-detail-info {
+  margin-left: 2px;
+  margin-top: 20px;
+}
+
+
+/*.exam-result-detail-search-form {
+  padding: 24px;
+  background: #fbfbfb;
+  border: 1px solid #d9d9d9;
+  border-radius: 6px;
+}*/

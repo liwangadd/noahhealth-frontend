@@ -180,9 +180,11 @@ class ProfileEditModal_ extends React.Component {
               url : SERVER + '/api/auth/send_sms',
               type : 'POST',
               contentType: 'application/json',
-              data : JSON.stringify({phone : values.phone}),
+              data : JSON.stringify({action: '修改手机', phone : values.phone}),
               dataType : 'json',
               success : (result) => {
+
+                if(result.code === RESULT.SUCCESS) {
 
                   message.success(result.reason, 2);
                   var timer = setInterval(() => {
@@ -202,6 +204,10 @@ class ProfileEditModal_ extends React.Component {
                           clearInterval(timer);
                       }
                   }, 1000);
+                } else {
+
+                  message.error(result.reason, 2);
+                }
               },
               error : () => message.error("内部错误", 2)
             });

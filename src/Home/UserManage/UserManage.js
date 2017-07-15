@@ -608,7 +608,7 @@ class UserManage extends React.Component {
       dataIndex: 'name',
       key: 'name'
     }, {
-      title: '用户名',
+      title: '手机',
       dataIndex: 'username',
       key: 'username',
     }, {
@@ -651,7 +651,7 @@ class UserManage extends React.Component {
       dataIndex: 'name',
       key: 'name'
     }, {
-      title: '用户名',
+      title: '手机',
       dataIndex: 'username',
       key: 'username',
     }, {

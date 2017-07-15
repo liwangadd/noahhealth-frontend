@@ -51,7 +51,7 @@ class ExamResultDetailAddModal_ extends React.Component {
             </FormItem>
 
             <FormItem {...formItemLayout} label="检查医院" hasFeedback={true}>
-              {getFieldDecorator('hospital', {rules: [{ required: true, message: '请输入检查医院!' }]})(
+              {getFieldDecorator('hospital', {rules: [{ required: true, message: '请输入检查医院!' }], initialValue: "301医院"})(
                 <Input />
               )}
             </FormItem>

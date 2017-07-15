@@ -2,7 +2,7 @@ import {SERVER, ROUTE, RESULT} from './../../App/PublicConstant.js';
 import {REGEX} from './../../App/PublicRegex.js';
 import React from 'react';
 import {Form, Icon, Input, Button, message,Card} from 'antd';
-import { browserHistory } from 'react-router';
+import { browserHistory, Link} from 'react-router';
 import $ from 'jquery';
 const FormItem = Form.Item;
 
@@ -65,9 +65,11 @@ class VerticalRegisterForm_ extends React.Component {
               url : SERVER + '/api/auth/send_sms',
               type : 'POST',
               contentType: 'application/json',
-              data : JSON.stringify({phone : values.phone}),
+              data : JSON.stringify({action: '注册', phone : values.phone}),
               dataType : 'json',
               success : (result) => {
+
+                if(result.code === RESULT.SUCCESS) {
 
                   message.success(result.reason, 2);
                   var timer = setInterval(() => {
@@ -87,18 +89,16 @@ class VerticalRegisterForm_ extends React.Component {
                           clearInterval(timer);
                       }
                   }, 1000);
+                } else {
+
+                  message.error(result.reason, 2);
+                }
               },
               error : () => message.error("内部错误", 2)
             });
           }
       });
   }
-
-  handleToLoginPage = (e) => {
-      e.preventDefault();
-      browserHistory.push(ROUTE.MEMBER_LOGIN.URL);
-  }
-
 
   handleConfirmPassword = (rule, value, callback) => {
 
@@ -149,7 +149,7 @@ class VerticalRegisterForm_ extends React.Component {
               )}
           </FormItem>
 
-          <FormItem {...formItemLayoutWithoutLabel} hasFeedback={true}>
+          <FormItem {...formItemLayoutWithoutLabel}>
               {getFieldDecorator('inputCode')(
               <Input prefix={<Icon type="mail" style={{ fontSize: 13 }} />} placeholder="验证码" style={{width:'55%', float:'left'}}/>
               )}
@@ -166,7 +166,7 @@ class VerticalRegisterForm_ extends React.Component {
               <Button type="primary" htmlType="submit" className="login-form-button" style={{width:'100%'}}>
                   注&nbsp;&nbsp;册
               </Button>
-              <a href="" onClick={this.handleToLoginPage} style={{float:'right'}}>已有账号?</a>
+              <Link to={ROUTE.MEMBER_LOGIN.URL} style={{float:'right'}}>已有账号?</Link>
           </FormItem>
         </Form>
       </Card>

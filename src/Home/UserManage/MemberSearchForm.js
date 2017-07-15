@@ -16,6 +16,7 @@ class MemberSearchForm_ extends React.Component {
 
   handleReset = () => {
     this.props.form.resetFields();
+    this.props.handleSearchMemberList(1);
   }
 
   toggle = () => {
@@ -51,10 +52,10 @@ class MemberSearchForm_ extends React.Component {
                 initialValue: '全部'
               })(
                 <Select>
+                  <Option value="">全部</Option>
                   <Option value={ROLE.MEMBER_1}>{ROLE.MEMBER_1}</Option>
                   <Option value={ROLE.MEMBER_2}>{ROLE.MEMBER_2}</Option>
                   <Option value={ROLE.MEMBER_3}>{ROLE.MEMBER_3}</Option>
-                  <Option value="">全部</Option>
                 </Select>
               )}
             </FormItem>

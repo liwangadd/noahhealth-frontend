@@ -16,6 +16,7 @@ class EmployeeSearchForm_ extends React.Component {
 
   handleReset = () => {
     this.props.form.resetFields();
+    this.props.handleSearchEmployeeList(1);
   }
 
   toggle = () => {
@@ -59,8 +60,8 @@ class EmployeeSearchForm_ extends React.Component {
                 initialValue: '全部'
               })(
                 <Select>
-                  {roleOptions}
                   <Option value="">全部</Option>
+                  {roleOptions}
                 </Select>
               )}
             </FormItem>

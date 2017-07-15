@@ -5,8 +5,8 @@ import React from 'react';
 import {Tabs, Table, message, BackTop} from 'antd';
 import {Link} from 'react-router';
 import $ from 'jquery';
-
 const TabPane = Tabs.TabPane;
+
 
 class ExamResultManage extends React.Component {
 
@@ -75,6 +75,14 @@ class ExamResultManage extends React.Component {
       dataIndex: 'name',
       key: 'name'
     },{
+      title: '所属顾问',
+      dataIndex: 'staffId',
+      key: 'staffId'
+    },{
+      title: '所属顾问主管',
+      dataIndex: 'staffMgrId',
+      key: 'staffMgrId'
+    },{
       title: '级别',
       dataIndex: 'role',
       key: 'role'
@@ -83,10 +91,11 @@ class ExamResultManage extends React.Component {
       key: 'action',
       render: (record) => (
         <span>
-          <Link to={ROUTE.EXAM_RESULT_DETAIL.URL_PREFIX + "/" + ROUTE.EXAM_RESULT_DETAIL.MENU_KEY + "/" + record.id + "/" + record.name}>查看详情</Link>
+          <Link to={ROUTE.EXAM_RESULT_DETAIL.URL_PREFIX + "/" + ROUTE.EXAM_RESULT_DETAIL.MENU_KEY + "/1/" + record.id + "/" + record.name}>查看详情</Link>
         </span>
       )
     }];
+
 
     return (
       <div>

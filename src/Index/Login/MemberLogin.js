@@ -3,6 +3,7 @@ import React from 'react';
 import { Layout, Spin} from 'antd';
 import VerticalLoginForm from './VerticalLoginForm.js';
 import IndexHeader from './../IndexHeader.js';
+import IndexFooter from './../IndexFooter.js';
 const { Header, Content} = Layout;
 
 class MemberLogin extends React.Component {
@@ -28,12 +29,10 @@ class MemberLogin extends React.Component {
         <Spin spinning={this.state.loading} delay={LOADING_DELAY_TIME} tip='登录中'>
           <Layout>
             <IndexHeader />
-            <Content className="index-login-content">
+            <Content className="index-content">
                 <VerticalLoginForm handleLoading={this.handleLoading} roleType="member"/>
             </Content>
-            <Header className='footer footer-affix'>
-              医海慈航 ©2017 Created by BUPT
-            </Header>
+            <IndexFooter />
           </Layout>
         </Spin>
     );

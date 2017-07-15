@@ -4,10 +4,13 @@ import {formatDate} from './../../App/PublicUtil.js';
 import {isEmployee, isAdviser} from './../../App/PublicMethod.js';
 import ExamResultDetailAddModal from './ExamResultDetailAddModal.js';
 import ExamResultDetailItem from './ExamResultDetailItem.js';
+import ExamResultDetailSearchForm from './ExamResultDetailSearchForm.js';
 import React from 'react';
-import {message, Button, BackTop, Breadcrumb, Timeline, Anchor, Alert, Spin} from 'antd';
+import {message, Button, BackTop, Breadcrumb, Timeline, Anchor, Alert, Spin, Tabs} from 'antd';
 import {Link} from 'react-router';
 import $ from 'jquery';
+
+const TabPane = Tabs.TabPane;
 
 class ExamResultDetail extends React.Component {
 
@@ -39,7 +42,10 @@ class ExamResultDetail extends React.Component {
 
 
     examResultDetailData: [],
-    examResultDetailItems: null
+    examResultDetailItems: null,
+
+    secondCategoryParentOfAssayData: [],
+    secondCategoryParentOfTechData: []
   };
 
 
@@ -360,7 +366,7 @@ class ExamResultDetail extends React.Component {
                 }
 
                 if(type === "化验") {
-
+                  console.log(secondCategoryParentData);
                   this.setState({secondCategoryParentOfAssayData: secondCategoryParentData});
 
                   if(this.refs.addForm == null) return;
@@ -465,36 +471,38 @@ class ExamResultDetail extends React.Component {
     const {examResultDetailData} = this.state;
     const examResultDetailAnchors = examResultDetailData.map((detail, index) => <Anchor.Link href={"#" + detail.id.toString()} key={index} title={detail.secondName + " " + formatDate(detail.time)}/>);
 
+
     return (
       <Spin spinning={this.state.pageLoading} delay={LOADING_DELAY_TIME} tip='加载中'>
         <BackTop visibilityHeight="200"/>
         {
           isEmployee(role)
           ?
-          <Breadcrumb separator=">" className="category-path" style={{marginBottom:40}}>
+          <Breadcrumb separator=">" className="category-path">
             <Breadcrumb.Item><Link to={ROUTE.EXAM_RESULT_MANAGE.URL_PREFIX + "/" + ROUTE.EXAM_RESULT_MANAGE.MENU_KEY}>首页</Link></Breadcrumb.Item>
             <Breadcrumb.Item>{this.props.params.memberName}</Breadcrumb.Item>
-            {
-              role === ROLE.EMPLOYEE_ARCHIVER || role === ROLE.EMPLOYEE_ADMIN
-              ?
-              <Breadcrumb.Item style={{float:'right'}}><Button type="primary" onClick={this.showAddModal}>添加检查记录</Button></Breadcrumb.Item>
-              :
-              null
-            }
           </Breadcrumb>
           :
           null
         }
         <ExamResultDetailAddModal ref="addForm" visible={this.state.addModalVisible} confirmLoading={this.state.confirmAddModalLoading} onCancel={this.closeAddModal} onConfirm={this.confirmAddModal} secondCategoryParentOfAssayData={this.state.secondCategoryParentOfAssayData} secondCategoryParentOfTechData={this.state.secondCategoryParentOfTechData}/>
 
-        <Anchor className="exam-result-detail-anchor" offsetTop={10}>
-          {examResultDetailAnchors}
-        </Anchor>
 
-
-        <Timeline pending={examResultDetailData.length <= 0 ? null : <h4>已到底部</h4>}>
-          {this.state.examResultDetailItems}
-        </Timeline>
+        <Tabs defaultActiveKey={this.props.params.tabKey} tabBarExtraContent={role === ROLE.EMPLOYEE_ARCHIVER || role === ROLE.EMPLOYEE_ADMIN ? <Button type="primary" onClick={this.showAddModal}>添加检查记录</Button> : null}>
+          <TabPane tab="化验数据" key={"1"}>
+            <ExamResultDetailSearchForm ref="searchForm" handleSearchOriginResultList={this.handleSearchOriginResultList} secondCategoryParentData={this.state.secondCategoryParentOfAssayData}/>
+            <div className="exam-result-detail-info">
+              <Anchor className="exam-result-detail-anchor">
+                {examResultDetailAnchors}
+              </Anchor>
+              <Timeline pending={examResultDetailData.length <= 0 ? null : <h4>已到底部</h4>}>
+                {this.state.examResultDetailItems}
+              </Timeline>
+            </div>
+          </TabPane>
+          <TabPane tab="医技数据" key={"2"}>
+          </TabPane>
+        </Tabs>
       </Spin>
     );
   }
