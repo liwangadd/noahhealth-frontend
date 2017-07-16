@@ -12,12 +12,12 @@ class ExamResultDetailSearchForm_ extends React.Component {
 
   handleSearch = (e) => {
     e.preventDefault();
-    this.props.handleSearchOriginResultList(1);
+    this.props.requestExamResultDetailOfMember(this.props.type);
   }
 
   handleReset = () => {
     this.props.form.resetFields();
-    this.props.handleSearchOriginResultList(1);
+    this.props.requestExamResultDetailOfMember(this.props.type);
   }
 
   toggle = () => {

@@ -91,7 +91,7 @@ class ExamResultManage extends React.Component {
       key: 'action',
       render: (record) => (
         <span>
-          <Link to={ROUTE.EXAM_RESULT_DETAIL.URL_PREFIX + "/" + ROUTE.EXAM_RESULT_DETAIL.MENU_KEY + "/1/" + record.id + "/" + record.name}>查看详情</Link>
+          <Link to={ROUTE.EXAM_RESULT_DETAIL.URL_PREFIX + "/" + ROUTE.EXAM_RESULT_DETAIL.MENU_KEY + "/" + record.id + "/" + record.name}>查看详情</Link>
         </span>
       )
     }];

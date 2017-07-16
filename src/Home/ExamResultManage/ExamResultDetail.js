@@ -36,16 +36,18 @@ class ExamResultDetail extends React.Component {
     //删除
     deleteLoading: false,
 
-    examResultId: -1,
     examResultSecondName: '',
     examResultDetailTableLoading: false,
 
-
-    examResultDetailData: [],
-    examResultDetailItems: null,
+    //正文 化验/医技 卡片/表格 内容
+    examResultDetailOfAssayData: [],
+    examResultDetailOfAssayItems: null,
+    examResultDetailOfTechData: [],
+    examResultDetailOfTechItems: null,
 
     secondCategoryParentOfAssayData: [],
-    secondCategoryParentOfTechData: []
+    secondCategoryParentOfTechData: [],
+    type: '化验'
   };
 
 
@@ -84,7 +86,7 @@ class ExamResultDetail extends React.Component {
 
                 //关闭加载圈、对话框
                 this.setState({ addModalVisible: false, confirmAddModalLoading: false});
-                this.requestExamResultDetailOfMember(this.props.params.memberId);
+                this.requestExamResultDetailOfMember(this.state.type);
 
                 message.success(result.reason, 2);
               } else {
@@ -96,37 +98,6 @@ class ExamResultDetail extends React.Component {
             }
         });
       }
-    });
-  }
-
-  /**
-  * 录入检查结果对话框
-  **/
-
-  requestInputedDetails = (examResultId, secondName) => {
-
-    console.log("拉取第" + examResultId + "号已录入了的检查结果");
-
-    this.setState({ examResultDetailTableLoading: true});
-    $.ajax({
-        url : SERVER + '/api/input/' + examResultId,
-        type : 'GET',
-        dataType : 'json',
-        beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
-        success : (result) => {
-
-          console.log(result);
-          if(result.code !== RESULT.SUCCESS) {
-            message.error(result.reason, 2);
-            return;
-          }
-
-          //更新状态
-          this.setState({examResultDetailTableLoading: false,
-                         examResultId: examResultId,
-                         examResultSecondName: secondName,
-                         examResultDetailData: result.content});
-        }
     });
   }
 
@@ -190,7 +161,7 @@ class ExamResultDetail extends React.Component {
             this.setState({ submitLoading: false});
 
             //重新查一遍
-            this.requestExamResultDetailOfMember(this.props.params.memberId);
+            this.requestExamResultDetailOfMember(this.state.type);
             message.success(result.reason, 2);
           } else {
 
@@ -226,7 +197,7 @@ class ExamResultDetail extends React.Component {
             //关闭加载圈、对话框
             this.setState({ passLoading: false });
 
-            this.requestExamResultDetailOfMember(this.props.params.memberId);
+            this.requestExamResultDetailOfMember(this.state.type);
             message.success(result.reason, 2);
           } else {
 
@@ -258,7 +229,7 @@ class ExamResultDetail extends React.Component {
             //关闭加载圈、对话框
             this.setState({ unpassLoading: false});
 
-            this.requestExamResultDetailOfMember(this.props.params.memberId);
+            this.requestExamResultDetailOfMember(this.state.type);
             message.success(result.reason, 2);
           } else {
 
@@ -320,7 +291,7 @@ class ExamResultDetail extends React.Component {
 
                 this.setState({deleteLoading: false});
 
-                this.requestExamResultDetailOfMember(this.props.params.memberId);
+                this.requestExamResultDetailOfMember(this.state.type);
                 message.success(result.reason, 2);
                 return;
             } else {
@@ -386,14 +357,24 @@ class ExamResultDetail extends React.Component {
     });
   }
 
-  //获取memberId用户的所有检查记录
-  requestExamResultDetailOfMember = (memberId) => {
+  //获取memberId用户的所有检查记录~~~~~~~~~~~~~
+  requestExamResultDetailOfMember = (type) => {
 
-    console.log('查询'+ memberId +'会员的所有检查记录');
+    let values = [];
+    if(type === '化验') values = this.refs.assaySearchForm.getFieldsValue();
+    else values = this.techSearchForm.getFieldsValue();
+
+    console.log('查询' + this.props.params.memberId + '会员的所有' + type + '检查记录');
     $.ajax({
-        url : SERVER + '/api/input/list/' + memberId,
+        url : SERVER + '/api/input/list/' + this.props.params.memberId,
         type : 'POST',
+        contentType: 'application/json',
         dataType : 'json',
+        data : JSON.stringify({type : type,
+                               secondId: values.secondId[1],
+                               status: values.status,
+                               beginTime: values.time !== undefined ? values.time[0] : undefined,
+                               endTime: values.time !== undefined ? values.time[1] : undefined}),
         beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
         success : (result) => {
 
@@ -405,7 +386,7 @@ class ExamResultDetail extends React.Component {
                                               isEmployee(role) && !isAdviser(role)
                                               ?
                                               <Alert
-                                              message="该会员还没有检查记录"
+                                              message="暂无相关检查记录"
                                               description="可点击右上角的按钮进行添加"
                                               type="warning"
                                               showIcon
@@ -439,9 +420,16 @@ class ExamResultDetail extends React.Component {
                                                                                                         onDelete={this.deleteInputDetail}
                                                                                                         deleteLoading={this.state.deleteLoading} />);
 
-              this.setState({examResultDetailData: result.content,
-                             examResultDetailItems: examResultDetailItems,
-                             pageLoading: false});
+
+              if(type === '化验') {
+                this.setState({examResultDetailOfAssayData: result.content,
+                               examResultDetailOfAssayItems: examResultDetailItems,
+                               pageLoading: false});
+              } else {
+                this.setState({examResultDetailOfTechData: result.content,
+                               examResultDetailOfTechItems: examResultDetailItems,
+                               pageLoading: false});
+              }
             } else {
               message.error(result.reason, 2);
               this.setState({pageLoading: false});
@@ -450,10 +438,29 @@ class ExamResultDetail extends React.Component {
     });
   }
 
+  //切换选项卡
+  handleMenuItemClick = (activeKey) => {
+
+    switch(activeKey) {
+      case "1":this.state.type = '化验';break;
+      case "2":this.state.type = '医技';break;
+      default:;break;
+    }
+  }
+
+
+  //打开医技数据选项卡
+  componentDidMountOfTechDataTab = (form) => {
+
+    if(form == null) return;
+    this.techSearchForm = form;
+    this.requestExamResultDetailOfMember('医技');
+  }
+
   componentDidMount = () => {
 
     //拉取该用户的已添加的所有检查记录
-    this.requestExamResultDetailOfMember(this.props.params.memberId);
+    this.requestExamResultDetailOfMember(this.state.type);
 
     //获取化验、医技亚类
     this.requestSecondCategoryParentData("化验");
@@ -468,9 +475,8 @@ class ExamResultDetail extends React.Component {
     //拆分examResultDetailData
     //1.组装成卡片+表格条目
     //2.组装成锚点目录
-    const {examResultDetailData} = this.state;
-    const examResultDetailAnchors = examResultDetailData.map((detail, index) => <Anchor.Link href={"#" + detail.id.toString()} key={index} title={detail.secondName + " " + formatDate(detail.time)}/>);
-
+    const examResultDetailOfAssayAnchors = this.state.examResultDetailOfAssayData.map((detail, index) => <Anchor.Link href={"#" + detail.id.toString()} key={index} title={detail.secondName + " " + formatDate(detail.time)}/>);
+    const examResultDetailOfTechAnchors = this.state.examResultDetailOfTechData.map((detail, index) => <Anchor.Link href={"#" + detail.id.toString()} key={index} title={detail.secondName + " " + formatDate(detail.time)}/>);
 
     return (
       <Spin spinning={this.state.pageLoading} delay={LOADING_DELAY_TIME} tip='加载中'>
@@ -488,19 +494,28 @@ class ExamResultDetail extends React.Component {
         <ExamResultDetailAddModal ref="addForm" visible={this.state.addModalVisible} confirmLoading={this.state.confirmAddModalLoading} onCancel={this.closeAddModal} onConfirm={this.confirmAddModal} secondCategoryParentOfAssayData={this.state.secondCategoryParentOfAssayData} secondCategoryParentOfTechData={this.state.secondCategoryParentOfTechData}/>
 
 
-        <Tabs defaultActiveKey={this.props.params.tabKey} tabBarExtraContent={role === ROLE.EMPLOYEE_ARCHIVER || role === ROLE.EMPLOYEE_ADMIN ? <Button type="primary" onClick={this.showAddModal}>添加检查记录</Button> : null}>
-          <TabPane tab="化验数据" key={"1"}>
-            <ExamResultDetailSearchForm ref="searchForm" handleSearchOriginResultList={this.handleSearchOriginResultList} secondCategoryParentData={this.state.secondCategoryParentOfAssayData}/>
+        <Tabs defaultActiveKey={"1"} tabBarExtraContent={role === ROLE.EMPLOYEE_ARCHIVER || role === ROLE.EMPLOYEE_ADMIN ? <Button type="primary" onClick={this.showAddModal}>添加检查记录</Button> : null} onChange={this.handleMenuItemClick}>
+          <TabPane tab="化验数据" key="1">
+            <ExamResultDetailSearchForm ref="assaySearchForm" type="化验" requestExamResultDetailOfMember={this.requestExamResultDetailOfMember} secondCategoryParentData={this.state.secondCategoryParentOfAssayData}/>
             <div className="exam-result-detail-info">
               <Anchor className="exam-result-detail-anchor">
-                {examResultDetailAnchors}
+                {examResultDetailOfAssayAnchors}
               </Anchor>
-              <Timeline pending={examResultDetailData.length <= 0 ? null : <h4>已到底部</h4>}>
-                {this.state.examResultDetailItems}
+              <Timeline pending={this.state.examResultDetailOfAssayData.length <= 0 ? null : <h4>已到底部</h4>}>
+                {this.state.examResultDetailOfAssayItems}
               </Timeline>
             </div>
           </TabPane>
-          <TabPane tab="医技数据" key={"2"}>
+          <TabPane tab="医技数据" key="2">
+            <ExamResultDetailSearchForm ref={this.componentDidMountOfTechDataTab} type="医技" requestExamResultDetailOfMember={this.requestExamResultDetailOfMember} secondCategoryParentData={this.state.secondCategoryParentOfTechData}/>
+            <div className="exam-result-detail-info">
+              <Anchor className="exam-result-detail-anchor">
+                {examResultDetailOfTechAnchors}
+              </Anchor>
+              <Timeline pending={this.state.examResultDetailOfTechData.length <= 0 ? null : <h4>已到底部</h4>}>
+                {this.state.examResultDetailOfTechItems}
+              </Timeline>
+            </div>
           </TabPane>
         </Tabs>
       </Spin>
