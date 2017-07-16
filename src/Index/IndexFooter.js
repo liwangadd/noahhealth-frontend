@@ -7,7 +7,7 @@ class IndexFooter extends React.Component{
   render() {
     return (
       <Header className='footer footer-affix'>
-        医海慈航 ©2017 Created by BUPT
+        诺亚健康 ©2017 Created by BUPT
       </Header>)
   }
 }

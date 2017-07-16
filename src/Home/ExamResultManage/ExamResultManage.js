@@ -76,12 +76,12 @@ class ExamResultManage extends React.Component {
       key: 'name'
     },{
       title: '所属顾问',
-      dataIndex: 'staffId',
-      key: 'staffId'
+      dataIndex: 'staffName',
+      key: 'staffName'
     },{
       title: '所属顾问主管',
-      dataIndex: 'staffMgrId',
-      key: 'staffMgrId'
+      dataIndex: 'staffMgrName',
+      key: 'staffMgrName'
     },{
       title: '级别',
       dataIndex: 'role',

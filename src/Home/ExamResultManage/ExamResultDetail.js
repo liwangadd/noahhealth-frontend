@@ -86,7 +86,7 @@ class ExamResultDetail extends React.Component {
 
                 //关闭加载圈、对话框
                 this.setState({ addModalVisible: false, confirmAddModalLoading: false});
-                this.requestExamResultDetailOfMember(this.state.type);
+                this.requestExamResultDetailOfMember(values.type);
 
                 message.success(result.reason, 2);
               } else {
@@ -361,8 +361,12 @@ class ExamResultDetail extends React.Component {
   requestExamResultDetailOfMember = (type) => {
 
     let values = [];
+    console.log(this.refs.assaySearchForm);
     if(type === '化验') values = this.refs.assaySearchForm.getFieldsValue();
-    else values = this.techSearchForm.getFieldsValue();
+    else if(type === '医技') {
+      if(this.techSearchForm === undefined) return;
+      values = this.techSearchForm.getFieldsValue();
+    }
 
     console.log('查询' + this.props.params.memberId + '会员的所有' + type + '检查记录');
     $.ajax({
@@ -382,18 +386,10 @@ class ExamResultDetail extends React.Component {
             if(result.code === RESULT.SUCCESS) {
 
               const role = sessionStorage.getItem(SESSION.ROLE);
-              const examResultDetailItems = result.content.length <= 0 ?
-                                              isEmployee(role) && !isAdviser(role)
-                                              ?
+              const examResultDetailItems = result.content.length <= 0
+                                            ?
                                               <Alert
                                               message="暂无相关检查记录"
-                                              description="可点击右上角的按钮进行添加"
-                                              type="warning"
-                                              showIcon
-                                              />
-                                              :
-                                              <Alert
-                                              message="暂无已通过审核的检查记录"
                                               description=" "
                                               type="warning"
                                               showIcon
@@ -431,6 +427,7 @@ class ExamResultDetail extends React.Component {
                                pageLoading: false});
               }
             } else {
+
               message.error(result.reason, 2);
               this.setState({pageLoading: false});
             }

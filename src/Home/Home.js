@@ -139,8 +139,12 @@ class Home extends React.Component {
             </Menu.Item>
             <Menu.Item key={ROUTE.USER_MANAGE.MENU_KEY} style={{display: layoutStyle.userManageMenuItemDisplay}}>
               <Icon type="team" className="menu-item-font"/>
-              <span className="nav-text menu-item-font">用户管理</span>
+              <span className="nav-text menu-item-font">职员管理</span>
             </Menu.Item>
+            {/* <Menu.Item key={ROUTE.USER_MANAGE.MENU_KEY} style={{display: layoutStyle.userManageMenuItemDisplay}}>
+              <Icon type="team" className="menu-item-font"/>
+              <span className="nav-text menu-item-font">会员管理</span>
+            </Menu.Item> */}
             <Menu.Item key={ROUTE.FIRST_CATEGORY_MANAGE.MENU_KEY} style={{display: layoutStyle.categoryManageMenuItemDisplay}}>
               <Icon type="medicine-box" className="menu-item-font"/>
               <span className="nav-text menu-item-font">检查项目管理</span>
@@ -176,7 +180,7 @@ class Home extends React.Component {
             {this.props.children}
           </Content>
           <Footer style={{ textAlign: 'center' }}>
-            医海慈航 ©2017 Created by BUPT
+            诺亚健康 ©2017 Created by BUPT
           </Footer>
         </Layout>
       </Layout>

@@ -19,7 +19,7 @@ class Welcome extends React.Component {
       <div>
         <BackTop visibilityHeight="200"/>
         <div className='introduce-text'>
-          <h1>医海慈航信息管理系统</h1>
+          <h1>诺亚健康信息管理系统</h1>
           <h3 className='introduce-content'>本系统主要是为档案部、顾问部管理用户健康档案服务，方便数据的录入、查询、修改等操作，也会加入部分财务人员的工作。该系统包含的功能模块主要有：用户管理模块、原始数据管理模块、化验/医技数据管理模块、健康摘要/就医方案管理模块、系统功能模块。</h3>
         </div>
         <div>

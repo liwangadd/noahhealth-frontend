@@ -44,7 +44,7 @@ class Login extends React.Component {
 
               <div style={{paddingLeft:80, paddingRight:80}}>
                 <div className='introduce-text' style={{textAlign:'center'}}>
-                  <h1>医海慈航为您提供什么?</h1>
+                  <h1>诺亚健康为您提供什么?</h1>
                 </div>
                 <div style={{marginLeft:25}}>
                   <Card className='card' bodyStyle={{ padding: 0 }}>
@@ -105,7 +105,7 @@ class Login extends React.Component {
               </div>
             </Content>
             <Header className='footer'>
-              医海慈航 ©2017 Created by BUPT
+              诺亚健康 ©2017 Created by BUPT
             </Header>
           </Layout>
         </Spin>

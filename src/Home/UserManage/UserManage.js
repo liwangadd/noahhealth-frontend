@@ -617,12 +617,12 @@ class UserManage extends React.Component {
       key: 'role',
     }, {
       title: '所属顾问',
-      dataIndex: 'staffId',
-      key: 'staffId',
+      dataIndex: 'staffName',
+      key: 'staffName',
     }, {
       title: '所属顾问主管',
-      dataIndex: 'staffMgrId',
-      key: 'staffMgrId',
+      dataIndex: 'staffMgrName',
+      key: 'staffMgrName',
     }, {
       title: '操作',
       key: 'action',
@@ -660,8 +660,8 @@ class UserManage extends React.Component {
       key: 'role',
     }, {
       title: '所属主管',
-      dataIndex: 'staffMgrId',
-      key: 'staffMgrId',
+      dataIndex: 'staffMgrName',
+      key: 'staffMgrName',
     }, {
       title: '操作',
       key: 'action',

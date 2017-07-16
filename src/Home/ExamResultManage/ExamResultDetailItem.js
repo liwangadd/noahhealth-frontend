@@ -70,9 +70,10 @@ class ExamResultDetailItem_ extends React.Component {
       key: 'value'
     }];
 
+    const role = sessionStorage.getItem(SESSION.ROLE);
 
     //操作栏
-    let detailOperationDelete = sessionStorage.getItem(SESSION.ROLE) === ROLE.EMPLOYEE_ADMIN
+    let detailOperationDelete = role === ROLE.EMPLOYEE_ADMIN
                                 ?
                                 <Popconfirm title="您确定要删除该条检查记录吗?" placement="bottom" onConfirm={() => this.props.onDelete(detail.id)}>
                                   <Button type="danger" size="default" className="delete" loading={this.props.deleteLoading}>删除</Button>
@@ -93,14 +94,22 @@ class ExamResultDetailItem_ extends React.Component {
       detailOperation =
       <div>
         {detailOperationDelete}
-        <Popconfirm title="您确定要通过审核吗?" placement="bottom" onConfirm={() => this.props.onPass(this.props.form, detail.id)}>
-          <Button className="gutter" type="primary" size="default" loading={this.props.passLoading}>通过</Button>
-        </Popconfirm>
-        <Popconfirm title={<Input value={this.state.unpassReason} size="small" onChange={this.changeUnpassReason} placeholder="未通过原因"/>}
-                    placement="bottom"
-                    onConfirm={() => this.confirmUnpass(detail.id)}>
-          <Button type="danger" size="default">不通过</Button>
-        </Popconfirm>
+        {
+          role === ROLE.EMPLOYEE_ARCHIVE_MANAGER || role === ROLE.EMPLOYEE_ADMIN
+          ?
+          <span>
+            <Popconfirm title="您确定要通过审核吗?" placement="bottom" onConfirm={() => this.props.onPass(this.props.form, detail.id)}>
+              <Button className="gutter" type="primary" size="default" loading={this.props.passLoading}>通过</Button>
+            </Popconfirm>
+            <Popconfirm title={<Input value={this.state.unpassReason} size="small" onChange={this.changeUnpassReason} placeholder="未通过原因"/>}
+                        placement="bottom"
+                        onConfirm={() => this.confirmUnpass(detail.id)}>
+              <Button type="danger" size="default">不通过</Button>
+            </Popconfirm>
+          </span>
+          :
+          null
+        }
       </div>
     else
       detailOperation =
@@ -129,7 +138,7 @@ class ExamResultDetailItem_ extends React.Component {
           <p>录入者：{detail.inputerName}</p>
           {detail.status !== "录入中" && detail.status !== "待审核" ? <p>审核者：{detail.checkerName}</p> : null}
           {detail.status === "未通过" ? <p>审核结果：{detail.reason}</p> : null}
-          <p>备注：{detail.comment}</p>
+          <p>备注：{detail.note}</p>
         </Card>
         <Form className="exam-result-detail-item-form" style={{display: this.state.formVisible}}>
           <Table columns={detailColumns} dataSource={detail.data} pagination={false} size="small" rowKey='id'/>

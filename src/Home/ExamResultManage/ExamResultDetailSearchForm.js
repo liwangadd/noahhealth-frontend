@@ -27,6 +27,8 @@ class ExamResultDetailSearchForm_ extends React.Component {
 
   render() {
 
+    const role = sessionStorage.getItem(SESSION.ROLE);
+
     //在检查亚类尾部加上全部/全部 secondId = -1
     const allCategory = {value: '全部分类', label: '全部分类', children:[{value: -1, label: '全部亚类'}]};
     let secondCategoryParentData = this.props.secondCategoryParentData.slice(); //复制数组对象
@@ -58,10 +60,10 @@ class ExamResultDetailSearchForm_ extends React.Component {
               })(
                 <Select>
                   <Option value="">全部</Option>
-                  <Option value="录入中">上传中</Option>
-                  <Option value="待审核">待审核</Option>
-                  <Option value="未通过">未通过</Option>
-                  <Option value="已通过">已通过</Option>
+                  <Option value="录入中" style={{display: role === ROLE.EMPLOYEE_ADMIN || role === ROLE.EMPLOYEE_ARCHIVER ? STYLE.BLOCK : STYLE.NONE}}>录入中</Option>
+                  <Option value="待审核" style={{display: role === ROLE.EMPLOYEE_ADMIN || role === ROLE.EMPLOYEE_ARCHIVER || role === ROLE.EMPLOYEE_ARCHIVE_MANAGER ? STYLE.BLOCK : STYLE.NONE}}>待审核</Option>
+                  <Option value="未通过" style={{display: role === ROLE.EMPLOYEE_ADMIN || role === ROLE.EMPLOYEE_ARCHIVER ? STYLE.BLOCK : STYLE.NONE}}>未通过</Option>
+                  <Option value="已通过" style={{display: role === ROLE.EMPLOYEE_ADMIN || role === ROLE.EMPLOYEE_ADVISER || role === ROLE.EMPLOYEE_ADVISE_MANAGER ? STYLE.BLOCK : STYLE.NONE}}>已通过</Option>
                 </Select>
               )}
             </FormItem>
