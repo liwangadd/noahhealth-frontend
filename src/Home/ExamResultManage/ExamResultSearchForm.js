@@ -34,7 +34,14 @@ class ExamResultSearchForm_ extends React.Component {
         onSubmit={this.handleSearch}
       >
         <Row gutter={40}>
-          <Col span={6} style={{display: filtersVisible}}>
+          <Col span={12} style={{display: filtersVisible}}>
+            <FormItem>
+              {getFieldDecorator('memberNum')(
+                <Input placeholder="会员编号" />
+              )}
+            </FormItem>
+          </Col>
+          <Col span={12} style={{display: filtersVisible}}>
             <FormItem>
               {getFieldDecorator('userName')(
                 <Input placeholder="会员姓名" />

@@ -152,7 +152,7 @@ class FindPassword extends React.Component {
           <Card className="index-card" bodyStyle={{ paddingTop:10, paddingLeft: 50, paddingRight: 50}} style={{width: '50%'}}>
 
             <div className="index-card-welcome" style={{marginBottom: 30}}>
-              <span>诺亚健康账号密码重置</span>
+              <span>密码重置</span>
             </div>
 
             <Steps current={this.state.currentStep} >

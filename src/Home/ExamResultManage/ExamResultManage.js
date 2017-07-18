@@ -33,6 +33,7 @@ class ExamResultManage extends React.Component {
             type : 'POST',
             contentType: 'application/json',
             data : JSON.stringify({userName : values.userName,
+                                   memberNum: values.memberNum,
                                    pageNow: pageNow,
                                    pageSize: PAGE_SIZE}),
             dataType : 'json',
@@ -75,6 +76,10 @@ class ExamResultManage extends React.Component {
       dataIndex: 'name',
       key: 'name'
     },{
+      title: '会员编号',
+      dataIndex: 'memberNum',
+      key: 'memberNum'
+    },{
       title: '所属顾问',
       dataIndex: 'staffName',
       key: 'staffName'
@@ -101,7 +106,7 @@ class ExamResultManage extends React.Component {
       <div>
         <BackTop visibilityHeight="200"/>
         <Tabs defaultActiveKey={"1"}>
-          <TabPane tab="化验/医技数据" key="1">
+          <TabPane tab="辅检数据库" key="1">
             <ExamResultSearchForm ref="searchForm" handleSearchExamResultList={this.handleSearchExamResultList}/>
             <Table className='exam-result-table' columns={examResultColumns} dataSource={this.state.examResultData} rowKey='id' loading={this.state.examResultTableLoading} pagination={this.state.examResultPager} onChange={this.changeExamResultPager}/>
           </TabPane>

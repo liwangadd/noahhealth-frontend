@@ -63,6 +63,7 @@ class OriginResultManage extends React.Component {
             type : 'POST',
             contentType: 'application/json',
             data : JSON.stringify({userName : values.userName,
+                                   memberNum: values.memberNum,
                                    uploaderName : values.uploaderName,
                                    checkerName: values.checkerName,
                                    status: values.status,
@@ -467,14 +468,23 @@ class OriginResultManage extends React.Component {
       dataIndex: 'userName',
       key: 'userName'
     },{
+      title: '会员编号',
+      dataIndex: 'memberNum',
+      key: 'memberNum'
+    },{
+      title: '检查日期',
+      dataIndex: 'time',
+      key: 'time',
+      render: (time) => formatDate(time)
+    },{
       title: '上传者',
       dataIndex: 'uploaderName',
       key: 'uploaderName'
     },{
       title: '上传日期',
-      dataIndex: 'time',
-      key: 'time',
-      render: (time) => formatDate(time)
+      dataIndex: 'uploadTime',
+      key: 'uploadTime',
+      render: (uploadTime) => formatDate(uploadTime)
     },{
       title: '备注',
       dataIndex: 'note',
@@ -572,7 +582,7 @@ class OriginResultManage extends React.Component {
       <div>
         <BackTop visibilityHeight="200"/>
         <Tabs defaultActiveKey={"1"} tabBarExtraContent={role === ROLE.EMPLOYEE_ARCHIVER || role === ROLE.EMPLOYEE_ADMIN ? <Button type="primary" onClick={this.showUploadModal}>添加原始资料</Button> : null}>
-          <TabPane tab="原始资料" key="1">
+          <TabPane tab="电子资料库" key="1">
             <OriginResultSearchForm ref="searchForm" handleSearchOriginResultList={this.handleSearchOriginResultList}/>
             <Table className='origin-result-table' columns={originResultColumns} dataSource={this.state.originResultData} rowKey='id' loading={this.state.originResultTableLoading} pagination={this.state.originResultPager} onChange={this.changeOriginResultPager}/>
           </TabPane>

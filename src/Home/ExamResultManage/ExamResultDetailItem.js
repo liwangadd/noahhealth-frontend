@@ -2,8 +2,7 @@ import './ExamResultManage.css';
 import {STYLE, SESSION, ROLE} from './../../App/PublicConstant.js';
 import {formatDate} from './../../App/PublicUtil.js';
 import React from 'react';
-import {Table, Button, Timeline, Card, Icon, Form, Input,Popconfirm} from 'antd';
-
+import {Table, Button, Timeline, Card, Icon, Form, Input,Popconfirm, Checkbox} from 'antd';
 
 class ExamResultDetailItem_ extends React.Component {
 
@@ -42,25 +41,17 @@ class ExamResultDetailItem_ extends React.Component {
       dataIndex: 'thirdName',
       key: 'thirdName'
     },{
-      title: '系统分类',
-      dataIndex: 'systemCategory',
-      key: 'systemCategory',
-    },{
       title: '参考值及单位',
       dataIndex: 'referenceValue',
       key: 'referenceValue',
-    },{
-      title: '301医院',
-      dataIndex: 'hospital',
-      key: 'hospital',
     },
     detail.status === "录入中" || detail.status === "未通过"
     ?
     {
       title: '检查结果',
-      key: 'action',
+      key: 'value',
       render: (record) => {
-        return getFieldDecorator(record.id.toString(), {'initialValue': record.value})(<Input size="small"/>)
+        return getFieldDecorator(record.id.toString() + "-value", {'initialValue': record.value})(<Input size="small"/>)
       }
     }
     :
@@ -68,15 +59,21 @@ class ExamResultDetailItem_ extends React.Component {
       title: '检查结果',
       dataIndex: 'value',
       key: 'value'
+    },{
+      title: '异常',
+      key: 'normal',
+      render: (record) => {
+        return getFieldDecorator(record.id.toString() + "-normal", {valuePropName: 'checked', 'initialValue': record.normal})(<Checkbox style={{marginLeft: 5}} disabled={detail.status === "录入中" || detail.status === "未通过" ? false : true}/>)
+      }
     }];
 
     const role = sessionStorage.getItem(SESSION.ROLE);
 
     //操作栏
-    let detailOperationDelete = role === ROLE.EMPLOYEE_ADMIN
+    let detailOperationDelete = role === ROLE.EMPLOYEE_ADMIN || role === ROLE.EMPLOYEE_ARCHIVE_MANAGER
                                 ?
                                 <Popconfirm title="您确定要删除该条检查记录吗?" placement="bottom" onConfirm={() => this.props.onDelete(detail.id)}>
-                                  <Button type="danger" size="default" className="delete" loading={this.props.deleteLoading}>删除</Button>
+                                  <Button type="danger" size="default" className="gutter" loading={this.props.deleteLoading}>删除</Button>
                                 </Popconfirm>
                                 :
                                 null;
@@ -135,6 +132,7 @@ class ExamResultDetailItem_ extends React.Component {
         <Card title={detail.status} extra={<a onClick={this.switchForm}>{this.state.switchText}</a>} className="exam-result-detail-item-card">
           <p>检查亚类：{detail.secondName}</p>
           <p>检查医院：{detail.hospital}</p>
+          <p>录入时间：{formatDate(detail.uploadTime)}</p>
           <p>录入者：{detail.inputerName}</p>
           {detail.status !== "录入中" && detail.status !== "待审核" ? <p>审核者：{detail.checkerName}</p> : null}
           {detail.status === "未通过" ? <p>审核结果：{detail.reason}</p> : null}

@@ -1,6 +1,8 @@
 import './Home.css';
 import React from 'react';
 import {SERVER, SESSION, FILE_SERVER, RESULT} from './../App/PublicConstant.js';
+import {isMember} from './../App/PublicMethod.js';
+import {formatDate} from './../App/PublicUtil.js';
 import {REGEX} from './../App/PublicRegex.js';
 import { Form, Input,Modal, Icon, Button, Upload, message, Tabs} from 'antd';
 import $ from 'jquery';
@@ -300,6 +302,20 @@ class ProfileEditModal_ extends React.Component {
               </FormItem>
             </Form>
           </TabPane>
+
+          {
+            isMember(sessionStorage.getItem(SESSION.ROLE))
+            ?
+            <TabPane tab={<span><Icon type="star-o" />会员信息</span>} key="4">
+              <Form >
+                  <FormItem {...formItemLayout} label="有效期至">
+                    <span>{formatDate(this.props.userInfo.valid)}</span>
+                  </FormItem>
+              </Form>
+            </TabPane>
+            :
+            null
+          }
         </Tabs>
       </Modal>
     );

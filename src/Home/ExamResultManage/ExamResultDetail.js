@@ -108,7 +108,7 @@ class ExamResultDetail extends React.Component {
 
     form.validateFields((err, values) => {
       if(!err) {
-
+console.log(values);
         //显示加载圈
         this.setState({ saveLoading: true });
         $.ajax({

@@ -39,35 +39,42 @@ class OriginResultSearchForm_ extends React.Component {
         onSubmit={this.handleSearch}
       >
         <Row gutter={20}>
-          <Col span={role === ROLE.EMPLOYEE_ADMIN ? 5 : 6}>
+          <Col span={role === ROLE.EMPLOYEE_ADMIN ? 5 : 5}>
             <FormItem>
               {getFieldDecorator('time')(
                 <RangePicker style={{width:'100%'}}/>
               )}
             </FormItem>
           </Col>
-          <Col span={role === ROLE.EMPLOYEE_ADMIN ? 5 : 6} style={{display: otherFilterVisible}}>
+          <Col span={role === ROLE.EMPLOYEE_ADMIN ? 4 : 5} style={{display: otherFilterVisible}}>
+            <FormItem>
+              {getFieldDecorator('memberNum')(
+                <Input placeholder="会员编号" />
+              )}
+            </FormItem>
+          </Col>
+          <Col span={role === ROLE.EMPLOYEE_ADMIN ? 4 : 5} style={{display: otherFilterVisible}}>
             <FormItem>
               {getFieldDecorator('userName')(
                 <Input placeholder="会员姓名" />
               )}
             </FormItem>
           </Col>
-          <Col span={role === ROLE.EMPLOYEE_ADMIN ? 5 : 6} style={{display: uploaderFilterVisible}}>
+          <Col span={role === ROLE.EMPLOYEE_ADMIN ? 4 : 5} style={{display: uploaderFilterVisible}}>
             <FormItem>
               {getFieldDecorator('uploaderName')(
                 <Input placeholder="上传者"/>
               )}
             </FormItem>
           </Col>
-          <Col span={5} style={{display: checkerFilterVisible}}>
+          <Col span={4} style={{display: checkerFilterVisible}}>
             <FormItem>
               {getFieldDecorator('checkerName')(
                 <Input placeholder="审核者"/>
               )}
             </FormItem>
           </Col>
-          <Col span={role === ROLE.EMPLOYEE_ADMIN ? 4 : 6} style={{display: otherFilterVisible}}>
+          <Col span={role === ROLE.EMPLOYEE_ADMIN ? 3 : 4} style={{display: otherFilterVisible}}>
             <FormItem>
               {getFieldDecorator('status', { initialValue: ''
               })(

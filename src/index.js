@@ -10,7 +10,8 @@ import EmployeeLogin from './Index/Login/EmployeeLogin.js';
 import Register from './Index/Register/Register.js';
 import Home from './Home/Home.js';
 import Welcome from './Home/Welcome/Welcome.js';
-import UserManage from './Home/UserManage/UserManage.js';
+import EmployeeManage from './Home/EmployeeManage/EmployeeManage.js';
+import MemberManage from './Home/MemberManage/MemberManage.js';
 import FirstCategoryManage from './Home/CategoryManage/FirstCategoryManage.js';
 import SecondCategoryManage from './Home/CategoryManage/SecondCategoryManage.js';
 import ThirdCategoryManage from './Home/CategoryManage/ThirdCategoryManage.js';
@@ -54,7 +55,8 @@ const certifyAccess = function(nextState, replace){
 
       case ROUTE.HOME.URL_PREFIX:certifyRole(replace, role, ROUTE.HOME.PERMISSION);break;
 
-      case ROUTE.USER_MANAGE.URL_PREFIX:certifyRole(replace, role, ROUTE.USER_MANAGE.PERMISSION);break;
+      case ROUTE.EMPLOYEE_MANAGE.URL_PREFIX:certifyRole(replace, role, ROUTE.EMPLOYEE_MANAGE.PERMISSION);break;
+      case ROUTE.MEMBER_MANAGE.URL_PREFIX:certifyRole(replace, role, ROUTE.MEMBER_MANAGE.PERMISSION);break;
 
       case ROUTE.FIRST_CATEGORY_MANAGE.URL_PREFIX:certifyRole(replace, role, ROUTE.FIRST_CATEGORY_MANAGE.PERMISSION);break;
       case ROUTE.SECOND_CATEGORY_MANAGE.URL_PREFIX:certifyRole(replace, role, ROUTE.SECOND_CATEGORY_MANAGE.PERMISSION);break;
@@ -97,7 +99,8 @@ class AppRouter extends React.Component {
                 <Route onEnter={certifyAccess}>
                   <Route path={ROUTE.HOME.URL} component={Home}>
                       <IndexRoute component={Welcome} />
-                      <Route path={ROUTE.USER_MANAGE.URL} component={UserManage}/>
+                      <Route path={ROUTE.EMPLOYEE_MANAGE.URL} component={EmployeeManage}/>
+                      <Route path={ROUTE.MEMBER_MANAGE.URL} component={MemberManage}/>
 
                       <Route path={ROUTE.FIRST_CATEGORY_MANAGE.URL} component={FirstCategoryManage}/>
                       <Route path={ROUTE.SECOND_CATEGORY_MANAGE.URL} component={SecondCategoryManage}/>
