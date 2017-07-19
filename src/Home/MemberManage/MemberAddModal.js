@@ -1,7 +1,7 @@
 import React from 'react';
 import {ROLE, SESSION} from './../../App/PublicConstant.js';
 import {REGEX} from './../../App/PublicRegex.js';
-import { Form, Input, Select,Modal, Tag, Cascader} from 'antd';
+import { Form, Input, Select,Modal, Tag, Cascader, InputNumber, Row, Col} from 'antd';
 const FormItem = Form.Item;
 const Option = Select.Option;
 
@@ -9,7 +9,7 @@ const Option = Select.Option;
 class MemberAddModal_ extends React.Component {
 
   render() {
-    //'initialValue' : [this.props.adviserAndManagerData[0].value, this.props.adviserAndManagerData[0].children[0].value]
+
     const role = sessionStorage.getItem(SESSION.ROLE);
 
     const formItemLayout = {labelCol: { xs: { span: 24 }, sm: { span: 7 },}, wrapperCol: { xs: { span: 24 }, sm: { span: 12 },}};
@@ -41,9 +41,25 @@ class MemberAddModal_ extends React.Component {
             )}
           </FormItem>
           <FormItem {...formItemLayout} label="所属顾问" hasFeedback={true}>
-            {getFieldDecorator('adviserAndManager',{ rules: [{ required: true, message: '请选择所属顾问'}]})(
+            {getFieldDecorator('staffId',{ rules: [{ required: true, message: '请选择所属顾问'}]})(
               <Cascader options={this.props.adviserAndManagerData} placeholder="" allowClear={false}/>
             )}
+          </FormItem>
+          <FormItem {...formItemLayout} label="有效期">
+            <Row gutter={0}>
+              <Col span={12}>
+                {getFieldDecorator('validYear', {rules: [{ required: true, message: '请设置有效期年限'}], initialValue: 1})(
+                <InputNumber min={0} step={1} precision={0}/>
+                )}
+                <span>年</span>
+              </Col>
+              <Col span={12}>
+                {getFieldDecorator('validMonth', {rules: [{ required: true, message: '请设置有效期月限'}], initialValue: 0})(
+                <InputNumber min={0} step={1} precision={0}/>
+                )}
+                <span>月</span>
+              </Col>
+            </Row>
           </FormItem>
           <FormItem {...formItemLayout} label="会员编号" hasFeedback={true}>
             {getFieldDecorator('memberNum')(

@@ -170,7 +170,7 @@ class MemberManage extends React.Component {
                 //通知对话框更新表单的级联选择器
                 this.setState({ adviserAndManagerData: adviseAndManagerData });
                 if(this.refs.memberAddForm == null) return;
-                this.refs.memberAddForm.setFieldsValue({adviserAndManager: adviseAndManagerData.length > 0 ? [adviseAndManagerData[0].value, adviseAndManagerData[0].children[0].value] : []});
+                this.refs.memberAddForm.setFieldsValue({staffId: adviseAndManagerData.length > 0 ? [adviseAndManagerData[0].value, adviseAndManagerData[0].children[0].value] : []});
                 return;
             } else {
                 message.error(result.reason, 2);
@@ -247,31 +247,22 @@ class MemberManage extends React.Component {
     //请求修改职员
     this.refs.memberAddForm.validateFields((err, values) => {
       if(!err) {
-        console.log('添加职员', values);
-
-        //根据角色传递staffMgrId
-        let staffMgrId = null;
-        const role = sessionStorage.getItem(SESSION.ROLE);
-
-        //先判断是管理员 or 主管在添加职员？
-        if(role === ROLE.EMPLOYEE_ADMIN) {
-
-          if(values.role === ROLE.EMPLOYEE_ADVISER) staffMgrId = Number(values.adviseManager);
-          else if(values.role === ROLE.EMPLOYEE_ARCHIVER) staffMgrId = Number(values.archiveManager);
-
-        } else if(role === ROLE.EMPLOYEE_ADVISE_MANAGER || role === ROLE.EMPLOYEE_ARCHIVE_MANAGER){
-
-          staffMgrId = Number(sessionStorage.getItem(SESSION.USER_ID));
-        }
+        console.log('添加会员', values);
 
         //显示加载圈
-        this.setState({ confirmEmployeeAddModalLoading: true });
+        this.setState({ confirmMemberAddModalLoading: true });
 
         $.ajax({
             url : SERVER + '/api/user',
             type : 'POST',
             contentType: 'application/json',
-            data : JSON.stringify({name: values.name, phone: values.phone, role: values.role, staffMgrId: staffMgrId}),
+            data : JSON.stringify({name: values.name,
+                                   phone: values.phone,
+                                   role: values.role,
+                                   staffId: values.staffId[1],
+                                   valid: values.validYear * 12 + values.validMonth,
+                                   memberNum: values.memberNum
+                                   }),
             dataType : 'json',
             beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
             success : (result) => {
@@ -279,18 +270,18 @@ class MemberManage extends React.Component {
               if(result.code === RESULT.SUCCESS) {
 
                 //重查刷新一遍
-                this.handleSearchEmployeeList(this.state.employeePager.current);
+                this.handleSearchMemberList(this.state.memberPager.current);
 
                 //关闭加载圈、对话框
                 this.setState({
-                  employeeAddModalVisible: false,
-                  confirmEmployeeAddModalLoading: false,
+                  memberAddModalVisible: false,
+                  confirmMemberAddModalLoading: false,
                 });
                 message.success(result.reason, 2);
               } else {
 
                 //关闭加载圈
-                this.setState({ confirmEmployeeAddModalLoading: false });
+                this.setState({ confirmMemberAddModalLoading: false });
                 message.error(result.reason, 2);
               }
             }
