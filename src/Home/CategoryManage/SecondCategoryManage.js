@@ -179,7 +179,7 @@ class SecondCategoryManage extends React.Component {
       title: '检查亚类名称',
       dataIndex: 'name',
       key: 'name',
-      render: (name, record) => <Link to={ROUTE.THIRD_CATEGORY_MANAGE.URL_PREFIX + "/" + ROUTE.THIRD_CATEGORY_MANAGE.MENU_KEY + "/" + this.props.params.tabKey + "/" + this.props.params.firstId +"/" + this.props.params.firstName + "/" + record.id + "/" + name}>{name}</Link>,
+      render: (name, record) => this.props.params.tabKey === '1' ? <Link to={ROUTE.THIRD_CATEGORY_MANAGE.URL_PREFIX + "/" + ROUTE.THIRD_CATEGORY_MANAGE.MENU_KEY + "/" + this.props.params.tabKey + "/" + this.props.params.firstId +"/" + this.props.params.firstName + "/" + record.id + "/" + name}>{name}</Link> : <span>{name}</span>,
     }, {
       title: '操作',
       key: 'action',

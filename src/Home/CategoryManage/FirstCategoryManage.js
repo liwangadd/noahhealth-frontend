@@ -5,7 +5,7 @@ import FirstSecondCategoryEditModal from './FirstSecondCategoryEditModal.js'
 import React from 'react';
 import {Tabs, Table, message, Popconfirm, Button, BackTop} from 'antd';
 import $ from 'jquery';
-import {Link} from 'react-router';
+import {Link,browserHistory} from 'react-router';
 const TabPane = Tabs.TabPane;
 
 
@@ -370,7 +370,7 @@ class FirstCategoryManage extends React.Component {
   //添加检查项目
   requestAddThirdCategory = () => {
 
-    this.refs.addForm.validateFields(['type', 'secondCategoryParentOfAssayId', 'secondCategoryParentOfTechId', 'thirdCategoryName', 'abbreviation', 'systemCategory', 'referenceValue', 'hospital'], (err, values) => {
+    this.refs.addForm.validateFields(['type', 'secondCategoryParentOfAssayId', 'secondCategoryParentOfTechId', 'thirdCategoryName', 'abbreviation', 'referenceValue', 'hospital'], (err, values) => {
       if (!err) {
         console.log('添加'+ values.type + '检查项目' + values.thirdCategoryName);
 
@@ -383,7 +383,6 @@ class FirstCategoryManage extends React.Component {
             dataType : 'json',
             data : JSON.stringify({secondId : secondId,
                                    name: values.thirdCategoryName,
-                                   systemCategory: values.systemCategory,
                                    referenceValue: values.referenceValue,
                                    hospital: values.hospital}),
             beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
@@ -408,6 +407,15 @@ class FirstCategoryManage extends React.Component {
         });
       }
     });
+  }
+
+  handleMenuItemClick = (key) => {
+
+    switch(key) {
+      case '2':browserHistory.push(ROUTE.FIRST_CATEGORY_MANAGE.URL_PREFIX + "/" + ROUTE.FIRST_CATEGORY_MANAGE.MENU_KEY + "/2");break;
+      case '1':
+      default:browserHistory.push(ROUTE.FIRST_CATEGORY_MANAGE.URL_PREFIX + "/" + ROUTE.FIRST_CATEGORY_MANAGE.MENU_KEY + "/1");break;
+    }
   }
 
 
@@ -467,7 +475,7 @@ class FirstCategoryManage extends React.Component {
     return (
       <div>
         <BackTop visibilityHeight="200"/>
-        <Tabs defaultActiveKey={this.props.params.tabKey} tabBarExtraContent={<Button type="primary" onClick={this.showAddModal}>添加检查项目</Button>}>
+        <Tabs defaultActiveKey={this.props.params.tabKey} onChange={this.handleMenuItemClick} tabBarExtraContent={<Button type="primary" onClick={this.showAddModal}>添加检查项目</Button>}>
           <TabPane tab="化验检查项目" key="1">
             <Table className='first-category-table' columns={assayColumns} dataSource={this.state.assayData} rowKey='id' loading={this.state.assayTableLoading} pagination={false}/>
           </TabPane>

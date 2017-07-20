@@ -10,6 +10,10 @@ class CategoryAddModal_ extends React.Component {
 
   state = {
 
+    techRadioDisabled: false,
+    thirdCategoryRadioDisabled: false,
+
+
     firstCategoryLevelVisible: STYLE.BLOCK,
 
     secondCategoryLevelVisible: STYLE.NONE,
@@ -52,6 +56,8 @@ class CategoryAddModal_ extends React.Component {
   handleTypeChange = (e) => {
 
     let type = e.target.value;
+    type === "医技" ? this.setState({thirdCategoryRadioDisabled: true}) : this.setState({thirdCategoryRadioDisabled: false})
+
     let level = this.props.form.getFieldValue("level");
     this.changeFormByTypeAndLevel(type, level);
   }
@@ -62,6 +68,8 @@ class CategoryAddModal_ extends React.Component {
 
     let type = this.props.form.getFieldValue("type");
     let level = e.target.value;
+    level === "检查项目" ? this.setState({techRadioDisabled: true}) : this.setState({techRadioDisabled: false})
+
     this.changeFormByTypeAndLevel(type, level);
   }
 
@@ -83,7 +91,7 @@ class CategoryAddModal_ extends React.Component {
               {getFieldDecorator('type', {rules: [{ required: true, message: '请选择检查类型!' }], initialValue: "化验"})(
               <Radio.Group onChange={this.handleTypeChange}>
                 <Radio.Button value="化验">化验</Radio.Button>
-                <Radio.Button value="医技">医技</Radio.Button>
+                <Radio.Button value="医技" disabled={this.state.techRadioDisabled}>医技</Radio.Button>
               </Radio.Group>
               )}
             </FormItem>
@@ -92,7 +100,7 @@ class CategoryAddModal_ extends React.Component {
               <Radio.Group onChange={this.handleLevelChange}>
                 <Radio.Button value="检查分类">检查分类</Radio.Button>
                 <Radio.Button value="检查亚类">检查亚类</Radio.Button>
-                <Radio.Button value="检查项目">检查项目</Radio.Button>
+                <Radio.Button value="检查项目" disabled={this.state.thirdCategoryRadioDisabled}>检查项目</Radio.Button>
               </Radio.Group>
               )}
             </FormItem>
@@ -143,11 +151,6 @@ class CategoryAddModal_ extends React.Component {
             </FormItem>
             <FormItem {...formItemLayout} label="英文缩写" style={{display: this.state.thirdCategoryLevelVisible}} hasFeedback={true}>
               {getFieldDecorator('abbreviation', {rules: [{ required: true, message: '请输入英文缩写!' }]})(
-                <Input />
-              )}
-            </FormItem>
-            <FormItem {...formItemLayout} label="系统分类" style={{display: this.state.thirdCategoryLevelVisible}} hasFeedback={true}>
-              {getFieldDecorator('systemCategory', {rules: [{ required: true, message: '请输入系统分类!' }]})(
                 <Input />
               )}
             </FormItem>

@@ -1,5 +1,7 @@
-import './MemberManage.css'
-import {SERVER, SESSION, RESULT, PAGE_SIZE, ROLE, STYLE} from './../../App/PublicConstant.js'
+import './MemberManage.css';
+import {SERVER, SESSION, RESULT, PAGE_SIZE, ROLE, STYLE, DATE_FORMAT} from './../../App/PublicConstant.js';
+import {formatDate} from './../../App/PublicUtil.js';
+import moment from 'moment';
 import React from 'react';
 import {Tabs, Table, message, Popconfirm, BackTop, Button} from 'antd';
 import MemberEditModal from './MemberEditModal.js';
@@ -124,7 +126,8 @@ class MemberManage extends React.Component {
                 if(this.refs.memberEditForm == null) return;
                 this.refs.memberEditForm.setFieldsValue({name: member.name,
                                                          role: member.role,
-                                                         adviserAndManager: [member.staffMgrName, Number(member.staffId)]});
+                                                         adviserAndManager: [member.staffMgrName, Number(member.staffId)],
+                                                         validTime: moment(formatDate(member.valid), DATE_FORMAT)});
 
                 return;
             } else {
@@ -206,7 +209,7 @@ class MemberManage extends React.Component {
             url : SERVER + '/api/user',
             type : 'PUT',
             contentType: 'application/json',
-            data : JSON.stringify({userId: this.memberId, role: values.role, staffId: values.adviserAndManager[1]}),
+            data : JSON.stringify({userId: this.memberId, role: values.role, staffId: values.adviserAndManager[1], valid: values.validTime}),
             dataType : 'json',
             beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
             success : (result) => {
@@ -320,6 +323,11 @@ class MemberManage extends React.Component {
       title: '所属顾问主管',
       dataIndex: 'staffMgrName',
       key: 'staffMgrName',
+    }, {
+      title: '有效日期',
+      dataIndex: 'valid',
+      key: 'valid',
+      render: (valid) => formatDate(valid)
     }, {
       title: '操作',
       key: 'action',
