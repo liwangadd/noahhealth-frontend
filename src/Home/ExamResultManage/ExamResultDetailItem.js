@@ -35,16 +35,21 @@ class ExamResultDetailItem_ extends React.Component {
 
     const { getFieldDecorator } = this.props.form;
 
-    const {detail} = this.props;
+    const {detail, type} = this.props;
     const detailColumns = [{
       title: '检查项目名称',
       dataIndex: 'thirdName',
       key: 'thirdName'
-    },{
+    },
+    type === "化验"
+    ?
+    {
       title: '参考值及单位',
       dataIndex: 'referenceValue',
       key: 'referenceValue',
-    },
+    }
+    :
+    {},
     detail.status === "录入中" || detail.status === "未通过"
     ?
     {

@@ -19,6 +19,8 @@ import ThirdCategoryManage from './Home/CategoryManage/ThirdCategoryManage.js';
 import OriginResultManage from './Home/OriginResultManage/OriginResultManage.js';
 import ExamResultManage from './Home/ExamResultManage/ExamResultManage.js';
 import ExamResultDetail from './Home/ExamResultManage/ExamResultDetail.js';
+import HealthResultManage from './Home/HealthResultManage/HealthResultManage.js';
+import HealthResultDetail from './Home/HealthResultManage/HealthResultDetail.js';
 import {message} from 'antd'
 import {Router, Route, browserHistory, IndexRoute} from 'react-router';
 
@@ -114,6 +116,11 @@ class AppRouter extends React.Component {
 
                       <Route path={ROUTE.EXAM_RESULT_MANAGE.URL} component={ExamResultManage}/>
                       <Route path={ROUTE.EXAM_RESULT_DETAIL.URL} component={ExamResultDetail}/>
+
+                      <Route path={ROUTE.HEALTH_RESULT_MANAGE.URL} component={HealthResultManage}/>
+                      <Route path={ROUTE.HEALTH_RESULT_DETAIL.URL} component={HealthResultDetail}/>
+
+
                   </Route>
                 </Route>
 

@@ -1,6 +1,6 @@
 import './OriginResultManage.css';
 import React from 'react';
-import {Form, Input, Select, Modal, DatePicker} from 'antd';
+import {Form, Input, Select, Modal, DatePicker, Cascader} from 'antd';
 const FormItem = Form.Item;
 const Option = Select.Option;
 
@@ -25,16 +25,24 @@ class OriginResultUploadModal_ extends React.Component {
                 </Select>
               )}
             </FormItem>
-
-            <FormItem {...formItemLayout} label="日期" hasFeedback={true}>
-              {getFieldDecorator('time', {rules: [{ required: true, message: '请选择日期!' }]})(
-                <DatePicker style={{width: '100%'}}/>
+            <FormItem {...formItemLayout} label="资料名称">
+              {getFieldDecorator('note', {rules: [{ required: true, message: '请输入资料名称!' }]})(
+                <Input />
               )}
             </FormItem>
-
-            <FormItem {...formItemLayout} label="备注">
-              {getFieldDecorator('note')(
+            <FormItem {...formItemLayout} label="资料类别">
+              {getFieldDecorator('secondId', {rules: [{ required: true, message: '请选择资料类别!' }]})(
+                <Cascader options={this.props.originResultSecondTypeData} placeholder="" allowClear={false}/>
+              )}
+            </FormItem>
+            <FormItem {...formItemLayout} label="检查医院">
+              {getFieldDecorator('hospital', {rules: [{ required: true, message: '请输入检查医院名称!' }]})(
                 <Input />
+              )}
+            </FormItem>
+            <FormItem {...formItemLayout} label="检查日期" hasFeedback={true}>
+              {getFieldDecorator('time', {rules: [{ required: true, message: '请选择检查日期!' }]})(
+                <DatePicker style={{width: '100%'}}/>
               )}
             </FormItem>
           </Form>
