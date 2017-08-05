@@ -22,49 +22,23 @@ class HealthResultDetailAddModal_ extends React.Component {
 
   render() {
 
-    const formItemLayout = {labelCol: { xs: { span: 24 }, sm: { span: 7 },}, wrapperCol: { xs: { span: 24 }, sm: { span: 12 }}};
+    const formItemLayoutOfType = {labelCol: { xs: { span: 24 }, sm: { span: 4 },}, wrapperCol: { xs: { span: 24 }, sm: { span: 10 }}};
+    const formItemLayoutOfContent = {labelCol: { xs: { span: 24 }, sm: { span: 4 },}, wrapperCol: { xs: { span: 24 }, sm: { span: 19 }}};
 
     const { getFieldDecorator } = this.props.form;
     return (
-        <Modal title="添加检查记录" visible={this.props.visible} onOk={this.props.onConfirm} confirmLoading={this.props.confirmLoading} onCancel={this.props.onCancel}>
+        <Modal title="添加健康摘要" visible={this.props.visible} onOk={this.props.onConfirm} confirmLoading={this.props.confirmLoading} onCancel={this.props.onCancel}>
           <Form className="add-form">
 
-            <FormItem {...formItemLayout} label="检查类型">
-              {getFieldDecorator('type', {rules: [{ required: true, message: '请选择检查类型!' }], initialValue: "化验"})(
-              <Radio.Group onChange={this.handleTypeChange}>
-                <Radio.Button value="化验">化验</Radio.Button>
-                <Radio.Button value="医技">医技</Radio.Button>
-              </Radio.Group>
+            <FormItem {...formItemLayoutOfType} label="摘要类别" style={{display: this.state.secondCategoryOfAssayVisible}} hasFeedback={true}>
+              {getFieldDecorator('secondId', {rules: [{ required: true, message: '请选择摘要类别!' }]})(
+                <Cascader options={this.props.healthResultSecondTypeData} placeholder="" allowClear={false}/>
               )}
             </FormItem>
 
-            <FormItem {...formItemLayout} label="检查亚类" style={{display: this.state.secondCategoryOfAssayVisible}} hasFeedback={true}>
-              {getFieldDecorator('secondCategoryParentOfAssayId', {rules: [{ required: true, message: '请选择检查亚类!' }]})(
-                <Cascader options={this.props.secondCategoryParentOfAssayData} placeholder="" allowClear={false}/>
-              )}
-            </FormItem>
-
-            <FormItem {...formItemLayout} label="检查亚类" style={{display: this.state.secondCategoryOfTechVisible}} hasFeedback={true}>
-              {getFieldDecorator('secondCategoryParentOfTechId', {rules: [{ required: true, message: '请选择检查亚类!' }]})(
-                <Cascader options={this.props.secondCategoryParentOfTechData} placeholder="" allowClear={false}/>
-              )}
-            </FormItem>
-
-            <FormItem {...formItemLayout} label="检查医院" hasFeedback={true}>
-              {getFieldDecorator('hospital', {rules: [{ required: true, message: '请输入检查医院!' }], initialValue: "301医院"})(
-                <Input />
-              )}
-            </FormItem>
-
-            <FormItem {...formItemLayout} label="检查日期" hasFeedback={true}>
-              {getFieldDecorator('time', {rules: [{ required: true, message: '请选择检查日期!' }]})(
-                <DatePicker style={{width: '100%'}}/>
-              )}
-            </FormItem>
-
-            <FormItem {...formItemLayout} label="备注">
-              {getFieldDecorator('note')(
-                <Input />
+            <FormItem {...formItemLayoutOfContent} label="摘要内容" >
+              {getFieldDecorator('contentNew')(
+                <Input type="textarea" rows={10} />
               )}
             </FormItem>
           </Form>

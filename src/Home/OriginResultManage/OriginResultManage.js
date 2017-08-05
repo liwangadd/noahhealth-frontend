@@ -452,7 +452,7 @@ class OriginResultManage extends React.Component {
       });
   }
 
-
+  //拉取电子资料类别级联数据
   requestOriginResultSecondType = () => {
 
     console.log('拉取电子资料类别数据');

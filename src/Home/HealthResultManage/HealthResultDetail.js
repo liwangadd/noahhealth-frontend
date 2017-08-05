@@ -18,9 +18,10 @@ class HealthResultDetail extends React.Component {
 
     pageLoading: true,
 
-    //添加检查记录对话框
+    //添加健康摘要对话框
     addModalVisible: false,
     confirmAddModalLoading: false,
+    healthResultSecondTypeData: [],
 
     //录入检查结果
     saveLoading: false,
@@ -40,43 +41,34 @@ class HealthResultDetail extends React.Component {
     healthResultDetailTableLoading: false,
 
     //正文 化验/医技 卡片/表格 内容
-    healthResultDetailOfAssayData: [],
-    healthResultDetailOfAssayItems: null,
-    healthResultDetailOfTechData: [],
-    healthResultDetailOfTechItems: null,
-
-    secondCategoryParentOfAssayData: [],
-    secondCategoryParentOfTechData: [],
-    type: '化验'
+    healthResultDetailData: [],
+    healthResultDetailItems: null,
   };
 
 
   /**
-  * 添加检查记录对话框
+  * 添加健康摘要对话框
   **/
   showAddModal = () => this.setState({ addModalVisible: true})
   closeAddModal = () => this.setState({ addModalVisible: false})
 
-  //确认录入检查记录信息
+  //确认录入健康摘要信息
   confirmAddModal = () => {
 
     this.refs.addForm.validateFields((err, values) => {
       if(!err) {
-        console.log('添加一条检查记录', values);
+        console.log('添加一条健康摘要', values);
 
         //显示加载圈
         this.setState({ confirmAddModalLoading: true });
 
-        let secondId = values.type === '化验' ? values.secondCategoryParentOfAssayId[1] : values.secondCategoryParentOfTechId[1];
         $.ajax({
-            url : SERVER + '/api/input',
+            url : SERVER + '/api/health',
             type : 'POST',
             contentType: 'application/json',
             data : JSON.stringify({userId: Number(this.props.params.memberId),
-                                   secondId: secondId,
-                                   hospital: values.hospital,
-                                   time: values.time,
-                                   note: values.note}),
+                                   secondId: Number(values.secondId[1]),
+                                   contentNew: values.contentNew}),
             dataType : 'json',
             beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
             success : (result) => {
@@ -277,7 +269,7 @@ class HealthResultDetail extends React.Component {
   //删除
   deleteInputDetail = (id) => {
 
-    console.log('删除一条检查记录', id);
+    console.log('删除一条健康摘要', id);
 
     $.ajax({
         url : SERVER + '/api/input/' + id,
@@ -303,79 +295,18 @@ class HealthResultDetail extends React.Component {
     });
   }
 
-  //拉取系统中所有检查亚类
-  requestSecondCategoryParentData = (type) => {
+  //获取memberId用户的所有健康摘要~~~~~~~~~~~~~
+  requestHealthResultDetailOfMember = () => {
 
-    console.log('查询所有'+ type +'检查亚类');
+    let values = this.refs.searchForm.getFieldsValue();
+
+    console.log('查询' + this.props.params.memberId + '会员的所有健康摘要');
     $.ajax({
-        url : SERVER + '/api/first/level',
+        url : SERVER + '/api/health/list/' + this.props.params.memberId,
         type : 'POST',
         contentType: 'application/json',
         dataType : 'json',
-        data : JSON.stringify({type : type}),
-        // async: false,
-        beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
-        success : (result) => {
-
-            console.log(result);
-            if(result.code === RESULT.SUCCESS) {
-
-                //将后端返回的map整理成级联列表识别的数据结构
-                let secondCategoryParentData = [];
-                for(let firstCategory in result.content) {
-
-                  //加入大类
-                  let firstCategoryData = {value: firstCategory, label: firstCategory, children:[]};
-
-                  //获取旗下所有亚类
-                  let secondCategories = result.content[firstCategory];
-                  for(let i = 0; i < secondCategories.length; i++) {
-                    firstCategoryData.children.push({value: secondCategories[i].id, label: secondCategories[i].name});
-                  }
-
-                  secondCategoryParentData.push(firstCategoryData);
-                }
-
-                if(type === "化验") {
-                  console.log(secondCategoryParentData);
-                  this.setState({secondCategoryParentOfAssayData: secondCategoryParentData});
-
-                  if(this.refs.addForm == null) return;
-                  this.refs.addForm.setFieldsValue({secondCategoryParentOfAssayId: secondCategoryParentData.length > 0 ? [secondCategoryParentData[0].value, secondCategoryParentData[0].children[0].value] : []});
-
-                } else {
-
-                  this.setState({secondCategoryParentOfTechData: secondCategoryParentData});
-
-                  if(this.refs.addForm == null) return;
-                  this.refs.addForm.setFieldsValue({secondCategoryParentOfTechId: secondCategoryParentData.length > 0 ? [secondCategoryParentData[0].value, secondCategoryParentData[0].children[0].value] : []});
-                }
-            } else {
-                message.error(result.reason, 2);
-            }
-        }
-    });
-  }
-
-  //获取memberId用户的所有检查记录~~~~~~~~~~~~~
-  requestHealthResultDetailOfMember = (type) => {
-
-    let values = [];
-    console.log(this.refs.assaySearchForm);
-    if(type === '化验') values = this.refs.assaySearchForm.getFieldsValue();
-    else if(type === '医技') {
-      if(this.techSearchForm === undefined) return;
-      values = this.techSearchForm.getFieldsValue();
-    }
-
-    console.log('查询' + this.props.params.memberId + '会员的所有' + type + '检查记录');
-    $.ajax({
-        url : SERVER + '/api/input/list/' + this.props.params.memberId,
-        type : 'POST',
-        contentType: 'application/json',
-        dataType : 'json',
-        data : JSON.stringify({type : type,
-                               secondId: values.secondId[1],
+        data : JSON.stringify({secondId: Number(values.secondId[1]),
                                status: values.status,
                                beginTime: values.time !== undefined ? values.time[0] : undefined,
                                endTime: values.time !== undefined ? values.time[1] : undefined}),
@@ -389,14 +320,13 @@ class HealthResultDetail extends React.Component {
               const healthResultDetailItems = result.content.length <= 0
                                             ?
                                               <Alert
-                                              message="暂无相关检查记录"
+                                              message="暂无相关健康摘要"
                                               description=" "
                                               type="warning"
                                               showIcon
                                               />
                                             :
                                             result.content.map((detail, index) => <HealthResultDetailItem detail={detail}
-                                                                                                        type={type}
                                                                                                         key={index}
 
                                                                                                         onSave={this.saveInputDetail}
@@ -418,15 +348,11 @@ class HealthResultDetail extends React.Component {
                                                                                                         deleteLoading={this.state.deleteLoading} />);
 
 
-              if(type === '化验') {
-                this.setState({healthResultDetailOfAssayData: result.content,
-                               healthResultDetailOfAssayItems: healthResultDetailItems,
-                               pageLoading: false});
-              } else {
-                this.setState({healthResultDetailOfTechData: result.content,
-                               healthResultDetailOfTechItems: healthResultDetailItems,
-                               pageLoading: false});
-              }
+
+              this.setState({healthResultDetailData: result.content,
+                             healthResultDetailItems: healthResultDetailItems,
+                             pageLoading: false});
+
             } else {
 
               message.error(result.reason, 2);
@@ -436,33 +362,55 @@ class HealthResultDetail extends React.Component {
     });
   }
 
-  //切换选项卡
-  handleMenuItemClick = (activeKey) => {
+  //拉取电子资料类别级联数据
+  requestHealthResultSecondType = () => {
 
-    switch(activeKey) {
-      case "1":this.state.type = '化验';break;
-      case "2":this.state.type = '医技';break;
-      default:;break;
-    }
+    console.log('拉取健康摘要类别数据');
+    $.ajax({
+        url : SERVER + '/api/health_category/level',
+        type : 'GET',
+        dataType : 'json',
+        beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
+        success : (result) => {
+
+            console.log(result);
+            if(result.code !== RESULT.SUCCESS) {
+                message.error(result.reason, 2);
+                return;
+            }
+
+            //将后端返回的map整理成级联列表识别的数据结构
+            let healthResultSecondTypeData = [];
+            for(let firstType in result.content) {
+
+              //加入大类
+              let firstTypeData = {value: firstType, label: firstType, children:[]};
+
+              //获取旗下所有亚类
+              let secondTypes = result.content[firstType];
+              for(let i = 0; i < secondTypes.length; i++) {
+                firstTypeData.children.push({value: secondTypes[i].id, label: secondTypes[i].name});
+              }
+
+              healthResultSecondTypeData.push(firstTypeData);
+            }
+
+            this.setState({healthResultSecondTypeData: healthResultSecondTypeData});
+
+            if(this.refs.addForm == null) return;
+            this.refs.addForm.setFieldsValue({secondId: healthResultSecondTypeData.length > 0 ? [healthResultSecondTypeData[0].value, healthResultSecondTypeData[0].children[0].value] : []});
+        }
+    });
   }
 
 
-  //打开医技数据选项卡
-  componentDidMountOfTechDataTab = (form) => {
-
-    if(form == null) return;
-    this.techSearchForm = form;
-    this.requestHealthResultDetailOfMember('医技');
-  }
 
   componentDidMount = () => {
 
-    //拉取该用户的已添加的所有检查记录
+    //拉取该用户的已添加的所有健康摘要
     this.requestHealthResultDetailOfMember(this.state.type);
 
-    //获取化验、医技亚类
-    this.requestSecondCategoryParentData("化验");
-    this.requestSecondCategoryParentData("医技");
+    this.requestHealthResultSecondType(); //拉取健康摘要类别的级联数据
   }
 
 
@@ -473,8 +421,7 @@ class HealthResultDetail extends React.Component {
     //拆分healthResultDetailData
     //1.组装成卡片+表格条目
     //2.组装成锚点目录
-    const healthResultDetailOfAssayAnchors = this.state.healthResultDetailOfAssayData.map((detail, index) => <Anchor.Link href={"#" + detail.id.toString()} key={index} title={detail.secondName + " " + formatDate(detail.time)}/>);
-    const healthResultDetailOfTechAnchors = this.state.healthResultDetailOfTechData.map((detail, index) => <Anchor.Link href={"#" + detail.id.toString()} key={index} title={detail.secondName + " " + formatDate(detail.time)}/>);
+    const healthResultDetailAnchors = this.state.healthResultDetailData.map((detail, index) => <Anchor.Link href={"#" + detail.id.toString()} key={index} title={detail.secondName + " " + formatDate(detail.time)}/>);
 
     return (
       <Spin spinning={this.state.pageLoading} delay={LOADING_DELAY_TIME} tip='加载中'>
@@ -483,35 +430,24 @@ class HealthResultDetail extends React.Component {
           isEmployee(role)
           ?
           <Breadcrumb separator=">" className="category-path">
-            <Breadcrumb.Item><Link to={ROUTE.EXAM_RESULT_MANAGE.URL_PREFIX + "/" + ROUTE.EXAM_RESULT_MANAGE.MENU_KEY}>首页</Link></Breadcrumb.Item>
+            <Breadcrumb.Item><Link to={ROUTE.HEALTH_RESULT_MANAGE.URL_PREFIX + "/" + ROUTE.HEALTH_RESULT_MANAGE.MENU_KEY}>首页</Link></Breadcrumb.Item>
             <Breadcrumb.Item>{this.props.params.memberName}</Breadcrumb.Item>
           </Breadcrumb>
           :
           null
         }
-        <HealthResultDetailAddModal ref="addForm" visible={this.state.addModalVisible} confirmLoading={this.state.confirmAddModalLoading} onCancel={this.closeAddModal} onConfirm={this.confirmAddModal} secondCategoryParentOfAssayData={this.state.secondCategoryParentOfAssayData} secondCategoryParentOfTechData={this.state.secondCategoryParentOfTechData}/>
+        <HealthResultDetailAddModal ref="addForm" visible={this.state.addModalVisible} confirmLoading={this.state.confirmAddModalLoading} onCancel={this.closeAddModal} onConfirm={this.confirmAddModal} healthResultSecondTypeData={this.state.healthResultSecondTypeData}/>
 
 
-        <Tabs defaultActiveKey={"1"} tabBarExtraContent={role === ROLE.EMPLOYEE_ARCHIVER || role === ROLE.EMPLOYEE_ADMIN ? <Button type="primary" onClick={this.showAddModal}>添加检查记录</Button> : null} onChange={this.handleMenuItemClick}>
-          <TabPane tab="化验数据" key="1">
-            <HealthResultDetailSearchForm ref="assaySearchForm" type="化验" requestHealthResultDetailOfMember={this.requestHealthResultDetailOfMember} secondCategoryParentData={this.state.secondCategoryParentOfAssayData}/>
+        <Tabs defaultActiveKey={"1"} tabBarExtraContent={role === ROLE.EMPLOYEE_ARCHIVER || role === ROLE.EMPLOYEE_ADMIN ? <Button type="primary" onClick={this.showAddModal}>添加健康摘要</Button> : null} onChange={this.handleMenuItemClick}>
+          <TabPane tab="健康摘要" key="1">
+            <HealthResultDetailSearchForm ref="searchForm" healthResultSecondTypeData={this.state.healthResultSecondTypeData} />
             <div className="health-result-detail-info">
               <Anchor className="health-result-detail-anchor">
-                {healthResultDetailOfAssayAnchors}
+                {healthResultDetailAnchors}
               </Anchor>
-              <Timeline pending={this.state.healthResultDetailOfAssayData.length <= 0 ? null : <h4>已到底部</h4>}>
-                {this.state.healthResultDetailOfAssayItems}
-              </Timeline>
-            </div>
-          </TabPane>
-          <TabPane tab="医技数据" key="2">
-            <HealthResultDetailSearchForm ref={this.componentDidMountOfTechDataTab} type="医技" requestHealthResultDetailOfMember={this.requestHealthResultDetailOfMember} secondCategoryParentData={this.state.secondCategoryParentOfTechData}/>
-            <div className="health-result-detail-info">
-              <Anchor className="health-result-detail-anchor">
-                {healthResultDetailOfTechAnchors}
-              </Anchor>
-              <Timeline pending={this.state.healthResultDetailOfTechData.length <= 0 ? null : <h4>已到底部</h4>}>
-                {this.state.healthResultDetailOfTechItems}
+              <Timeline pending={this.state.healthResultDetailData.length <= 0 ? null : <h4>已到底部</h4>}>
+                {this.state.healthResultDetailItems}
               </Timeline>
             </div>
           </TabPane>

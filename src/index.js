@@ -72,6 +72,9 @@ const certifyAccess = function(nextState, replace){
       case ROUTE.EXAM_RESULT_MANAGE.URL_PREFIX:certifyRole(replace, role, ROUTE.EXAM_RESULT_MANAGE.PERMISSION);break;
       case ROUTE.EXAM_RESULT_DETAIL.URL_PREFIX:certifyRole(replace, role, ROUTE.EXAM_RESULT_DETAIL.PERMISSION);break;
 
+      case ROUTE.HEALTH_RESULT_MANAGE.URL_PREFIX:certifyRole(replace, role, ROUTE.HEALTH_RESULT_MANAGE.PERMISSION);break;
+      case ROUTE.HEALTH_RESULT_DETAIL.URL_PREFIX:certifyRole(replace, role, ROUTE.HEALTH_RESULT_DETAIL.PERMISSION);break;
+
       default:clearSession(); isEmployee(role) ? replace({ pathname: ROUTE.EMPLOYEE_LOGIN.URL }) : replace({ pathname: ROUTE.MEMBER_LOGIN.URL }); message.error('暂无该页面，请重新登录');break;
     }
 

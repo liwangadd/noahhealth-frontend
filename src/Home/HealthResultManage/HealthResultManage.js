@@ -29,7 +29,7 @@ class HealthResultManage extends React.Component {
         console.log('拉取第'+ pageNow + "页化验/医技目录", values);
 
         $.ajax({
-            url : SERVER + '/api/input/list',
+            url : SERVER + '/api/health/list',
             type : 'POST',
             contentType: 'application/json',
             data : JSON.stringify({userName : values.userName,
@@ -96,7 +96,7 @@ class HealthResultManage extends React.Component {
       key: 'action',
       render: (record) => (
         <span>
-          <Link to={ROUTE.EXAM_RESULT_DETAIL.URL_PREFIX + "/" + ROUTE.EXAM_RESULT_DETAIL.MENU_KEY + "/" + record.id + "/" + record.name}>查看详情</Link>
+          <Link to={ROUTE.HEALTH_RESULT_DETAIL.URL_PREFIX + "/" + ROUTE.HEALTH_RESULT_DETAIL.MENU_KEY + "/" + record.id + "/" + record.name}>查看详情</Link>
         </span>
       )
     }];

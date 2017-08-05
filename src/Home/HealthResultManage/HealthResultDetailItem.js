@@ -135,8 +135,6 @@ class HealthResultDetailItem_ extends React.Component {
       <Timeline.Item dot={timeLineIcon}>
         <h4 id={detail.id.toString()}>{detail.secondName + " " + formatDate(detail.time)}</h4>
         <Card title={detail.status} extra={<a onClick={this.switchForm}>{this.state.switchText}</a>} className="health-result-detail-item-card">
-          <p>检查亚类：{detail.secondName}</p>
-          <p>检查医院：{detail.hospital}</p>
           <p>录入时间：{formatDate(detail.uploadTime)}</p>
           <p>录入者：{detail.inputerName}</p>
           {detail.status !== "录入中" && detail.status !== "待审核" ? <p>审核者：{detail.checkerName}</p> : null}

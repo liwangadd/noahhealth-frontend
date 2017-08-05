@@ -11,7 +11,7 @@ class Welcome extends React.Component {
     //     type : 'POST'
     // });
 
-//    window.location.href = 'https://10.109.247.72:8443/email/user/login.action?username=bob&password=1234';
+   window.location.href = 'https://10.109.247.72:8443/email/user/login.action?username=alice&password=1234&receiver=bob@boat2.wuhan';
 
   }
 

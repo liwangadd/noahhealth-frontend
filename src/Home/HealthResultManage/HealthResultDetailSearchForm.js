@@ -30,9 +30,9 @@ class HealthResultDetailSearchForm_ extends React.Component {
     const role = sessionStorage.getItem(SESSION.ROLE);
 
     //在检查亚类尾部加上全部/全部 secondId = -1
-    const allCategory = {value: '全部分类', label: '全部分类', children:[{value: -1, label: '全部亚类'}]};
-    let secondCategoryParentData = this.props.secondCategoryParentData.slice(); //复制数组对象
-    secondCategoryParentData.unshift(allCategory);
+    const allType = {value: '全部分类', label: '全部分类', children:[{value: -1, label: '全部亚类'}]};
+    let healthResultSecondTypeData = this.props.healthResultSecondTypeData.slice(); //复制数组对象
+    healthResultSecondTypeData.unshift(allType);
 
     const { getFieldDecorator } = this.props.form;
     return (
@@ -50,7 +50,7 @@ class HealthResultDetailSearchForm_ extends React.Component {
           <Col span={8}>
             <FormItem>
               {getFieldDecorator('secondId', {initialValue: ['全部分类', -1]})(
-                <Cascader options={secondCategoryParentData} placeholder="" allowClear={false}/>
+                <Cascader options={healthResultSecondTypeData} placeholder="" allowClear={false}/>
               )}
             </FormItem>
           </Col>
