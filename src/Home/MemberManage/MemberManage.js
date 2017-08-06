@@ -333,6 +333,8 @@ class MemberManage extends React.Component {
       key: 'action',
       render: (record) => (
         <span>
+          <a href="#">查看</a>
+          <span className="ant-divider" />
           <a onClick={() => this.showMemberEditModal(record)}>修改</a>
           {
             sessionStorage.getItem(SESSION.ROLE) === ROLE.EMPLOYEE_ADMIN

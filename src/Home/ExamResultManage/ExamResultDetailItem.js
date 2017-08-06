@@ -4,6 +4,15 @@ import {formatDate} from './../../App/PublicUtil.js';
 import React from 'react';
 import {Table, Button, Timeline, Card, Icon, Form, Input,Popconfirm, Checkbox} from 'antd';
 
+//判断是否含有异常项
+const hasAbnormal = (tableItem) => {
+
+  for(let i = 0; i < tableItem.length; i++)
+    if(tableItem[i].normal === true)
+      return true;
+}
+
+
 class ExamResultDetailItem_ extends React.Component {
 
   state = {
@@ -38,8 +47,10 @@ class ExamResultDetailItem_ extends React.Component {
     const {detail, type} = this.props;
     const detailColumns = [{
       title: '检查项目名称',
-      dataIndex: 'thirdName',
-      key: 'thirdName'
+      key: 'thirdName',
+      render: (record) => {
+        return <span className={record.normal === true ? "abnormal" : ""}>{record.thirdName}</span>
+      }
     },
     type === "化验"
     ?
@@ -133,7 +144,7 @@ class ExamResultDetailItem_ extends React.Component {
 
     return (
       <Timeline.Item dot={timeLineIcon}>
-        <h4 id={detail.id.toString()}>{detail.secondName + " " + formatDate(detail.time)}</h4>
+        <h4 id={detail.id.toString()} className={hasAbnormal(detail.data) ? "abnormal" : ""}>{detail.secondName + " " + formatDate(detail.time)}</h4>
         <Card title={detail.status} extra={<a onClick={this.switchForm}>{this.state.switchText}</a>} className="exam-result-detail-item-card">
           <p>检查亚类：{detail.secondName}</p>
           <p>检查医院：{detail.hospital}</p>

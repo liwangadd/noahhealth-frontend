@@ -78,7 +78,7 @@ class HealthResultDetail extends React.Component {
 
                 //关闭加载圈、对话框
                 this.setState({ addModalVisible: false, confirmAddModalLoading: false});
-                this.requestHealthResultDetailOfMember(values.type);
+                this.requestHealthResultDetailOfMember();
 
                 message.success(result.reason, 2);
               } else {
@@ -94,21 +94,21 @@ class HealthResultDetail extends React.Component {
   }
 
   //保存录入的检查结果
-  saveInputDetail = (form, id) => {
+  saveHealthDetail = (form, id) => {
 
     console.log('保存录入了的检查结果', id);
 
     form.validateFields((err, values) => {
       if(!err) {
-        console.log(values);
+
         //显示加载圈
         this.setState({ saveLoading: true });
         $.ajax({
-            url : SERVER + '/api/detail',
+            url : SERVER + '/api/health/' + id,
             type : 'PUT',
             contentType: 'application/json',
             dataType : 'json',
-            data : JSON.stringify(values),
+            data : JSON.stringify({contentNew: values.contentNew}),
             beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
             success : (result) => {
               console.log(result);
@@ -129,17 +129,17 @@ class HealthResultDetail extends React.Component {
   }
 
   //提交录入的检查结果（先请求保存、再请求改变状态）
-  submitInputDetail = (form, id) => {
+  submitHealthDetail = (form, id) => {
 
     console.log('提交一份检查结果,变为待审核', id);
 
     //先保存
-    this.saveInputDetail(form, id);
+    this.saveHealthDetail(form, id);
 
     //再提交
     this.setState({ submitLoading: true });
     $.ajax({
-        url : SERVER + '/api/input/status/' + id,
+        url : SERVER + '/api/health/status/' + id,
         type : 'PUT',
         contentType: 'application/json',
         dataType : 'json',
@@ -153,7 +153,7 @@ class HealthResultDetail extends React.Component {
             this.setState({ submitLoading: false});
 
             //重新查一遍
-            this.requestHealthResultDetailOfMember(this.state.type);
+            this.requestHealthResultDetailOfMember();
             message.success(result.reason, 2);
           } else {
 
@@ -169,14 +169,14 @@ class HealthResultDetail extends React.Component {
   * 审核检查结果对话框
   **/
 
-  passInputDetail = (form, id) => {
+  passHealthDetail = (form, id) => {
 
     console.log('通过一份检查结果,变为已通过', id);
 
     //显示加载圈
     this.setState({ passLoading: true });
     $.ajax({
-        url : SERVER + '/api/input/status/' + id,
+        url : SERVER + '/api/health/status/' + id,
         type : 'PUT',
         contentType: 'application/json',
         dataType : 'json',
@@ -189,7 +189,7 @@ class HealthResultDetail extends React.Component {
             //关闭加载圈、对话框
             this.setState({ passLoading: false });
 
-            this.requestHealthResultDetailOfMember(this.state.type);
+            this.requestHealthResultDetailOfMember();
             message.success(result.reason, 2);
           } else {
 
@@ -201,14 +201,14 @@ class HealthResultDetail extends React.Component {
     });
   }
 
-  unpassInputDetail = (id, unpassReason) => {
+  unpassHealthDetail = (id, unpassReason) => {
 
     console.log('不通过一份检查结果,变为未通过', id);
 
     //显示加载圈
     this.setState({ unpassLoading: true });
     $.ajax({
-        url : SERVER + '/api/input/status/' + id,
+        url : SERVER + '/api/health/status/' + id,
         type : 'PUT',
         contentType: 'application/json',
         dataType : 'json',
@@ -221,7 +221,7 @@ class HealthResultDetail extends React.Component {
             //关闭加载圈、对话框
             this.setState({ unpassLoading: false});
 
-            this.requestHealthResultDetailOfMember(this.state.type);
+            this.requestHealthResultDetailOfMember();
             message.success(result.reason, 2);
           } else {
 
@@ -234,14 +234,14 @@ class HealthResultDetail extends React.Component {
   }
 
   //下载
-  downloadInputDetail = (id) => {
+  downloadHealthDetail = (id) => {
 
     console.log('请求下载检查结果', id);
 
     //显示加载圈
     this.setState({ downloadLoading: true });
     $.ajax({
-        url : SERVER + '/api/input/download/' + id,
+        url : SERVER + '/api/health/download/' + id,
         type : 'GET',
         dataType : 'json',
         beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
@@ -267,12 +267,12 @@ class HealthResultDetail extends React.Component {
 
 
   //删除
-  deleteInputDetail = (id) => {
+  deleteHealthDetail = (id) => {
 
     console.log('删除一条健康摘要', id);
 
     $.ajax({
-        url : SERVER + '/api/input/' + id,
+        url : SERVER + '/api/health/' + id,
         type : 'DELETE',
         dataType : 'json',
         beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
@@ -283,7 +283,7 @@ class HealthResultDetail extends React.Component {
 
                 this.setState({deleteLoading: false});
 
-                this.requestHealthResultDetailOfMember(this.state.type);
+                this.requestHealthResultDetailOfMember();
                 message.success(result.reason, 2);
                 return;
             } else {
@@ -329,22 +329,22 @@ class HealthResultDetail extends React.Component {
                                             result.content.map((detail, index) => <HealthResultDetailItem detail={detail}
                                                                                                         key={index}
 
-                                                                                                        onSave={this.saveInputDetail}
+                                                                                                        onSave={this.saveHealthDetail}
                                                                                                         saveLoading={this.state.saveLoading}
 
-                                                                                                        onSubmit={this.submitInputDetail}
+                                                                                                        onSubmit={this.submitHealthDetail}
                                                                                                         submitLoading={this.state.submitLoading}
 
-                                                                                                        onPass={this.passInputDetail}
+                                                                                                        onPass={this.passHealthDetail}
                                                                                                         passLoading={this.state.passLoading}
 
-                                                                                                        onUnpass={this.unpassInputDetail}
+                                                                                                        onUnpass={this.unpassHealthDetail}
                                                                                                         unpassLoading={this.state.unpassLoading}
 
-                                                                                                        onDownload={this.downloadInputDetail}
+                                                                                                        onDownload={this.downloadHealthDetail}
                                                                                                         downloadLoading={this.state.downloadLoading}
 
-                                                                                                        onDelete={this.deleteInputDetail}
+                                                                                                        onDelete={this.deleteHealthDetail}
                                                                                                         deleteLoading={this.state.deleteLoading} />);
 
 
@@ -408,7 +408,7 @@ class HealthResultDetail extends React.Component {
   componentDidMount = () => {
 
     //拉取该用户的已添加的所有健康摘要
-    this.requestHealthResultDetailOfMember(this.state.type);
+    this.requestHealthResultDetailOfMember();
 
     this.requestHealthResultSecondType(); //拉取健康摘要类别的级联数据
   }

@@ -1,8 +1,10 @@
 import './HealthResultManage.css';
 import {STYLE, SESSION, ROLE} from './../../App/PublicConstant.js';
 import {formatDate} from './../../App/PublicUtil.js';
+import {isEmployee, isMember} from './../../App/PublicMethod.js';
 import React from 'react';
 import {Table, Button, Timeline, Card, Icon, Form, Input,Popconfirm, Checkbox} from 'antd';
+
 
 class HealthResultDetailItem_ extends React.Component {
 
@@ -35,40 +37,13 @@ class HealthResultDetailItem_ extends React.Component {
 
     const { getFieldDecorator } = this.props.form;
 
-    const {detail, type} = this.props;
-    const detailColumns = [{
-      title: '检查项目名称',
-      dataIndex: 'thirdName',
-      key: 'thirdName'
-    },
-    type === "化验"
-    ?
+    const {detail} = this.props;
+    const detailColumns = [
     {
-      title: '参考值及单位',
-      dataIndex: 'referenceValue',
-      key: 'referenceValue',
-    }
-    :
-    {},
-    detail.status === "录入中" || detail.status === "未通过"
-    ?
-    {
-      title: '检查结果',
-      key: 'value',
+      title: '摘要内容',
+      key: 'contentNew',
       render: (record) => {
-        return getFieldDecorator(record.id.toString() + "-value", {'initialValue': record.value})(<Input size="small"/>)
-      }
-    }
-    :
-    {
-      title: '检查结果',
-      dataIndex: 'value',
-      key: 'value'
-    },{
-      title: '异常',
-      key: 'normal',
-      render: (record) => {
-        return getFieldDecorator(record.id.toString() + "-normal", {valuePropName: 'checked', 'initialValue': record.normal})(<Checkbox style={{marginLeft: 5}} disabled={detail.status === "录入中" || detail.status === "未通过" ? false : true}/>)
+        return getFieldDecorator('contentNew', {'initialValue': isEmployee(role) ? record.contentNew : record.content})(<Input type="textarea" placeholder={isEmployee(role) && (detail.status === "录入中" || detail.status === "未通过" || detail.status === "已通过") ? "请输入" : null} rows={5} style={{border: '0px'}} disabled={isEmployee(role) && (detail.status === "录入中" || detail.status === "未通过" || detail.status === "已通过") ? false : true}/>)
       }
     }];
 
@@ -83,15 +58,19 @@ class HealthResultDetailItem_ extends React.Component {
                                 :
                                 null;
     let detailOperation = null;
-    if(detail.status === "录入中" || detail.status === "未通过")
+    if(detail.status === "录入中" || detail.status === "未通过" || detail.status === "已通过")
       detailOperation =
+      isEmployee(role)
+      ?
       <div>
         {detailOperationDelete}
         <Button className="gutter" size="default" onClick={() => this.props.onSave(this.props.form, detail.id)} loading={this.props.saveLoading}>保存</Button>
         <Popconfirm title="您确定要提交审核吗?" placement="bottom" onConfirm={() => this.props.onSubmit(this.props.form, detail.id)}>
           <Button size="default" type="primary" loading={this.props.submitLoading}>提交审核</Button>
         </Popconfirm>
-      </div>;
+      </div>
+      :
+      null ;
     else if(detail.status === "待审核")
       detailOperation =
       <div>
@@ -113,12 +92,12 @@ class HealthResultDetailItem_ extends React.Component {
           null
         }
       </div>
-    else
-      detailOperation =
-      <div>
-        {detailOperationDelete}
-        <Button size="default" type="primary" onClick={() => this.props.onDownload(detail.id)} loading={this.props.downloadLoading}>下载</Button>
-      </div>
+    // else
+    //   detailOperation =
+    //   <div>
+    //     {detailOperationDelete}
+    //     <Button size="default" type="primary" onClick={() => this.props.onDownload(detail.id)} loading={this.props.downloadLoading}>下载</Button>
+    //   </div>
 
 
     //时间轴节点图标
@@ -129,12 +108,12 @@ class HealthResultDetailItem_ extends React.Component {
     else if(detail.status === "未通过") { iconType = "close-circle-o"; iconColor = "#f04134";}
     else { iconType = "check-circle-o"; iconColor = "#1DA57A";}
 
-    const timeLineIcon = <Icon type={iconType} style={{ fontSize: '16px' , fontWeight: 'bold', color: iconColor}} />
+    const timeLineIcon = isEmployee(role) ? <Icon type={iconType} style={{ fontSize: '16px' , fontWeight: 'bold', color: iconColor}} /> : null;
 
     return (
       <Timeline.Item dot={timeLineIcon}>
         <h4 id={detail.id.toString()}>{detail.secondName + " " + formatDate(detail.time)}</h4>
-        <Card title={detail.status} extra={<a onClick={this.switchForm}>{this.state.switchText}</a>} className="health-result-detail-item-card">
+        <Card title={isEmployee(role) ? detail.status : null} extra={<a onClick={this.switchForm}>{this.state.switchText}</a>} className="health-result-detail-item-card">
           <p>录入时间：{formatDate(detail.uploadTime)}</p>
           <p>录入者：{detail.inputerName}</p>
           {detail.status !== "录入中" && detail.status !== "待审核" ? <p>审核者：{detail.checkerName}</p> : null}
@@ -142,7 +121,7 @@ class HealthResultDetailItem_ extends React.Component {
           <p>备注：{detail.note}</p>
         </Card>
         <Form className="health-result-detail-item-form" style={{display: this.state.formVisible}}>
-          <Table columns={detailColumns} dataSource={detail.data} pagination={false} size="small" rowKey='id'/>
+          <Table columns={detailColumns} dataSource={[{id: detail.id, content: detail.content, contentNew: detail.contentNew}]} pagination={false} size="small" rowKey='id'/>
           <div className="operation">
             {detailOperation}
           </div>

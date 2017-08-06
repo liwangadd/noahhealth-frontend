@@ -189,6 +189,10 @@ class ThirdCategoryManage extends React.Component {
       dataIndex: 'name',
       key: 'name'
     },{
+      title: '英文缩写',
+      dataIndex: 'enShort',
+      key: 'enShort'
+    },{
       title: '参考值及单位',
       dataIndex: 'referenceValue',
       key: 'referenceValue',

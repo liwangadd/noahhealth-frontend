@@ -150,7 +150,7 @@ class CategoryAddModal_ extends React.Component {
               )}
             </FormItem>
             <FormItem {...formItemLayout} label="英文缩写" style={{display: this.state.thirdCategoryLevelVisible}} hasFeedback={true}>
-              {getFieldDecorator('abbreviation', {rules: [{ required: true, message: '请输入英文缩写!' }]})(
+              {getFieldDecorator('enShort', {rules: [{ required: true, message: '请输入英文缩写!' }]})(
                 <Input />
               )}
             </FormItem>

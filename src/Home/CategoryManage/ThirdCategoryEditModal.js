@@ -18,6 +18,11 @@ class ThirdCategoryEditModal_ extends React.Component {
             <Input />
             )}
           </FormItem>
+          <FormItem {...formItemLayout} label="名称" hasFeedback={true}>
+            {getFieldDecorator('name', {rules: [{ required: true, message: '请输入名称!' }]})(
+            <Input />
+            )}
+          </FormItem>
           <FormItem {...formItemLayout} label="系统分类" hasFeedback={true}>
             {getFieldDecorator('systemCategory', {rules: [{ required: true, message: '请输入系统分类!' }]})(
               <Input />

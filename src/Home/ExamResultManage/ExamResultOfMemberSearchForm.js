@@ -3,14 +3,14 @@ import {ROLE, SESSION, STYLE} from './../../App/PublicConstant.js';
 import { Form, Row, Col, Input, Button} from 'antd';
 const FormItem = Form.Item;
 
-class ExamResultSearchForm_ extends React.Component {
+class ExamResultOfMemberSearchForm_ extends React.Component {
   state = {
     expand: false,
   };
 
   handleSearch = (e) => {
     e.preventDefault();
-    this.props.handleSearchExamResultList(1);
+    this.props.handleSearchExamResultOfMemberList(1);
   }
 
   handleReset = () => {
@@ -61,5 +61,5 @@ class ExamResultSearchForm_ extends React.Component {
 }
 
 //当值改变时回调上层修改表单域的值
-const ExamResultSearchForm = Form.create()(ExamResultSearchForm_);
-export default ExamResultSearchForm;
+const ExamResultOfMemberSearchForm = Form.create()(ExamResultOfMemberSearchForm_);
+export default ExamResultOfMemberSearchForm;

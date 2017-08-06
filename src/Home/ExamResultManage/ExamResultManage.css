@@ -81,7 +81,10 @@
   margin-top: 20px;
 }
 
-
+.abnormal{
+  color:#f46e65;
+  font-weight:bold;
+}
 /*.exam-result-detail-search-form {
   padding: 24px;
   background: #fbfbfb;
