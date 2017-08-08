@@ -159,11 +159,6 @@ class CategoryAddModal_ extends React.Component {
               <Input />
               )}
             </FormItem>
-            <FormItem {...formItemLayout} label="301医院" style={{display: this.state.thirdCategoryLevelVisible}}>
-              {getFieldDecorator('hospital')(
-              <Input />
-              )}
-            </FormItem>
           </Form>
         </Modal>
     );

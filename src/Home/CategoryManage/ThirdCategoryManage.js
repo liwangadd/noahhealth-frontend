@@ -119,9 +119,8 @@ class ThirdCategoryManage extends React.Component {
 
                 let category = result.content;
                 this.refs.editForm.setFieldsValue({name: category.name,
-                                              systemCategory: category.systemCategory,
                                               referenceValue: category.referenceValue,
-                                              hospital: category.hospital});
+                                              enShort: category.enShort});
 
                 return;
             } else {
@@ -149,9 +148,8 @@ class ThirdCategoryManage extends React.Component {
             contentType: 'application/json',
             data : JSON.stringify({secondId: Number(this.props.params.secondId),
                                    name: values.name,
-                                   systemCategory: values.systemCategory,
                                    referenceValue: values.referenceValue,
-                                   hospital: values.hospital}),
+                                   enShort: values.enShort}),
             dataType : 'json',
             beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
             success : (result) => {
@@ -196,10 +194,6 @@ class ThirdCategoryManage extends React.Component {
       title: '参考值及单位',
       dataIndex: 'referenceValue',
       key: 'referenceValue',
-    },{
-      title: '301医院',
-      dataIndex: 'hospital',
-      key: 'hospital',
     }, {
       title: '操作',
       key: 'action',

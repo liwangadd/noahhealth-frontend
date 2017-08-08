@@ -19,6 +19,7 @@ import ThirdCategoryManage from './Home/CategoryManage/ThirdCategoryManage.js';
 import OriginResultManage from './Home/OriginResultManage/OriginResultManage.js';
 import ExamResultManage from './Home/ExamResultManage/ExamResultManage.js';
 import ExamResultDetail from './Home/ExamResultManage/ExamResultDetail.js';
+import ExamResultCloseup from './Home/ExamResultManage/ExamResultCloseup.js';
 import HealthResultManage from './Home/HealthResultManage/HealthResultManage.js';
 import HealthResultDetail from './Home/HealthResultManage/HealthResultDetail.js';
 import {message} from 'antd'
@@ -71,6 +72,7 @@ const certifyAccess = function(nextState, replace){
 
       case ROUTE.EXAM_RESULT_MANAGE.URL_PREFIX:certifyRole(replace, role, ROUTE.EXAM_RESULT_MANAGE.PERMISSION);break;
       case ROUTE.EXAM_RESULT_DETAIL.URL_PREFIX:certifyRole(replace, role, ROUTE.EXAM_RESULT_DETAIL.PERMISSION);break;
+      case ROUTE.EXAM_RESULT_CLOSEUP.URL_PREFIX:certifyRole(replace, role, ROUTE.EXAM_RESULT_CLOSEUP.PERMISSION);break;
 
       case ROUTE.HEALTH_RESULT_MANAGE.URL_PREFIX:certifyRole(replace, role, ROUTE.HEALTH_RESULT_MANAGE.PERMISSION);break;
       case ROUTE.HEALTH_RESULT_DETAIL.URL_PREFIX:certifyRole(replace, role, ROUTE.HEALTH_RESULT_DETAIL.PERMISSION);break;
@@ -119,6 +121,7 @@ class AppRouter extends React.Component {
 
                       <Route path={ROUTE.EXAM_RESULT_MANAGE.URL} component={ExamResultManage}/>
                       <Route path={ROUTE.EXAM_RESULT_DETAIL.URL} component={ExamResultDetail}/>
+                      <Route path={ROUTE.EXAM_RESULT_CLOSEUP.URL} component={ExamResultCloseup}/>
 
                       <Route path={ROUTE.HEALTH_RESULT_MANAGE.URL} component={HealthResultManage}/>
                       <Route path={ROUTE.HEALTH_RESULT_DETAIL.URL} component={HealthResultDetail}/>

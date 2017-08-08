@@ -447,7 +447,8 @@ class OriginResultManage extends React.Component {
               const memberUnderEmployeeData = result.content;
               this.setState({ memberUnderEmployeeData: memberUnderEmployeeData});
               if(this.refs.uploadForm == null) return;
-              this.refs.uploadForm.setFieldsValue({userId: memberUnderEmployeeData.length > 0 ? memberUnderEmployeeData[0].id.toString() : ''});
+              this.refs.uploadForm.setFieldsValue({userId: memberUnderEmployeeData.length > 0 ? memberUnderEmployeeData[0].id.toString() : '',
+                                                   memberNum: memberUnderEmployeeData.length > 0 ? memberUnderEmployeeData[0].memberNum : ''});
           }
       });
   }

@@ -3,8 +3,9 @@ import {SERVER, SESSION, RESULT, PAGE_SIZE, ROUTE, ROLE} from './../../App/Publi
 import {formatDate} from './../../App/PublicUtil.js';
 import ExamResultOfMemberSearchForm from './ExamResultOfMemberSearchForm.js';
 import ExamResultOfWorkflowSearchForm from './ExamResultOfWorkflowSearchForm.js';
+import ExamResultDetailAddModal from './ExamResultDetailAddModal.js';
 import React from 'react';
-import {Tabs, Table, message, BackTop, Tooltip, Popconfirm} from 'antd';
+import {Tabs, Table, message, BackTop, Tooltip, Popconfirm, Button} from 'antd';
 import {Link} from 'react-router';
 import $ from 'jquery';
 const TabPane = Tabs.TabPane;
@@ -22,7 +23,14 @@ class ExamResultManage extends React.Component {
     //工作流表（档案部）
     examResultOfWorkflowData: [],
     examResultOfWorkflowTableLoading: false,
-    examResultOfWorkflowPager: {pageSize: PAGE_SIZE, total: 0}
+    examResultOfWorkflowPager: {pageSize: PAGE_SIZE, total: 0},
+
+    //添加检查记录对话框
+    addModalVisible: false,
+    confirmAddModalLoading: false,
+    memberUnderEmployeeData: [],
+    secondCategoryParentOfAssayData: [],
+    secondCategoryParentOfTechData: [],
   };
 
   //查用户表（顾问、顾问主管）
@@ -127,11 +135,149 @@ class ExamResultManage extends React.Component {
   //翻页
   changeExamResultOfWorkflowPager = (pager) =>  this.handleSearchExamResultOfWorkflowList(pager.current)
 
+  /**
+  * 添加检查记录对话框
+  **/
+  showAddModal = () => this.setState({ addModalVisible: true})
+  closeAddModal = () => this.setState({ addModalVisible: false})
+
+  //确认录入检查记录信息
+  confirmAddModal = () => {
+
+    this.refs.addForm.validateFields((err, values) => {
+      if(!err) {
+        console.log('添加一条检查记录', values);
+
+        //显示加载圈
+        this.setState({ confirmAddModalLoading: true });
+
+        let secondId = values.type === '化验' ? values.secondCategoryParentOfAssayId[1] : values.secondCategoryParentOfTechId[1];
+        $.ajax({
+            url : SERVER + '/api/input',
+            type : 'POST',
+            contentType: 'application/json',
+            data : JSON.stringify({userId: Number(values.userId),
+                                   secondId: secondId,
+                                   hospital: values.hospital,
+                                   time: values.time,
+                                   note: values.note}),
+            dataType : 'json',
+            beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
+            success : (result) => {
+              console.log(result);
+              if(result.code === RESULT.SUCCESS) {
+
+
+                //关闭加载圈、对话框
+                this.setState({ addModalVisible: false, confirmAddModalLoading: false});
+                this.handleSearchExamResultOfWorkflowList(this.state.examResultOfWorkflowPager.current);
+
+                message.success(result.reason, 2);
+              } else {
+
+                //关闭加载圈
+                this.setState({ confirmAddModalLoading: false });
+                message.error(result.reason, 2);
+              }
+            }
+        });
+      }
+    });
+  }
+
+  //拉取系统中所有检查亚类
+  requestSecondCategoryParentData = (type) => {
+
+    console.log('查询所有'+ type +'检查亚类');
+    $.ajax({
+        url : SERVER + '/api/first/level',
+        type : 'POST',
+        contentType: 'application/json',
+        dataType : 'json',
+        data : JSON.stringify({type : type}),
+        // async: false,
+        beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
+        success : (result) => {
+
+            console.log(result);
+            if(result.code === RESULT.SUCCESS) {
+
+                //将后端返回的map整理成级联列表识别的数据结构
+                let secondCategoryParentData = [];
+                for(let firstCategory in result.content) {
+
+                  //加入大类
+                  let firstCategoryData = {value: firstCategory, label: firstCategory, children:[]};
+
+                  //获取旗下所有亚类
+                  let secondCategories = result.content[firstCategory];
+                  for(let i = 0; i < secondCategories.length; i++) {
+                    firstCategoryData.children.push({value: secondCategories[i].id, label: secondCategories[i].name});
+                  }
+
+                  secondCategoryParentData.push(firstCategoryData);
+                }
+
+                if(type === "化验") {
+                  console.log(secondCategoryParentData);
+                  this.setState({secondCategoryParentOfAssayData: secondCategoryParentData});
+
+                  if(this.refs.addForm == null) return;
+                  this.refs.addForm.setFieldsValue({secondCategoryParentOfAssayId: secondCategoryParentData.length > 0 ? [secondCategoryParentData[0].value, secondCategoryParentData[0].children[0].value] : []});
+
+                } else {
+
+                  this.setState({secondCategoryParentOfTechData: secondCategoryParentData});
+
+                  if(this.refs.addForm == null) return;
+                  this.refs.addForm.setFieldsValue({secondCategoryParentOfTechId: secondCategoryParentData.length > 0 ? [secondCategoryParentData[0].value, secondCategoryParentData[0].children[0].value] : []});
+                }
+            } else {
+                message.error(result.reason, 2);
+            }
+        }
+    });
+  }
+
+  //拉取档案部管理的所有会员名单
+  requestMembersUnderEmployee = () => {
+
+      console.log('拉取'+ sessionStorage.getItem(SESSION.NAME) +'旗下的所有会员信息');
+      $.ajax({
+          url : SERVER + '/api/origin/member_under_employee',
+          type : 'GET',
+          dataType : 'json',
+          beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
+          success : (result) => {
+
+              console.log(result);
+              if(result.code !== RESULT.SUCCESS) {
+                  message.error(result.reason, 2);
+                  return;
+              }
+
+              //更新获取到的数据到状态中
+              const memberUnderEmployeeData = result.content;
+              this.setState({ memberUnderEmployeeData: memberUnderEmployeeData});
+              if(this.refs.addForm == null) return;
+              this.refs.addForm.setFieldsValue({userId: memberUnderEmployeeData.length > 0 ? memberUnderEmployeeData[0].id.toString() : '',
+                                                   memberNum: memberUnderEmployeeData.length > 0 ? memberUnderEmployeeData[0].memberNum : ''});
+          }
+      });
+  }
+
   componentDidMount = () => {
 
     const role = sessionStorage.getItem(SESSION.ROLE);
     if(role === ROLE.EMPLOYEE_ARCHIVE_MANAGER ||  role === ROLE.EMPLOYEE_ARCHIVER) {
       this.handleSearchExamResultOfWorkflowList(1);
+
+      //获取所有成员
+      this.requestMembersUnderEmployee();
+
+      //获取化验、医技亚类
+      this.requestSecondCategoryParentData("化验");
+      this.requestSecondCategoryParentData("医技");
     }
     else if(role === ROLE.EMPLOYEE_ADVISE_MANAGER ||  role === ROLE.EMPLOYEE_ADVISER || role === ROLE.EMPLOYEE_ADMIN)
       this.handleSearchExamResultOfMemberList(1);
@@ -165,11 +311,11 @@ class ExamResultManage extends React.Component {
       key: 'time',
       render: (time) => formatDate(time)
     },{
-      title: '上传者',
-      dataIndex: 'uploaderName',
-      key: 'uploaderName'
+      title: '录入者',
+      dataIndex: 'inputerName',
+      key: 'inputerName'
     },{
-      title: '上传日期',
+      title: '录入日期',
       dataIndex: 'uploadTime',
       key: 'uploadTime',
       render: (uploadTime) => formatDate(uploadTime)
@@ -195,8 +341,8 @@ class ExamResultManage extends React.Component {
       key: 'action',
       render: (record) => (
         <span>
-          <a href="#">查看</a>
-          {
+          <Link to={ROUTE.EXAM_RESULT_CLOSEUP.URL_PREFIX + "/" + ROUTE.EXAM_RESULT_CLOSEUP.MENU_KEY + "/" + record.userName + "/" + record.id}>查看</Link>
+          {/* {
             role === ROLE.EMPLOYEE_ADMIN
             ?
             <div>
@@ -207,7 +353,7 @@ class ExamResultManage extends React.Component {
             </div>
             :
             null
-          }
+          } */}
         </span>
       )
     }];
@@ -247,7 +393,7 @@ class ExamResultManage extends React.Component {
     return (
       <div>
         <BackTop visibilityHeight="200"/>
-        <Tabs defaultActiveKey={"1"}>
+        <Tabs defaultActiveKey={"1"} tabBarExtraContent={role === ROLE.EMPLOYEE_ARCHIVER || role === ROLE.EMPLOYEE_ADMIN ? <Button type="primary" onClick={this.showAddModal}>添加检查记录</Button> : null}>
           <TabPane tab="辅检数据库" key="1">
             {
               role === ROLE.EMPLOYEE_ARCHIVE_MANAGER ||  role === ROLE.EMPLOYEE_ARCHIVER
@@ -271,6 +417,8 @@ class ExamResultManage extends React.Component {
             }
           </TabPane>
         </Tabs>
+
+        <ExamResultDetailAddModal ref="addForm" visible={this.state.addModalVisible} confirmLoading={this.state.confirmAddModalLoading} onCancel={this.closeAddModal} onConfirm={this.confirmAddModal} memberUnderEmployeeData={this.state.memberUnderEmployeeData} secondCategoryParentOfAssayData={this.state.secondCategoryParentOfAssayData} secondCategoryParentOfTechData={this.state.secondCategoryParentOfTechData}/>
       </div>
     );
   }

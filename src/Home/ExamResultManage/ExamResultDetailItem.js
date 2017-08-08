@@ -16,8 +16,8 @@ const hasAbnormal = (tableItem) => {
 class ExamResultDetailItem_ extends React.Component {
 
   state = {
-    formVisible: STYLE.NONE,
-    switchText: '展开',
+    formVisible: STYLE.BLOCK,
+    switchText: '收起',
 
     unpassReason: ''
   }

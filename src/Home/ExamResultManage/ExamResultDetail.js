@@ -2,7 +2,6 @@ import './ExamResultManage.css';
 import {SERVER, SESSION, RESULT, ROLE, FILE_SERVER, ROUTE, LOADING_DELAY_TIME} from './../../App/PublicConstant.js';
 import {formatDate} from './../../App/PublicUtil.js';
 import {isEmployee, isAdviser} from './../../App/PublicMethod.js';
-import ExamResultDetailAddModal from './ExamResultDetailAddModal.js';
 import ExamResultDetailItem from './ExamResultDetailItem.js';
 import ExamResultDetailSearchForm from './ExamResultDetailSearchForm.js';
 import React from 'react';
@@ -17,10 +16,6 @@ class ExamResultDetail extends React.Component {
   state = {
 
     pageLoading: true,
-
-    //添加检查记录对话框
-    addModalVisible: false,
-    confirmAddModalLoading: false,
 
     //录入检查结果
     saveLoading: false,
@@ -44,62 +39,10 @@ class ExamResultDetail extends React.Component {
     examResultDetailOfAssayItems: null,
     examResultDetailOfTechData: [],
     examResultDetailOfTechItems: null,
-
     secondCategoryParentOfAssayData: [],
     secondCategoryParentOfTechData: [],
     type: '化验'
   };
-
-
-  /**
-  * 添加检查记录对话框
-  **/
-  showAddModal = () => this.setState({ addModalVisible: true})
-  closeAddModal = () => this.setState({ addModalVisible: false})
-
-  //确认录入检查记录信息
-  confirmAddModal = () => {
-
-    this.refs.addForm.validateFields((err, values) => {
-      if(!err) {
-        console.log('添加一条检查记录', values);
-
-        //显示加载圈
-        this.setState({ confirmAddModalLoading: true });
-
-        let secondId = values.type === '化验' ? values.secondCategoryParentOfAssayId[1] : values.secondCategoryParentOfTechId[1];
-        $.ajax({
-            url : SERVER + '/api/input',
-            type : 'POST',
-            contentType: 'application/json',
-            data : JSON.stringify({userId: Number(this.props.params.memberId),
-                                   secondId: secondId,
-                                   hospital: values.hospital,
-                                   time: values.time,
-                                   note: values.note}),
-            dataType : 'json',
-            beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
-            success : (result) => {
-              console.log(result);
-              if(result.code === RESULT.SUCCESS) {
-
-
-                //关闭加载圈、对话框
-                this.setState({ addModalVisible: false, confirmAddModalLoading: false});
-                this.requestExamResultDetailOfMember(values.type);
-
-                message.success(result.reason, 2);
-              } else {
-
-                //关闭加载圈
-                this.setState({ confirmAddModalLoading: false });
-                message.error(result.reason, 2);
-              }
-            }
-        });
-      }
-    });
-  }
 
   //保存录入的检查结果
   saveInputDetail = (form, id) => {
@@ -303,60 +246,6 @@ class ExamResultDetail extends React.Component {
     });
   }
 
-  //拉取系统中所有检查亚类
-  requestSecondCategoryParentData = (type) => {
-
-    console.log('查询所有'+ type +'检查亚类');
-    $.ajax({
-        url : SERVER + '/api/first/level',
-        type : 'POST',
-        contentType: 'application/json',
-        dataType : 'json',
-        data : JSON.stringify({type : type}),
-        // async: false,
-        beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
-        success : (result) => {
-
-            console.log(result);
-            if(result.code === RESULT.SUCCESS) {
-
-                //将后端返回的map整理成级联列表识别的数据结构
-                let secondCategoryParentData = [];
-                for(let firstCategory in result.content) {
-
-                  //加入大类
-                  let firstCategoryData = {value: firstCategory, label: firstCategory, children:[]};
-
-                  //获取旗下所有亚类
-                  let secondCategories = result.content[firstCategory];
-                  for(let i = 0; i < secondCategories.length; i++) {
-                    firstCategoryData.children.push({value: secondCategories[i].id, label: secondCategories[i].name});
-                  }
-
-                  secondCategoryParentData.push(firstCategoryData);
-                }
-
-                if(type === "化验") {
-                  console.log(secondCategoryParentData);
-                  this.setState({secondCategoryParentOfAssayData: secondCategoryParentData});
-
-                  if(this.refs.addForm == null) return;
-                  this.refs.addForm.setFieldsValue({secondCategoryParentOfAssayId: secondCategoryParentData.length > 0 ? [secondCategoryParentData[0].value, secondCategoryParentData[0].children[0].value] : []});
-
-                } else {
-
-                  this.setState({secondCategoryParentOfTechData: secondCategoryParentData});
-
-                  if(this.refs.addForm == null) return;
-                  this.refs.addForm.setFieldsValue({secondCategoryParentOfTechId: secondCategoryParentData.length > 0 ? [secondCategoryParentData[0].value, secondCategoryParentData[0].children[0].value] : []});
-                }
-            } else {
-                message.error(result.reason, 2);
-            }
-        }
-    });
-  }
-
   //获取memberId用户的所有检查记录~~~~~~~~~~~~~
   requestExamResultDetailOfMember = (type) => {
 
@@ -436,6 +325,60 @@ class ExamResultDetail extends React.Component {
     });
   }
 
+  //拉取系统中所有检查亚类
+  requestSecondCategoryParentData = (type) => {
+
+    console.log('查询所有'+ type +'检查亚类');
+    $.ajax({
+        url : SERVER + '/api/first/level',
+        type : 'POST',
+        contentType: 'application/json',
+        dataType : 'json',
+        data : JSON.stringify({type : type}),
+        // async: false,
+        beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
+        success : (result) => {
+
+            console.log(result);
+            if(result.code === RESULT.SUCCESS) {
+
+                //将后端返回的map整理成级联列表识别的数据结构
+                let secondCategoryParentData = [];
+                for(let firstCategory in result.content) {
+
+                  //加入大类
+                  let firstCategoryData = {value: firstCategory, label: firstCategory, children:[]};
+
+                  //获取旗下所有亚类
+                  let secondCategories = result.content[firstCategory];
+                  for(let i = 0; i < secondCategories.length; i++) {
+                    firstCategoryData.children.push({value: secondCategories[i].id, label: secondCategories[i].name});
+                  }
+
+                  secondCategoryParentData.push(firstCategoryData);
+                }
+
+                if(type === "化验") {
+                  console.log(secondCategoryParentData);
+                  this.setState({secondCategoryParentOfAssayData: secondCategoryParentData});
+
+                  if(this.refs.addForm == null) return;
+                  this.refs.addForm.setFieldsValue({secondCategoryParentOfAssayId: secondCategoryParentData.length > 0 ? [secondCategoryParentData[0].value, secondCategoryParentData[0].children[0].value] : []});
+
+                } else {
+
+                  this.setState({secondCategoryParentOfTechData: secondCategoryParentData});
+
+                  if(this.refs.addForm == null) return;
+                  this.refs.addForm.setFieldsValue({secondCategoryParentOfTechId: secondCategoryParentData.length > 0 ? [secondCategoryParentData[0].value, secondCategoryParentData[0].children[0].value] : []});
+                }
+            } else {
+                message.error(result.reason, 2);
+            }
+        }
+    });
+  }
+
   //切换选项卡
   handleMenuItemClick = (activeKey) => {
 
@@ -457,12 +400,12 @@ class ExamResultDetail extends React.Component {
 
   componentDidMount = () => {
 
-    //拉取该用户的已添加的所有检查记录
-    this.requestExamResultDetailOfMember(this.state.type);
+      //拉取该用户的已添加的所有检查记录
+      this.requestExamResultDetailOfMember(this.state.type);
 
-    //获取化验、医技亚类
-    this.requestSecondCategoryParentData("化验");
-    this.requestSecondCategoryParentData("医技");
+      //拉取所有化验、医技类到搜索框
+      this.requestSecondCategoryParentData('化验');
+      this.requestSecondCategoryParentData('医技');
   }
 
 
@@ -489,10 +432,8 @@ class ExamResultDetail extends React.Component {
           :
           null
         }
-        <ExamResultDetailAddModal ref="addForm" visible={this.state.addModalVisible} confirmLoading={this.state.confirmAddModalLoading} onCancel={this.closeAddModal} onConfirm={this.confirmAddModal} secondCategoryParentOfAssayData={this.state.secondCategoryParentOfAssayData} secondCategoryParentOfTechData={this.state.secondCategoryParentOfTechData}/>
 
-
-        <Tabs defaultActiveKey={"1"} tabBarExtraContent={role === ROLE.EMPLOYEE_ARCHIVER || role === ROLE.EMPLOYEE_ADMIN ? <Button type="primary" onClick={this.showAddModal}>添加检查记录</Button> : null} onChange={this.handleMenuItemClick}>
+        <Tabs defaultActiveKey={"1"}  onChange={this.handleMenuItemClick}>
           <TabPane tab="化验数据" key="1">
             <ExamResultDetailSearchForm ref="assaySearchForm" type="化验" requestExamResultDetailOfMember={this.requestExamResultDetailOfMember} secondCategoryParentData={this.state.secondCategoryParentOfAssayData}/>
             <div className="exam-result-detail-info">

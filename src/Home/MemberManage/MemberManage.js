@@ -150,7 +150,7 @@ class MemberManage extends React.Component {
         dataType : 'json',
         beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
         success : (result) => {
-
+            console.log("+++++++++=");
             console.log(result);
             if(result.code === RESULT.SUCCESS) {
 

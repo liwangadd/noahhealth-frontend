@@ -384,8 +384,7 @@ class FirstCategoryManage extends React.Component {
             data : JSON.stringify({secondId : secondId,
                                    name: values.thirdCategoryName,
                                    enShort: values.enShort,
-                                   referenceValue: values.referenceValue,
-                                   hospital: values.hospital}),
+                                   referenceValue: values.referenceValue}),
             beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
             success : (result) => {
 
