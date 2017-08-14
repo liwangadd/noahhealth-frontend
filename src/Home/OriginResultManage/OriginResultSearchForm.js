@@ -29,6 +29,7 @@ class OriginResultSearchForm_ extends React.Component {
 
     //根据当前用户的角色决定是否显示所有筛选项
     const role = sessionStorage.getItem(SESSION.ROLE);
+    const statusFilterVisible = (role === ROLE.EMPLOYEE_ADVISER || role === ROLE.EMPLOYEE_ADVISE_MANAGER || role === ROLE.MEMBER_1 || role === ROLE.MEMBER_2 || role === ROLE.MEMBER_3) ? STYLE.NONE : STYLE.BLOCK;
     const otherFilterVisible = (role === ROLE.MEMBER_1 || role === ROLE.MEMBER_2 || role === ROLE.MEMBER_3) ? STYLE.NONE : STYLE.BLOCK;
     const uploaderFilterVisible = (role === ROLE.MEMBER_1 || role === ROLE.MEMBER_2 || role === ROLE.MEMBER_3 || role === ROLE.EMPLOYEE_ARCHIVER || role === ROLE.EMPLOYEE_ADVISER || role === ROLE.EMPLOYEE_ADVISE_MANAGER) ? STYLE.NONE : STYLE.BLOCK;
     const checkerFilterVisible = role !== ROLE.EMPLOYEE_ADMIN ? STYLE.NONE : STYLE.BLOCK;
@@ -74,7 +75,7 @@ class OriginResultSearchForm_ extends React.Component {
               )}
             </FormItem>
           </Col>
-          <Col span={role === ROLE.EMPLOYEE_ADMIN ? 3 : 4} style={{display: otherFilterVisible}}>
+          <Col span={role === ROLE.EMPLOYEE_ADMIN ? 3 : 4} style={{display: statusFilterVisible}}>
             <FormItem>
               {getFieldDecorator('status', { initialValue: ''
               })(

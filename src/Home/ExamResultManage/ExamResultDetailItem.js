@@ -86,7 +86,11 @@ class ExamResultDetailItem_ extends React.Component {
     const role = sessionStorage.getItem(SESSION.ROLE);
 
     //操作栏
-    let detailOperationDelete = role === ROLE.EMPLOYEE_ADMIN || role === ROLE.EMPLOYEE_ARCHIVE_MANAGER
+    let detailOperationDelete = (<Popconfirm title="您确定要删除该条检查记录吗?" placement="bottom" onConfirm={() => this.props.onDelete(detail.id)}>
+                                  <Button type="danger" size="default" className="gutter" loading={this.props.deleteLoading}>删除</Button>
+                                </Popconfirm>);
+
+    role === ROLE.EMPLOYEE_ADMIN || role === ROLE.EMPLOYEE_ARCHIVE_MANAGER
                                 ?
                                 <Popconfirm title="您确定要删除该条检查记录吗?" placement="bottom" onConfirm={() => this.props.onDelete(detail.id)}>
                                   <Button type="danger" size="default" className="gutter" loading={this.props.deleteLoading}>删除</Button>
@@ -97,7 +101,12 @@ class ExamResultDetailItem_ extends React.Component {
     if(detail.status === "录入中" || detail.status === "未通过")
       detailOperation =
       <div>
-        {detailOperationDelete}
+        {role === ROLE.EMPLOYEE_ADMIN || role === ROLE.EMPLOYEE_ARCHIVE_MANAGER
+        ?
+        detailOperationDelete
+        :
+        null
+        }
         <Button className="gutter" size="default" onClick={() => this.props.onSave(this.props.form, detail.id)} loading={this.props.saveLoading}>保存</Button>
         <Popconfirm title="您确定要提交审核吗?" placement="bottom" onConfirm={() => this.props.onSubmit(this.props.form, detail.id)}>
           <Button size="default" type="primary" loading={this.props.submitLoading}>提交审核</Button>
@@ -106,28 +115,38 @@ class ExamResultDetailItem_ extends React.Component {
     else if(detail.status === "待审核")
       detailOperation =
       <div>
-        {detailOperationDelete}
+        {role === ROLE.EMPLOYEE_ADMIN || role === ROLE.EMPLOYEE_ARCHIVE_MANAGER
+        ?
+        detailOperationDelete
+        :
+        null
+        }
         {
           role === ROLE.EMPLOYEE_ARCHIVE_MANAGER || role === ROLE.EMPLOYEE_ADMIN
           ?
           <span>
-            <Popconfirm title="您确定要通过审核吗?" placement="bottom" onConfirm={() => this.props.onPass(this.props.form, detail.id)}>
-              <Button className="gutter" type="primary" size="default" loading={this.props.passLoading}>通过</Button>
-            </Popconfirm>
             <Popconfirm title={<Input value={this.state.unpassReason} size="small" onChange={this.changeUnpassReason} placeholder="未通过原因"/>}
                         placement="bottom"
                         onConfirm={() => this.confirmUnpass(detail.id)}>
-              <Button type="danger" size="default">不通过</Button>
+              <Button className="gutter" type="danger" size="default">不通过</Button>
+            </Popconfirm>
+            <Popconfirm title="您确定要通过审核吗?" placement="bottom" onConfirm={() => this.props.onPass(this.props.form, detail.id)}>
+              <Button type="primary" size="default" loading={this.props.passLoading}>通过</Button>
             </Popconfirm>
           </span>
           :
           null
         }
       </div>
-    else
+    else //已通过
       detailOperation =
       <div>
-        {detailOperationDelete}
+        {role === ROLE.EMPLOYEE_ADMIN
+        ?
+        detailOperationDelete
+        :
+        null
+        }
         <Button size="default" type="primary" onClick={() => this.props.onDownload(detail.id)} loading={this.props.downloadLoading}>下载</Button>
       </div>
 

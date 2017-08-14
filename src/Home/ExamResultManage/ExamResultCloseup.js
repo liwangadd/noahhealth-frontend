@@ -65,6 +65,8 @@ class ExamResultCloseup extends React.Component {
               console.log(result);
               if(result.code === RESULT.SUCCESS) {
 
+                //重新查一遍
+                this.requestExamResultDetailById();
                 message.success(result.reason, 2);
               } else {
 
@@ -104,7 +106,7 @@ class ExamResultCloseup extends React.Component {
             this.setState({ submitLoading: false});
 
             //重新查一遍
-            this.requestExamResultDetailOfMember(this.state.type);
+            this.requestExamResultDetailById();
             message.success(result.reason, 2);
           } else {
 
@@ -140,7 +142,7 @@ class ExamResultCloseup extends React.Component {
             //关闭加载圈、对话框
             this.setState({ passLoading: false });
 
-            this.requestExamResultDetailOfMember(this.state.type);
+            this.requestExamResultDetailById();
             message.success(result.reason, 2);
           } else {
 
@@ -172,7 +174,7 @@ class ExamResultCloseup extends React.Component {
             //关闭加载圈、对话框
             this.setState({ unpassLoading: false});
 
-            this.requestExamResultDetailOfMember(this.state.type);
+            this.requestExamResultDetailById();
             message.success(result.reason, 2);
           } else {
 
@@ -234,7 +236,7 @@ class ExamResultCloseup extends React.Component {
 
                 this.setState({deleteLoading: false});
 
-                this.requestExamResultDetailOfMember(this.state.type);
+                this.requestExamResultDetailById();
                 message.success(result.reason, 2);
                 return;
             } else {

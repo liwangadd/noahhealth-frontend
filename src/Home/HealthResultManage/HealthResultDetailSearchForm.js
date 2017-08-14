@@ -39,32 +39,18 @@ class HealthResultDetailSearchForm_ extends React.Component {
       <Form
         onSubmit={this.handleSearch}
       >
-        <Row gutter={40}>
-          <Col span={8}>
+        <Row gutter={20}>
+          <Col span={12}>
             <FormItem>
               {getFieldDecorator('time')(
                 <RangePicker style={{width:'100%'}}/>
               )}
             </FormItem>
           </Col>
-          <Col span={8}>
+          <Col span={12}>
             <FormItem>
               {getFieldDecorator('secondId', {initialValue: ['全部分类', -1]})(
                 <Cascader options={healthResultSecondTypeData} placeholder="" allowClear={false}/>
-              )}
-            </FormItem>
-          </Col>
-          <Col span={8}>
-            <FormItem>
-              {getFieldDecorator('status', { initialValue: ''
-              })(
-                <Select>
-                  <Option value="">全部</Option>
-                  <Option value="录入中" style={{display: role === ROLE.EMPLOYEE_ADMIN || role === ROLE.EMPLOYEE_ARCHIVER ? STYLE.BLOCK : STYLE.NONE}}>录入中</Option>
-                  <Option value="待审核" style={{display: role === ROLE.EMPLOYEE_ADMIN || role === ROLE.EMPLOYEE_ARCHIVER || role === ROLE.EMPLOYEE_ARCHIVE_MANAGER ? STYLE.BLOCK : STYLE.NONE}}>待审核</Option>
-                  <Option value="未通过" style={{display: role === ROLE.EMPLOYEE_ADMIN || role === ROLE.EMPLOYEE_ARCHIVER ? STYLE.BLOCK : STYLE.NONE}}>未通过</Option>
-                  <Option value="已通过" style={{display: role === ROLE.EMPLOYEE_ADMIN || role === ROLE.EMPLOYEE_ADVISER || role === ROLE.EMPLOYEE_ADVISE_MANAGER ? STYLE.BLOCK : STYLE.NONE}}>已通过</Option>
-                </Select>
               )}
             </FormItem>
           </Col>

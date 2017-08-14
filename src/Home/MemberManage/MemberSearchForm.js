@@ -31,7 +31,7 @@ class MemberSearchForm_ extends React.Component {
       <Form
         onSubmit={this.handleSearch}
       >
-        <Row gutter={40}>
+        <Row gutter={20}>
           <Col span={8}>
             <FormItem>
               {getFieldDecorator('memberNum')(

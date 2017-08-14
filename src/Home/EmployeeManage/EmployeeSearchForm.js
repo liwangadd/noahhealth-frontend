@@ -39,7 +39,7 @@ class EmployeeSearchForm_ extends React.Component {
       <Form
         onSubmit={this.handleSearch}
       >
-        <Row gutter={40}>
+        <Row gutter={20}>
           <Col span={12}>
             <FormItem>
               {getFieldDecorator('name')(

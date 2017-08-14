@@ -46,7 +46,7 @@ class MemberAddModal_ extends React.Component {
             )}
           </FormItem>
           <FormItem {...formItemLayout} label="有效期">
-            <Row gutter={0}>
+            <Row>
               <Col span={12}>
                 {getFieldDecorator('validYear', {rules: [{ required: true, message: '请设置有效期年限'}], initialValue: 1})(
                 <InputNumber min={0} step={1} precision={0}/>

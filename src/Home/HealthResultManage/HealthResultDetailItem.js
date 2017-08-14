@@ -79,13 +79,13 @@ class HealthResultDetailItem_ extends React.Component {
           role === ROLE.EMPLOYEE_ARCHIVE_MANAGER || role === ROLE.EMPLOYEE_ADMIN
           ?
           <span>
-            <Popconfirm title="您确定要通过审核吗?" placement="bottom" onConfirm={() => this.props.onPass(this.props.form, detail.id)}>
-              <Button className="gutter" type="primary" size="default" loading={this.props.passLoading}>通过</Button>
-            </Popconfirm>
             <Popconfirm title={<Input value={this.state.unpassReason} size="small" onChange={this.changeUnpassReason} placeholder="未通过原因"/>}
                         placement="bottom"
                         onConfirm={() => this.confirmUnpass(detail.id)}>
-              <Button type="danger" size="default">不通过</Button>
+              <Button className="gutter" type="danger" size="default">不通过</Button>
+            </Popconfirm>
+            <Popconfirm title="您确定要通过审核吗?" placement="bottom" onConfirm={() => this.props.onPass(this.props.form, detail.id)}>
+              <Button type="primary" size="default" loading={this.props.passLoading}>通过</Button>
             </Popconfirm>
           </span>
           :

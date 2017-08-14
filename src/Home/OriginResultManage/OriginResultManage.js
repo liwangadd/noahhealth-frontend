@@ -1,5 +1,5 @@
 import './OriginResultManage.css';
-import {SERVER, SESSION, RESULT, PAGE_SIZE, ROLE, FILE_SERVER} from './../../App/PublicConstant.js';
+import {SERVER, SESSION, RESULT, PAGE_SIZE, ROLE, FILE_SERVER, DATE_FORMAT} from './../../App/PublicConstant.js';
 import {formatDate} from './../../App/PublicUtil.js';
 import OriginResultSearchForm from './OriginResultSearchForm.js';
 import OriginResultUploadModal from './OriginResultUploadModal.js';
@@ -68,8 +68,8 @@ class OriginResultManage extends React.Component {
                                    uploaderName : values.uploaderName,
                                    checkerName: values.checkerName,
                                    status: values.status,
-                                   beginTime: values.time !== undefined ? values.time[0] : undefined,
-                                   endTime: values.time !== undefined ? values.time[1] : undefined,
+                                   beginTime: values.time !== undefined ? formatDate(values.time[0], DATE_FORMAT) : undefined,
+                                   endTime: values.time !== undefined ? formatDate(values.time[1], DATE_FORMAT) : undefined,
                                    pageNow: pageNow,
                                    pageSize: PAGE_SIZE}),
             dataType : 'json',
@@ -78,6 +78,7 @@ class OriginResultManage extends React.Component {
 
                 console.log(result);
                 if(result.code !== RESULT.SUCCESS) {
+                    this.setState({ originResultTableLoading: false});
                     message.error(result.reason, 2);
                     return;
                 }
@@ -431,9 +432,11 @@ class OriginResultManage extends React.Component {
 
       console.log('拉取'+ sessionStorage.getItem(SESSION.NAME) +'旗下的所有会员信息');
       $.ajax({
-          url : SERVER + '/api/origin/member_under_employee',
-          type : 'GET',
+          url : SERVER + '/api/user/member_under_employee',
+          type : 'POST',
+          contentType: 'application/json',
           dataType : 'json',
+          data : JSON.stringify({type: '电子资料库'}),
           beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
           success : (result) => {
 
@@ -546,7 +549,8 @@ class OriginResultManage extends React.Component {
     },{
       title: '审核者',
       dataIndex: 'checkerName',
-      key: 'checkerName'
+      key: 'checkerName',
+      render: (checkerName) => checkerName === null ? '/' : checkerName
     }, {
       title: '执行状态',
       dataIndex: 'status',
@@ -567,7 +571,7 @@ class OriginResultManage extends React.Component {
         <span>
 
           {
-            (record.status === '上传中' || record.status === '未通过') && (role === ROLE.EMPLOYEE_ARCHIVER || role === ROLE.EMPLOYEE_ADMIN)
+            (record.status === '上传中' || record.status === '未通过') && (role === ROLE.EMPLOYEE_ARCHIVER || role === ROLE.EMPLOYEE_ARCHIVE_MANAGER || role === ROLE.EMPLOYEE_ADMIN)
             ?
             <span>
               <a onClick={() => this.showUploadPictureModal(record.id)}>
@@ -579,21 +583,26 @@ class OriginResultManage extends React.Component {
                   "上传扫描件"
                 }
               </a>
-              <span className="ant-divider"/>
             </span>
             :
             null
           }
 
           {
-            (record.status === '待审核') && (role === ROLE.EMPLOYEE_ARCHIVE_MANAGER || role === ROLE.EMPLOYEE_ADMIN)
+            (record.status === '待审核') && (role === ROLE.EMPLOYEE_ARCHIVE_MANAGER || role === ROLE.EMPLOYEE_ADMIN || role === ROLE.EMPLOYEE_ARCHIVER)
             ?
             <span>
-              <a onClick={() => this.showCheckPictureModal(record.id)}>审核扫描件</a>
               {
-                role === ROLE.EMPLOYEE_ADMIN
+                role === ROLE.EMPLOYEE_ARCHIVE_MANAGER || role === ROLE.EMPLOYEE_ADMIN
                 ?
-                <span className="ant-divider"/>
+                <a onClick={() => this.showCheckPictureModal(record.id)}>审核扫描件</a>
+                :
+                null
+              }
+              {
+                role === ROLE.EMPLOYEE_ARCHIVER
+                ?
+                <a onClick={() => this.showWatchPictureModal(record.id)}>查看扫描件</a>
                 :
                 null
               }
@@ -605,26 +614,20 @@ class OriginResultManage extends React.Component {
           {
             (record.status === '已通过') && (role === ROLE.EMPLOYEE_ADVISER || role === ROLE.EMPLOYEE_ADVISE_MANAGER || role === ROLE.MEMBER_1 || role === ROLE.MEMBER_2 || role === ROLE.MEMBER_3 || role === ROLE.EMPLOYEE_ADMIN)
             ?
-            <span>
-              <a onClick={() => this.showWatchPictureModal(record.id)}>查看扫描件</a>
-              {
-                role === ROLE.EMPLOYEE_ADMIN
-                ?
-                <span className="ant-divider"/>
-                :
-                null
-              }
-            </span>
+            <a onClick={() => this.showWatchPictureModal(record.id)}>查看扫描件</a>
             :
             null
           }
 
           {
-            ((record.status === '上传中' || record.status === '未通过') && role === ROLE.EMPLOYEE_ARCHIVER) || role === ROLE.EMPLOYEE_ADMIN
+            ((record.status === '上传中' || record.status === '待审核' || record.status === '未通过') && role === ROLE.EMPLOYEE_ARCHIVE_MANAGER) || role === ROLE.EMPLOYEE_ADMIN
             ?
-            <Popconfirm title="您确定要删除该条原始资料吗?" onConfirm={() => this.handleDeleteOriginResult(record.id)}>
-              <a className='operation-delete'>删除</a>
-            </Popconfirm>
+            <span>
+              <span className="ant-divider"/>
+              <Popconfirm title="您确定要删除该条原始资料吗?" onConfirm={() => this.handleDeleteOriginResult(record.id)}>
+                <a className='operation-delete'>删除</a>
+              </Popconfirm>
+            </span>
             :
             null
           }
@@ -635,7 +638,7 @@ class OriginResultManage extends React.Component {
     return (
       <div>
         <BackTop visibilityHeight="200"/>
-        <Tabs defaultActiveKey={"1"} tabBarExtraContent={role === ROLE.EMPLOYEE_ARCHIVER || role === ROLE.EMPLOYEE_ADMIN ? <Button type="primary" onClick={this.showUploadModal}>添加原始资料</Button> : null}>
+        <Tabs defaultActiveKey={"1"} tabBarExtraContent={role === ROLE.EMPLOYEE_ARCHIVER || role === ROLE.EMPLOYEE_ARCHIVE_MANAGER || role === ROLE.EMPLOYEE_ADMIN ? <Button type="primary" onClick={this.showUploadModal}>添加原始资料</Button> : null}>
           <TabPane tab="电子资料库" key="1">
             <OriginResultSearchForm ref="searchForm" handleSearchOriginResultList={this.handleSearchOriginResultList}/>
             <Table className='origin-result-table' columns={originResultColumns} dataSource={this.state.originResultData} rowKey='id' loading={this.state.originResultTableLoading} pagination={this.state.originResultPager} onChange={this.changeOriginResultPager}/>

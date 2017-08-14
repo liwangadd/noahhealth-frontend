@@ -1,5 +1,5 @@
 import './HealthResultManage.css';
-import {SERVER, SESSION, RESULT, ROLE, FILE_SERVER, ROUTE, LOADING_DELAY_TIME} from './../../App/PublicConstant.js';
+import {SERVER, SESSION, RESULT, ROLE, FILE_SERVER, ROUTE, LOADING_DELAY_TIME, DATE_FORMAT} from './../../App/PublicConstant.js';
 import {formatDate} from './../../App/PublicUtil.js';
 import {isEmployee, isAdviser} from './../../App/PublicMethod.js';
 import HealthResultDetailAddModal from './HealthResultDetailAddModal.js';
@@ -307,9 +307,8 @@ class HealthResultDetail extends React.Component {
         contentType: 'application/json',
         dataType : 'json',
         data : JSON.stringify({secondId: Number(values.secondId[1]),
-                               status: values.status,
-                               beginTime: values.time !== undefined ? values.time[0] : undefined,
-                               endTime: values.time !== undefined ? values.time[1] : undefined}),
+                               beginTime: values.time !== undefined ? formatDate(values.time[0], DATE_FORMAT) : undefined,
+                               endTime: values.time !== undefined ? formatDate(values.time[1], DATE_FORMAT) : undefined}),
         beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
         success : (result) => {
 
@@ -322,7 +321,7 @@ class HealthResultDetail extends React.Component {
                                               <Alert
                                               message="暂无相关健康摘要"
                                               description=" "
-                                              type="warning"
+                                              type="info"
                                               showIcon
                                               />
                                             :

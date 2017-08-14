@@ -1,5 +1,5 @@
 import './ExamResultManage.css';
-import {SERVER, SESSION, RESULT, ROLE, FILE_SERVER, ROUTE, LOADING_DELAY_TIME} from './../../App/PublicConstant.js';
+import {SERVER, SESSION, RESULT, ROLE, FILE_SERVER, ROUTE, LOADING_DELAY_TIME, DATE_FORMAT} from './../../App/PublicConstant.js';
 import {formatDate} from './../../App/PublicUtil.js';
 import {isEmployee, isAdviser} from './../../App/PublicMethod.js';
 import ExamResultDetailItem from './ExamResultDetailItem.js';
@@ -265,9 +265,9 @@ class ExamResultDetail extends React.Component {
         dataType : 'json',
         data : JSON.stringify({type : type,
                                secondId: values.secondId[1],
-                               status: values.status,
-                               beginTime: values.time !== undefined ? values.time[0] : undefined,
-                               endTime: values.time !== undefined ? values.time[1] : undefined}),
+                               normal: values.normal,
+                               beginTime: values.time !== undefined ? formatDate(values.time[0], DATE_FORMAT) : undefined,
+                               endTime: values.time !== undefined ? formatDate(values.time[1], DATE_FORMAT) : undefined}),
         beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
         success : (result) => {
 
@@ -280,7 +280,7 @@ class ExamResultDetail extends React.Component {
                                               <Alert
                                               message="暂无相关检查记录"
                                               description=" "
-                                              type="warning"
+                                              type="info"
                                               showIcon
                                               />
                                             :

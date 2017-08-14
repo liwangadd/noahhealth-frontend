@@ -1,5 +1,5 @@
 import './ExamResultManage.css';
-import {SERVER, SESSION, RESULT, PAGE_SIZE, ROUTE, ROLE} from './../../App/PublicConstant.js';
+import {SERVER, SESSION, RESULT, PAGE_SIZE, ROUTE, ROLE, DATE_FORMAT} from './../../App/PublicConstant.js';
 import {formatDate} from './../../App/PublicUtil.js';
 import ExamResultOfMemberSearchForm from './ExamResultOfMemberSearchForm.js';
 import ExamResultOfWorkflowSearchForm from './ExamResultOfWorkflowSearchForm.js';
@@ -101,8 +101,8 @@ class ExamResultManage extends React.Component {
                                    uploaderName : values.uploaderName,
                                    checkerName: values.checkerName,
                                    status: values.status,
-                                   beginTime: values.time !== undefined ? values.time[0] : undefined,
-                                   endTime: values.time !== undefined ? values.time[1] : undefined,
+                                   beginTime: values.time !== undefined ? formatDate(values.time[0], DATE_FORMAT) : undefined,
+                                   endTime: values.time !== undefined ? formatDate(values.time[1], DATE_FORMAT) : undefined,
                                    pageNow: pageNow,
                                    pageSize: PAGE_SIZE}),
             dataType : 'json',
@@ -185,6 +185,34 @@ class ExamResultManage extends React.Component {
     });
   }
 
+  //删除
+  handleDeleteExamResult = (examResultId) => {
+
+    console.log('删除一条检查记录信息', examResultId);
+
+    $.ajax({
+        url : SERVER + '/api/input/' + examResultId,
+        type : 'DELETE',
+        dataType : 'json',
+        beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
+        success : (result) => {
+
+            console.log(result);
+            if(result.code === RESULT.SUCCESS) {
+
+                //删除后重查一遍
+                this.handleSearchExamResultOfWorkflowList(1);
+                message.success(result.reason, 2);
+                return;
+            } else {
+                message.error(result.reason, 2);
+                return;
+            }
+        }
+    });
+  }
+
+
   //拉取系统中所有检查亚类
   requestSecondCategoryParentData = (type) => {
 
@@ -244,9 +272,11 @@ class ExamResultManage extends React.Component {
 
       console.log('拉取'+ sessionStorage.getItem(SESSION.NAME) +'旗下的所有会员信息');
       $.ajax({
-          url : SERVER + '/api/origin/member_under_employee',
-          type : 'GET',
+          url : SERVER + '/api/user/member_under_employee',
+          type : 'POST',
+          contentType: 'application/json',
           dataType : 'json',
+          data : JSON.stringify({type: '辅检数据库'}),
           beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
           success : (result) => {
 
@@ -269,7 +299,7 @@ class ExamResultManage extends React.Component {
   componentDidMount = () => {
 
     const role = sessionStorage.getItem(SESSION.ROLE);
-    if(role === ROLE.EMPLOYEE_ARCHIVE_MANAGER ||  role === ROLE.EMPLOYEE_ARCHIVER) {
+    if(role === ROLE.EMPLOYEE_ARCHIVE_MANAGER ||  role === ROLE.EMPLOYEE_ARCHIVER || role === ROLE.EMPLOYEE_ADMIN) {
       this.handleSearchExamResultOfWorkflowList(1);
 
       //获取所有成员
@@ -279,9 +309,10 @@ class ExamResultManage extends React.Component {
       this.requestSecondCategoryParentData("化验");
       this.requestSecondCategoryParentData("医技");
     }
-    else if(role === ROLE.EMPLOYEE_ADVISE_MANAGER ||  role === ROLE.EMPLOYEE_ADVISER || role === ROLE.EMPLOYEE_ADMIN)
-      this.handleSearchExamResultOfMemberList(1);
+    else if(role === ROLE.EMPLOYEE_ADVISE_MANAGER ||  role === ROLE.EMPLOYEE_ADVISER) {
 
+      this.handleSearchExamResultOfMemberList(1);
+    }
   }
 
   render(){
@@ -322,7 +353,8 @@ class ExamResultManage extends React.Component {
     },{
       title: '审核者',
       dataIndex: 'checkerName',
-      key: 'checkerName'
+      key: 'checkerName',
+      render: (checkerName) => checkerName === null ? '/' : checkerName
     }, {
       title: '执行状态',
       dataIndex: 'status',
@@ -341,19 +373,42 @@ class ExamResultManage extends React.Component {
       key: 'action',
       render: (record) => (
         <span>
-          <Link to={ROUTE.EXAM_RESULT_CLOSEUP.URL_PREFIX + "/" + ROUTE.EXAM_RESULT_CLOSEUP.MENU_KEY + "/" + record.userName + "/" + record.id}>查看</Link>
-          {/* {
-            role === ROLE.EMPLOYEE_ADMIN
+          {
+            (record.status === '录入中' || record.status === '未通过') && (role === ROLE.EMPLOYEE_ARCHIVER || role === ROLE.EMPLOYEE_ARCHIVE_MANAGER || role === ROLE.EMPLOYEE_ADMIN)
             ?
-            <div>
-              <span className="ant-divider"/>
-              <Popconfirm title="您确定要删除该条检查记录吗?" onConfirm={() => this.handleDeleteOriginResult(record.id)}>
-                <a className='operation-delete'>删除</a>
-              </Popconfirm>
-            </div>
+            <Link to={ROUTE.EXAM_RESULT_CLOSEUP.URL_PREFIX + "/" + ROUTE.EXAM_RESULT_CLOSEUP.MENU_KEY + "/" + record.userName + "/" + record.id}>{record.status === '未通过' ? '重新录入' : '录入'}</Link>
             :
             null
-          } */}
+          }
+
+          {
+            (record.status === '待审核') && (role === ROLE.EMPLOYEE_ARCHIVE_MANAGER || role === ROLE.EMPLOYEE_ARCHIVER || role === ROLE.EMPLOYEE_ADMIN)
+            ?
+            <Link to={ROUTE.EXAM_RESULT_CLOSEUP.URL_PREFIX + "/" + ROUTE.EXAM_RESULT_CLOSEUP.MENU_KEY + "/" + record.userName + "/" + record.id}>{role === ROLE.EMPLOYEE_ARCHIVER ? '查看' : '审核'}</Link>
+            :
+            null
+          }
+
+          {
+            (record.status === '已通过') && (role === ROLE.EMPLOYEE_ADVISER || role === ROLE.EMPLOYEE_ADVISE_MANAGER || role === ROLE.MEMBER_1 || role === ROLE.MEMBER_2 || role === ROLE.MEMBER_3 || role === ROLE.EMPLOYEE_ADMIN)
+            ?
+            <Link to={ROUTE.EXAM_RESULT_CLOSEUP.URL_PREFIX + "/" + ROUTE.EXAM_RESULT_CLOSEUP.MENU_KEY + "/" + record.userName + "/" + record.id}>查看</Link>
+            :
+            null
+          }
+
+          {
+            ((record.status === '录入中' || record.status === '待审核' || record.status === '未通过') && role === ROLE.EMPLOYEE_ARCHIVE_MANAGER) || role === ROLE.EMPLOYEE_ADMIN
+            ?
+            <span>
+              <span className="ant-divider"/>
+              <Popconfirm title="您确定要删除该条检查记录吗?" onConfirm={() => this.handleDeleteExamResult(record.id)}>
+                <a className='operation-delete'>删除</a>
+              </Popconfirm>
+            </span>
+            :
+            null
+          }
         </span>
       )
     }];
@@ -393,10 +448,10 @@ class ExamResultManage extends React.Component {
     return (
       <div>
         <BackTop visibilityHeight="200"/>
-        <Tabs defaultActiveKey={"1"} tabBarExtraContent={role === ROLE.EMPLOYEE_ARCHIVER || role === ROLE.EMPLOYEE_ADMIN ? <Button type="primary" onClick={this.showAddModal}>添加检查记录</Button> : null}>
+        <Tabs defaultActiveKey={"1"} tabBarExtraContent={role === ROLE.EMPLOYEE_ARCHIVER || role === ROLE.EMPLOYEE_ARCHIVE_MANAGER || role === ROLE.EMPLOYEE_ADMIN ? <Button type="primary" onClick={this.showAddModal}>添加检查记录</Button> : null}>
           <TabPane tab="辅检数据库" key="1">
             {
-              role === ROLE.EMPLOYEE_ARCHIVE_MANAGER ||  role === ROLE.EMPLOYEE_ARCHIVER
+              role === ROLE.EMPLOYEE_ARCHIVE_MANAGER ||  role === ROLE.EMPLOYEE_ARCHIVER || role === ROLE.EMPLOYEE_ADMIN
               ?
               <div>
                 <ExamResultOfWorkflowSearchForm ref="workflowSearchForm" handleSearchExamResultOfWorkflowList={this.handleSearchExamResultOfWorkflowList}/>
@@ -406,7 +461,7 @@ class ExamResultManage extends React.Component {
               null
             }
             {
-              role === ROLE.EMPLOYEE_ADVISE_MANAGER ||  role === ROLE.EMPLOYEE_ADVISER || role === ROLE.EMPLOYEE_ADMIN
+              role === ROLE.EMPLOYEE_ADVISE_MANAGER ||  role === ROLE.EMPLOYEE_ADVISER
               ?
               <div>
                 <ExamResultOfMemberSearchForm ref="memberSearchForm" handleSearchExamResultOfMemberList={this.handleSearchExamResultOfMemberList}/>
