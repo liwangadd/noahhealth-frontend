@@ -60,15 +60,15 @@ class Home extends React.Component {
     let layoutStyle;
 
     //主色调、用户管理、检查项目、原始资料、化验/医技数据、健康管理
-    if(role === ROLE.EMPLOYEE_ADMIN) layoutStyle = this.getLayoutStyle(COLOR.RED, STYLE.BLOCK, STYLE.BLOCK, STYLE.BLOCK, STYLE.BLOCK, STYLE.BLOCK, STYLE.BLOCK, STYLE.BLOCK);
+    if(role === ROLE.EMPLOYEE_ADMIN) layoutStyle = this.getLayoutStyle(COLOR.RED, STYLE.BLOCK, STYLE.BLOCK, STYLE.BLOCK, STYLE.BLOCK, STYLE.BLOCK, STYLE.BLOCK, STYLE.NONE);
     else if(role === ROLE.EMPLOYEE_FINANCER) layoutStyle = this.getLayoutStyle(COLOR.RED, STYLE.BLOCK, STYLE.NONE, STYLE.BLOCK, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.NONE);
     else if(role === ROLE.EMPLOYEE_ARCHIVER) layoutStyle = this.getLayoutStyle(COLOR.PINK, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.BLOCK, STYLE.BLOCK, STYLE.NONE);
     else if(role === ROLE.EMPLOYEE_ARCHIVE_MANAGER) layoutStyle = this.getLayoutStyle(COLOR.PINK, STYLE.NONE, STYLE.BLOCK, STYLE.NONE, STYLE.BLOCK, STYLE.BLOCK, STYLE.BLOCK, STYLE.NONE);
-    else if(role === ROLE.EMPLOYEE_ADVISER) layoutStyle = this.getLayoutStyle(COLOR.ORANGE, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.BLOCK, STYLE.BLOCK, STYLE.BLOCK);
-    else if(role === ROLE.EMPLOYEE_ADVISE_MANAGER) layoutStyle = this.getLayoutStyle(COLOR.ORANGE, STYLE.NONE, STYLE.BLOCK, STYLE.NONE, STYLE.BLOCK, STYLE.BLOCK, STYLE.BLOCK, STYLE.BLOCK);
-    else if(role === ROLE.MEMBER_1) layoutStyle = this.getLayoutStyle(COLOR.GREEN, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.BLOCK, STYLE.NONE, STYLE.NONE);
-    else if(role=== ROLE.MEMBER_2) layoutStyle = this.getLayoutStyle(COLOR.CYAN, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.BLOCK, STYLE.BLOCK, STYLE.NONE);
-    else if(role=== ROLE.MEMBER_3) layoutStyle = this.getLayoutStyle(COLOR.BLUE, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.BLOCK, STYLE.BLOCK, STYLE.BLOCK);
+    else if(role === ROLE.EMPLOYEE_ADVISER) layoutStyle = this.getLayoutStyle(COLOR.ORANGE, STYLE.NONE, STYLE.NONE, STYLE.BLOCK, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.NONE);
+    else if(role === ROLE.EMPLOYEE_ADVISE_MANAGER) layoutStyle = this.getLayoutStyle(COLOR.ORANGE, STYLE.NONE, STYLE.BLOCK, STYLE.BLOCK, STYLE.BLOCK, STYLE.NONE, STYLE.NONE, STYLE.NONE);
+    else if(role === ROLE.MEMBER_1) layoutStyle = this.getLayoutStyle(COLOR.GREEN, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.BLOCK);
+    else if(role === ROLE.MEMBER_2) layoutStyle = this.getLayoutStyle(COLOR.CYAN, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.BLOCK);
+    else if(role === ROLE.MEMBER_3) layoutStyle = this.getLayoutStyle(COLOR.BLUE, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.BLOCK);
     else layoutStyle = this.getLayoutStyle(COLOR.BLUE, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.NONE);
 
     return layoutStyle;
@@ -81,7 +81,7 @@ class Home extends React.Component {
                  categoryManageMenuItemDisplay,
                  originResultMenuItemDisplay,
                  examResultMenuItemDisplay,
-                 healthResultMenuItemDisplay) {
+                 memberDetailPrivateMenuItemDisplay) {
 
       let layoutStyle = {
         roleTagColor: roleTagColor,
@@ -91,7 +91,7 @@ class Home extends React.Component {
         categoryManageMenuItemDisplay: categoryManageMenuItemDisplay,
         originResultMenuItemDisplay: originResultMenuItemDisplay,
         examResultMenuItemDisplay: examResultMenuItemDisplay,
-        healthResultMenuItemDisplay: healthResultMenuItemDisplay
+        memberDetailPrivateMenuItemDisplay: memberDetailPrivateMenuItemDisplay
       };
 
       return layoutStyle;
@@ -109,6 +109,7 @@ class Home extends React.Component {
       case ROUTE.FINANCE_MANAGE.MENU_KEY: targetUrl = ROUTE.FINANCE_MANAGE.URL_PREFIX + "/" + ROUTE.FINANCE_MANAGE.MENU_KEY; break;
       case ROUTE.EMPLOYEE_MANAGE.MENU_KEY: targetUrl = ROUTE.EMPLOYEE_MANAGE.URL_PREFIX + "/" + ROUTE.EMPLOYEE_MANAGE.MENU_KEY; break;
       case ROUTE.MEMBER_MANAGE.MENU_KEY: targetUrl = ROUTE.MEMBER_MANAGE.URL_PREFIX + "/" + ROUTE.MEMBER_MANAGE.MENU_KEY; break;
+      case ROUTE.MEMBER_DETAIL_PRIVATE.MENU_KEY: targetUrl = ROUTE.MEMBER_DETAIL_PRIVATE.URL_PREFIX + "/" + ROUTE.MEMBER_DETAIL_PRIVATE.MENU_KEY + "/" + memberId + "/" + memberName; break;
       case ROUTE.FIRST_CATEGORY_MANAGE.MENU_KEY: targetUrl = ROUTE.FIRST_CATEGORY_MANAGE.URL_PREFIX + "/" + ROUTE.FIRST_CATEGORY_MANAGE.MENU_KEY + "/1"; break;
       case ROUTE.ORIGIN_RESULT_MANAGE.MENU_KEY: targetUrl = ROUTE.ORIGIN_RESULT_MANAGE.URL_PREFIX + "/" + ROUTE.ORIGIN_RESULT_MANAGE.MENU_KEY; break;
       case ROUTE.EXAM_RESULT_MANAGE.MENU_KEY: targetUrl = isEmployee(role) ? (ROUTE.EXAM_RESULT_MANAGE.URL_PREFIX + "/" + ROUTE.EXAM_RESULT_MANAGE.MENU_KEY) : (ROUTE.EXAM_RESULT_DETAIL.URL_PREFIX + "/" + ROUTE.EXAM_RESULT_DETAIL.MENU_KEY + "/" + memberId + "/" + memberName);break;
@@ -191,16 +192,20 @@ class Home extends React.Component {
             </Menu.Item>
             <Menu.Item key={ROUTE.ORIGIN_RESULT_MANAGE.MENU_KEY} style={{display: layoutStyle.originResultMenuItemDisplay}}>
               <Icon type="file-pdf" className="menu-item-font"/>
-              <span className="nav-text menu-item-font">电子资料库</span>
+              <span className="nav-text menu-item-font">电子资料管理</span>
             </Menu.Item>
             <Menu.Item key={ROUTE.EXAM_RESULT_MANAGE.MENU_KEY} style={{display: layoutStyle.examResultMenuItemDisplay}}>
               <Icon type="file-text" className="menu-item-font"/>
-              <span className="nav-text menu-item-font">辅检数据库</span>
+              <span className="nav-text menu-item-font">辅检数据管理</span>
             </Menu.Item>
-            <Menu.Item key={ROUTE.HEALTH_RESULT_MANAGE.MENU_KEY} style={{display: layoutStyle.healthResultMenuItemDisplay}}>
+            <Menu.Item key={ROUTE.MEMBER_DETAIL_PRIVATE.MENU_KEY} style={{display: layoutStyle.memberDetailPrivateMenuItemDisplay}}>
+              <Icon type="team" className="menu-item-font"/>
+              <span className="nav-text menu-item-font">个人资料</span>
+            </Menu.Item>
+            {/* <Menu.Item key={ROUTE.HEALTH_RESULT_MANAGE.MENU_KEY} style={{display: layoutStyle.healthResultMenuItemDisplay}}>
               <Icon type="file-text" className="menu-item-font"/>
               <span className="nav-text menu-item-font">健康摘要库</span>
-            </Menu.Item>
+            </Menu.Item> */}
           </Menu>
         </Sider>
         <Layout>

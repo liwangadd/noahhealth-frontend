@@ -13,15 +13,13 @@ import Welcome from './Home/Welcome/Welcome.js';
 import FinanceManage from './Home/FinanceManage/FinanceManage.js';
 import EmployeeManage from './Home/EmployeeManage/EmployeeManage.js';
 import MemberManage from './Home/MemberManage/MemberManage.js';
+import MemberDetail from './Home/MemberManage/MemberDetail.js';
 import FirstCategoryManage from './Home/CategoryManage/FirstCategoryManage.js';
 import SecondCategoryManage from './Home/CategoryManage/SecondCategoryManage.js';
 import ThirdCategoryManage from './Home/CategoryManage/ThirdCategoryManage.js';
 import OriginResultManage from './Home/OriginResultManage/OriginResultManage.js';
 import ExamResultManage from './Home/ExamResultManage/ExamResultManage.js';
-import ExamResultDetail from './Home/ExamResultManage/ExamResultDetail.js';
 import ExamResultCloseup from './Home/ExamResultManage/ExamResultCloseup.js';
-import HealthResultManage from './Home/HealthResultManage/HealthResultManage.js';
-import HealthResultDetail from './Home/HealthResultManage/HealthResultDetail.js';
 import {message} from 'antd'
 import {Router, Route, browserHistory, IndexRoute} from 'react-router';
 
@@ -63,6 +61,7 @@ const certifyAccess = function(nextState, replace){
 
       case ROUTE.EMPLOYEE_MANAGE.URL_PREFIX:certifyRole(replace, role, ROUTE.EMPLOYEE_MANAGE.PERMISSION);break;
       case ROUTE.MEMBER_MANAGE.URL_PREFIX:certifyRole(replace, role, ROUTE.MEMBER_MANAGE.PERMISSION);break;
+      case ROUTE.MEMBER_DETAIL.URL_PREFIX:certifyRole(replace, role, ROUTE.MEMBER_DETAIL.PERMISSION);break;
 
       case ROUTE.FIRST_CATEGORY_MANAGE.URL_PREFIX:certifyRole(replace, role, ROUTE.FIRST_CATEGORY_MANAGE.PERMISSION);break;
       case ROUTE.SECOND_CATEGORY_MANAGE.URL_PREFIX:certifyRole(replace, role, ROUTE.SECOND_CATEGORY_MANAGE.PERMISSION);break;
@@ -112,6 +111,8 @@ class AppRouter extends React.Component {
                       <Route path={ROUTE.FINANCE_MANAGE.URL} component={FinanceManage}/>
                       <Route path={ROUTE.EMPLOYEE_MANAGE.URL} component={EmployeeManage}/>
                       <Route path={ROUTE.MEMBER_MANAGE.URL} component={MemberManage}/>
+                      <Route path={ROUTE.MEMBER_DETAIL.URL} component={MemberDetail}/>
+                      <Route path={ROUTE.MEMBER_DETAIL_PRIVATE.URL} component={MemberDetail}/>
 
                       <Route path={ROUTE.FIRST_CATEGORY_MANAGE.URL} component={FirstCategoryManage}/>
                       <Route path={ROUTE.SECOND_CATEGORY_MANAGE.URL} component={SecondCategoryManage}/>
@@ -120,12 +121,7 @@ class AppRouter extends React.Component {
                       <Route path={ROUTE.ORIGIN_RESULT_MANAGE.URL} component={OriginResultManage}/>
 
                       <Route path={ROUTE.EXAM_RESULT_MANAGE.URL} component={ExamResultManage}/>
-                      <Route path={ROUTE.EXAM_RESULT_DETAIL.URL} component={ExamResultDetail}/>
                       <Route path={ROUTE.EXAM_RESULT_CLOSEUP.URL} component={ExamResultCloseup}/>
-
-                      <Route path={ROUTE.HEALTH_RESULT_MANAGE.URL} component={HealthResultManage}/>
-                      <Route path={ROUTE.HEALTH_RESULT_DETAIL.URL} component={HealthResultDetail}/>
-
 
                   </Route>
                 </Route>

@@ -61,8 +61,8 @@ class ExamResultOfWorkflowSearchForm_ extends React.Component {
           </Col>
           <Col span={role === ROLE.EMPLOYEE_ADMIN ? 4 : 5} style={{display: uploaderFilterVisible}}>
             <FormItem>
-              {getFieldDecorator('uploaderName')(
-                <Input placeholder="上传者"/>
+              {getFieldDecorator('inputerName')(
+                <Input placeholder="录入者"/>
               )}
             </FormItem>
           </Col>

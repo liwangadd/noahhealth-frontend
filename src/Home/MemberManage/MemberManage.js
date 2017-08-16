@@ -1,8 +1,9 @@
 import './MemberManage.css';
-import {SERVER, SESSION, RESULT, PAGE_SIZE, ROLE, STYLE, DATE_FORMAT} from './../../App/PublicConstant.js';
+import {SERVER, SESSION, RESULT, PAGE_SIZE, ROLE, STYLE, DATE_FORMAT,ROUTE} from './../../App/PublicConstant.js';
 import {formatDate} from './../../App/PublicUtil.js';
 import moment from 'moment';
 import React from 'react';
+import {Link} from 'react-router';
 import {Tabs, Table, message, Popconfirm, BackTop, Button} from 'antd';
 import MemberEditModal from './MemberEditModal.js';
 import MemberSearchForm from './MemberSearchForm.js';
@@ -310,7 +311,8 @@ class MemberManage extends React.Component {
     }, {
       title: '会员编号',
       dataIndex: 'memberNum',
-      key: 'memberNum'
+      key: 'memberNum',
+      render: (memberNum) => memberNum === null || memberNum === '' ? '/' : memberNum
     }, {
       title: '级别',
       dataIndex: 'role',
@@ -333,7 +335,7 @@ class MemberManage extends React.Component {
       key: 'action',
       render: (record) => (
         <span>
-          <a href="#">查看</a>
+          <Link to={ROUTE.MEMBER_DETAIL.URL_PREFIX + "/" + ROUTE.MEMBER_DETAIL.MENU_KEY + "/" + record.id + "/" + record.name}>查看详情</Link>
           <span className="ant-divider" />
           <a onClick={() => this.showMemberEditModal(record)}>修改</a>
           {

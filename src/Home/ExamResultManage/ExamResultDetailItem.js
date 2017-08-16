@@ -90,13 +90,6 @@ class ExamResultDetailItem_ extends React.Component {
                                   <Button type="danger" size="default" className="gutter" loading={this.props.deleteLoading}>删除</Button>
                                 </Popconfirm>);
 
-    role === ROLE.EMPLOYEE_ADMIN || role === ROLE.EMPLOYEE_ARCHIVE_MANAGER
-                                ?
-                                <Popconfirm title="您确定要删除该条检查记录吗?" placement="bottom" onConfirm={() => this.props.onDelete(detail.id)}>
-                                  <Button type="danger" size="default" className="gutter" loading={this.props.deleteLoading}>删除</Button>
-                                </Popconfirm>
-                                :
-                                null;
     let detailOperation = null;
     if(detail.status === "录入中" || detail.status === "未通过")
       detailOperation =

@@ -1,20 +1,23 @@
 import React from 'react';
 import {ROLE, SESSION, STYLE} from './../../App/PublicConstant.js';
-import { Form, Row, Col, Input, Button} from 'antd';
+import { Form, Row, Col, Input, Button, Select, DatePicker} from 'antd';
 const FormItem = Form.Item;
+const Option = Select.Option;
+const { RangePicker } = DatePicker;
 
-class HealthResultSearchForm_ extends React.Component {
+class MemberDetailOriginResultSearchForm_ extends React.Component {
   state = {
     expand: false,
   };
 
   handleSearch = (e) => {
     e.preventDefault();
-    this.props.handleSearchHealthResultList(1);
+    this.props.requestOriginResultOfMember(1);
   }
 
   handleReset = () => {
     this.props.form.resetFields();
+    this.props.requestOriginResultOfMember(1);
   }
 
   toggle = () => {
@@ -23,28 +26,16 @@ class HealthResultSearchForm_ extends React.Component {
   }
 
   render() {
-
-    //根据当前用户的角色决定是否显示所有筛选项
-    const role = sessionStorage.getItem(SESSION.ROLE);
-    const filtersVisible = (role === ROLE.MEMBER_1 || role === ROLE.MEMBER_2 || role === ROLE.MEMBER_3) ? STYLE.NONE : STYLE.BLOCK;
-
     const { getFieldDecorator } = this.props.form;
     return (
       <Form
         onSubmit={this.handleSearch}
       >
         <Row gutter={20}>
-          <Col span={12} style={{display: filtersVisible}}>
+          <Col span={8}>
             <FormItem>
-              {getFieldDecorator('memberNum')(
-                <Input placeholder="会员编号" />
-              )}
-            </FormItem>
-          </Col>
-          <Col span={12} style={{display: filtersVisible}}>
-            <FormItem>
-              {getFieldDecorator('userName')(
-                <Input placeholder="会员姓名" />
+              {getFieldDecorator('time')(
+                <RangePicker style={{width:'100%'}}/>
               )}
             </FormItem>
           </Col>
@@ -61,5 +52,5 @@ class HealthResultSearchForm_ extends React.Component {
 }
 
 //当值改变时回调上层修改表单域的值
-const HealthResultSearchForm = Form.create()(HealthResultSearchForm_);
-export default HealthResultSearchForm;
+const MemberDetailOriginResultSearchForm = Form.create()(MemberDetailOriginResultSearchForm_);
+export default MemberDetailOriginResultSearchForm;

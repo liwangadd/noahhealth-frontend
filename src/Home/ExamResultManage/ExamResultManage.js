@@ -1,7 +1,6 @@
 import './ExamResultManage.css';
 import {SERVER, SESSION, RESULT, PAGE_SIZE, ROUTE, ROLE, DATE_FORMAT} from './../../App/PublicConstant.js';
 import {formatDate} from './../../App/PublicUtil.js';
-import ExamResultOfMemberSearchForm from './ExamResultOfMemberSearchForm.js';
 import ExamResultOfWorkflowSearchForm from './ExamResultOfWorkflowSearchForm.js';
 import ExamResultDetailAddModal from './ExamResultDetailAddModal.js';
 import React from 'react';
@@ -15,10 +14,6 @@ class ExamResultManage extends React.Component {
 
   state = {
 
-    //用户表（顾问部）
-    examResultOfMemberData: [],
-    examResultOfMemberTableLoading: false,
-    examResultOfMemberPager: {pageSize: PAGE_SIZE, total: 0},
 
     //工作流表（档案部）
     examResultOfWorkflowData: [],
@@ -33,50 +28,6 @@ class ExamResultManage extends React.Component {
     secondCategoryParentOfTechData: [],
   };
 
-  //查用户表（顾问、顾问主管）
-  handleSearchExamResultOfMemberList = (pageNow) => {
-
-    this.refs.memberSearchForm.validateFields((err, values) => {
-      if(!err) {
-
-        this.setState({ examResultOfMemberTableLoading: true});
-
-        console.log('拉取第'+ pageNow + "页化验/医技目录", values);
-
-        $.ajax({
-            url : SERVER + '/api/input/list',
-            type : 'POST',
-            contentType: 'application/json',
-            data : JSON.stringify({userName : values.userName,
-                                   memberNum: values.memberNum,
-                                   pageNow: pageNow,
-                                   pageSize: PAGE_SIZE}),
-            dataType : 'json',
-            beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
-            success : (result) => {
-
-                console.log(result);
-                if(result.code !== RESULT.SUCCESS) {
-                    message.error(result.reason, 2);
-                    return;
-                }
-
-                //更新页码
-                const examResultOfMemberPager = this.state.examResultOfMemberPager;
-                examResultOfMemberPager.total = result.content.rowTotal;
-                examResultOfMemberPager.current = pageNow;
-
-                //更新获取到的数据到状态中
-                this.setState({
-                  examResultOfMemberTableLoading: false,
-                  examResultOfMemberData: result.content.data,
-                  examResultOfMemberPager
-                });
-            }
-        });
-      }
-    });
-  }
 
   //翻页
   changeExamResultOfMemberPager = (pager) =>  this.handleSearchExamResultOfMemberList(pager.current)
@@ -98,7 +49,7 @@ class ExamResultManage extends React.Component {
             contentType: 'application/json',
             data : JSON.stringify({userName : values.userName,
                                    memberNum: values.memberNum,
-                                   uploaderName : values.uploaderName,
+                                   inputerName : values.inputerName,
                                    checkerName: values.checkerName,
                                    status: values.status,
                                    beginTime: values.time !== undefined ? formatDate(values.time[0], DATE_FORMAT) : undefined,
@@ -298,21 +249,14 @@ class ExamResultManage extends React.Component {
 
   componentDidMount = () => {
 
-    const role = sessionStorage.getItem(SESSION.ROLE);
-    if(role === ROLE.EMPLOYEE_ARCHIVE_MANAGER ||  role === ROLE.EMPLOYEE_ARCHIVER || role === ROLE.EMPLOYEE_ADMIN) {
-      this.handleSearchExamResultOfWorkflowList(1);
+    this.handleSearchExamResultOfWorkflowList(1);
 
-      //获取所有成员
-      this.requestMembersUnderEmployee();
+    //获取所有成员
+    this.requestMembersUnderEmployee();
 
-      //获取化验、医技亚类
-      this.requestSecondCategoryParentData("化验");
-      this.requestSecondCategoryParentData("医技");
-    }
-    else if(role === ROLE.EMPLOYEE_ADVISE_MANAGER ||  role === ROLE.EMPLOYEE_ADVISER) {
-
-      this.handleSearchExamResultOfMemberList(1);
-    }
+    //获取化验、医技亚类
+    this.requestSecondCategoryParentData("化验");
+    this.requestSecondCategoryParentData("医技");
   }
 
   render(){
@@ -414,65 +358,15 @@ class ExamResultManage extends React.Component {
     }];
 
 
-
-    const examResultOfMemberColumns = [{
-      title: '会员姓名',
-      dataIndex: 'name',
-      key: 'name'
-    },{
-      title: '会员编号',
-      dataIndex: 'memberNum',
-      key: 'memberNum'
-    },{
-      title: '所属顾问',
-      dataIndex: 'staffName',
-      key: 'staffName'
-    },{
-      title: '所属顾问主管',
-      dataIndex: 'staffMgrName',
-      key: 'staffMgrName'
-    },{
-      title: '级别',
-      dataIndex: 'role',
-      key: 'role'
-    },{
-      title: '操作',
-      key: 'action',
-      render: (record) => (
-        <span>
-          <Link to={ROUTE.EXAM_RESULT_DETAIL.URL_PREFIX + "/" + ROUTE.EXAM_RESULT_DETAIL.MENU_KEY + "/" + record.id + "/" + record.name}>查看详情</Link>
-        </span>
-      )
-    }];
-
     return (
       <div>
         <BackTop visibilityHeight="200"/>
         <Tabs defaultActiveKey={"1"} tabBarExtraContent={role === ROLE.EMPLOYEE_ARCHIVER || role === ROLE.EMPLOYEE_ARCHIVE_MANAGER || role === ROLE.EMPLOYEE_ADMIN ? <Button type="primary" onClick={this.showAddModal}>添加检查记录</Button> : null}>
           <TabPane tab="辅检数据库" key="1">
-            {
-              role === ROLE.EMPLOYEE_ARCHIVE_MANAGER ||  role === ROLE.EMPLOYEE_ARCHIVER || role === ROLE.EMPLOYEE_ADMIN
-              ?
-              <div>
-                <ExamResultOfWorkflowSearchForm ref="workflowSearchForm" handleSearchExamResultOfWorkflowList={this.handleSearchExamResultOfWorkflowList}/>
-                <Table className='exam-result-table' columns={examResultOfWorkflowColumns} dataSource={this.state.examResultOfWorkflowData} rowKey='id' loading={this.state.examResultOfWorkflowTableLoading} pagination={this.state.examResultOfWorkflowPager} onChange={this.changeExamResultOfWorkflowPager}/>
-              </div>
-              :
-              null
-            }
-            {
-              role === ROLE.EMPLOYEE_ADVISE_MANAGER ||  role === ROLE.EMPLOYEE_ADVISER
-              ?
-              <div>
-                <ExamResultOfMemberSearchForm ref="memberSearchForm" handleSearchExamResultOfMemberList={this.handleSearchExamResultOfMemberList}/>
-                <Table className='exam-result-table' columns={examResultOfMemberColumns} dataSource={this.state.examResultOfMemberData} rowKey='id' loading={this.state.examResultOfMemberTableLoading} pagination={this.state.examResultOfMemberPager} onChange={this.changeExamResultOfMemberPager}/>
-              </div>
-              :
-              null
-            }
+            <ExamResultOfWorkflowSearchForm ref="workflowSearchForm" handleSearchExamResultOfWorkflowList={this.handleSearchExamResultOfWorkflowList}/>
+            <Table className='exam-result-table' columns={examResultOfWorkflowColumns} dataSource={this.state.examResultOfWorkflowData} rowKey='id' loading={this.state.examResultOfWorkflowTableLoading} pagination={this.state.examResultOfWorkflowPager} onChange={this.changeExamResultOfWorkflowPager}/>
           </TabPane>
         </Tabs>
-
         <ExamResultDetailAddModal ref="addForm" visible={this.state.addModalVisible} confirmLoading={this.state.confirmAddModalLoading} onCancel={this.closeAddModal} onConfirm={this.confirmAddModal} memberUnderEmployeeData={this.state.memberUnderEmployeeData} secondCategoryParentOfAssayData={this.state.secondCategoryParentOfAssayData} secondCategoryParentOfTechData={this.state.secondCategoryParentOfTechData}/>
       </div>
     );

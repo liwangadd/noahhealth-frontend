@@ -1,6 +1,6 @@
 import './Welcome.css'
 import React from 'react';
-import {Card, BackTop} from 'antd';
+import {Card, BackTop, Calendar} from 'antd';
 import $ from 'jquery';
 
 class Welcome extends React.Component {
@@ -22,9 +22,11 @@ class Welcome extends React.Component {
         <BackTop visibilityHeight="200"/>
         <div className='introduce-text'>
           <h1>诺亚健康信息管理系统</h1>
-          <h3 className='introduce-content'>本系统主要是为档案部、顾问部管理用户健康档案服务，方便数据的录入、查询、修改等操作，也会加入部分财务人员的工作。该系统包含的功能模块主要有：用户管理模块、原始数据管理模块、化验/医技数据管理模块、健康摘要/就医方案管理模块、系统功能模块。</h3>
         </div>
-        <div>
+        <div style={{width: '100%', border: '1px solid #d9d9d9', borderRadius: 4 ,textAlign: 'center'}}>
+          <Calendar fullscreen={false}/>
+        </div>
+        {/* <div>
           <Card className='card' bodyStyle={{ padding: 0 }} onClick={this.test}>
             <div className="custom-image">
               <img alt="example" src="/Home/Welcome/user_card.svg" />
@@ -79,7 +81,7 @@ class Welcome extends React.Component {
               <p>维护检查项目、用户申请单</p>
             </div>
           </Card>
-        </div>
+        </div> */}
       </div>
     );
   }

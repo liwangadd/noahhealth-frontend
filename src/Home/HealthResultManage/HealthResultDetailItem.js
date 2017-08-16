@@ -9,8 +9,8 @@ import {Table, Button, Timeline, Card, Icon, Form, Input,Popconfirm, Checkbox} f
 class HealthResultDetailItem_ extends React.Component {
 
   state = {
-    formVisible: STYLE.NONE,
-    switchText: '展开',
+    formVisible: STYLE.BLOCK,
+    switchText: '收起',
 
     unpassReason: ''
   }
@@ -50,7 +50,7 @@ class HealthResultDetailItem_ extends React.Component {
     const role = sessionStorage.getItem(SESSION.ROLE);
 
     //操作栏
-    let detailOperationDelete = role === ROLE.EMPLOYEE_ADMIN || role === ROLE.EMPLOYEE_ARCHIVE_MANAGER
+    let detailOperationDelete = role === ROLE.EMPLOYEE_ADMIN || role === ROLE.EMPLOYEE_ADVISE_MANAGER
                                 ?
                                 <Popconfirm title="您确定要删除该条检查记录吗?" placement="bottom" onConfirm={() => this.props.onDelete(detail.id)}>
                                   <Button type="danger" size="default" className="gutter" loading={this.props.deleteLoading}>删除</Button>
@@ -76,7 +76,7 @@ class HealthResultDetailItem_ extends React.Component {
       <div>
         {detailOperationDelete}
         {
-          role === ROLE.EMPLOYEE_ARCHIVE_MANAGER || role === ROLE.EMPLOYEE_ADMIN
+          role === ROLE.EMPLOYEE_ADVISE_MANAGER || role === ROLE.EMPLOYEE_ADMIN
           ?
           <span>
             <Popconfirm title={<Input value={this.state.unpassReason} size="small" onChange={this.changeUnpassReason} placeholder="未通过原因"/>}
@@ -92,12 +92,12 @@ class HealthResultDetailItem_ extends React.Component {
           null
         }
       </div>
-    // else
-    //   detailOperation =
-    //   <div>
-    //     {detailOperationDelete}
-    //     <Button size="default" type="primary" onClick={() => this.props.onDownload(detail.id)} loading={this.props.downloadLoading}>下载</Button>
-    //   </div>
+    else //已通过
+      detailOperation =
+      <div>
+        {detailOperationDelete}
+        <Button size="default" type="primary" onClick={() => this.props.onDownload(detail.id)} loading={this.props.downloadLoading}>下载</Button>
+      </div>
 
 
     //时间轴节点图标

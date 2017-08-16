@@ -377,6 +377,7 @@ class EmployeeManage extends React.Component {
       title: '所属主管',
       dataIndex: 'staffMgrName',
       key: 'staffMgrName',
+      render: (staffMgrName) => staffMgrName === null ? '/' : staffMgrName
     }, {
       title: '操作',
       key: 'action',
