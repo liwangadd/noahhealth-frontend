@@ -62,6 +62,7 @@ const certifyAccess = function(nextState, replace){
       case ROUTE.EMPLOYEE_MANAGE.URL_PREFIX:certifyRole(replace, role, ROUTE.EMPLOYEE_MANAGE.PERMISSION);break;
       case ROUTE.MEMBER_MANAGE.URL_PREFIX:certifyRole(replace, role, ROUTE.MEMBER_MANAGE.PERMISSION);break;
       case ROUTE.MEMBER_DETAIL.URL_PREFIX:certifyRole(replace, role, ROUTE.MEMBER_DETAIL.PERMISSION);break;
+      case ROUTE.MEMBER_DETAIL_PRIVATE.URL_PREFIX:certifyRole(replace, role, ROUTE.MEMBER_DETAIL_PRIVATE.PERMISSION);break;
 
       case ROUTE.FIRST_CATEGORY_MANAGE.URL_PREFIX:certifyRole(replace, role, ROUTE.FIRST_CATEGORY_MANAGE.PERMISSION);break;
       case ROUTE.SECOND_CATEGORY_MANAGE.URL_PREFIX:certifyRole(replace, role, ROUTE.SECOND_CATEGORY_MANAGE.PERMISSION);break;
@@ -70,11 +71,9 @@ const certifyAccess = function(nextState, replace){
       case ROUTE.ORIGIN_RESULT_MANAGE.URL_PREFIX:certifyRole(replace, role, ROUTE.ORIGIN_RESULT_MANAGE.PERMISSION);break;
 
       case ROUTE.EXAM_RESULT_MANAGE.URL_PREFIX:certifyRole(replace, role, ROUTE.EXAM_RESULT_MANAGE.PERMISSION);break;
-      case ROUTE.EXAM_RESULT_DETAIL.URL_PREFIX:certifyRole(replace, role, ROUTE.EXAM_RESULT_DETAIL.PERMISSION);break;
       case ROUTE.EXAM_RESULT_CLOSEUP.URL_PREFIX:certifyRole(replace, role, ROUTE.EXAM_RESULT_CLOSEUP.PERMISSION);break;
 
       case ROUTE.HEALTH_RESULT_MANAGE.URL_PREFIX:certifyRole(replace, role, ROUTE.HEALTH_RESULT_MANAGE.PERMISSION);break;
-      case ROUTE.HEALTH_RESULT_DETAIL.URL_PREFIX:certifyRole(replace, role, ROUTE.HEALTH_RESULT_DETAIL.PERMISSION);break;
 
       default:clearSession(); isEmployee(role) ? replace({ pathname: ROUTE.EMPLOYEE_LOGIN.URL }) : replace({ pathname: ROUTE.MEMBER_LOGIN.URL }); message.error('暂无该页面，请重新登录');break;
     }

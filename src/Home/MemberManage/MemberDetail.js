@@ -57,15 +57,15 @@ class MemberDetail extends React.Component {
     confirmAddModalLoading: false,
     healthResultSecondTypeData: [],
 
-    //录入检查结果
+    //录入健康摘要
     saveLoading: false,
     submitLoading: false,
 
-    //审核检查结果
+    //审核健康摘要
     passLoading: false,
     unpassLoading: false,
 
-    //查看检查结果
+    //查看健康摘要
     downloadLoading: false,
 
     //删除
@@ -214,7 +214,7 @@ class MemberDetail extends React.Component {
   //下载
   downloadInputDetail = (id) => {
 
-    console.log('请求下载检查结果', id);
+    console.log('请求下载健康摘要', id);
 
     //显示加载圈
     this.setState({ downloadLoading: true });
@@ -525,14 +525,13 @@ requestHealthResultDetailOfMember = () => {
     });
   }
 
-  //保存录入的检查结果
+  //保存录入的健康摘要
   saveHealthDetail = (form, id) => {
 
-    console.log('保存录入了的检查结果', id);
-
+    console.log('保存录入了的健康摘要', id);
     form.validateFields((err, values) => {
       if(!err) {
-
+        console.log(values);
         //显示加载圈
         this.setState({ saveLoading: true });
         $.ajax({
@@ -560,10 +559,10 @@ requestHealthResultDetailOfMember = () => {
     });
   }
 
-  //提交录入的检查结果（先请求保存、再请求改变状态）
+  //提交录入的健康摘要（先请求保存、再请求改变状态）
   submitHealthDetail = (form, id) => {
 
-    console.log('提交一份检查结果,变为待审核', id);
+    console.log('提交一份健康摘要,变为待审核', id);
 
     //先保存
     this.saveHealthDetail(form, id);
@@ -598,11 +597,11 @@ requestHealthResultDetailOfMember = () => {
   }
 
   /**
-  * 审核检查结果对话框
+  * 审核健康摘要对话框
   **/
   passHealthDetail = (form, id) => {
 
-    console.log('通过一份检查结果,变为已通过', id);
+    console.log('通过一份健康摘要,变为已通过', id);
 
     //显示加载圈
     this.setState({ passLoading: true });
@@ -635,7 +634,7 @@ requestHealthResultDetailOfMember = () => {
   //不通过
   unpassHealthDetail = (id, unpassReason) => {
 
-    console.log('不通过一份检查结果,变为未通过', id);
+    console.log('不通过一份健康摘要,变为未通过', id);
 
     //显示加载圈
     this.setState({ unpassLoading: true });
@@ -668,7 +667,7 @@ requestHealthResultDetailOfMember = () => {
   // //下载
   // downloadHealthDetail = (id) => {
   //
-  //   console.log('请求下载检查结果', id);
+  //   console.log('请求下载健康摘要', id);
   //
   //   //显示加载圈
   //   this.setState({ downloadLoading: true });
@@ -853,7 +852,7 @@ requestHealthResultDetailOfMember = () => {
           null
         }
 
-        <Tabs defaultActiveKey={"1"}  tabBarExtraContent={role === ROLE.EMPLOYEE_ADVISER || role === ROLE.EMPLOYEE_ADVISE_MANAGER || role === ROLE.EMPLOYEE_ADMIN ? <Button type="primary" onClick={this.showAddModal} style={{display: this.state.addHealthResultBtnVisible}}>添加健康摘要</Button> : null} onChange={this.handleMenuItemClick}>
+        <Tabs defaultActiveKey="1"  tabBarExtraContent={role === ROLE.EMPLOYEE_ADVISER || role === ROLE.EMPLOYEE_ADVISE_MANAGER || role === ROLE.EMPLOYEE_ADMIN ? <Button type="primary" onClick={this.showAddModal} style={{display: this.state.addHealthResultBtnVisible}}>添加健康摘要</Button> : null} onChange={this.handleMenuItemClick}>
           {
             role === ROLE.EMPLOYEE_ADVISER || role === ROLE.EMPLOYEE_ADVISE_MANAGER || role === ROLE.EMPLOYEE_ADMIN
             || role === ROLE.MEMBER_1 || role === ROLE.MEMBER_2 || role === ROLE.MEMBER_3
