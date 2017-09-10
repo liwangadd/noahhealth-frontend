@@ -335,7 +335,7 @@ class MemberManage extends React.Component {
       key: 'action',
       render: (record) => (
         <span>
-          <Link to={ROUTE.MEMBER_DETAIL.URL_PREFIX + "/" + ROUTE.MEMBER_DETAIL.MENU_KEY + "/" + record.id + "/" + record.name}>查看详情</Link>
+          <Link to={ROUTE.MEMBER_DETAIL.URL_PREFIX + "/" + ROUTE.MEMBER_DETAIL.MENU_KEY + "/" + record.id + "/" + record.name}>查看</Link>
           <span className="ant-divider" />
           <a onClick={() => this.showMemberEditModal(record)}>修改</a>
           {

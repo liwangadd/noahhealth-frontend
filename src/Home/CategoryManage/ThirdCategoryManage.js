@@ -184,12 +184,8 @@ class ThirdCategoryManage extends React.Component {
 
     const thirdCategoryColumns = [{
       title: '检查项目名称',
-      dataIndex: 'name',
-      key: 'name'
-    },{
-      title: '英文缩写',
-      dataIndex: 'enShort',
-      key: 'enShort'
+      key: 'name',
+      render: (record) => <span>{record.name}{record.enShort === null || record.enShort === '' ? '' : '(' + record.enShort +')'}</span>
     },{
       title: '参考值及单位',
       dataIndex: 'referenceValue',

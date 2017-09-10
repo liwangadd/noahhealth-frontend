@@ -4,6 +4,7 @@ import {formatDate} from './../../App/PublicUtil.js';
 import {isEmployee, isAdviser} from './../../App/PublicMethod.js';
 import ExamResultDetailItem from './ExamResultDetailItem.js';
 import React from 'react';
+import {browserHistory} from 'react-router';
 import {message, Button, BackTop, Breadcrumb, Timeline, Anchor, Alert, Spin, Tabs} from 'antd';
 import {Link} from 'react-router';
 import $ from 'jquery';
@@ -235,9 +236,10 @@ class ExamResultCloseup extends React.Component {
             if(result.code === RESULT.SUCCESS) {
 
                 this.setState({deleteLoading: false});
-
-                this.requestExamResultDetailById();
                 message.success(result.reason, 2);
+
+                //返回首页
+                browserHistory.push(ROUTE.EXAM_RESULT_MANAGE.URL_PREFIX + "/" + ROUTE.EXAM_RESULT_MANAGE.MENU_KEY);
                 return;
             } else {
                 this.setState({deleteLoading: false});

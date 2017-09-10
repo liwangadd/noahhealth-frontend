@@ -7,6 +7,7 @@ import {browserHistory} from 'react-router';
 import ProfileEditModal from './ProfileEditModal.js';
 import $ from 'jquery';
 const { Header, Content, Footer, Sider} = Layout;
+const { SubMenu } = Menu;
 
 var close = () => {
   console.log('Notification was closed. Either the close button was clicked or duration time elapsed.');
@@ -186,26 +187,66 @@ class Home extends React.Component {
               <Icon type="team" className="menu-item-font"/>
               <span className="nav-text menu-item-font">会员管理</span>
             </Menu.Item>
-            <Menu.Item key={ROUTE.FIRST_CATEGORY_MANAGE.MENU_KEY} style={{display: layoutStyle.categoryManageMenuItemDisplay}}>
-              <Icon type="medicine-box" className="menu-item-font"/>
-              <span className="nav-text menu-item-font">检查项目管理</span>
-            </Menu.Item>
-            <Menu.Item key={ROUTE.ORIGIN_RESULT_MANAGE.MENU_KEY} style={{display: layoutStyle.originResultMenuItemDisplay}}>
-              <Icon type="file-pdf" className="menu-item-font"/>
-              <span className="nav-text menu-item-font">电子资料管理</span>
-            </Menu.Item>
-            <Menu.Item key={ROUTE.EXAM_RESULT_MANAGE.MENU_KEY} style={{display: layoutStyle.examResultMenuItemDisplay}}>
-              <Icon type="file-text" className="menu-item-font"/>
-              <span className="nav-text menu-item-font">辅检数据管理</span>
-            </Menu.Item>
+
+            <SubMenu key="health_bank" title={<span className="menu-item-font"><Icon type="file" />电子健康银行</span>}>
+              <Menu.Item key={ROUTE.FIRST_CATEGORY_MANAGE.MENU_KEY} style={{display: layoutStyle.categoryManageMenuItemDisplay}}>
+                <span className="menu-item-font">检查项目</span>
+              </Menu.Item>
+              <Menu.Item key={ROUTE.ORIGIN_RESULT_MANAGE.MENU_KEY} style={{display: layoutStyle.originResultMenuItemDisplay}}>
+                <span className="nav-text menu-item-font">电子资料</span>
+              </Menu.Item>
+              {/* <Menu.Item key="11">
+                <span className="menu-item-font">门诊资料</span>
+              </Menu.Item>
+              <Menu.Item key="22">
+                <span className="menu-item-font">住院资料</span>
+              </Menu.Item>
+              <Menu.Item key="33">
+                <span className="menu-item-font">体检资料</span>
+              </Menu.Item>
+              <Menu.Item key="44">
+                <span className="menu-item-font">牙科资料</span>
+              </Menu.Item>
+              <Menu.Item key="55">
+                <span className="menu-item-font">中医资料</span>
+              </Menu.Item>
+              <Menu.Item key="55">
+                <span className="menu-item-font">影音资料</span>
+              </Menu.Item> */}
+            </SubMenu>
+
+            <SubMenu key="health_store" title={<span className="menu-item-font"><Icon type="medicine-box" />健康大数据库</span>}>
+              <Menu.Item key="66">
+                <span className="menu-item-font">健康信息表</span>
+              </Menu.Item>
+              <Menu.Item key="77">
+                <span className="menu-item-font">健康摘要库</span>
+              </Menu.Item>
+              <Menu.Item key={ROUTE.EXAM_RESULT_MANAGE.MENU_KEY} style={{display: layoutStyle.examResultMenuItemDisplay}}>
+                <span className="nav-text menu-item-font">辅检数据库</span>
+              </Menu.Item>
+            </SubMenu>
+
+            <SubMenu key="health_manage" title={<span className="menu-item-font"><Icon type="eye-o" />健康长程管理</span>}>
+              <Menu.Item key="88">
+                <span className="menu-item-font">健康管理方案</span>
+              </Menu.Item>
+              <Menu.Item key="99">
+                <span className="menu-item-font">健康记录</span>
+              </Menu.Item>
+              <Menu.Item key="00">
+                <span className="menu-item-font">各种记录表格</span>
+              </Menu.Item>
+              <Menu.Item key="23">
+                <span className="menu-item-font">年度总结</span>
+              </Menu.Item>
+            </SubMenu>
+
+
             <Menu.Item key={ROUTE.MEMBER_DETAIL_PRIVATE.MENU_KEY} style={{display: layoutStyle.memberDetailPrivateMenuItemDisplay}}>
               <Icon type="team" className="menu-item-font"/>
               <span className="nav-text menu-item-font">个人资料</span>
             </Menu.Item>
-            {/* <Menu.Item key={ROUTE.HEALTH_RESULT_MANAGE.MENU_KEY} style={{display: layoutStyle.healthResultMenuItemDisplay}}>
-              <Icon type="file-text" className="menu-item-font"/>
-              <span className="nav-text menu-item-font">健康摘要库</span>
-            </Menu.Item> */}
           </Menu>
         </Sider>
         <Layout>
@@ -214,11 +255,8 @@ class Home extends React.Component {
             <Icon type="logout" className="logout-icon" onClick={this.handleLogout}/>
             <Avatar size="large" src={FILE_SERVER + sessionStorage.getItem(SESSION.AVATAR)} className="avatar-header" style={{backgroundColor: 'white'}} onClick={this.showProfileEditModal}/>
             <ProfileEditModal ref="profileEditForm" visible={this.state.profileEditModalVisible} onCancel={this.closeProfileEditModal} userInfo={this.state.userInfo}/>
-
             <a className='name' onClick={this.showProfileEditModal}>{sessionStorage.getItem(SESSION.NAME)}</a>
             <Tag color={layoutStyle.roleTagColor} style={{marginLeft:7, float:'right', marginTop:21}}>{role}</Tag>
-
-
 
           </Header>
           <Content style={{ margin: '24px 16px', padding: 24, background: '#fff', minHeight: 800 }}>

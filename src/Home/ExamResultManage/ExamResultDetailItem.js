@@ -46,16 +46,16 @@ class ExamResultDetailItem_ extends React.Component {
 
     const {detail, type} = this.props;
     const detailColumns = [{
-      title: '检查项目名称',
+      title: type === '化验' ? '化验项目' : '医技项目',
       key: 'thirdName',
       render: (record) => {
-        return <span className={record.normal === true ? "abnormal" : ""}>{record.thirdName}</span>
+        return <span className={record.normal === true ? "abnormal" : ""}>{record.thirdName}{record.enShort === null || record.enShort === '' || record.enShort === undefined ? '' : '(' + record.enShort +')'}</span>
       }
     },
     type === "化验"
     ?
     {
-      title: '参考值及单位',
+      title: '参考值',
       dataIndex: 'referenceValue',
       key: 'referenceValue',
     }
@@ -64,7 +64,7 @@ class ExamResultDetailItem_ extends React.Component {
     detail.status === "录入中" || detail.status === "未通过"
     ?
     {
-      title: '检查结果',
+      title: type === '化验' ? '化验数据' : '医技数据',
       key: 'value',
       render: (record) => {
         return getFieldDecorator(record.id.toString() + "-value", {'initialValue': record.value})(<Input size="small"/>)
@@ -72,16 +72,35 @@ class ExamResultDetailItem_ extends React.Component {
     }
     :
     {
-      title: '检查结果',
+      title: type === '化验' ? '化验数据' : '医技数据',
       dataIndex: 'value',
       key: 'value'
     },{
-      title: '异常',
+      title: '异常判断',
       key: 'normal',
       render: (record) => {
-        return getFieldDecorator(record.id.toString() + "-normal", {valuePropName: 'checked', 'initialValue': record.normal})(<Checkbox style={{marginLeft: 5}} disabled={detail.status === "录入中" || detail.status === "未通过" ? false : true}/>)
+        return getFieldDecorator(record.id.toString() + "-normal", {valuePropName: 'checked', 'initialValue': record.normal})(<Checkbox style={{marginLeft: 18}} disabled={detail.status === "录入中" || detail.status === "未通过" ? false : true}/>)
       }
-    }];
+    },
+    type === '化验'
+    ?
+    (detail.status === "录入中" || detail.status === "未通过")
+    ?
+    {
+      title: '备注',
+      key: 'note',
+      render: (record) => {
+        return getFieldDecorator(record.id.toString() + "-note", {'initialValue': record.note})(<Input size="small"/>)
+      }
+    }
+    :
+    {
+      title: '备注',
+      dataIndex: 'note',
+      key: 'note'
+    }
+    :
+    {}];
 
     const role = sessionStorage.getItem(SESSION.ROLE);
 

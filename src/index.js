@@ -12,6 +12,7 @@ import Home from './Home/Home.js';
 import Welcome from './Home/Welcome/Welcome.js';
 import FinanceManage from './Home/FinanceManage/FinanceManage.js';
 import EmployeeManage from './Home/EmployeeManage/EmployeeManage.js';
+import EmployeeDetail from './Home/EmployeeManage/EmployeeDetail.js';
 import MemberManage from './Home/MemberManage/MemberManage.js';
 import MemberDetail from './Home/MemberManage/MemberDetail.js';
 import FirstCategoryManage from './Home/CategoryManage/FirstCategoryManage.js';
@@ -108,7 +109,10 @@ class AppRouter extends React.Component {
                   <Route path={ROUTE.HOME.URL} component={Home}>
                       <IndexRoute component={Welcome} />
                       <Route path={ROUTE.FINANCE_MANAGE.URL} component={FinanceManage}/>
+
                       <Route path={ROUTE.EMPLOYEE_MANAGE.URL} component={EmployeeManage}/>
+                      <Route path={ROUTE.EMPLOYEE_DETAIL.URL} component={EmployeeDetail}/>
+
                       <Route path={ROUTE.MEMBER_MANAGE.URL} component={MemberManage}/>
                       <Route path={ROUTE.MEMBER_DETAIL.URL} component={MemberDetail}/>
                       <Route path={ROUTE.MEMBER_DETAIL_PRIVATE.URL} component={MemberDetail}/>

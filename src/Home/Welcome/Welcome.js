@@ -21,11 +21,11 @@ class Welcome extends React.Component {
       <div>
         <BackTop visibilityHeight="200"/>
         <div className='introduce-text'>
-          <h1>诺亚健康信息管理系统</h1>
+          <h1>欢迎来到诺亚健康信息管理系统</h1>
         </div>
-        <div style={{width: '100%', border: '1px solid #d9d9d9', borderRadius: 4 ,textAlign: 'center'}}>
+        {/* <div style={{width: '100%', border: '1px solid #d9d9d9', borderRadius: 4 ,textAlign: 'center'}}>
           <Calendar fullscreen={false}/>
-        </div>
+        </div> */}
         {/* <div>
           <Card className='card' bodyStyle={{ padding: 0 }} onClick={this.test}>
             <div className="custom-image">

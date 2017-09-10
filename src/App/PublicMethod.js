@@ -47,8 +47,6 @@ const isArchiver = function(role) {
   }
 }
 
-
-
 //判断一个用户是否为会员
 const isMember = function(role) {
 
@@ -57,6 +55,27 @@ const isMember = function(role) {
     case ROLE.MEMBER_1:
     case ROLE.MEMBER_2:
     case ROLE.MEMBER_3:return true;
+    default: return false;
+  }
+}
+
+//判断一个用户是否为主管
+const isManager = function(role) {
+
+  switch(role){
+    case ROLE.EMPLOYEE_ARCHIVE_MANAGER:
+    case ROLE.EMPLOYEE_ADVISE_MANAGER: return true;
+    default: return false;
+  }
+}
+
+//判断一个用户是否为顾问部主管、顾问部员工、档案部主管
+const isRoleHasChildren = function(role) {
+
+  switch(role){
+    case ROLE.EMPLOYEE_ADVISER:
+    case ROLE.EMPLOYEE_ARCHIVE_MANAGER:
+    case ROLE.EMPLOYEE_ADVISE_MANAGER: return true;
     default: return false;
   }
 }
@@ -94,5 +113,7 @@ export {
   isEmployee,
   isAdviser,
   isArchiver,
-  isMember
+  isMember,
+  isManager,
+  isRoleHasChildren
 }

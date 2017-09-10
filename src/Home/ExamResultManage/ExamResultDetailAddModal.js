@@ -89,11 +89,11 @@ class ExamResultDetailAddModal_ extends React.Component {
               )}
             </FormItem>
 
-            <FormItem {...formItemLayout} label="备注">
+            {/* <FormItem {...formItemLayout} label="备注">
               {getFieldDecorator('note')(
                 <Input />
               )}
-            </FormItem>
+            </FormItem> */}
           </Form>
         </Modal>
     );
