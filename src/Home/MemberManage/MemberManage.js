@@ -210,7 +210,7 @@ class MemberManage extends React.Component {
             url : SERVER + '/api/user',
             type : 'PUT',
             contentType: 'application/json',
-            data : JSON.stringify({userId: this.memberId, role: values.role, staffId: values.adviserAndManager[1], valid: values.validTime}),
+            data : JSON.stringify({userId: this.memberId, role: values.role, staffId: values.adviserAndManager[1], valid: formatDate(values.validTime)}),
             dataType : 'json',
             beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
             success : (result) => {

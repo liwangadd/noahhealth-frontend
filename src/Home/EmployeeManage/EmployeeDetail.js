@@ -1,6 +1,6 @@
 import './EmployeeManage.css'
 import {SERVER, SESSION, RESULT, PAGE_SIZE, ROLE, STYLE, ROUTE, DATE_FORMAT} from './../../App/PublicConstant.js';
-import {isManager} from './../../App/PublicMethod.js';
+import {isManager, isAdmin, isAdviser, isAdviserReal, isAdviserManager, isArchiverManager} from './../../App/PublicMethod.js';
 import {formatDate} from './../../App/PublicUtil.js';
 import React from 'react';
 import {Tabs, Table, message, Popconfirm, BackTop, Button, Breadcrumb} from 'antd';
@@ -58,46 +58,40 @@ class EmployeeDetail extends React.Component {
   //查询所有职员
   handleSearchUserList = (pageNow) => {
 
-    this.refs.userSearchForm.validateFields((err, values) => {
-      if(!err) {
+      this.setState({ userTableLoading: true});
 
-        this.setState({ userTableLoading: true});
+      console.log('拉取第'+ pageNow + "页旗下职员信息");
 
-        console.log('拉取第'+ pageNow + "页旗下职员信息", values);
+      $.ajax({
+          url : SERVER + '/api/user/info/' + Number(this.props.params.employeeId),
+          type : 'POST',
+          contentType: 'application/json',
+          data : JSON.stringify({pageNow: pageNow,
+                                 pageSize: PAGE_SIZE}),
+          dataType : 'json',
+          beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
+          success : (result) => {
 
-        $.ajax({
-            url : SERVER + '/api/user/info/' + Number(this.props.params.employeeId),
-            type : 'POST',
-            contentType: 'application/json',
-            data : JSON.stringify({name : values.name,
-                                   pageNow: pageNow,
-                                   pageSize: PAGE_SIZE}),
-            dataType : 'json',
-            beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
-            success : (result) => {
+              console.log(result);
+              if(result.code !== RESULT.SUCCESS) {
+                  message.error(result.reason, 2);
+                  return;
+              }
 
-                console.log(result);
-                if(result.code !== RESULT.SUCCESS) {
-                    message.error(result.reason, 2);
-                    return;
-                }
+              //更新页码
+              const userPager = this.state.userPager;
+              userPager.total = result.content.rowTotal;
+              userPager.current = pageNow;
 
-                //更新页码
-                const userPager = this.state.userPager;
-                userPager.total = result.content.rowTotal;
-                userPager.current = pageNow;
+              //更新获取到的数据到状态中
+              this.setState({
+                userData: result.content.data,
+                userPager
+              });
 
-                //更新获取到的数据到状态中
-                this.setState({
-                  userData: result.content.list,
-                  userPager
-                });
-
-                this.setState({ userTableLoading: false});
-            }
-        });
-      }
-    });
+              this.setState({ userTableLoading: false});
+          }
+      });
   }
 
   //删除职员
@@ -106,7 +100,7 @@ class EmployeeDetail extends React.Component {
     console.log('删除职员', record);
 
     $.ajax({
-        url : SERVER + '/api/employee/' + record.id,
+        url : SERVER + '/api/user/' + record.id,
         type : 'DELETE',
         beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
         success : (result) => {
@@ -132,7 +126,7 @@ class EmployeeDetail extends React.Component {
     console.log('查询职员', employeeId);
 
     $.ajax({
-        url : SERVER + '/api/employee/' + employeeId,
+        url : SERVER + '/api/user/' + employeeId,
         type : 'GET',
         dataType : 'json',
         beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
@@ -274,10 +268,10 @@ class EmployeeDetail extends React.Component {
         this.setState({ confirmEmployeeEditModalLoading: true });
 
         $.ajax({
-            url : SERVER + '/api/employee',
+            url : SERVER + '/api/user',
             type : 'PUT',
             contentType: 'application/json',
-            data : JSON.stringify({employeeId: this.employeeId, role: values.role, staffMgrId: staffMgrId}),
+            data : JSON.stringify({userId: this.employeeId, role: values.role, staffMgrId: staffMgrId}),
             dataType : 'json',
             beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
             success : (result) => {
@@ -308,66 +302,66 @@ class EmployeeDetail extends React.Component {
   /**
   * 添加职员对话框
   **/
-  showEmployeeAddModal = (record) => this.setState({ employeeAddModalVisible: true})
-
-  closeEmployeeAddModal = () => this.setState({ employeeAddModalVisible: false})
-
-  confirmEmployeeAddModal = () => {
-
-    //请求修改职员
-    this.refs.employeeAddForm.validateFields((err, values) => {
-      if(!err) {
-        console.log('添加职员', values);
-
-        //根据角色传递staffMgrId
-        let staffMgrId = null;
-        const role = sessionStorage.getItem(SESSION.ROLE);
-
-        //先判断是管理员 or 主管在添加职员？
-        if(role === ROLE.EMPLOYEE_ADMIN) {
-
-          if(values.role === ROLE.EMPLOYEE_ADVISER) staffMgrId = Number(values.adviseManager);
-          else if(values.role === ROLE.EMPLOYEE_ARCHIVER) staffMgrId = Number(values.archiveManager);
-
-        } else if(role === ROLE.EMPLOYEE_ADVISE_MANAGER || role === ROLE.EMPLOYEE_ARCHIVE_MANAGER){
-
-          staffMgrId = Number(sessionStorage.getItem(SESSION.USER_ID));
-        }
-
-        //显示加载圈
-        this.setState({ confirmEmployeeAddModalLoading: true });
-
-        $.ajax({
-            url : SERVER + '/api/employee',
-            type : 'POST',
-            contentType: 'application/json',
-            data : JSON.stringify({name: values.name, phone: values.phone, role: values.role, staffMgrId: staffMgrId}),
-            dataType : 'json',
-            beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
-            success : (result) => {
-              console.log(result);
-              if(result.code === RESULT.SUCCESS) {
-
-                //重查刷新一遍
-                this.handleSearchUserList(this.state.userPager.current);
-
-                //关闭加载圈、对话框
-                this.setState({
-                  employeeAddModalVisible: false,
-                  confirmEmployeeAddModalLoading: false,
-                });
-                message.success(result.reason, 2);
-              } else {
-
-                //关闭加载圈
-                this.setState({ confirmEmployeeAddModalLoading: false });
-                message.error(result.reason, 2);
-              }
-            }
-        });
-      }
-    });
-  }
+  // showEmployeeAddModal = (record) => this.setState({ employeeAddModalVisible: true})
+  //
+  // closeEmployeeAddModal = () => this.setState({ employeeAddModalVisible: false})
+  //
+  // confirmEmployeeAddModal = () => {
+  //
+  //   //请求修改职员
+  //   this.refs.employeeAddForm.validateFields((err, values) => {
+  //     if(!err) {
+  //       console.log('添加职员', values);
+  //
+  //       //根据角色传递staffMgrId
+  //       let staffMgrId = null;
+  //       const role = sessionStorage.getItem(SESSION.ROLE);
+  //
+  //       //先判断是管理员 or 主管在添加职员？
+  //       if(role === ROLE.EMPLOYEE_ADMIN) {
+  //
+  //         if(values.role === ROLE.EMPLOYEE_ADVISER) staffMgrId = Number(values.adviseManager);
+  //         else if(values.role === ROLE.EMPLOYEE_ARCHIVER) staffMgrId = Number(values.archiveManager);
+  //
+  //       } else if(role === ROLE.EMPLOYEE_ADVISE_MANAGER || role === ROLE.EMPLOYEE_ARCHIVE_MANAGER){
+  //
+  //         staffMgrId = Number(sessionStorage.getItem(SESSION.USER_ID));
+  //       }
+  //
+  //       //显示加载圈
+  //       this.setState({ confirmEmployeeAddModalLoading: true });
+  //
+  //       $.ajax({
+  //           url : SERVER + '/api/employee',
+  //           type : 'POST',
+  //           contentType: 'application/json',
+  //           data : JSON.stringify({name: values.name, phone: values.phone, role: values.role, staffMgrId: staffMgrId}),
+  //           dataType : 'json',
+  //           beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
+  //           success : (result) => {
+  //             console.log(result);
+  //             if(result.code === RESULT.SUCCESS) {
+  //
+  //               //重查刷新一遍
+  //               this.handleSearchUserList(this.state.userPager.current);
+  //
+  //               //关闭加载圈、对话框
+  //               this.setState({
+  //                 employeeAddModalVisible: false,
+  //                 confirmEmployeeAddModalLoading: false,
+  //               });
+  //               message.success(result.reason, 2);
+  //             } else {
+  //
+  //               //关闭加载圈
+  //               this.setState({ confirmEmployeeAddModalLoading: false });
+  //               message.error(result.reason, 2);
+  //             }
+  //           }
+  //       });
+  //     }
+  //   });
+  // }
 
   /**
   *会员相关
@@ -389,7 +383,7 @@ class EmployeeDetail extends React.Component {
             if(result.code === RESULT.SUCCESS) {
 
                 //删除后重查一遍
-                this.handleSearchMemberList(1);
+                this.handleSearchUserList(1);
 
                 message.success(result.reason, 2);
                 return;
@@ -445,7 +439,7 @@ class EmployeeDetail extends React.Component {
         dataType : 'json',
         beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
         success : (result) => {
-            console.log("+++++++++=");
+
             console.log(result);
             if(result.code === RESULT.SUCCESS) {
 
@@ -504,7 +498,7 @@ class EmployeeDetail extends React.Component {
             url : SERVER + '/api/user',
             type : 'PUT',
             contentType: 'application/json',
-            data : JSON.stringify({userId: this.memberId, role: values.role, staffId: values.adviserAndManager[1], valid: values.validTime}),
+            data : JSON.stringify({userId: this.memberId, role: values.role, staffId: values.adviserAndManager[1], valid: formatDate(values.validTime)}),
             dataType : 'json',
             beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
             success : (result) => {
@@ -512,7 +506,7 @@ class EmployeeDetail extends React.Component {
               if(result.code === RESULT.SUCCESS) {
 
                 //重查刷新一遍
-                this.handleSearchMemberList(this.state.memberPager.current);
+                this.handleSearchUserList(this.state.userPager.current);
 
                 //关闭加载圈、对话框
                 this.setState({
@@ -568,21 +562,29 @@ class EmployeeDetail extends React.Component {
       key: 'action',
       render: (record) => (
         <span>
-          <span>
-            <a onClick={() => this.showEmployeeEditModal(record)}>修改</a>
-            {
-              role === ROLE.EMPLOYEE_ADMIN
-              ?
-              <span>
-                <span className="ant-divider" />
-                <Popconfirm title="您确定要删除该职员吗?" onConfirm={() => this.handleDeleteEmployee(record)}>
-                  <a className='user-table-delete'>删除</a>
-                </Popconfirm>
-              </span>
-              :
-              null
-            }
-          </span>
+          {/* {
+            isAdviser(record.role) || isAdmin(record.role)
+            ?
+            <span>
+              <Link to={ROUTE.EMPLOYEE_DETAIL.URL_PREFIX + "/" + ROUTE.EMPLOYEE_DETAIL.MENU_KEY + "/" + record.id + "/" + record.name + "/" + record.role}>查看</Link>
+              <span className="ant-divider" />
+            </span>
+            :
+            null
+          } */}
+          <a onClick={() => this.showEmployeeEditModal(record)}>修改</a>
+          {
+            role === ROLE.EMPLOYEE_ADMIN
+            ?
+            <span>
+              <span className="ant-divider" />
+              <Popconfirm title="您确定要删除该职员吗?" onConfirm={() => this.handleDeleteEmployee(record)}>
+                <a className='user-table-delete'>删除</a>
+              </Popconfirm>
+            </span>
+            :
+            null
+          }
         </span>
       )
     }]
@@ -645,14 +647,14 @@ class EmployeeDetail extends React.Component {
             <Breadcrumb.Item>{this.props.params.employeeRole + ' ' + this.props.params.employeeName}</Breadcrumb.Item>
           </Breadcrumb>
 
-          <EmployeeSearchForm ref="userSearchForm" handleSearchUserList={this.handleSearchUserList}/>
+          {/* <EmployeeSearchForm ref="userSearchForm" handleSearchUserList={this.handleSearchUserList}/> */}
           <Table className='user-table' columns={userColumns} dataSource={this.state.userData} pagination={this.state.userPager} onChange={this.changeEmployeePager} rowKey='id' loading={this.state.userTableLoading}/>
 
           <EmployeeEditModal ref="employeeEditForm" visible={this.state.employeeEditModalVisible} confirmLoading={this.state.confirmEmployeeEditModalLoading} onCancel={this.closeEmployeeEditModal} onConfirm={this.confirmEmployeeEditModal} adviseManagerData={this.state.adviseManagerData} archiveManagerData={this.state.archiveManagerData} archiveManagerSelectVisible={this.state.archiveManagerEditModalSelectVisible} adviseManagerSelectVisible={this.state.adviseManagerEditModalSelectVisible} changeRole={this.changeEditModalRole}/>
-          <EmployeeAddModal ref="employeeAddForm" visible={this.state.employeeAddModalVisible} confirmLoading={this.state.confirmEmployeeAddModalLoading} onCancel={this.closeEmployeeAddModal} onConfirm={this.confirmEmployeeAddModal} adviseManagerData={this.state.adviseManagerData} archiveManagerData={this.state.archiveManagerData} archiveManagerSelectVisible={this.state.archiveManagerAddModalSelectVisible} adviseManagerSelectVisible={this.state.adviseManagerAddModalSelectVisible} changeRole={this.changeAddModalRole}/>
+          {/* <EmployeeAddModal ref="employeeAddForm" visible={this.state.employeeAddModalVisible} confirmLoading={this.state.confirmEmployeeAddModalLoading} onCancel={this.closeEmployeeAddModal} onConfirm={this.confirmEmployeeAddModal} adviseManagerData={this.state.adviseManagerData} archiveManagerData={this.state.archiveManagerData} archiveManagerSelectVisible={this.state.archiveManagerAddModalSelectVisible} adviseManagerSelectVisible={this.state.adviseManagerAddModalSelectVisible} changeRole={this.changeAddModalRole}/> */}
 
           <MemberEditModal ref="memberEditForm" visible={this.state.memberEditModalVisible} confirmLoading={this.state.confirmMemberLoading} onCancel={this.closeMemberEditModal} onConfirm={this.confirmMemberEditModal} adviserAndManagerData={this.state.adviserAndManagerData} />
-          <MemberAddModal ref="memberAddForm" visible={this.state.memberAddModalVisible} confirmLoading={this.state.confirmMemberAddModalLoading} onCancel={this.closeMemberAddModal} onConfirm={this.confirmMemberAddModal}  adviserAndManagerData={this.state.adviserAndManagerData}/>
+          {/* <MemberAddModal ref="memberAddForm" visible={this.state.memberAddModalVisible} confirmLoading={this.state.confirmMemberAddModalLoading} onCancel={this.closeMemberAddModal} onConfirm={this.confirmMemberAddModal}  adviserAndManagerData={this.state.adviserAndManagerData}/> */}
         </div>
     );
   }

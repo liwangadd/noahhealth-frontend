@@ -32,7 +32,9 @@ class Home extends React.Component {
   handleLogout = (e) => {
 
     e.preventDefault();
-    browserHistory.push(ROUTE.MAIN.URL);
+
+    const role = sessionStorage.getItem(SESSION.ROLE);
+    isEmployee(role) ? browserHistory.push(ROUTE.EMPLOYEE_LOGIN.URL) : browserHistory.push(ROUTE.MEMBER_LOGIN.URL);
 
     // const key = `open${Date.now()}`;
     // const btnClick = function () {
@@ -175,10 +177,10 @@ class Home extends React.Component {
               <Icon type="home" className="menu-item-font"/>
               <span className="nav-text menu-item-font">首页</span>
             </Menu.Item>
-            <Menu.Item key={ROUTE.FINANCE_MANAGE.MENU_KEY} style={{display: layoutStyle.financeManageMenuItemDisplay}}>
+            {/* <Menu.Item key={ROUTE.FINANCE_MANAGE.MENU_KEY} style={{display: layoutStyle.financeManageMenuItemDisplay}}>
               <Icon type="pay-circle-o" className="menu-item-font"/>
               <span className="nav-text menu-item-font">财务管理</span>
-            </Menu.Item>
+            </Menu.Item> */}
             <Menu.Item key={ROUTE.EMPLOYEE_MANAGE.MENU_KEY} style={{display: layoutStyle.employeeManageMenuItemDisplay}}>
               <Icon type="team" className="menu-item-font"/>
               <span className="nav-text menu-item-font">职员管理</span>

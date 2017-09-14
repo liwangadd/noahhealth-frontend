@@ -61,6 +61,8 @@ const certifyAccess = function(nextState, replace){
       case ROUTE.FINANCE_MANAGE.URL_PREFIX:certifyRole(replace, role, ROUTE.FINANCE_MANAGE.PERMISSION);break;
 
       case ROUTE.EMPLOYEE_MANAGE.URL_PREFIX:certifyRole(replace, role, ROUTE.EMPLOYEE_MANAGE.PERMISSION);break;
+      case ROUTE.EMPLOYEE_DETAIL.URL_PREFIX:certifyRole(replace, role, ROUTE.EMPLOYEE_DETAIL.PERMISSION);break;
+
       case ROUTE.MEMBER_MANAGE.URL_PREFIX:certifyRole(replace, role, ROUTE.MEMBER_MANAGE.PERMISSION);break;
       case ROUTE.MEMBER_DETAIL.URL_PREFIX:certifyRole(replace, role, ROUTE.MEMBER_DETAIL.PERMISSION);break;
       case ROUTE.MEMBER_DETAIL_PRIVATE.URL_PREFIX:certifyRole(replace, role, ROUTE.MEMBER_DETAIL_PRIVATE.PERMISSION);break;
@@ -102,7 +104,7 @@ const certifyRole = function(replace, role, legalRoles) {
 
 class AppRouter extends React.Component {
   render() {
-    return (<Router history={browserHistory}>
+    return (<Router history={browserHistory} addHandlerKey={true}>
               <Route component={App}>
 
                 <Route onEnter={certifyAccess}>

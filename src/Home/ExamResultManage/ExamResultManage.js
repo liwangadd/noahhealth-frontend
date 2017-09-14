@@ -1,5 +1,5 @@
 import './ExamResultManage.css';
-import {SERVER, SESSION, RESULT, PAGE_SIZE, ROUTE, ROLE, DATE_FORMAT} from './../../App/PublicConstant.js';
+import {SERVER, SESSION, RESULT, PAGE_SIZE, ROUTE, ROLE} from './../../App/PublicConstant.js';
 import {formatDate} from './../../App/PublicUtil.js';
 import ExamResultOfWorkflowSearchForm from './ExamResultOfWorkflowSearchForm.js';
 import ExamResultDetailAddModal from './ExamResultDetailAddModal.js';
@@ -52,8 +52,8 @@ class ExamResultManage extends React.Component {
                                    inputerName : values.inputerName,
                                    checkerName: values.checkerName,
                                    status: values.status,
-                                   beginTime: values.time !== undefined ? formatDate(values.time[0], DATE_FORMAT) : undefined,
-                                   endTime: values.time !== undefined ? formatDate(values.time[1], DATE_FORMAT) : undefined,
+                                   beginTime: values.time !== undefined ? formatDate(values.time[0]) : undefined,
+                                   endTime: values.time !== undefined ? formatDate(values.time[1]) : undefined,
                                    pageNow: pageNow,
                                    pageSize: PAGE_SIZE}),
             dataType : 'json',

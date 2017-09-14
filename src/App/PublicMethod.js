@@ -27,6 +27,15 @@ const isEmployee = function(role) {
   }
 }
 
+//判断一个用户是否为系统管理员
+const isAdmin = function(role) {
+
+  switch(role){
+    case ROLE.EMPLOYEE_ADMIN: return true;
+    default: return false;
+  }
+}
+
 //判断一个用户是否为顾问员工/主管
 const isAdviser = function(role) {
 
@@ -37,11 +46,47 @@ const isAdviser = function(role) {
   }
 }
 
+//判断一个用户是否为顾问员工
+const isAdviserReal = function(role) {
+
+  switch(role){
+    case ROLE.EMPLOYEE_ADVISER: return true;
+    default: return false;
+  }
+}
+
+//判断一个用户是否为顾问主管
+const isAdviserManager = function(role) {
+
+  switch(role){
+    case ROLE.EMPLOYEE_ADVISE_MANAGER: return true;
+    default: return false;
+  }
+}
+
 //判断一个用户是否为档案员工/主管
 const isArchiver = function(role) {
 
   switch(role){
     case ROLE.EMPLOYEE_ARCHIVER:
+    case ROLE.EMPLOYEE_ARCHIVE_MANAGER: return true;
+    default: return false;
+  }
+}
+
+//判断一个用户是否为档案员工
+const isArchiverReal = function(role) {
+
+  switch(role){
+    case ROLE.EMPLOYEE_ARCHIVER: return true;
+    default: return false;
+  }
+}
+
+//判断一个用户是否为档案主管
+const isArchiverManager = function(role) {
+
+  switch(role){
     case ROLE.EMPLOYEE_ARCHIVE_MANAGER: return true;
     default: return false;
   }
@@ -115,5 +160,10 @@ export {
   isArchiver,
   isMember,
   isManager,
-  isRoleHasChildren
+  isRoleHasChildren,
+  isAdviserReal,
+  isAdviserManager,
+  isArchiverReal,
+  isArchiverManager,
+  isAdmin
 }

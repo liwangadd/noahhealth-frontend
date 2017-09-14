@@ -2,6 +2,7 @@ import React from 'react';
 import {ROUTE, SESSION, SERVER, RESULT} from './../../App/PublicConstant';
 import { Layout, Card, Steps, Button, message, Alert} from 'antd';
 import IndexHeader from './../IndexHeader.js';
+import IndexHeaderOfEmployee from './../IndexHeaderOfEmployee.js';
 import IndexFooter from './../IndexFooter.js';
 import ValidatePhoneForm from './ValidatePhoneForm.js';
 import NewPasswordForm from './NewPasswordForm.js';
@@ -147,7 +148,13 @@ class FindPassword extends React.Component {
 
     return (
       <Layout>
-        <IndexHeader />
+        {
+          this.props.params.roleType === "member"
+          ?
+          <IndexHeader />
+          :
+          <IndexHeaderOfEmployee />
+        }
         <Content className="index-content">
           <Card className="index-card" bodyStyle={{ paddingTop:10, paddingLeft: 50, paddingRight: 50}} style={{width: '50%'}}>
 
