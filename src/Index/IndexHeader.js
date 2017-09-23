@@ -21,7 +21,7 @@ class IndexHeader extends React.Component{
             <Menu.Item key="3">帮助</Menu.Item> */}
           </Menu>
           <div style={{ lineHeight: '64px' , float: 'right'}}>
-           {/* <Button ghost style={{marginRight:10}} onClick={() => browserHistory.push(ROUTE.EMPLOYEE_LOGIN.URL)}>职员登录</Button> */}
+           <Button ghost style={{marginRight:10}} onClick={() => browserHistory.push(ROUTE.EMPLOYEE_LOGIN.URL)}>职员登录</Button>
            <Button ghost style={{marginRight:10}} onClick={() => browserHistory.push(ROUTE.MEMBER_LOGIN.URL)}>会员登录</Button>
            <Button ghost onClick={() => browserHistory.push(ROUTE.REGISTER.URL)}>会员注册</Button>
           </div>

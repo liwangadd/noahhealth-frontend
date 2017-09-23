@@ -50,8 +50,18 @@ class OriginResultUploadModal_ extends React.Component {
               )}
             </FormItem>
             <FormItem {...formItemLayout} label="资料类别">
-              {getFieldDecorator('secondId', {rules: [{ required: true, message: '请选择资料类别!' }]})(
-                <Cascader options={this.props.originResultSecondTypeData} placeholder="" allowClear={false}/>
+              {getFieldDecorator('secondId', {rules: [{ required: true, message: '请选择资料类别!' }], initialValue: '门诊资料'})(
+                // <Cascader options={this.props.originResultSecondTypeData} placeholder="" allowClear={false}/>
+                <Select>
+                  <Option value="门诊资料">门诊资料</Option>
+                  <Option value="住院资料">住院资料</Option>
+                  <Option value="体检资料">体检资料</Option>
+                  <Option value="影像资料">影像资料</Option>
+                  <Option value="牙科资料">牙科资料</Option>
+                  <Option value="中医资料">中医资料</Option>
+                  <Option value="心理资料">心理资料</Option>
+                  <Option value="其他资料">其他资料</Option>
+                </Select>
               )}
             </FormItem>
             <FormItem {...formItemLayout} label="检查医院">

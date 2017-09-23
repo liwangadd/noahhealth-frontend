@@ -122,7 +122,7 @@ class OriginResultManage extends React.Component {
             contentType: 'application/json',
             data : JSON.stringify({userId: Number(values.userId),
                                    hospital: values.hospital,
-                                   secondId: Number(values.secondId[1]),
+                                   secondId: values.secondId,
                                    time: values.time,
                                    note: values.note}),
             dataType : 'json',
@@ -504,7 +504,7 @@ class OriginResultManage extends React.Component {
     this.handleSearchOriginResultList(1);
 
     this.requestMembersUnderEmployee(); //拉取上传对话框中的会员信息(该employee旗下的)
-    this.requestOriginResultSecondType(); //拉取电子资料类别的级联数据
+    //this.requestOriginResultSecondType(); //拉取电子资料类别的级联数据
   }
 
 
@@ -644,7 +644,7 @@ class OriginResultManage extends React.Component {
             <Table className='origin-result-table' columns={originResultColumns} dataSource={this.state.originResultData} rowKey='id' loading={this.state.originResultTableLoading} pagination={this.state.originResultPager} onChange={this.changeOriginResultPager}/>
           </TabPane>
         </Tabs>
-        <OriginResultUploadModal ref="uploadForm" visible={this.state.uploadModalVisible} confirmLoading={this.state.confirmUploadModalLoading} onCancel={this.closeUploadModal} onConfirm={this.confirmUploadModal} memberUnderEmployeeData={this.state.memberUnderEmployeeData} originResultSecondTypeData={this.state.originResultSecondTypeData}/>
+        <OriginResultUploadModal ref="uploadForm" visible={this.state.uploadModalVisible} confirmLoading={this.state.confirmUploadModalLoading} onCancel={this.closeUploadModal} onConfirm={this.confirmUploadModal} memberUnderEmployeeData={this.state.memberUnderEmployeeData}/>
         <OriginResultUploadPictureModal visible={this.state.uploadPictureModalVisible} onCancel={this.closeUploadPictureModal} submitLoading={this.state.submitLoading}  onSubmit={this.handleSubmitPicture} fileList={this.state.fileList} originResultId={this.state.originResultId} onChange={this.handleUploadPictureChange} />
         <OriginResultCheckPictureModal visible={this.state.checkPictureModalVisible} onCancel={this.closeCheckPictureModal} passLoading={this.state.passLoading} unpassLoading={this.state.unpassLoading}  onPass={this.handlePassPicture} onUnpass={this.handleUnpassPicture} fileList={this.state.fileList} originResultId={this.state.originResultId}/>
         <OriginResultWatchPictureModal visible={this.state.watchPictureModalVisible} onCancel={this.closeWatchPictureModal} fileList={this.state.fileList} />

@@ -40,13 +40,22 @@ class HealthResultDetailItem_ extends React.Component {
     const {detail} = this.props;
     const detailColumns = [
     {
+      title: '摘要问题',
+      key: 'problemNew',
+      render: (record) => {
+        return getFieldDecorator('problemNew', {'initialValue': isEmployee(role) ? record.problemNew : record.problem})(
+          <Input type="textarea"
+            placeholder={isEmployee(role) && (detail.status === "录入中" || detail.status === "未通过" || detail.status === "已通过") ? "请输入" : null}
+            rows={5} disabled={isEmployee(role) && (detail.status === "录入中" || detail.status === "未通过" || detail.status === "已通过") ? false : true}/>)}
+    },
+    {
       title: '摘要内容',
       key: 'contentNew',
       render: (record) => {
         return getFieldDecorator('contentNew', {'initialValue': isEmployee(role) ? record.contentNew : record.content})(
           <Input type="textarea"
             placeholder={isEmployee(role) && (detail.status === "录入中" || detail.status === "未通过" || detail.status === "已通过") ? "请输入" : null}
-            rows={5} style={{border: '0px'}} disabled={isEmployee(role) && (detail.status === "录入中" || detail.status === "未通过" || detail.status === "已通过") ? false : true}/>)}
+            rows={5} disabled={isEmployee(role) && (detail.status === "录入中" || detail.status === "未通过" || detail.status === "已通过") ? false : true}/>)}
     }];
 
     const role = sessionStorage.getItem(SESSION.ROLE);

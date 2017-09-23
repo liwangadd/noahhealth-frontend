@@ -15,10 +15,11 @@
 
 .card {
   width:23%;
-  height:300px;
+  height:230px;
   float:left;
   margin-left: 15px;
   margin-bottom: 20px;
+  text-align: center;
 }
 
 .custom-image {
@@ -39,4 +40,10 @@
 }
 .custom-card p {
   color: #999;
+}
+
+
+.card .card-btn {
+  margin-left: 7px;
+  margin-bottom: 7px;
 }

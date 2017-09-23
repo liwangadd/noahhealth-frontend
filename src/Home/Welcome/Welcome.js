@@ -1,6 +1,7 @@
 import './Welcome.css'
 import React from 'react';
-import {Card, BackTop, Calendar} from 'antd';
+import {Card, BackTop, Calendar, Button} from 'antd';
+import {Link} from 'react-router';
 import $ from 'jquery';
 
 class Welcome extends React.Component {
@@ -23,65 +24,36 @@ class Welcome extends React.Component {
         <div className='introduce-text'>
           <h1>欢迎来到诺亚健康信息管理系统</h1>
         </div>
-        {/* <div style={{width: '100%', border: '1px solid #d9d9d9', borderRadius: 4 ,textAlign: 'center'}}>
-          <Calendar fullscreen={false}/>
-        </div> */}
-        {/* <div>
-          <Card className='card' bodyStyle={{ padding: 0 }} onClick={this.test}>
-            <div className="custom-image">
-              <img alt="example" src="/Home/Welcome/user_card.svg" />
-            </div>
-            <div className="custom-card">
-              <h3>会员管理</h3>
-              <p>会员信息、角色级别、所属顾问</p>
-            </div>
+        <div>
+          <Card title="电子健康银行" className="card">
+            <Button className="card-btn">门诊资料</Button>
+            <Button className="card-btn">住院资料</Button>
+            <Button className="card-btn">体检资料</Button>
+            <Button className="card-btn">影像资料</Button>
+            <Button className="card-btn">牙科资料</Button>
+            <Button className="card-btn">中医资料</Button>
+            <Button className="card-btn">心理资料</Button>
+            <Button className="card-btn">其他资料</Button>
           </Card>
-          <Card className='card' bodyStyle={{ padding: 0 }}>
-            <div className="custom-image">
-              <img alt="example" src="/Home/Welcome/doctor_card.svg"/>
-            </div>
-            <div className="custom-card">
-              <h3>职员管理</h3>
-              <p>权限配置、所属主管</p>
-            </div>
+          <Card title="健康大数据库" className="card" style={{width:'20%'}}>
+            <Button className="card-btn" >健康摘要库</Button>
+            <Button className="card-btn" >化验数据库</Button>
+            <Button className="card-btn" >医技数据库</Button>
           </Card>
-          <Card className='card' bodyStyle={{ padding: 0 }}>
-            <div className="custom-image">
-              <img alt="example" src="/Home/Welcome/health_card.svg" />
-            </div>
-            <div className="custom-card">
-              <h3>健康管理</h3>
-              <p>健康摘要、就医方案</p>
-            </div>
+          <Card title="健康长程管理" className="card" style={{width:'28%'}}>
+            <Button className="card-btn">健康管理方案</Button>
+            <Button className="card-btn">健康问题记录</Button>
+            <Button className="card-btn">专病监测表格</Button>
+            <Button className="card-btn">调查评估量表</Button>
+            <Button className="card-btn">私人定制体检</Button>
+            <Button className="card-btn">年度健康总结</Button>
           </Card>
-          <Card className='card' bodyStyle={{ padding: 0 }}>
-            <div className="custom-image">
-              <img alt="example" src="/Home/Welcome/record_card.svg" />
-            </div>
-            <div className="custom-card">
-              <h3>原始数据管理</h3>
-              <p>用户扫描件</p>
-            </div>
+          <Card title="会员服务预约" className="card" style={{width:'22%'}}>
+            <Button className="card-btn" >体检服务预约单</Button>
+            <Button className="card-btn">就医服务预约单</Button>
+            <Button className="card-btn" >其他服务预约单</Button>
           </Card>
-          <Card className='card' bodyStyle={{ padding: 0 }}>
-            <div className="custom-image">
-              <img alt="example" src="/Home/Welcome/origindata_card.svg" />
-            </div>
-            <div className="custom-card">
-              <h3>化验/医技数据管理</h3>
-              <p>数据录入、数据导出</p>
-            </div>
-          </Card>
-          <Card className='card' bodyStyle={{ padding: 0 }}>
-            <div className="custom-image">
-              <img alt="example" src="/Home/Welcome/config_card.svg" />
-            </div>
-            <div className="custom-card">
-              <h3>系统管理</h3>
-              <p>维护检查项目、用户申请单</p>
-            </div>
-          </Card>
-        </div> */}
+        </div>
       </div>
     );
   }

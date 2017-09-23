@@ -56,7 +56,7 @@ class ExamResultDetailAddModal_ extends React.Component {
               )}
             </FormItem>
 
-            <FormItem {...formItemLayout} label="检查类型">
+            <FormItem {...formItemLayout} label="资料名称">
               {getFieldDecorator('type', {rules: [{ required: true, message: '请选择检查类型!' }], initialValue: "化验"})(
               <Radio.Group onChange={this.handleTypeChange}>
                 <Radio.Button value="化验">化验</Radio.Button>

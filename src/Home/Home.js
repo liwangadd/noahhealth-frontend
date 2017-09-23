@@ -192,12 +192,12 @@ class Home extends React.Component {
 
             <SubMenu key="health_bank" title={<span className="menu-item-font"><Icon type="file" />电子健康银行</span>}>
               <Menu.Item key={ROUTE.FIRST_CATEGORY_MANAGE.MENU_KEY} style={{display: layoutStyle.categoryManageMenuItemDisplay}}>
-                <span className="menu-item-font">检查项目</span>
+                <span className="menu-item-font">检查项目X</span>
               </Menu.Item>
               <Menu.Item key={ROUTE.ORIGIN_RESULT_MANAGE.MENU_KEY} style={{display: layoutStyle.originResultMenuItemDisplay}}>
-                <span className="nav-text menu-item-font">电子资料</span>
+                <span className="nav-text menu-item-font">电子资料X</span>
               </Menu.Item>
-              {/* <Menu.Item key="11">
+              <Menu.Item key="11">
                 <span className="menu-item-font">门诊资料</span>
               </Menu.Item>
               <Menu.Item key="22">
@@ -206,26 +206,35 @@ class Home extends React.Component {
               <Menu.Item key="33">
                 <span className="menu-item-font">体检资料</span>
               </Menu.Item>
+              <Menu.Item key="66">
+                <span className="menu-item-font">影像资料</span>
+              </Menu.Item>
               <Menu.Item key="44">
                 <span className="menu-item-font">牙科资料</span>
               </Menu.Item>
               <Menu.Item key="55">
                 <span className="menu-item-font">中医资料</span>
               </Menu.Item>
-              <Menu.Item key="55">
-                <span className="menu-item-font">影音资料</span>
-              </Menu.Item> */}
+              <Menu.Item key="771">
+                <span className="menu-item-font">心理资料</span>
+              </Menu.Item>
+              <Menu.Item key="883">
+                <span className="menu-item-font">其他资料</span>
+              </Menu.Item>
             </SubMenu>
 
             <SubMenu key="health_store" title={<span className="menu-item-font"><Icon type="medicine-box" />健康大数据库</span>}>
-              <Menu.Item key="66">
-                <span className="menu-item-font">健康信息表</span>
+              <Menu.Item key={ROUTE.EXAM_RESULT_MANAGE.MENU_KEY} style={{display: layoutStyle.examResultMenuItemDisplay}}>
+                <span className="nav-text menu-item-font">辅检数据库X</span>
               </Menu.Item>
-              <Menu.Item key="77">
+              <Menu.Item key="662">
                 <span className="menu-item-font">健康摘要库</span>
               </Menu.Item>
-              <Menu.Item key={ROUTE.EXAM_RESULT_MANAGE.MENU_KEY} style={{display: layoutStyle.examResultMenuItemDisplay}}>
-                <span className="nav-text menu-item-font">辅检数据库</span>
+              <Menu.Item key="77">
+                <span className="menu-item-font">化验数据库</span>
+              </Menu.Item>
+              <Menu.Item key="100">
+                <span className="menu-item-font">医技数据库</span>
               </Menu.Item>
             </SubMenu>
 
@@ -234,13 +243,31 @@ class Home extends React.Component {
                 <span className="menu-item-font">健康管理方案</span>
               </Menu.Item>
               <Menu.Item key="99">
-                <span className="menu-item-font">健康记录</span>
+                <span className="menu-item-font">健康问题记录</span>
               </Menu.Item>
               <Menu.Item key="00">
-                <span className="menu-item-font">各种记录表格</span>
+                <span className="menu-item-font">专病监测表格</span>
               </Menu.Item>
               <Menu.Item key="23">
-                <span className="menu-item-font">年度总结</span>
+                <span className="menu-item-font">调查评估量表</span>
+              </Menu.Item>
+              <Menu.Item key="235555">
+                <span className="menu-item-font">私人定制体检</span>
+              </Menu.Item>
+              <Menu.Item key="2355551">
+                <span className="menu-item-font">年度健康总结</span>
+              </Menu.Item>
+            </SubMenu>
+
+            <SubMenu key="member_service_subscribe" title={<span className="menu-item-font"><Icon type="eye-o" />会员服务预约</span>}>
+              <Menu.Item key="8866">
+                <span className="menu-item-font">体检服务预约单</span>
+              </Menu.Item>
+              <Menu.Item key="9977">
+                <span className="menu-item-font">就医服务预约单</span>
+              </Menu.Item>
+              <Menu.Item key="0088">
+                <span className="menu-item-font">其他服务预约单</span>
               </Menu.Item>
             </SubMenu>
 

@@ -81,26 +81,7 @@ class ExamResultDetailItem_ extends React.Component {
       render: (record) => {
         return getFieldDecorator(record.id.toString() + "-normal", {valuePropName: 'checked', 'initialValue': record.normal})(<Checkbox style={{marginLeft: 18}} disabled={detail.status === "录入中" || detail.status === "未通过" ? false : true}/>)
       }
-    },
-    type === '化验'
-    ?
-    (detail.status === "录入中" || detail.status === "未通过")
-    ?
-    {
-      title: '备注',
-      key: 'note',
-      render: (record) => {
-        return getFieldDecorator(record.id.toString() + "-note", {'initialValue': record.note})(<Input size="small"/>)
-      }
-    }
-    :
-    {
-      title: '备注',
-      dataIndex: 'note',
-      key: 'note'
-    }
-    :
-    {}];
+    }];
 
     const role = sessionStorage.getItem(SESSION.ROLE);
 
