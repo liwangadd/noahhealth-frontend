@@ -57,7 +57,7 @@ class ExamResultDetailItem_ extends React.Component {
     {
       title: '参考值',
       dataIndex: 'referenceValue',
-      key: 'referenceValue',
+      key: 'referenceValue'
     }
     :
     {},

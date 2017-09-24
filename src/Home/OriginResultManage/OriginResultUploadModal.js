@@ -3,7 +3,7 @@ import React from 'react';
 import moment from 'moment';
 import {DATE_FORMAT} from './../../App/PublicConstant.js';
 import {formatDate} from './../../App/PublicUtil.js';
-import {Form, Input, Select, Modal, DatePicker, Cascader} from 'antd';
+import {Form, Input, Select, Modal, DatePicker, Cascader, Radio} from 'antd';
 const FormItem = Form.Item;
 const Option = Select.Option;
 
@@ -25,7 +25,7 @@ class OriginResultUploadModal_ extends React.Component {
 
     const formItemLayout = {labelCol: { xs: { span: 24 }, sm: { span: 7 },}, wrapperCol: { xs: { span: 24 }, sm: { span: 12 }}};
     const memberNameOptions = this.props.memberUnderEmployeeData.map((member, index) => <Option value={member.id.toString()} key={index}>{member.name}</Option>);
-
+    const originResultTypeOptions = this.props.originResultTypeData.map((type, index) => <Option value={type.value.toString()} key={index}>{type.label}</Option>);
 
     const { getFieldDecorator } = this.props.form;
     return (
@@ -50,18 +50,19 @@ class OriginResultUploadModal_ extends React.Component {
               )}
             </FormItem>
             <FormItem {...formItemLayout} label="资料类别">
-              {getFieldDecorator('secondId', {rules: [{ required: true, message: '请选择资料类别!' }], initialValue: '门诊资料'})(
-                // <Cascader options={this.props.originResultSecondTypeData} placeholder="" allowClear={false}/>
+              {getFieldDecorator('secondId', {rules: [{ required: true, message: '请选择资料类别!' }]})(
+                //<Cascader options={this.props.originResultSecondTypeData} placeholder="" allowClear={false}/>
                 <Select>
-                  <Option value="门诊资料">门诊资料</Option>
-                  <Option value="住院资料">住院资料</Option>
-                  <Option value="体检资料">体检资料</Option>
-                  <Option value="影像资料">影像资料</Option>
-                  <Option value="牙科资料">牙科资料</Option>
-                  <Option value="中医资料">中医资料</Option>
-                  <Option value="心理资料">心理资料</Option>
-                  <Option value="其他资料">其他资料</Option>
+                  {originResultTypeOptions}
                 </Select>
+              )}
+            </FormItem>
+            <FormItem {...formItemLayout} label="是否异常">
+              {getFieldDecorator('normal', {rules: [{ required: true, message: '请选择是否异常!' }], initialValue: "正常"})(
+              <Radio.Group>
+                <Radio.Button value="正常">正常</Radio.Button>
+                <Radio.Button value="异常">异常</Radio.Button>
+              </Radio.Group>
               )}
             </FormItem>
             <FormItem {...formItemLayout} label="检查医院">
@@ -74,6 +75,7 @@ class OriginResultUploadModal_ extends React.Component {
                 <DatePicker style={{width: '100%'}}/>
               )}
             </FormItem>
+
           </Form>
         </Modal>
     );

@@ -30,9 +30,11 @@ class HealthResultDetailSearchForm_ extends React.Component {
     const role = sessionStorage.getItem(SESSION.ROLE);
 
     //在检查亚类尾部加上全部/全部 secondId = -1
-    const allType = {value: '全部分类', label: '全部分类', children:[{value: -1, label: '全部亚类'}]};
-    let healthResultSecondTypeData = this.props.healthResultSecondTypeData.slice(); //复制数组对象
-    healthResultSecondTypeData.unshift(allType);
+    // const allType = {value: '全部分类', label: '全部分类', children:[{value: -1, label: '全部亚类'}]};
+    // let healthResultSecondTypeData = this.props.healthResultSecondTypeData.slice(); //复制数组对象
+    // healthResultSecondTypeData.unshift(allType);
+    const healthResultTypeOptions = this.props.healthResultTypeData.map((type, index) => <Option value={type.value.toString()} key={index}>{type.label}</Option>);
+
 
     const { getFieldDecorator } = this.props.form;
     return (
@@ -49,29 +51,11 @@ class HealthResultDetailSearchForm_ extends React.Component {
           </Col>
           <Col span={8}>
             <FormItem>
-              {getFieldDecorator('secondId', {initialValue: '基本信息'})(
+              {getFieldDecorator('secondId',{initialValue: "-1"})(
                 // <Cascader options={healthResultSecondTypeData} placeholder="" allowClear={false}/>
                 <Select>
-                  <Option value="基本信息">基本信息</Option>
-                  <Option value="心血管系统">心血管系统</Option>
-                  <Option value="呼吸系统">呼吸系统</Option>
-                  <Option value="消化系统">消化系统</Option>
-                  <Option value="血液系统">血液系统</Option>
-                  <Option value="内分泌系统">内分泌系统</Option>
-                  <Option value="风湿免疫">风湿免疫</Option>
-                  <Option value="神经系统">神经系统</Option>
-                  <Option value="运动系统">运动系统</Option>
-                  <Option value="神经系统">神经系统</Option>
-                  <Option value="泌尿系统">泌尿系统</Option>
-                  <Option value="生殖系统">生殖系统</Option>
-                  <Option value="营养代谢">营养代谢</Option>
-                  <Option value="肿瘤疾病">肿瘤疾病</Option>
-                  <Option value="眼科疾病">眼科疾病</Option>
-                  <Option value="耳鼻咽喉">耳鼻咽喉</Option>
-                  <Option value="口腔颌面">口腔颌面</Option>
-                  <Option value="皮肤疾病">皮肤疾病</Option>
-                  <Option value="精神心理">精神心理</Option>
-                  <Option value="其他">其他</Option>
+                  <Option value="-1" key={-1}>全部</Option>
+                  {healthResultTypeOptions}
                 </Select>
               )}
             </FormItem>

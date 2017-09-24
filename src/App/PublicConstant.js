@@ -1,12 +1,12 @@
 
 //服务器地址
 //const SERVER = 'http://localhost:8080' //yaochenkun
-//const SERVER = 'http://10.109.247.127:8080' //lab
-const SERVER = 'http://noahhealth.cn:8080' //alicloud
+const SERVER = 'http://10.109.247.12:8080' //lab
+//const SERVER = 'http://noahhealth.cn:8080' //alicloud
 
 //文件服务器地址
-//const FILE_SERVER = 'http://10.109.247.127:8088' //lab
-const FILE_SERVER = 'http://noahhealth.cn:8088' //alicloud
+const FILE_SERVER = 'http://10.109.247.12:8088' //lab
+//const FILE_SERVER = 'http://noahhealth.cn:8088' //alicloud
 
 
 
@@ -45,8 +45,6 @@ const ROUTE = {
 
     MEMBER_MANAGE: {URL:'/member_manage/:menuKey', URL_PREFIX:'/member_manage', MENU_KEY: '6', PERMISSION: [ROLE.EMPLOYEE_ADMIN, ROLE.EMPLOYEE_FINANCER,ROLE.EMPLOYEE_ADVISER,ROLE.EMPLOYEE_ADVISE_MANAGER]},
     MEMBER_DETAIL: {URL:'/member_detail/:menuKey/:memberId/:memberName', URL_PREFIX:'/member_detail', MENU_KEY: '6', PERMISSION: [ROLE.EMPLOYEE_ADMIN, ROLE.EMPLOYEE_ADVISE_MANAGER, ROLE.EMPLOYEE_ADVISER, ROLE.MEMBER_1, ROLE.MEMBER_2, ROLE.MEMBER_3]},
-    MEMBER_DETAIL_PRIVATE: {URL:'/member_detail_private/:menuKey/:memberId/:memberName', URL_PREFIX:'/member_detail_private', MENU_KEY: '9', PERMISSION: [ROLE.EMPLOYEE_ADMIN, ROLE.MEMBER_1, ROLE.MEMBER_2, ROLE.MEMBER_3]},
-
 
     FINANCE_MANAGE: {URL:'/finance_manage/:menuKey', URL_PREFIX:'/finance_manage', MENU_KEY: '7', PERMISSION: [ROLE.EMPLOYEE_ADMIN, ROLE.EMPLOYEE_FINANCER]},
 

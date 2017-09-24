@@ -23,6 +23,7 @@ class Home extends React.Component {
       userInfo: {valid: 0}
 
   };
+
   toggle = () => {
     this.setState({
       collapsed: !this.state.collapsed,
@@ -63,15 +64,15 @@ class Home extends React.Component {
     let layoutStyle;
 
     //主色调、用户管理、检查项目、原始资料、化验/医技数据、健康管理
-    if(role === ROLE.EMPLOYEE_ADMIN) layoutStyle = this.getLayoutStyle(COLOR.RED, STYLE.BLOCK, STYLE.BLOCK, STYLE.BLOCK, STYLE.BLOCK, STYLE.BLOCK, STYLE.BLOCK, STYLE.NONE);
-    else if(role === ROLE.EMPLOYEE_FINANCER) layoutStyle = this.getLayoutStyle(COLOR.RED, STYLE.BLOCK, STYLE.NONE, STYLE.BLOCK, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.NONE);
-    else if(role === ROLE.EMPLOYEE_ARCHIVER) layoutStyle = this.getLayoutStyle(COLOR.PINK, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.BLOCK, STYLE.BLOCK, STYLE.NONE);
-    else if(role === ROLE.EMPLOYEE_ARCHIVE_MANAGER) layoutStyle = this.getLayoutStyle(COLOR.PINK, STYLE.NONE, STYLE.BLOCK, STYLE.NONE, STYLE.BLOCK, STYLE.BLOCK, STYLE.BLOCK, STYLE.NONE);
+    if(role === ROLE.EMPLOYEE_ADMIN) layoutStyle = this.getLayoutStyle(COLOR.RED, STYLE.BLOCK, STYLE.BLOCK, STYLE.BLOCK, STYLE.BLOCK, STYLE.BLOCK, STYLE.BLOCK, STYLE.BLOCK);
+    else if(role === ROLE.EMPLOYEE_FINANCER) layoutStyle = this.getLayoutStyle(COLOR.RED, STYLE.BLOCK, STYLE.NONE, STYLE.BLOCK, STYLE.BLOCK, STYLE.BLOCK, STYLE.BLOCK, STYLE.BLOCK);
+    else if(role === ROLE.EMPLOYEE_ARCHIVER) layoutStyle = this.getLayoutStyle(COLOR.PINK, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.BLOCK, STYLE.BLOCK, STYLE.BLOCK, STYLE.BLOCK);
+    else if(role === ROLE.EMPLOYEE_ARCHIVE_MANAGER) layoutStyle = this.getLayoutStyle(COLOR.PINK, STYLE.NONE, STYLE.BLOCK, STYLE.NONE, STYLE.BLOCK, STYLE.BLOCK, STYLE.BLOCK, STYLE.BLOCK);
     else if(role === ROLE.EMPLOYEE_ADVISER) layoutStyle = this.getLayoutStyle(COLOR.ORANGE, STYLE.NONE, STYLE.NONE, STYLE.BLOCK, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.NONE);
-    else if(role === ROLE.EMPLOYEE_ADVISE_MANAGER) layoutStyle = this.getLayoutStyle(COLOR.ORANGE, STYLE.NONE, STYLE.BLOCK, STYLE.BLOCK, STYLE.BLOCK, STYLE.NONE, STYLE.NONE, STYLE.NONE);
-    else if(role === ROLE.MEMBER_1) layoutStyle = this.getLayoutStyle(COLOR.GREEN, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.BLOCK);
-    else if(role === ROLE.MEMBER_2) layoutStyle = this.getLayoutStyle(COLOR.CYAN, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.BLOCK);
-    else if(role === ROLE.MEMBER_3) layoutStyle = this.getLayoutStyle(COLOR.BLUE, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.BLOCK);
+    else if(role === ROLE.EMPLOYEE_ADVISE_MANAGER) layoutStyle = this.getLayoutStyle(COLOR.ORANGE, STYLE.NONE, STYLE.BLOCK, STYLE.BLOCK, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.NONE);
+    else if(role === ROLE.MEMBER_1) layoutStyle = this.getLayoutStyle(COLOR.GREEN, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.NONE);
+    else if(role === ROLE.MEMBER_2) layoutStyle = this.getLayoutStyle(COLOR.CYAN, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.NONE);
+    else if(role === ROLE.MEMBER_3) layoutStyle = this.getLayoutStyle(COLOR.BLUE, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.NONE);
     else layoutStyle = this.getLayoutStyle(COLOR.BLUE, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.NONE);
 
     return layoutStyle;
@@ -81,20 +82,20 @@ class Home extends React.Component {
                  financeManageMenuItemDisplay,
                  employeeManageMenuItemDisplay,
                  memberManageMenuItemDisplay,
-                 categoryManageMenuItemDisplay,
-                 originResultMenuItemDisplay,
-                 examResultMenuItemDisplay,
-                 memberDetailPrivateMenuItemDisplay) {
+                 documentBankMenuItemDisplay,
+                 healthDatabaseMenuItemDisplay,
+                 healthLongtermManageMenuItemDisplay,
+                 memberServiceSubscribeMenuItemDisplay) {
 
       let layoutStyle = {
         roleTagColor: roleTagColor,
         financeManageMenuItemDisplay: financeManageMenuItemDisplay,
         employeeManageMenuItemDisplay: employeeManageMenuItemDisplay,
         memberManageMenuItemDisplay: memberManageMenuItemDisplay,
-        categoryManageMenuItemDisplay: categoryManageMenuItemDisplay,
-        originResultMenuItemDisplay: originResultMenuItemDisplay,
-        examResultMenuItemDisplay: examResultMenuItemDisplay,
-        memberDetailPrivateMenuItemDisplay: memberDetailPrivateMenuItemDisplay
+        documentBankMenuItemDisplay: documentBankMenuItemDisplay,
+        healthDatabaseMenuItemDisplay: healthDatabaseMenuItemDisplay,
+        healthLongtermManageMenuItemDisplay: healthLongtermManageMenuItemDisplay,
+        memberServiceSubscribeMenuItemDisplay: memberServiceSubscribeMenuItemDisplay
       };
 
       return layoutStyle;
@@ -112,7 +113,6 @@ class Home extends React.Component {
       case ROUTE.FINANCE_MANAGE.MENU_KEY: targetUrl = ROUTE.FINANCE_MANAGE.URL_PREFIX + "/" + ROUTE.FINANCE_MANAGE.MENU_KEY; break;
       case ROUTE.EMPLOYEE_MANAGE.MENU_KEY: targetUrl = ROUTE.EMPLOYEE_MANAGE.URL_PREFIX + "/" + ROUTE.EMPLOYEE_MANAGE.MENU_KEY; break;
       case ROUTE.MEMBER_MANAGE.MENU_KEY: targetUrl = ROUTE.MEMBER_MANAGE.URL_PREFIX + "/" + ROUTE.MEMBER_MANAGE.MENU_KEY; break;
-      case ROUTE.MEMBER_DETAIL_PRIVATE.MENU_KEY: targetUrl = ROUTE.MEMBER_DETAIL_PRIVATE.URL_PREFIX + "/" + ROUTE.MEMBER_DETAIL_PRIVATE.MENU_KEY + "/" + memberId + "/" + memberName; break;
       case ROUTE.FIRST_CATEGORY_MANAGE.MENU_KEY: targetUrl = ROUTE.FIRST_CATEGORY_MANAGE.URL_PREFIX + "/" + ROUTE.FIRST_CATEGORY_MANAGE.MENU_KEY + "/1"; break;
       case ROUTE.ORIGIN_RESULT_MANAGE.MENU_KEY: targetUrl = ROUTE.ORIGIN_RESULT_MANAGE.URL_PREFIX + "/" + ROUTE.ORIGIN_RESULT_MANAGE.MENU_KEY; break;
       case ROUTE.EXAM_RESULT_MANAGE.MENU_KEY: targetUrl = isEmployee(role) ? (ROUTE.EXAM_RESULT_MANAGE.URL_PREFIX + "/" + ROUTE.EXAM_RESULT_MANAGE.MENU_KEY) : (ROUTE.EXAM_RESULT_DETAIL.URL_PREFIX + "/" + ROUTE.EXAM_RESULT_DETAIL.MENU_KEY + "/" + memberId + "/" + memberName);break;
@@ -190,92 +190,111 @@ class Home extends React.Component {
               <span className="nav-text menu-item-font">会员管理</span>
             </Menu.Item>
 
-            <SubMenu key="health_bank" title={<span className="menu-item-font"><Icon type="file" />电子健康银行</span>}>
-              <Menu.Item key={ROUTE.FIRST_CATEGORY_MANAGE.MENU_KEY} style={{display: layoutStyle.categoryManageMenuItemDisplay}}>
-                <span className="menu-item-font">检查项目X</span>
-              </Menu.Item>
-              <Menu.Item key={ROUTE.ORIGIN_RESULT_MANAGE.MENU_KEY} style={{display: layoutStyle.originResultMenuItemDisplay}}>
-                <span className="nav-text menu-item-font">电子资料X</span>
-              </Menu.Item>
-              <Menu.Item key="11">
-                <span className="menu-item-font">门诊资料</span>
-              </Menu.Item>
-              <Menu.Item key="22">
-                <span className="menu-item-font">住院资料</span>
-              </Menu.Item>
-              <Menu.Item key="33">
-                <span className="menu-item-font">体检资料</span>
-              </Menu.Item>
-              <Menu.Item key="66">
-                <span className="menu-item-font">影像资料</span>
-              </Menu.Item>
-              <Menu.Item key="44">
-                <span className="menu-item-font">牙科资料</span>
-              </Menu.Item>
-              <Menu.Item key="55">
-                <span className="menu-item-font">中医资料</span>
-              </Menu.Item>
-              <Menu.Item key="771">
-                <span className="menu-item-font">心理资料</span>
-              </Menu.Item>
-              <Menu.Item key="883">
-                <span className="menu-item-font">其他资料</span>
-              </Menu.Item>
-            </SubMenu>
+            {
+              layoutStyle.documentBankMenuItemDisplay === STYLE.BLOCK
+              ?
+              <SubMenu key="health_bank" title={<span className="menu-item-font"><Icon type="file" /><span>电子健康银行</span></span>}>
+                <Menu.Item key={ROUTE.FIRST_CATEGORY_MANAGE.MENU_KEY} >
+                  <span className="menu-item-font">检查项目X</span>
+                </Menu.Item>
+                <Menu.Item key={ROUTE.ORIGIN_RESULT_MANAGE.MENU_KEY} >
+                  <span className="nav-text menu-item-font">电子资料X</span>
+                </Menu.Item>
+                <Menu.Item key="11">
+                  <span className="menu-item-font">门诊资料</span>
+                </Menu.Item>
+                <Menu.Item key="22">
+                  <span className="menu-item-font">住院资料</span>
+                </Menu.Item>
+                <Menu.Item key="33">
+                  <span className="menu-item-font">体检资料</span>
+                </Menu.Item>
+                <Menu.Item key="66">
+                  <span className="menu-item-font">影像资料</span>
+                </Menu.Item>
+                <Menu.Item key="44">
+                  <span className="menu-item-font">牙科资料</span>
+                </Menu.Item>
+                <Menu.Item key="55">
+                  <span className="menu-item-font">中医资料</span>
+                </Menu.Item>
+                <Menu.Item key="771">
+                  <span className="menu-item-font">心理资料</span>
+                </Menu.Item>
+                <Menu.Item key="883">
+                  <span className="menu-item-font">其他资料</span>
+                </Menu.Item>
+              </SubMenu>
+              :
+              null
+            }
 
-            <SubMenu key="health_store" title={<span className="menu-item-font"><Icon type="medicine-box" />健康大数据库</span>}>
-              <Menu.Item key={ROUTE.EXAM_RESULT_MANAGE.MENU_KEY} style={{display: layoutStyle.examResultMenuItemDisplay}}>
-                <span className="nav-text menu-item-font">辅检数据库X</span>
-              </Menu.Item>
-              <Menu.Item key="662">
-                <span className="menu-item-font">健康摘要库</span>
-              </Menu.Item>
-              <Menu.Item key="77">
-                <span className="menu-item-font">化验数据库</span>
-              </Menu.Item>
-              <Menu.Item key="100">
-                <span className="menu-item-font">医技数据库</span>
-              </Menu.Item>
-            </SubMenu>
-
-            <SubMenu key="health_manage" title={<span className="menu-item-font"><Icon type="eye-o" />健康长程管理</span>}>
-              <Menu.Item key="88">
-                <span className="menu-item-font">健康管理方案</span>
-              </Menu.Item>
-              <Menu.Item key="99">
-                <span className="menu-item-font">健康问题记录</span>
-              </Menu.Item>
-              <Menu.Item key="00">
-                <span className="menu-item-font">专病监测表格</span>
-              </Menu.Item>
-              <Menu.Item key="23">
-                <span className="menu-item-font">调查评估量表</span>
-              </Menu.Item>
-              <Menu.Item key="235555">
-                <span className="menu-item-font">私人定制体检</span>
-              </Menu.Item>
-              <Menu.Item key="2355551">
-                <span className="menu-item-font">年度健康总结</span>
-              </Menu.Item>
-            </SubMenu>
-
-            <SubMenu key="member_service_subscribe" title={<span className="menu-item-font"><Icon type="eye-o" />会员服务预约</span>}>
-              <Menu.Item key="8866">
-                <span className="menu-item-font">体检服务预约单</span>
-              </Menu.Item>
-              <Menu.Item key="9977">
-                <span className="menu-item-font">就医服务预约单</span>
-              </Menu.Item>
-              <Menu.Item key="0088">
-                <span className="menu-item-font">其他服务预约单</span>
-              </Menu.Item>
-            </SubMenu>
+            {
+              layoutStyle.healthDatabaseMenuItemDisplay === STYLE.BLOCK
+              ?
+              <SubMenu key="health_store" title={<span className="menu-item-font"><Icon type="medicine-box" /><span>健康大数据库</span></span>} >
+                <Menu.Item key={ROUTE.EXAM_RESULT_MANAGE.MENU_KEY} >
+                  <span className="nav-text menu-item-font">辅检数据库X</span>
+                </Menu.Item>
+                <Menu.Item key="662">
+                  <span className="menu-item-font">健康摘要库</span>
+                </Menu.Item>
+                <Menu.Item key="77">
+                  <span className="menu-item-font">化验数据库</span>
+                </Menu.Item>
+                <Menu.Item key="100">
+                  <span className="menu-item-font">医技数据库</span>
+                </Menu.Item>
+              </SubMenu>
+              :
+              null
+            }
 
 
-            <Menu.Item key={ROUTE.MEMBER_DETAIL_PRIVATE.MENU_KEY} style={{display: layoutStyle.memberDetailPrivateMenuItemDisplay}}>
-              <Icon type="team" className="menu-item-font"/>
-              <span className="nav-text menu-item-font">个人资料</span>
-            </Menu.Item>
+            {
+              layoutStyle.healthLongtermManageMenuItemDisplay === STYLE.BLOCK
+              ?
+              <SubMenu key="health_manage" title={<span className="menu-item-font"><Icon type="book" /><span>健康长程管理</span></span>}>
+                <Menu.Item key="88">
+                  <span className="menu-item-font">健康管理方案</span>
+                </Menu.Item>
+                <Menu.Item key="99">
+                  <span className="menu-item-font">健康问题记录</span>
+                </Menu.Item>
+                <Menu.Item key="00">
+                  <span className="menu-item-font">专病监测表格</span>
+                </Menu.Item>
+                <Menu.Item key="23">
+                  <span className="menu-item-font">调查评估量表</span>
+                </Menu.Item>
+                <Menu.Item key="235555">
+                  <span className="menu-item-font">私人定制体检</span>
+                </Menu.Item>
+                <Menu.Item key="2355551">
+                  <span className="menu-item-font">年度健康总结</span>
+                </Menu.Item>
+              </SubMenu>
+              :
+              null
+            }
+
+            {
+              layoutStyle.memberServiceSubscribeMenuItemDisplay === STYLE.BLOCK
+              ?
+              <SubMenu key="member_service_subscribe" title={<span className="menu-item-font"><Icon type="phone" /><span>会员服务预约</span></span>}>
+                <Menu.Item key="8866">
+                  <span className="menu-item-font">体检服务预约单</span>
+                </Menu.Item>
+                <Menu.Item key="9977">
+                  <span className="menu-item-font">就医服务预约单</span>
+                </Menu.Item>
+                <Menu.Item key="0088">
+                  <span className="menu-item-font">其他服务预约单</span>
+                </Menu.Item>
+              </SubMenu>
+              :
+              null
+            }
           </Menu>
         </Sider>
         <Layout>

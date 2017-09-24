@@ -1,10 +1,22 @@
 import './Welcome.css'
 import React from 'react';
-import {Card, BackTop, Calendar, Button} from 'antd';
+import {SESSION, RESULT, ROLE, SERVER} from './../../App/PublicConstant.js';
+import {isMember} from './../../App/PublicMethod.js';
+import {Card, BackTop, Calendar, Button, message} from 'antd';
 import {Link} from 'react-router';
+import MemberInfoTable from './../MemberManage/MemberInfoTable.js';
 import $ from 'jquery';
 
 class Welcome extends React.Component {
+
+  state = {
+
+    /*
+    *会员健康信息
+    */
+    memberInfo: {},
+    updateMemberInfoLoading: false
+  }
 
   test = () => {
     // $.ajax({
@@ -16,6 +28,80 @@ class Welcome extends React.Component {
 
   }
 
+  //获取memberId对应的健康信息
+  requestMemberInfoData = () => {
+
+    $.ajax({
+        url : SERVER + '/api/user/' + sessionStorage.getItem(SESSION.USER_ID),
+        type : 'GET',
+        dataType : 'json',
+        beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
+        success : (result) => {
+
+          console.log(result);
+          if(result.code !== RESULT.SUCCESS) {
+            message.error(result.reason, 2);
+          }
+
+          this.setState({memberInfo: result.content});
+        }
+    });
+  }
+
+  //获取memberId对应的健康信息
+  updateMemberInfoData = () => {
+
+    this.refs.memberInfoForm.validateFields((err, values) => {
+      if(!err) {
+        console.log('更新会员的健康信息表', values);
+
+        //显示加载圈
+        this.setState({updateMemberInfoLoading: true});
+        $.ajax({
+            url : SERVER + '/api/user/' + sessionStorage.getItem(SESSION.USER_ID),
+            type : 'PUT',
+            contentType: 'application/json',
+            dataType : 'json',
+            data : JSON.stringify({name: values.name,
+                                   birth: values.birth,
+                                   gender: values.gender,
+                                   idCard: values.idCard,
+                                   physicalCondition: values.physicalCondition,
+                                   maritalStatus: values.maritalStatus,
+                                   medicalCare: values.medicalCare,
+                                   hospital: values.hospital,
+                                   insurance: values.insurance,
+                                   allergyDrug: values.allergyDrug,
+                                   allergyOthers: values.allergyOthers}),
+            beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
+            success : (result) => {
+              console.log(result);
+              if(result.code === RESULT.SUCCESS) {
+
+                //关闭加载圈、对话框
+                this.setState({updateMemberInfoLoading: false});
+                message.success(result.reason, 2);
+              } else {
+
+                //关闭加载圈
+                this.setState({updateMemberInfoLoading: false });
+                message.error(result.reason, 2);
+              }
+            }
+        });
+      }
+    });
+  }
+
+  componentDidMount = () => {
+
+    //如果是会员
+    //拉取健康信息表数据
+    const role = sessionStorage.getItem(SESSION.ROLE);
+    if(isMember(role)) {
+      this.requestMemberInfoData();
+    }
+  }
 
   render(){
     return (
@@ -24,7 +110,17 @@ class Welcome extends React.Component {
         <div className='introduce-text'>
           <h1>欢迎来到诺亚健康信息管理系统</h1>
         </div>
-        <div>
+
+        {
+          isMember(sessionStorage.getItem(SESSION.ROLE))
+          ?
+          <MemberInfoTable ref="memberInfoForm" memberInfo={this.state.memberInfo} updateMemberInfoLoading={this.state.updateMemberInfoLoading} onClick={this.updateMemberInfoData}/>
+          :
+          null
+        }
+
+        <div style={{textAlign: 'center'}}>
+          <h2 style={{marginBottom: '15px', color:'#1DA57A'}}>健康详情入口</h2>
           <Card title="电子健康银行" className="card">
             <Button className="card-btn">门诊资料</Button>
             <Button className="card-btn">住院资料</Button>

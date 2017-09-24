@@ -122,7 +122,8 @@ class OriginResultManage extends React.Component {
             contentType: 'application/json',
             data : JSON.stringify({userId: Number(values.userId),
                                    hospital: values.hospital,
-                                   secondId: values.secondId,
+                                   normal: values.normal,
+                                   secondId: Number(values.secondId),
                                    time: values.time,
                                    note: values.note}),
             dataType : 'json',
@@ -466,7 +467,7 @@ class OriginResultManage extends React.Component {
         dataType : 'json',
         beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
         success : (result) => {
-
+            console.log("=======");
             console.log(result);
             if(result.code !== RESULT.SUCCESS) {
                 message.error(result.reason, 2);
@@ -474,25 +475,17 @@ class OriginResultManage extends React.Component {
             }
 
             //将后端返回的map整理成级联列表识别的数据结构
-            let originResultSecondTypeData = [];
+            let originResultTypeData = [];
             for(let firstType in result.content) {
 
               //加入大类
-              let firstTypeData = {value: firstType, label: firstType, children:[]};
-
-              //获取旗下所有亚类
-              let secondTypes = result.content[firstType];
-              for(let i = 0; i < secondTypes.length; i++) {
-                firstTypeData.children.push({value: secondTypes[i].id, label: secondTypes[i].name});
-              }
-
-              originResultSecondTypeData.push(firstTypeData);
+              let firstTypeData = {value: result.content[firstType][0].id, label: firstType};
+              originResultTypeData.push(firstTypeData);
             }
 
-            this.setState({originResultSecondTypeData: originResultSecondTypeData});
-
+            this.setState({originResultTypeData: originResultTypeData});
             if(this.refs.uploadForm == null) return;
-            this.refs.uploadForm.setFieldsValue({secondId: originResultSecondTypeData.length > 0 ? [originResultSecondTypeData[0].value, originResultSecondTypeData[0].children[0].value] : []});
+            this.refs.uploadForm.setFieldsValue({secondId: originResultTypeData.length > 0 ? originResultTypeData[0].value.toString() : "-1"});
         }
     });
   }
@@ -504,7 +497,7 @@ class OriginResultManage extends React.Component {
     this.handleSearchOriginResultList(1);
 
     this.requestMembersUnderEmployee(); //拉取上传对话框中的会员信息(该employee旗下的)
-    //this.requestOriginResultSecondType(); //拉取电子资料类别的级联数据
+    this.requestOriginResultSecondType(); //拉取电子资料类别的级联数据
   }
 
 
@@ -528,6 +521,11 @@ class OriginResultManage extends React.Component {
       title: '资料类别',
       dataIndex: 'secondName',
       key: 'secondName'
+    },{
+      title: '异常判断',
+      dataIndex: 'normal',
+      key: 'normal',
+      render: (normal) => normal === '异常' ? <span className="abnormal">异常</span> : normal
     },{
       title: '检查医院',
       dataIndex: 'hospital',
@@ -644,7 +642,7 @@ class OriginResultManage extends React.Component {
             <Table className='origin-result-table' columns={originResultColumns} dataSource={this.state.originResultData} rowKey='id' loading={this.state.originResultTableLoading} pagination={this.state.originResultPager} onChange={this.changeOriginResultPager}/>
           </TabPane>
         </Tabs>
-        <OriginResultUploadModal ref="uploadForm" visible={this.state.uploadModalVisible} confirmLoading={this.state.confirmUploadModalLoading} onCancel={this.closeUploadModal} onConfirm={this.confirmUploadModal} memberUnderEmployeeData={this.state.memberUnderEmployeeData}/>
+        <OriginResultUploadModal ref="uploadForm" visible={this.state.uploadModalVisible} confirmLoading={this.state.confirmUploadModalLoading} onCancel={this.closeUploadModal} onConfirm={this.confirmUploadModal} memberUnderEmployeeData={this.state.memberUnderEmployeeData} originResultTypeData={this.state.originResultTypeData}/>
         <OriginResultUploadPictureModal visible={this.state.uploadPictureModalVisible} onCancel={this.closeUploadPictureModal} submitLoading={this.state.submitLoading}  onSubmit={this.handleSubmitPicture} fileList={this.state.fileList} originResultId={this.state.originResultId} onChange={this.handleUploadPictureChange} />
         <OriginResultCheckPictureModal visible={this.state.checkPictureModalVisible} onCancel={this.closeCheckPictureModal} passLoading={this.state.passLoading} unpassLoading={this.state.unpassLoading}  onPass={this.handlePassPicture} onUnpass={this.handleUnpassPicture} fileList={this.state.fileList} originResultId={this.state.originResultId}/>
         <OriginResultWatchPictureModal visible={this.state.watchPictureModalVisible} onCancel={this.closeWatchPictureModal} fileList={this.state.fileList} />

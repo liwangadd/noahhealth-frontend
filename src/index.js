@@ -117,7 +117,6 @@ class AppRouter extends React.Component {
 
                       <Route path={ROUTE.MEMBER_MANAGE.URL} component={MemberManage}/>
                       <Route path={ROUTE.MEMBER_DETAIL.URL} component={MemberDetail}/>
-                      <Route path={ROUTE.MEMBER_DETAIL_PRIVATE.URL} component={MemberDetail}/>
 
                       <Route path={ROUTE.FIRST_CATEGORY_MANAGE.URL} component={FirstCategoryManage}/>
                       <Route path={ROUTE.SECOND_CATEGORY_MANAGE.URL} component={SecondCategoryManage}/>

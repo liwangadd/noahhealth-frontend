@@ -10,7 +10,8 @@ import ExamResultDetailSearchForm from './../ExamResultManage/ExamResultDetailSe
 import HealthResultDetailSearchForm from './../HealthResultManage/HealthResultDetailSearchForm.js';
 import OriginResultWatchPictureModal from './../OriginResultManage/OriginResultWatchPictureModal.js';
 import HealthResultDetailAddModal from './../HealthResultManage/HealthResultDetailAddModal.js';
-import {message, Button, BackTop, Breadcrumb, Timeline, Anchor, Alert, Spin, Tabs, Table, Tooltip} from 'antd';
+import MemberInfoTable from './MemberInfoTable.js';
+import {message, Button, BackTop, Breadcrumb, Timeline, Anchor, Alert, Spin, Tabs, Table, Tooltip, Card} from 'antd';
 import {Link} from 'react-router';
 import $ from 'jquery';
 
@@ -47,7 +48,7 @@ class MemberDetail extends React.Component {
     *健康摘要库
     */
     healthResultPageLoading: false,
-    healthResultSecondTypeData: [],
+    healthResultTypeData: [],
     healthResultDetailData: [],
     healthResultDetailItems: null,
     addHealthResultBtnVisible: STYLE.NONE,
@@ -55,7 +56,6 @@ class MemberDetail extends React.Component {
     //添加健康摘要对话框
     addModalVisible: false,
     confirmAddModalLoading: false,
-    healthResultSecondTypeData: [],
 
     //录入健康摘要
     saveLoading: false,
@@ -72,7 +72,15 @@ class MemberDetail extends React.Component {
     deleteLoading: false,
 
     healthResultSecondName: '',
-    healthResultDetailTableLoading: false
+    healthResultDetailTableLoading: false,
+
+
+    /*
+    *会员健康信息
+    */
+    memberInfo: {},
+    updateMemberInfoLoading: false
+
   };
 
   /**
@@ -147,25 +155,17 @@ class MemberDetail extends React.Component {
             }
 
             //将后端返回的map整理成级联列表识别的数据结构
-            let healthResultSecondTypeData = [];
+            let healthResultTypeData = [];
             for(let firstType in result.content) {
 
               //加入大类
-              let firstTypeData = {value: firstType, label: firstType, children:[]};
-
-              //获取旗下所有亚类
-              let secondTypes = result.content[firstType];
-              for(let i = 0; i < secondTypes.length; i++) {
-                firstTypeData.children.push({value: secondTypes[i].id, label: secondTypes[i].name});
-              }
-
-              healthResultSecondTypeData.push(firstTypeData);
+              let firstTypeData = {value: result.content[firstType][0].id, label: firstType};
+              healthResultTypeData.push(firstTypeData);
             }
 
-            this.setState({healthResultSecondTypeData: healthResultSecondTypeData});
-
+            this.setState({healthResultTypeData: healthResultTypeData});
             if(this.refs.healthResultAddForm == null) return;
-            this.refs.healthResultAddForm.setFieldsValue({secondId: healthResultSecondTypeData.length > 0 ? [healthResultSecondTypeData[0].value, healthResultSecondTypeData[0].children[0].value] : []});
+            this.refs.healthResultAddForm.setFieldsValue({secondId: healthResultTypeData.length > 0 ? healthResultTypeData[0].value.toString() : "-1" });
         }
     });
   }
@@ -207,6 +207,148 @@ class MemberDetail extends React.Component {
 
           //更新状态
           this.setState({fileList: fileList});
+        }
+    });
+  }
+
+  //保存录入的检查结果
+  saveInputDetail = (form, id) => {
+
+    console.log('保存录入了的检查结果', id);
+
+    form.validateFields((err, values) => {
+      if(!err) {
+        console.log(values);
+        //显示加载圈
+        this.setState({ saveLoading: true });
+        $.ajax({
+            url : SERVER + '/api/detail',
+            type : 'PUT',
+            contentType: 'application/json',
+            dataType : 'json',
+            data : JSON.stringify(values),
+            beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
+            success : (result) => {
+              console.log(result);
+              if(result.code === RESULT.SUCCESS) {
+
+                //重新查一遍
+                this.requestExamResultDetailOfMember(this.state.type);
+                message.success(result.reason, 2);
+              } else {
+
+                message.error(result.reason, 2);
+              }
+
+              //关闭加载圈
+              this.setState({ saveLoading: false });
+            }
+        });
+      }
+    });
+  }
+
+  //提交录入的检查结果（先请求保存、再请求改变状态）
+  submitInputDetail = (form, id) => {
+
+    console.log('提交一份检查结果,变为待审核', id);
+
+    //先保存
+    this.saveInputDetail(form, id);
+
+    //再提交
+    this.setState({ submitLoading: true });
+    $.ajax({
+        url : SERVER + '/api/input/status/' + id,
+        type : 'PUT',
+        contentType: 'application/json',
+        dataType : 'json',
+        data : JSON.stringify({status: '待审核'}),
+        beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
+        success : (result) => {
+          console.log(result);
+          if(result.code === RESULT.SUCCESS) {
+
+            //关闭加载圈、对话框
+            this.setState({ submitLoading: false});
+
+            //重新查一遍
+            this.requestExamResultDetailOfMember(this.state.type);
+            message.success(result.reason, 2);
+          } else {
+
+            //关闭加载圈
+            this.setState({ submitLoading: false });
+            message.error(result.reason, 2);
+          }
+        }
+    });
+  }
+
+  /**
+  * 审核检查结果对话框
+  **/
+
+  passInputDetail = (form, id) => {
+
+    console.log('通过一份检查结果,变为已通过', id);
+
+    //显示加载圈
+    this.setState({ passLoading: true });
+    $.ajax({
+        url : SERVER + '/api/input/status/' + id,
+        type : 'PUT',
+        contentType: 'application/json',
+        dataType : 'json',
+        data : JSON.stringify({status: '已通过'}),
+        beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
+        success : (result) => {
+          console.log(result);
+          if(result.code === RESULT.SUCCESS) {
+
+            //关闭加载圈、对话框
+            this.setState({ passLoading: false });
+
+            this.requestExamResultDetailOfMember(this.state.type);
+            message.success(result.reason, 2);
+          } else {
+
+            //关闭加载圈
+            this.setState({ passLoading: false });
+            message.error(result.reason, 2);
+          }
+        }
+    });
+  }
+
+  unpassInputDetail = (id, unpassReason) => {
+
+    console.log('不通过一份检查结果,变为未通过', id);
+
+    //显示加载圈
+    this.setState({ unpassLoading: true });
+    $.ajax({
+        url : SERVER + '/api/input/status/' + id,
+        type : 'PUT',
+        contentType: 'application/json',
+        dataType : 'json',
+        data : JSON.stringify({status: '未通过', reason: unpassReason}),
+        beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
+        success : (result) => {
+          console.log(result);
+          if(result.code === RESULT.SUCCESS) {
+
+            //关闭加载圈、对话框
+            this.setState({ unpassLoading: false});
+
+            this.requestExamResultDetailOfMember(this.state.type);
+            message.success(result.reason, 2);
+          } else {
+
+            //关闭加载圈
+            this.setState({ unpassLoading: false });
+            message.error(result.reason, 2);
+          }
         }
     });
   }
@@ -421,7 +563,7 @@ requestHealthResultDetailOfMember = () => {
       contentType: 'application/json',
       dataType : 'json',
       data : JSON.stringify({status: values.status,
-                             secondId: values.secondId,
+                             secondId: Number(values.secondId),
                              beginTime: values.time !== undefined ? formatDate(values.time[0], DATE_FORMAT) : undefined,
                              endTime: values.time !== undefined ? formatDate(values.time[1], DATE_FORMAT) : undefined}),
       beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
@@ -499,7 +641,7 @@ requestHealthResultDetailOfMember = () => {
             type : 'POST',
             contentType: 'application/json',
             data : JSON.stringify({userId: Number(this.props.params.memberId),
-                                   secondId: values.secondId,
+                                   secondId: Number(values.secondId),
                                    problemNew: values.problemNew,
                                    contentNew: values.contentNew}),
             dataType : 'json',
@@ -540,7 +682,7 @@ requestHealthResultDetailOfMember = () => {
             type : 'PUT',
             contentType: 'application/json',
             dataType : 'json',
-            data : JSON.stringify({contentNew: values.contentNew}),
+            data : JSON.stringify({problemNew: values.problemNew, contentNew: values.contentNew}),
             beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
             success : (result) => {
               console.log(result);
@@ -752,15 +894,84 @@ requestHealthResultDetailOfMember = () => {
     this.requestHealthResultDetailOfMember();  //拉取该用户的已添加的所有健康摘要
   }
 
+  //获取memberId对应的健康信息
+  requestMemberInfoData = () => {
+
+    $.ajax({
+        url : SERVER + '/api/user/' + this.props.params.memberId,
+        type : 'GET',
+        dataType : 'json',
+        beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
+        success : (result) => {
+
+          console.log(result);
+          if(result.code !== RESULT.SUCCESS) {
+            message.error(result.reason, 2);
+          }
+
+          this.setState({memberInfo: result.content});
+        }
+    });
+  }
+
+  //获取memberId对应的健康信息
+  updateMemberInfoData = () => {
+
+    this.refs.memberInfoForm.validateFields((err, values) => {
+      if(!err) {
+        console.log('更新会员的健康信息表', values);
+
+        //显示加载圈
+        this.setState({updateMemberInfoLoading: true});
+        $.ajax({
+            url : SERVER + '/api/user/' + this.props.params.memberId,
+            type : 'PUT',
+            contentType: 'application/json',
+            dataType : 'json',
+            data : JSON.stringify({name: values.name,
+                                   birth: values.birth,
+                                   gender: values.gender,
+                                   idCard: values.idCard,
+                                   physicalCondition: values.physicalCondition,
+                                   maritalStatus: values.maritalStatus,
+                                   medicalCare: values.medicalCare,
+                                   hospital: values.hospital,
+                                   insurance: values.insurance,
+                                   allergyDrug: values.allergyDrug,
+                                   allergyOthers: values.allergyOthers}),
+            beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
+            success : (result) => {
+              console.log(result);
+              if(result.code === RESULT.SUCCESS) {
+
+                //关闭加载圈、对话框
+                this.setState({updateMemberInfoLoading: false});
+                message.success(result.reason, 2);
+              } else {
+
+                //关闭加载圈
+                this.setState({updateMemberInfoLoading: false });
+                message.error(result.reason, 2);
+              }
+            }
+        });
+      }
+    });
+  }
+
+
   componentDidMount = () => {
 
     //拉取该人的电子资料数据
-    this.requestOriginResultOfMember(1);
+    // this.requestOriginResultOfMember(1);
 
     //拉取所有化验、医技类到搜索框
-    this.requestSecondCategoryParentData('化验');
-    this.requestSecondCategoryParentData('医技');
-    this.requestHealthResultSecondType();
+    // this.requestSecondCategoryParentData('化验');
+    // this.requestSecondCategoryParentData('医技');
+    // this.requestHealthResultSecondType();
+
+    //拉取该人的健康信息表数据
+    this.requestMemberInfoData();
   }
 
   //切换选项卡
@@ -853,7 +1064,41 @@ requestHealthResultDetailOfMember = () => {
           null
         }
 
-        <Tabs defaultActiveKey="1"  tabBarExtraContent={role === ROLE.EMPLOYEE_ADVISER || role === ROLE.EMPLOYEE_ADVISE_MANAGER || role === ROLE.EMPLOYEE_ADMIN ? <Button type="primary" onClick={this.showAddModal} style={{display: this.state.addHealthResultBtnVisible}}>添加健康摘要</Button> : null} onChange={this.handleMenuItemClick}>
+        <MemberInfoTable ref="memberInfoForm" memberInfo={this.state.memberInfo} updateMemberInfoLoading={this.state.updateMemberInfoLoading} onClick={this.updateMemberInfoData}/>
+
+        <div style={{textAlign: 'center'}}>
+          <h2 style={{marginBottom: '15px', color:'#1DA57A'}}>健康详情入口</h2>
+          <Card title="电子健康银行" className="card">
+            <Button className="card-btn">门诊资料</Button>
+            <Button className="card-btn">住院资料</Button>
+            <Button className="card-btn">体检资料</Button>
+            <Button className="card-btn">影像资料</Button>
+            <Button className="card-btn">牙科资料</Button>
+            <Button className="card-btn">中医资料</Button>
+            <Button className="card-btn">心理资料</Button>
+            <Button className="card-btn">其他资料</Button>
+          </Card>
+          <Card title="健康大数据库" className="card" style={{width:'20%'}}>
+            <Button className="card-btn" >健康摘要库</Button>
+            <Button className="card-btn" >化验数据库</Button>
+            <Button className="card-btn" >医技数据库</Button>
+          </Card>
+          <Card title="健康长程管理" className="card" style={{width:'28%'}}>
+            <Button className="card-btn">健康管理方案</Button>
+            <Button className="card-btn">健康问题记录</Button>
+            <Button className="card-btn">专病监测表格</Button>
+            <Button className="card-btn">调查评估量表</Button>
+            <Button className="card-btn">私人定制体检</Button>
+            <Button className="card-btn">年度健康总结</Button>
+          </Card>
+          <Card title="会员服务预约" className="card" style={{width:'22%'}}>
+            <Button className="card-btn" >体检服务预约单</Button>
+            <Button className="card-btn">就医服务预约单</Button>
+            <Button className="card-btn" >其他服务预约单</Button>
+          </Card>
+        </div>
+
+        {/* <Tabs defaultActiveKey="1"  tabBarExtraContent={role === ROLE.EMPLOYEE_ADVISER || role === ROLE.EMPLOYEE_ADVISE_MANAGER || role === ROLE.EMPLOYEE_ADMIN ? <Button type="primary" onClick={this.showAddModal} style={{display: this.state.addHealthResultBtnVisible}}>添加健康摘要</Button> : null} onChange={this.handleMenuItemClick}>
           {
             role === ROLE.EMPLOYEE_ADVISER || role === ROLE.EMPLOYEE_ADVISE_MANAGER || role === ROLE.EMPLOYEE_ADMIN
             || role === ROLE.MEMBER_1 || role === ROLE.MEMBER_2 || role === ROLE.MEMBER_3
@@ -909,7 +1154,7 @@ requestHealthResultDetailOfMember = () => {
             || role === ROLE.MEMBER_2 || role === ROLE.MEMBER_3
             ?
             <TabPane tab="健康摘要" key="4">
-              <HealthResultDetailSearchForm ref={this.componentDidMountOfHealthResultTab} healthResultSecondTypeData={this.state.healthResultSecondTypeData} requestHealthResultDetailOfMember={this.requestHealthResultDetailOfMember}/>
+              <HealthResultDetailSearchForm ref={this.componentDidMountOfHealthResultTab} healthResultTypeData={this.state.healthResultTypeData} requestHealthResultDetailOfMember={this.requestHealthResultDetailOfMember}/>
               <div className="health-result-detail-info">
                 <Anchor className="health-result-detail-anchor">
                   {healthResultDetailAnchors}
@@ -924,7 +1169,7 @@ requestHealthResultDetailOfMember = () => {
           }
         </Tabs>
         <OriginResultWatchPictureModal visible={this.state.watchPictureModalVisible} onCancel={this.closeWatchPictureModal} fileList={this.state.fileList} />
-        <HealthResultDetailAddModal ref="healthResultAddForm" visible={this.state.addModalVisible} confirmLoading={this.state.confirmAddModalLoading} onCancel={this.closeAddModal} onConfirm={this.confirmAddModal} healthResultSecondTypeData={this.state.healthResultSecondTypeData}/>
+        <HealthResultDetailAddModal ref="healthResultAddForm" visible={this.state.addModalVisible} confirmLoading={this.state.confirmAddModalLoading} onCancel={this.closeAddModal} onConfirm={this.confirmAddModal} healthResultTypeData={this.state.healthResultTypeData}/> */}
       </div>
     );
   }

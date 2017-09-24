@@ -45,7 +45,6 @@ class HealthResultDetailItem_ extends React.Component {
       render: (record) => {
         return getFieldDecorator('problemNew', {'initialValue': isEmployee(role) ? record.problemNew : record.problem})(
           <Input type="textarea"
-            placeholder={isEmployee(role) && (detail.status === "录入中" || detail.status === "未通过" || detail.status === "已通过") ? "请输入" : null}
             rows={5} disabled={isEmployee(role) && (detail.status === "录入中" || detail.status === "未通过" || detail.status === "已通过") ? false : true}/>)}
     },
     {
@@ -54,7 +53,6 @@ class HealthResultDetailItem_ extends React.Component {
       render: (record) => {
         return getFieldDecorator('contentNew', {'initialValue': isEmployee(role) ? record.contentNew : record.content})(
           <Input type="textarea"
-            placeholder={isEmployee(role) && (detail.status === "录入中" || detail.status === "未通过" || detail.status === "已通过") ? "请输入" : null}
             rows={5} disabled={isEmployee(role) && (detail.status === "录入中" || detail.status === "未通过" || detail.status === "已通过") ? false : true}/>)}
     }];
 
@@ -132,7 +130,7 @@ class HealthResultDetailItem_ extends React.Component {
           <p>备注：{detail.note}</p>
         </Card>
         <Form className="health-result-detail-item-form" style={{display: this.state.formVisible}}>
-          <Table columns={detailColumns} dataSource={[{id: detail.id, content: detail.content, contentNew: detail.contentNew}]} pagination={false} size="small" rowKey='id'/>
+          <Table columns={detailColumns} dataSource={[{id: detail.id, problem: detail.problem, content: detail.content, problemNew: detail.problemNew, contentNew: detail.contentNew}]} pagination={false} size="small" rowKey='id'/>
           <div className="operation">
             {detailOperation}
           </div>
