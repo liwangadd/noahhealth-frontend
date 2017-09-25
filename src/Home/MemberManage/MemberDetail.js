@@ -12,7 +12,7 @@ import OriginResultWatchPictureModal from './../OriginResultManage/OriginResultW
 import HealthResultDetailAddModal from './../HealthResultManage/HealthResultDetailAddModal.js';
 import MemberInfoTable from './MemberInfoTable.js';
 import {message, Button, BackTop, Breadcrumb, Timeline, Anchor, Alert, Spin, Tabs, Table, Tooltip, Card} from 'antd';
-import {Link} from 'react-router';
+import {Link, browserHistory} from 'react-router';
 import $ from 'jquery';
 
 const TabPane = Tabs.TabPane;
@@ -959,13 +959,23 @@ requestHealthResultDetailOfMember = () => {
     });
   }
 
+  //点击跳转按钮跳转到详情页面
+  handleClickJumpBtn = (page) => {
+
+    const targetUrl = page.URL_PREFIX + "/" + page.MENU_KEY + "/" + this.props.params.memberId + "/" + this.props.params.memberName;
+
+    //跳转
+    browserHistory.push(targetUrl);
+  }
+
+
 
   componentDidMount = () => {
 
-    //拉取该人的电子资料数据
+    // //拉取该人的电子资料数据
     // this.requestOriginResultOfMember(1);
-
-    //拉取所有化验、医技类到搜索框
+    //
+    // //拉取所有化验、医技类到搜索框
     // this.requestSecondCategoryParentData('化验');
     // this.requestSecondCategoryParentData('医技');
     // this.requestHealthResultSecondType();
@@ -1069,19 +1079,19 @@ requestHealthResultDetailOfMember = () => {
         <div style={{textAlign: 'center'}}>
           <h2 style={{marginBottom: '15px', color:'#1DA57A'}}>健康详情入口</h2>
           <Card title="电子健康银行" className="card">
-            <Button className="card-btn">门诊资料</Button>
-            <Button className="card-btn">住院资料</Button>
-            <Button className="card-btn">体检资料</Button>
-            <Button className="card-btn">影像资料</Button>
-            <Button className="card-btn">牙科资料</Button>
-            <Button className="card-btn">中医资料</Button>
-            <Button className="card-btn">心理资料</Button>
-            <Button className="card-btn">其他资料</Button>
+            <Button className="card-btn" onClick={() => this.handleClickJumpBtn(ROUTE.MEMBER_DETAIL_MENZHEN_DOC)}>门诊资料</Button>
+            <Button className="card-btn" onClick={() => this.handleClickJumpBtn(ROUTE.MEMBER_DETAIL_ZHUYUAN_DOC)}>住院资料</Button>
+            <Button className="card-btn" onClick={() => this.handleClickJumpBtn(ROUTE.MEMBER_DETAIL_TIJIAN_DOC)}>体检资料</Button>
+            <Button className="card-btn" onClick={() => this.handleClickJumpBtn(ROUTE.MEMBER_DETAIL_YINGXIANG_DOC)}>影像资料</Button>
+            <Button className="card-btn" onClick={() => this.handleClickJumpBtn(ROUTE.MEMBER_DETAIL_YAKE_DOC)}>牙科资料</Button>
+            <Button className="card-btn" onClick={() => this.handleClickJumpBtn(ROUTE.MEMBER_DETAIL_ZHONGYI_DOC)}>中医资料</Button>
+            <Button className="card-btn" onClick={() => this.handleClickJumpBtn(ROUTE.MEMBER_DETAIL_XINLI_DOC)}>心理资料</Button>
+            <Button className="card-btn" onClick={() => this.handleClickJumpBtn(ROUTE.MEMBER_DETAIL_QITA_DOC)}>其他资料</Button>
           </Card>
           <Card title="健康大数据库" className="card" style={{width:'20%'}}>
-            <Button className="card-btn" >健康摘要库</Button>
-            <Button className="card-btn" >化验数据库</Button>
-            <Button className="card-btn" >医技数据库</Button>
+            <Button className="card-btn" onClick={() => this.handleClickJumpBtn(ROUTE.MEMBER_DETAIL_HEALTH_RESULT)}>健康摘要库</Button>
+            <Button className="card-btn" onClick={() => this.handleClickJumpBtn(ROUTE.MEMBER_DETAIL_ASSAY_RESULT)}>化验数据库</Button>
+            <Button className="card-btn" onClick={() => this.handleClickJumpBtn(ROUTE.MEMBER_DETAIL_TECH_RESULT)}>医技数据库</Button>
           </Card>
           <Card title="健康长程管理" className="card" style={{width:'28%'}}>
             <Button className="card-btn">健康管理方案</Button>

@@ -15,6 +15,10 @@ import EmployeeManage from './Home/EmployeeManage/EmployeeManage.js';
 import EmployeeDetail from './Home/EmployeeManage/EmployeeDetail.js';
 import MemberManage from './Home/MemberManage/MemberManage.js';
 import MemberDetail from './Home/MemberManage/MemberDetail.js';
+
+import MemberDetailAssayResult from './Home/MemberManage/MemberDetailAssayResult.js';
+
+
 import FirstCategoryManage from './Home/CategoryManage/FirstCategoryManage.js';
 import SecondCategoryManage from './Home/CategoryManage/SecondCategoryManage.js';
 import ThirdCategoryManage from './Home/CategoryManage/ThirdCategoryManage.js';
@@ -64,8 +68,20 @@ const certifyAccess = function(nextState, replace){
       case ROUTE.EMPLOYEE_DETAIL.URL_PREFIX:certifyRole(replace, role, ROUTE.EMPLOYEE_DETAIL.PERMISSION);break;
 
       case ROUTE.MEMBER_MANAGE.URL_PREFIX:certifyRole(replace, role, ROUTE.MEMBER_MANAGE.PERMISSION);break;
+
       case ROUTE.MEMBER_DETAIL.URL_PREFIX:certifyRole(replace, role, ROUTE.MEMBER_DETAIL.PERMISSION);break;
-      case ROUTE.MEMBER_DETAIL_PRIVATE.URL_PREFIX:certifyRole(replace, role, ROUTE.MEMBER_DETAIL_PRIVATE.PERMISSION);break;
+      case ROUTE.MEMBER_DETAIL_HEALTH_RESULT.URL_PREFIX:certifyRole(replace, role, ROUTE.MEMBER_DETAIL_HEALTH_RESULT.PERMISSION);break;
+      case ROUTE.MEMBER_DETAIL_ASSAY_RESULT.URL_PREFIX:certifyRole(replace, role, ROUTE.MEMBER_DETAIL_ASSAY_RESULT.PERMISSION);break;
+      case ROUTE.MEMBER_DETAIL_TECH_RESULT.URL_PREFIX:certifyRole(replace, role, ROUTE.MEMBER_DETAIL_TECH_RESULT.PERMISSION);break;
+      case ROUTE.MEMBER_DETAIL_MENZHEN_DOC.URL_PREFIX:certifyRole(replace, role, ROUTE.MEMBER_DETAIL_MENZHEN_DOC.PERMISSION);break;
+      case ROUTE.MEMBER_DETAIL_ZHUYUAN_DOC.URL_PREFIX:certifyRole(replace, role, ROUTE.MEMBER_DETAIL_ZHUYUAN_DOC.PERMISSION);break;
+      case ROUTE.MEMBER_DETAIL_TIJIAN_DOC.URL_PREFIX:certifyRole(replace, role, ROUTE.MEMBER_DETAIL_TIJIAN_DOC.PERMISSION);break;
+      case ROUTE.MEMBER_DETAIL_YINGXIANG_DOC.URL_PREFIX:certifyRole(replace, role, ROUTE.MEMBER_DETAIL_YINGXIANG_DOC.PERMISSION);break;
+      case ROUTE.MEMBER_DETAIL_YAKE_DOC.URL_PREFIX:certifyRole(replace, role, ROUTE.MEMBER_DETAIL_YAKE_DOC.PERMISSION);break;
+      case ROUTE.MEMBER_DETAIL_ZHONGYI_DOC.URL_PREFIX:certifyRole(replace, role, ROUTE.MEMBER_DETAIL_ZHONGYI_DOC.PERMISSION);break;
+      case ROUTE.MEMBER_DETAIL_XINLI_DOC.URL_PREFIX:certifyRole(replace, role, ROUTE.MEMBER_DETAIL_XINLI_DOC.PERMISSION);break;
+      case ROUTE.MEMBER_DETAIL_QITA_DOC.URL_PREFIX:certifyRole(replace, role, ROUTE.MEMBER_DETAIL_QITA_DOC.PERMISSION);break;
+
 
       case ROUTE.FIRST_CATEGORY_MANAGE.URL_PREFIX:certifyRole(replace, role, ROUTE.FIRST_CATEGORY_MANAGE.PERMISSION);break;
       case ROUTE.SECOND_CATEGORY_MANAGE.URL_PREFIX:certifyRole(replace, role, ROUTE.SECOND_CATEGORY_MANAGE.PERMISSION);break;
@@ -116,7 +132,9 @@ class AppRouter extends React.Component {
                       <Route path={ROUTE.EMPLOYEE_DETAIL.URL} component={EmployeeDetail}/>
 
                       <Route path={ROUTE.MEMBER_MANAGE.URL} component={MemberManage}/>
+
                       <Route path={ROUTE.MEMBER_DETAIL.URL} component={MemberDetail}/>
+                      <Route path={ROUTE.MEMBER_DETAIL_ASSAY_RESULT.URL} component={MemberDetailAssayResult}/>
 
                       <Route path={ROUTE.FIRST_CATEGORY_MANAGE.URL} component={FirstCategoryManage}/>
                       <Route path={ROUTE.SECOND_CATEGORY_MANAGE.URL} component={SecondCategoryManage}/>
