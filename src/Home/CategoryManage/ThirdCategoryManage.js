@@ -207,8 +207,8 @@ class ThirdCategoryManage extends React.Component {
 
     return (
         <div>
-          <Breadcrumb separator=">" className="category-path">
-            <Breadcrumb.Item><Link to={ROUTE.FIRST_CATEGORY_MANAGE.URL_PREFIX + "/" + ROUTE.FIRST_CATEGORY_MANAGE.MENU_KEY + "/" + this.props.params.tabKey}>首页</Link></Breadcrumb.Item>
+          <Breadcrumb className="category-path">
+            <Breadcrumb.Item><Link to={ROUTE.FIRST_CATEGORY_MANAGE.URL_PREFIX + "/" + ROUTE.FIRST_CATEGORY_MANAGE.MENU_KEY + "/" + this.props.params.tabKey}>检查项目管理</Link></Breadcrumb.Item>
             <Breadcrumb.Item><Link to={ROUTE.SECOND_CATEGORY_MANAGE.URL_PREFIX + "/" + ROUTE.SECOND_CATEGORY_MANAGE.MENU_KEY + "/" + this.props.params.tabKey + "/" + this.props.params.firstId + "/" + this.props.params.firstName}>{this.props.params.firstName}</Link></Breadcrumb.Item>
             <Breadcrumb.Item>{this.props.params.secondName}</Breadcrumb.Item>
           </Breadcrumb>

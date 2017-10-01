@@ -6,7 +6,7 @@ import ExamResultDetailItem from './../ExamResultManage/ExamResultDetailItem.js'
 import HealthResultDetailItem from './../HealthResultManage/HealthResultDetailItem.js';
 import React from 'react';
 import MemberDetailOriginResultSearchForm from './MemberDetailOriginResultSearchForm.js';
-import ExamResultDetailSearchForm from './../ExamResultManage/ExamResultDetailSearchForm.js';
+import ExamResultOverviewSearchForm from './../ExamResultManage/ExamResultOverviewSearchForm.js';
 import HealthResultDetailSearchForm from './../HealthResultManage/HealthResultDetailSearchForm.js';
 import OriginResultWatchPictureModal from './../OriginResultManage/OriginResultWatchPictureModal.js';
 import HealthResultDetailAddModal from './../HealthResultManage/HealthResultDetailAddModal.js';
@@ -137,7 +137,7 @@ class MemberDetail extends React.Component {
   //翻页
   changeOriginResultPager = (pager) =>  this.requestOriginResultOfMember(pager.current)
 
-  //拉取电子资料类别级联数据
+  //拉取健康摘要类别级联数据
   requestHealthResultSecondType = () => {
 
     console.log('拉取健康摘要类别数据');
@@ -962,6 +962,17 @@ requestHealthResultDetailOfMember = () => {
   //点击跳转按钮跳转到详情页面
   handleClickJumpBtn = (page) => {
 
+    const role = sessionStorage.getItem(SESSION.ROLE);
+
+    if( role === ROLE.MEMBER_1
+    && (page === ROUTE.MEMBER_DETAIL_HEALTH_RESULT
+    || page === ROUTE.MEMBER_DETAIL_ASSAY_RESULT
+    || page === ROUTE.MEMBER_DETAIL_TECH_RESULT)) {
+
+      message.error('一级会员无法访问该项目', 2);
+      return;
+    }
+
     const targetUrl = page.URL_PREFIX + "/" + page.MENU_KEY + "/" + this.props.params.memberId + "/" + this.props.params.memberName;
 
     //跳转
@@ -972,85 +983,13 @@ requestHealthResultDetailOfMember = () => {
 
   componentDidMount = () => {
 
-    // //拉取该人的电子资料数据
-    // this.requestOriginResultOfMember(1);
-    //
-    // //拉取所有化验、医技类到搜索框
-    // this.requestSecondCategoryParentData('化验');
-    // this.requestSecondCategoryParentData('医技');
-    // this.requestHealthResultSecondType();
-
     //拉取该人的健康信息表数据
     this.requestMemberInfoData();
-  }
-
-  //切换选项卡
-  handleMenuItemClick = (activeKey) => {
-
-    switch(activeKey) {
-      case "1":this.setState({addHealthResultBtnVisible: STYLE.NONE});break;
-      case "2":this.state.type = '化验';this.setState({addHealthResultBtnVisible: STYLE.NONE});break;
-      case "3":this.state.type = '医技';this.setState({addHealthResultBtnVisible: STYLE.NONE});break;
-      case "4":this.setState({addHealthResultBtnVisible: STYLE.BLOCK});break;
-      default:;break;
-    }
   }
 
   render(){
 
     const role = sessionStorage.getItem(SESSION.ROLE);
-
-    const originResultColumns = [{
-      title: '资料名称',
-      dataIndex: 'note',
-      key: 'note'
-    },{
-      title: '资料类别',
-      dataIndex: 'secondName',
-      key: 'secondName'
-    },{
-      title: '检查医院',
-      dataIndex: 'hospital',
-      key: 'hospital'
-    },{
-      title: '检查日期',
-      dataIndex: 'time',
-      key: 'time',
-      render: (time) => formatDate(time)
-    },{
-      title: '上传者',
-      dataIndex: 'uploaderName',
-      key: 'uploaderName'
-    },{
-      title: '上传日期',
-      dataIndex: 'uploadTime',
-      key: 'uploadTime',
-      render: (uploadTime) => formatDate(uploadTime)
-    },{
-      title: '审核者',
-      dataIndex: 'checkerName',
-      key: 'checkerName',
-      render: (checkerName) => checkerName === null ? '/' : checkerName
-    }, {
-      title: '执行状态',
-      dataIndex: 'status',
-      key: 'status',
-      render: (status, record) => {
-
-        if(status === '未通过')
-          return <Tooltip title={record.reason}><span className="unpass">未通过</span></Tooltip>;
-        else if(status === '已通过')
-          return <span className="pass">已通过</span>;
-        else
-          return status;
-      }
-    }, {
-      title: '操作',
-      key: 'action',
-      render: (record) =>  <a onClick={() => this.showWatchPictureModal(record.id)}>查看扫描件</a>
-    }];
-
-
 
 
     //拆分examResultDetailData
@@ -1066,8 +1005,8 @@ requestHealthResultDetailOfMember = () => {
         {
           isEmployee(role)
           ?
-          <Breadcrumb separator=">" className="category-path">
-            <Breadcrumb.Item><Link to={ROUTE.MEMBER_MANAGE.URL_PREFIX + "/" + ROUTE.MEMBER_MANAGE.MENU_KEY}>首页</Link></Breadcrumb.Item>
+          <Breadcrumb className="category-path">
+            <Breadcrumb.Item><Link to={ROUTE.MEMBER_MANAGE.URL_PREFIX + "/" + ROUTE.MEMBER_MANAGE.MENU_KEY}>会员管理</Link></Breadcrumb.Item>
             <Breadcrumb.Item>{this.props.params.memberName}</Breadcrumb.Item>
           </Breadcrumb>
           :
@@ -1079,14 +1018,14 @@ requestHealthResultDetailOfMember = () => {
         <div style={{textAlign: 'center'}}>
           <h2 style={{marginBottom: '15px', color:'#1DA57A'}}>健康详情入口</h2>
           <Card title="电子健康银行" className="card">
-            <Button className="card-btn" onClick={() => this.handleClickJumpBtn(ROUTE.MEMBER_DETAIL_MENZHEN_DOC)}>门诊资料</Button>
-            <Button className="card-btn" onClick={() => this.handleClickJumpBtn(ROUTE.MEMBER_DETAIL_ZHUYUAN_DOC)}>住院资料</Button>
-            <Button className="card-btn" onClick={() => this.handleClickJumpBtn(ROUTE.MEMBER_DETAIL_TIJIAN_DOC)}>体检资料</Button>
-            <Button className="card-btn" onClick={() => this.handleClickJumpBtn(ROUTE.MEMBER_DETAIL_YINGXIANG_DOC)}>影像资料</Button>
-            <Button className="card-btn" onClick={() => this.handleClickJumpBtn(ROUTE.MEMBER_DETAIL_YAKE_DOC)}>牙科资料</Button>
-            <Button className="card-btn" onClick={() => this.handleClickJumpBtn(ROUTE.MEMBER_DETAIL_ZHONGYI_DOC)}>中医资料</Button>
-            <Button className="card-btn" onClick={() => this.handleClickJumpBtn(ROUTE.MEMBER_DETAIL_XINLI_DOC)}>心理资料</Button>
-            <Button className="card-btn" onClick={() => this.handleClickJumpBtn(ROUTE.MEMBER_DETAIL_QITA_DOC)}>其他资料</Button>
+            <Button className="card-btn" onClick={() => this.handleClickJumpBtn(ROUTE.MEMBER_DETAIL_ORIGIN_RESULT_MENZHEN)}>门诊资料</Button>
+            <Button className="card-btn" onClick={() => this.handleClickJumpBtn(ROUTE.MEMBER_DETAIL_ORIGIN_RESULT_ZHUYUAN)}>住院资料</Button>
+            <Button className="card-btn" onClick={() => this.handleClickJumpBtn(ROUTE.MEMBER_DETAIL_ORIGIN_RESULT_TIJIAN)}>体检资料</Button>
+            <Button className="card-btn" onClick={() => this.handleClickJumpBtn(ROUTE.MEMBER_DETAIL_ORIGIN_RESULT_YINGXIANG)}>影像资料</Button>
+            <Button className="card-btn" onClick={() => this.handleClickJumpBtn(ROUTE.MEMBER_DETAIL_ORIGIN_RESULT_YAKE)}>牙科资料</Button>
+            <Button className="card-btn" onClick={() => this.handleClickJumpBtn(ROUTE.MEMBER_DETAIL_ORIGIN_RESULT_ZHONGYI)}>中医资料</Button>
+            <Button className="card-btn" onClick={() => this.handleClickJumpBtn(ROUTE.MEMBER_DETAIL_ORIGIN_RESULT_XINLI)}>心理资料</Button>
+            <Button className="card-btn" onClick={() => this.handleClickJumpBtn(ROUTE.MEMBER_DETAIL_ORIGIN_RESULT_QITA)}>其他资料</Button>
           </Card>
           <Card title="健康大数据库" className="card" style={{width:'20%'}}>
             <Button className="card-btn" onClick={() => this.handleClickJumpBtn(ROUTE.MEMBER_DETAIL_HEALTH_RESULT)}>健康摘要库</Button>

@@ -11,7 +11,7 @@ import $ from 'jquery';
 
 const TabPane = Tabs.TabPane;
 
-class ExamResultCloseup extends React.Component {
+class ExamResultTechCloseup extends React.Component {
 
   state = {
 
@@ -289,11 +289,10 @@ class ExamResultCloseup extends React.Component {
     return (
       <Spin spinning={this.state.pageLoading} delay={LOADING_DELAY_TIME} tip='加载中'>
         <BackTop visibilityHeight="200"/>
-        <Breadcrumb separator=">" className="category-path">
-          <Breadcrumb.Item><Link to={ROUTE.EXAM_RESULT_MANAGE.URL_PREFIX + "/" + ROUTE.EXAM_RESULT_MANAGE.MENU_KEY}>首页</Link></Breadcrumb.Item>
+        <Breadcrumb className="category-path">
+          <Breadcrumb.Item><Link to={ROUTE.EXAM_RESULT_TECH_MANAGE.URL_PREFIX + "/" + ROUTE.EXAM_RESULT_TECH_MANAGE.MENU_KEY}>医技数据库</Link></Breadcrumb.Item>
           <Breadcrumb.Item>{this.props.params.memberName}</Breadcrumb.Item>
         </Breadcrumb>
-
         {
           this.state.detail !== null
           ?
@@ -326,4 +325,4 @@ class ExamResultCloseup extends React.Component {
   }
 }
 
-export default ExamResultCloseup;
+export default ExamResultTechCloseup;

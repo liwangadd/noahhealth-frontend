@@ -7,7 +7,7 @@ import HealthResultDetailItem from './../HealthResultManage/HealthResultDetailIt
 import React from 'react';
 import MemberDetailOriginResultSearchForm from './MemberDetailOriginResultSearchForm.js';
 import ExamResultOverviewSearchForm from './../ExamResultManage/ExamResultOverviewSearchForm.js';
-import ExamResultOverviewOfAssay from './../ExamResultManage/ExamResultOverviewOfAssay.js';
+import ExamResultOverviewOfTech from './../ExamResultManage/ExamResultOverviewOfTech.js';
 import HealthResultDetailSearchForm from './../HealthResultManage/HealthResultDetailSearchForm.js';
 import OriginResultWatchPictureModal from './../OriginResultManage/OriginResultWatchPictureModal.js';
 import HealthResultDetailAddModal from './../HealthResultManage/HealthResultDetailAddModal.js';
@@ -18,7 +18,7 @@ import $ from 'jquery';
 
 const TabPane = Tabs.TabPane;
 
-class MemberDetailAssayResult extends React.Component {
+class MemberDetailTechResult extends React.Component {
 
   state = {
 
@@ -27,11 +27,11 @@ class MemberDetailAssayResult extends React.Component {
     */
     examResultPageLoading: true,
 
-    secondCategoryParentOfAssayData: [],
+    secondCategoryParentOfTechData: [],
     secondCategoryParentOfTechData: [],
 
     type: '化验',
-    examResultOverviewOfAssayData: [],
+    examResultOverviewOfTechData: [],
     examResultOverviews:null
 
   };
@@ -41,9 +41,9 @@ class MemberDetailAssayResult extends React.Component {
   */
 
   //获取memberId用户的所有检查记录~~~~~~~~~~~~~
-  requestExamResultOfAssayData = (type, pageNow) => {
+  requestExamResultOfTechData = (type, pageNow) => {
 
-    this.refs.examResultOfAssaySearchForm.validateFields((err, values) => {
+    this.refs.examResultOfTechSearchForm.validateFields((err, values) => {
       if(!err) {
 
         console.log('查询' + this.props.params.memberId + '会员的所有' + type + '汇总检查记录');
@@ -76,16 +76,16 @@ class MemberDetailAssayResult extends React.Component {
                                                 showIcon
                                                 />
                                               :
-                                              result.content.map((overview, index) => <ExamResultOverviewOfAssay
+                                              result.content.map((overview, index) => <ExamResultOverviewOfTech
                                                                                                           overview={overview}
                                                                                                           type={type}
                                                                                                           tableIndex={index}
                                                                                                           key={index}
-                                                                                                          changeExamResultOverviewOfAssayTablePager={this.changeExamResultOverviewOfAssayTablePager}
+                                                                                                          changeExamResultOverviewOfTechTablePager={this.changeExamResultOverviewOfTechTablePager}
                                                                                                           onDownload={this.downloadOverview}
                                                                                                           downloadLoading={this.state.downloadLoading}/>);
 
-                  this.setState({examResultOverviewOfAssayData: result.content,
+                  this.setState({examResultOverviewOfTechData: result.content,
                                  examResultOverviews: examResultOverviews,
                                  examResultPageLoading: false});
 
@@ -102,10 +102,11 @@ class MemberDetailAssayResult extends React.Component {
 
 
   //获取memberId用户的所有检查记录~~~~~~~~~~~~~
-  changeExamResultOverviewOfAssayTablePager = (type, secondId, pageNow, tableIndex) => {
+  changeExamResultOverviewOfTechTablePager = (type, secondId, pageNow, tableIndex) => {
 
-      this.refs.examResultOfAssaySearchForm.validateFields((err, values) => {
+    this.refs.examResultOfTechSearchForm.validateFields((err, values) => {
         if(!err) {
+
         console.log('查询' + this.props.params.memberId + '会员的'  + secondId + '亚类的所有检查记录');
         this.setState({examResultPageLoading: true});
         $.ajax({
@@ -126,25 +127,25 @@ class MemberDetailAssayResult extends React.Component {
                 if(result.code === RESULT.SUCCESS) {
 
 
-                  const {examResultOverviewOfAssayData, examResultOverviews} = this.state;
+                  const {examResultOverviewOfTechData, examResultOverviews} = this.state;
 
                   if(result.content.length <= 0) {
                     return;
                   }
 
 
-                  examResultOverviewOfAssayData[tableIndex] = result.content[0];
-                  const examResultOverview = <ExamResultOverviewOfAssay
+                  examResultOverviewOfTechData[tableIndex] = result.content[0];
+                  const examResultOverview = <ExamResultOverviewOfTech
                                                                     overview={result.content[0]}
                                                                     type={type}
                                                                     tableIndex={tableIndex}
                                                                     key={tableIndex}
-                                                                    changeExamResultOverviewOfAssayTablePager={this.changeExamResultOverviewOfAssayTablePager}
+                                                                    changeExamResultOverviewOfTechTablePager={this.changeExamResultOverviewOfTechTablePager}
                                                                     onDownload={this.downloadOverview} />;
 
                   examResultOverviews[tableIndex] = examResultOverview;
 
-                  this.setState({examResultOverviewOfAssayData: examResultOverviewOfAssayData,
+                  this.setState({examResultOverviewOfTechData: examResultOverviewOfTechData,
                                  examResultPageLoading: false});
 
                 } else {
@@ -161,9 +162,10 @@ class MemberDetailAssayResult extends React.Component {
   //获取memberId用户的所有检查记录~~~~~~~~~~~~~
   downloadOverview = (type, secondId, tableIndex) => {
 
-    this.refs.examResultOfAssaySearchForm.validateFields((err, values) => {
-      if(!err) {
-        console.log('下载' + this.props.params.memberId + '会员的'  + secondId + '亚类的所有化验检查记录');
+    this.refs.examResultOfTechSearchForm.validateFields((err, values) => {
+        if(!err) {
+
+        console.log('下载' + this.props.params.memberId + '会员的'  + secondId + '亚类的所有医技检查记录');
         $.ajax({
             url : SERVER + '/api/input/download/' + this.props.params.memberId,
             type : 'POST',
@@ -228,7 +230,7 @@ class MemberDetailAssayResult extends React.Component {
 
                 if(type === "化验") {
                   console.log(secondCategoryParentData);
-                  this.setState({secondCategoryParentOfAssayData: secondCategoryParentData});
+                  this.setState({secondCategoryParentOfTechData: secondCategoryParentData});
                 } else {
                   this.setState({secondCategoryParentOfTechData: secondCategoryParentData});
                 }
@@ -242,8 +244,8 @@ class MemberDetailAssayResult extends React.Component {
   componentDidMount = () => {
 
     //拉取所有化验、医技类到搜索框
-    this.requestSecondCategoryParentData('化验');
-    this.requestExamResultOfAssayData('化验', 1);
+    this.requestSecondCategoryParentData('医技');
+    this.requestExamResultOfTechData('医技', 1);
   }
 
   render(){
@@ -254,51 +256,50 @@ class MemberDetailAssayResult extends React.Component {
     //拆分examResultDetailData
     //1.组装成卡片+表格条目
     //2.组装成锚点目录
-    console.log(this.state.examResultOverviewOfAssayData);
-    const examResultOverviewOfAssayAnchors = this.state.examResultOverviewOfAssayData.map((overview, index) => <Anchor.Link href={"#" + overview.secondId.toString()} key={index} title={overview.secondName} />);
+    console.log(this.state.examResultOverviewOfTechData);
+    const examResultOverviewOfTechAnchors = this.state.examResultOverviewOfTechData.map((overview, index) => <Anchor.Link href={"#" + overview.secondId.toString()} key={index} title={overview.secondName} />);
 
     return (
       <Spin spinning={this.state.examResultPageLoading}>
         <BackTop visibilityHeight="200"/>
-        <Breadcrumb className="category-path">
-          {
-            isEmployee(role)
-            ?
-            <span>
-              <Breadcrumb.Item><Link to={ROUTE.MEMBER_MANAGE.URL_PREFIX + "/" + ROUTE.MEMBER_MANAGE.MENU_KEY}>会员管理</Link></Breadcrumb.Item>
-              <Breadcrumb.Item><Link to={ROUTE.MEMBER_DETAIL.URL_PREFIX + "/" + ROUTE.MEMBER_DETAIL.MENU_KEY + "/" + this.props.params.memberId + "/" + this.props.params.memberName}>{this.props.params.memberName}</Link></Breadcrumb.Item>
-            </span>
-            :
-            <Breadcrumb.Item><Link to={ROUTE.MEMBER_DETAIL.URL_PREFIX + "/" + ROUTE.MEMBER_DETAIL.MENU_KEY + "/" + this.props.params.memberId + "/" + this.props.params.memberName}>个人资料</Link></Breadcrumb.Item>
-          }
-          <Breadcrumb.Item>化验数据库</Breadcrumb.Item>
-        </Breadcrumb>
+          <Breadcrumb className="category-path">
+            {
+              isEmployee(role)
+              ?
+              <span>
+                <Breadcrumb.Item><Link to={ROUTE.MEMBER_MANAGE.URL_PREFIX + "/" + ROUTE.MEMBER_MANAGE.MENU_KEY}>会员管理</Link></Breadcrumb.Item>
+                <Breadcrumb.Item><Link to={ROUTE.MEMBER_DETAIL.URL_PREFIX + "/" + ROUTE.MEMBER_DETAIL.MENU_KEY + "/" + this.props.params.memberId + "/" + this.props.params.memberName}>{this.props.params.memberName}</Link></Breadcrumb.Item>
+              </span>
+              :
+              <Breadcrumb.Item><Link to={ROUTE.MEMBER_DETAIL.URL_PREFIX + "/" + ROUTE.MEMBER_DETAIL.MENU_KEY + "/" + this.props.params.memberId + "/" + this.props.params.memberName}>个人资料</Link></Breadcrumb.Item>
+            }
+            <Breadcrumb.Item>医技数据库</Breadcrumb.Item>
+          </Breadcrumb>
+          <Tabs defaultActiveKey="1">
 
-        <Tabs defaultActiveKey="1">
-
-          {
-            role === ROLE.EMPLOYEE_ADVISER || role === ROLE.EMPLOYEE_ADVISE_MANAGER || role === ROLE.EMPLOYEE_ADMIN
-            || role === ROLE.MEMBER_2 || role === ROLE.MEMBER_3
-            ?
-            <TabPane tab="化验数据库" key="1">
-              <ExamResultOverviewSearchForm ref="examResultOfAssaySearchForm" type="化验" requestExamResultOfAssayOrTechData={this.requestExamResultOfAssayData} secondCategoryParentData={this.state.secondCategoryParentOfAssayData}/>
-              <div className="exam-result-overview-info">
-                <Anchor className="exam-result-overview-anchor">
-                  {examResultOverviewOfAssayAnchors}
-                </Anchor>
-                <Timeline pending={this.state.examResultOverviewOfAssayData.length <= 0 ? null : <h4>已到底部</h4>}>
-                  {this.state.examResultOverviews}
-                </Timeline>
-              </div>
-            </TabPane>
-            :
-            null
-          }
-        </Tabs>
+            {
+              role === ROLE.EMPLOYEE_ADVISER || role === ROLE.EMPLOYEE_ADVISE_MANAGER || role === ROLE.EMPLOYEE_ADMIN
+              || role === ROLE.MEMBER_2 || role === ROLE.MEMBER_3
+              ?
+              <TabPane tab="医技数据库" key="1">
+                <ExamResultOverviewSearchForm ref="examResultOfTechSearchForm" type="医技" requestExamResultOfAssayOrTechData={this.requestExamResultOfTechData} secondCategoryParentData={this.state.secondCategoryParentOfTechData}/>
+                <div className="exam-result-overview-info">
+                  <Anchor className="exam-result-overview-anchor">
+                    {examResultOverviewOfTechAnchors}
+                  </Anchor>
+                  <Timeline pending={this.state.examResultOverviewOfTechData.length <= 0 ? null : <h4>已到底部</h4>}>
+                    {this.state.examResultOverviews}
+                  </Timeline>
+                </div>
+              </TabPane>
+              :
+              null
+            }
+          </Tabs>
 
       </Spin>
     );
   }
 }
 
-export default MemberDetailAssayResult;
+export default MemberDetailTechResult;

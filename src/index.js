@@ -11,20 +11,33 @@ import Register from './Index/Register/Register.js';
 import Home from './Home/Home.js';
 import Welcome from './Home/Welcome/Welcome.js';
 import FinanceManage from './Home/FinanceManage/FinanceManage.js';
+
 import EmployeeManage from './Home/EmployeeManage/EmployeeManage.js';
 import EmployeeDetail from './Home/EmployeeManage/EmployeeDetail.js';
+
 import MemberManage from './Home/MemberManage/MemberManage.js';
 import MemberDetail from './Home/MemberManage/MemberDetail.js';
 
-import MemberDetailAssayResult from './Home/MemberManage/MemberDetailAssayResult.js';
+import MemberDetailOriginResultMenzhen from './Home/MemberManage/MemberDetailOriginResultMenzhen.js';
 
+import MemberDetailHealthResult from './Home/MemberManage/MemberDetailHealthResult.js';
+import MemberDetailAssayResult from './Home/MemberManage/MemberDetailAssayResult.js';
+import MemberDetailTechResult from './Home/MemberManage/MemberDetailTechResult.js';
 
 import FirstCategoryManage from './Home/CategoryManage/FirstCategoryManage.js';
 import SecondCategoryManage from './Home/CategoryManage/SecondCategoryManage.js';
 import ThirdCategoryManage from './Home/CategoryManage/ThirdCategoryManage.js';
-import OriginResultManage from './Home/OriginResultManage/OriginResultManage.js';
-import ExamResultManage from './Home/ExamResultManage/ExamResultManage.js';
-import ExamResultCloseup from './Home/ExamResultManage/ExamResultCloseup.js';
+
+import OriginResultMenzhenManage from './Home/OriginResultManage/OriginResultMenzhenManage.js';
+
+import ExamResultAssayManage from './Home/ExamResultManage/ExamResultAssayManage.js';
+import ExamResultTechManage from './Home/ExamResultManage/ExamResultTechManage.js';
+import ExamResultAssayCloseup from './Home/ExamResultManage/ExamResultAssayCloseup.js';
+import ExamResultTechCloseup from './Home/ExamResultManage/ExamResultTechCloseup.js';
+
+import HealthResultManage from './Home/HealthResultManage/HealthResultManage.js';
+import HealthResultDetail from './Home/HealthResultManage/HealthResultDetail.js';
+
 import {message} from 'antd'
 import {Router, Route, browserHistory, IndexRoute} from 'react-router';
 
@@ -73,26 +86,31 @@ const certifyAccess = function(nextState, replace){
       case ROUTE.MEMBER_DETAIL_HEALTH_RESULT.URL_PREFIX:certifyRole(replace, role, ROUTE.MEMBER_DETAIL_HEALTH_RESULT.PERMISSION);break;
       case ROUTE.MEMBER_DETAIL_ASSAY_RESULT.URL_PREFIX:certifyRole(replace, role, ROUTE.MEMBER_DETAIL_ASSAY_RESULT.PERMISSION);break;
       case ROUTE.MEMBER_DETAIL_TECH_RESULT.URL_PREFIX:certifyRole(replace, role, ROUTE.MEMBER_DETAIL_TECH_RESULT.PERMISSION);break;
-      case ROUTE.MEMBER_DETAIL_MENZHEN_DOC.URL_PREFIX:certifyRole(replace, role, ROUTE.MEMBER_DETAIL_MENZHEN_DOC.PERMISSION);break;
-      case ROUTE.MEMBER_DETAIL_ZHUYUAN_DOC.URL_PREFIX:certifyRole(replace, role, ROUTE.MEMBER_DETAIL_ZHUYUAN_DOC.PERMISSION);break;
-      case ROUTE.MEMBER_DETAIL_TIJIAN_DOC.URL_PREFIX:certifyRole(replace, role, ROUTE.MEMBER_DETAIL_TIJIAN_DOC.PERMISSION);break;
-      case ROUTE.MEMBER_DETAIL_YINGXIANG_DOC.URL_PREFIX:certifyRole(replace, role, ROUTE.MEMBER_DETAIL_YINGXIANG_DOC.PERMISSION);break;
-      case ROUTE.MEMBER_DETAIL_YAKE_DOC.URL_PREFIX:certifyRole(replace, role, ROUTE.MEMBER_DETAIL_YAKE_DOC.PERMISSION);break;
-      case ROUTE.MEMBER_DETAIL_ZHONGYI_DOC.URL_PREFIX:certifyRole(replace, role, ROUTE.MEMBER_DETAIL_ZHONGYI_DOC.PERMISSION);break;
-      case ROUTE.MEMBER_DETAIL_XINLI_DOC.URL_PREFIX:certifyRole(replace, role, ROUTE.MEMBER_DETAIL_XINLI_DOC.PERMISSION);break;
-      case ROUTE.MEMBER_DETAIL_QITA_DOC.URL_PREFIX:certifyRole(replace, role, ROUTE.MEMBER_DETAIL_QITA_DOC.PERMISSION);break;
+
+      case ROUTE.MEMBER_DETAIL_ORIGIN_RESULT_MENZHEN.URL_PREFIX:certifyRole(replace, role, ROUTE.MEMBER_DETAIL_ORIGIN_RESULT_MENZHEN.PERMISSION);break;
+      case ROUTE.MEMBER_DETAIL_ORIGIN_RESULT_ZHUYUAN.URL_PREFIX:certifyRole(replace, role, ROUTE.MEMBER_DETAIL_ORIGIN_RESULT_ZHUYUAN.PERMISSION);break;
+      case ROUTE.MEMBER_DETAIL_ORIGIN_RESULT_TIJIAN.URL_PREFIX:certifyRole(replace, role, ROUTE.MEMBER_DETAIL_ORIGIN_RESULT_TIJIAN.PERMISSION);break;
+      case ROUTE.MEMBER_DETAIL_ORIGIN_RESULT_YINGXIANG.URL_PREFIX:certifyRole(replace, role, ROUTE.MEMBER_DETAIL_ORIGIN_RESULT_YINGXIANG.PERMISSION);break;
+      case ROUTE.MEMBER_DETAIL_ORIGIN_RESULT_YAKE.URL_PREFIX:certifyRole(replace, role, ROUTE.MEMBER_DETAIL_ORIGIN_RESULT_YAKE.PERMISSION);break;
+      case ROUTE.MEMBER_DETAIL_ORIGIN_RESULT_ZHONGYI.URL_PREFIX:certifyRole(replace, role, ROUTE.MEMBER_DETAIL_ORIGIN_RESULT_ZHONGYI.PERMISSION);break;
+      case ROUTE.MEMBER_DETAIL_ORIGIN_RESULT_XINLI.URL_PREFIX:certifyRole(replace, role, ROUTE.MEMBER_DETAIL_ORIGIN_RESULT_XINLI.PERMISSION);break;
+      case ROUTE.MEMBER_DETAIL_ORIGIN_RESULT_QITA.URL_PREFIX:certifyRole(replace, role, ROUTE.MEMBER_DETAIL_ORIGIN_RESULT_QITA.PERMISSION);break;
 
 
       case ROUTE.FIRST_CATEGORY_MANAGE.URL_PREFIX:certifyRole(replace, role, ROUTE.FIRST_CATEGORY_MANAGE.PERMISSION);break;
       case ROUTE.SECOND_CATEGORY_MANAGE.URL_PREFIX:certifyRole(replace, role, ROUTE.SECOND_CATEGORY_MANAGE.PERMISSION);break;
       case ROUTE.THIRD_CATEGORY_MANAGE.URL_PREFIX:certifyRole(replace, role, ROUTE.THIRD_CATEGORY_MANAGE.PERMISSION);break;
 
-      case ROUTE.ORIGIN_RESULT_MANAGE.URL_PREFIX:certifyRole(replace, role, ROUTE.ORIGIN_RESULT_MANAGE.PERMISSION);break;
+      case ROUTE.ORIGIN_RESULT_MENZHEN_MANAGE.URL_PREFIX:certifyRole(replace, role, ROUTE.ORIGIN_RESULT_MENZHEN_MANAGE.PERMISSION);break;
 
-      case ROUTE.EXAM_RESULT_MANAGE.URL_PREFIX:certifyRole(replace, role, ROUTE.EXAM_RESULT_MANAGE.PERMISSION);break;
-      case ROUTE.EXAM_RESULT_CLOSEUP.URL_PREFIX:certifyRole(replace, role, ROUTE.EXAM_RESULT_CLOSEUP.PERMISSION);break;
+      case ROUTE.EXAM_RESULT_ASSAY_MANAGE.URL_PREFIX:certifyRole(replace, role, ROUTE.EXAM_RESULT_ASSAY_MANAGE.PERMISSION);break;
+      case ROUTE.EXAM_RESULT_ASSAY_CLOSEUP.URL_PREFIX:certifyRole(replace, role, ROUTE.EXAM_RESULT_ASSAY_CLOSEUP.PERMISSION);break;
+
+      case ROUTE.EXAM_RESULT_TECH_MANAGE.URL_PREFIX:certifyRole(replace, role, ROUTE.EXAM_RESULT_TECH_MANAGE.PERMISSION);break;
+      case ROUTE.EXAM_RESULT_TECH_CLOSEUP.URL_PREFIX:certifyRole(replace, role, ROUTE.EXAM_RESULT_TECH_CLOSEUP.PERMISSION);break;
 
       case ROUTE.HEALTH_RESULT_MANAGE.URL_PREFIX:certifyRole(replace, role, ROUTE.HEALTH_RESULT_MANAGE.PERMISSION);break;
+      case ROUTE.HEALTH_RESULT_DETAIL.URL_PREFIX:certifyRole(replace, role, ROUTE.HEALTH_RESULT_DETAIL.PERMISSION);break;
 
       default:clearSession(); isEmployee(role) ? replace({ pathname: ROUTE.EMPLOYEE_LOGIN.URL }) : replace({ pathname: ROUTE.MEMBER_LOGIN.URL }); message.error('暂无该页面，请重新登录');break;
     }
@@ -134,16 +152,28 @@ class AppRouter extends React.Component {
                       <Route path={ROUTE.MEMBER_MANAGE.URL} component={MemberManage}/>
 
                       <Route path={ROUTE.MEMBER_DETAIL.URL} component={MemberDetail}/>
+
+                      <Route path={ROUTE.MEMBER_DETAIL_ORIGIN_RESULT_MENZHEN.URL} component={MemberDetailOriginResultMenzhen}/>
+
+
+                      <Route path={ROUTE.MEMBER_DETAIL_HEALTH_RESULT.URL} component={MemberDetailHealthResult}/>
                       <Route path={ROUTE.MEMBER_DETAIL_ASSAY_RESULT.URL} component={MemberDetailAssayResult}/>
+                      <Route path={ROUTE.MEMBER_DETAIL_TECH_RESULT.URL} component={MemberDetailTechResult}/>
 
                       <Route path={ROUTE.FIRST_CATEGORY_MANAGE.URL} component={FirstCategoryManage}/>
                       <Route path={ROUTE.SECOND_CATEGORY_MANAGE.URL} component={SecondCategoryManage}/>
                       <Route path={ROUTE.THIRD_CATEGORY_MANAGE.URL} component={ThirdCategoryManage}/>
 
-                      <Route path={ROUTE.ORIGIN_RESULT_MANAGE.URL} component={OriginResultManage}/>
+                      <Route path={ROUTE.ORIGIN_RESULT_MENZHEN_MANAGE.URL} component={OriginResultMenzhenManage}/>
 
-                      <Route path={ROUTE.EXAM_RESULT_MANAGE.URL} component={ExamResultManage}/>
-                      <Route path={ROUTE.EXAM_RESULT_CLOSEUP.URL} component={ExamResultCloseup}/>
+                      <Route path={ROUTE.EXAM_RESULT_ASSAY_MANAGE.URL} component={ExamResultAssayManage}/>
+                      <Route path={ROUTE.EXAM_RESULT_TECH_MANAGE.URL} component={ExamResultTechManage}/>
+                      <Route path={ROUTE.EXAM_RESULT_ASSAY_CLOSEUP.URL} component={ExamResultAssayCloseup}/>
+                      <Route path={ROUTE.EXAM_RESULT_TECH_CLOSEUP.URL} component={ExamResultTechCloseup}/>
+
+
+                      <Route path={ROUTE.HEALTH_RESULT_MANAGE.URL} component={HealthResultManage}/>
+                      <Route path={ROUTE.HEALTH_RESULT_DETAIL.URL} component={HealthResultDetail}/>
 
                   </Route>
                 </Route>

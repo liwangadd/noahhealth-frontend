@@ -29,13 +29,7 @@ class HealthResultDetailSearchForm_ extends React.Component {
 
     const role = sessionStorage.getItem(SESSION.ROLE);
 
-    //在检查亚类尾部加上全部/全部 secondId = -1
-    // const allType = {value: '全部分类', label: '全部分类', children:[{value: -1, label: '全部亚类'}]};
-    // let healthResultSecondTypeData = this.props.healthResultSecondTypeData.slice(); //复制数组对象
-    // healthResultSecondTypeData.unshift(allType);
     const healthResultTypeOptions = this.props.healthResultTypeData.map((type, index) => <Option value={type.value.toString()} key={index}>{type.label}</Option>);
-
-
     const { getFieldDecorator } = this.props.form;
     return (
       <Form

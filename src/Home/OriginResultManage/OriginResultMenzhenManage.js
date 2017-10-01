@@ -13,7 +13,7 @@ import $ from 'jquery';
 const TabPane = Tabs.TabPane;
 const confirm = Modal.confirm;
 
-class OriginResultManage extends React.Component {
+class OriginResultMenzhenManage extends React.Component {
 
   state = {
 
@@ -483,6 +483,9 @@ class OriginResultManage extends React.Component {
               originResultTypeData.push(firstTypeData);
             }
 
+console.log("*********");
+console.log(originResultTypeData);
+
             this.setState({originResultTypeData: originResultTypeData});
             if(this.refs.uploadForm == null) return;
             this.refs.uploadForm.setFieldsValue({secondId: originResultTypeData.length > 0 ? originResultTypeData[0].value.toString() : "-1"});
@@ -637,7 +640,7 @@ class OriginResultManage extends React.Component {
       <div>
         <BackTop visibilityHeight="200"/>
         <Tabs defaultActiveKey={"1"} tabBarExtraContent={role === ROLE.EMPLOYEE_ARCHIVER || role === ROLE.EMPLOYEE_ARCHIVE_MANAGER || role === ROLE.EMPLOYEE_ADMIN ? <Button type="primary" onClick={this.showUploadModal}>添加原始资料</Button> : null}>
-          <TabPane tab="电子资料库" key="1">
+          <TabPane tab="门诊资料" key="1">
             <OriginResultSearchForm ref="searchForm" handleSearchOriginResultList={this.handleSearchOriginResultList}/>
             <Table className='origin-result-table' columns={originResultColumns} dataSource={this.state.originResultData} rowKey='id' loading={this.state.originResultTableLoading} pagination={this.state.originResultPager} onChange={this.changeOriginResultPager}/>
           </TabPane>
@@ -651,4 +654,4 @@ class OriginResultManage extends React.Component {
   }
 }
 
-export default OriginResultManage;
+export default OriginResultMenzhenManage;

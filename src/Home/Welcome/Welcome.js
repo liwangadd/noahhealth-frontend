@@ -1,11 +1,12 @@
 import './Welcome.css'
 import React from 'react';
-import {SESSION, RESULT, ROLE, SERVER} from './../../App/PublicConstant.js';
+import {SESSION, RESULT, ROLE, SERVER, ROUTE} from './../../App/PublicConstant.js';
 import {isMember} from './../../App/PublicMethod.js';
-import {Card, BackTop, Calendar, Button, message} from 'antd';
-import {Link} from 'react-router';
+import {Card, BackTop, Calendar, Button, message, Anchor} from 'antd';
+import {Link, browserHistory} from 'react-router';
 import MemberInfoTable from './../MemberManage/MemberInfoTable.js';
 import $ from 'jquery';
+
 
 class Welcome extends React.Component {
 
@@ -24,7 +25,7 @@ class Welcome extends React.Component {
     //     type : 'POST'
     // });
 
-   window.location.href = 'https://10.109.247.72:8443/email/user/login.action?username=alice&password=1234&receiver=bob@boat2.wuhan';
+   //window.location.href = 'https://10.109.247.72:8443/email/user/login.action?username=alice&password=1234&receiver=bob@boat2.wuhan';
 
   }
 
@@ -93,6 +94,14 @@ class Welcome extends React.Component {
     });
   }
 
+  //点击跳转按钮跳转到页面
+  handleClickJumpBtn = (page) => {
+
+    const targetUrl = page.URL_PREFIX + "/" + page.MENU_KEY;
+    browserHistory.push(targetUrl);
+  }
+
+
   componentDidMount = () => {
 
     //如果是会员
@@ -132,9 +141,9 @@ class Welcome extends React.Component {
             <Button className="card-btn">其他资料</Button>
           </Card>
           <Card title="健康大数据库" className="card" style={{width:'20%'}}>
-            <Button className="card-btn" >健康摘要库</Button>
-            <Button className="card-btn" >化验数据库</Button>
-            <Button className="card-btn" >医技数据库</Button>
+            <Button className="card-btn" onClick={() => this.handleClickJumpBtn(ROUTE.HEALTH_RESULT_MANAGE)}>健康摘要库</Button>
+            <Button className="card-btn" onClick={() => this.handleClickJumpBtn(ROUTE.EXAM_RESULT_ASSAY_MANAGE)}>化验数据库</Button>
+            <Button className="card-btn" onClick={() => this.handleClickJumpBtn(ROUTE.EXAM_RESULT_TECH_MANAGE)}>医技数据库</Button>
           </Card>
           <Card title="健康长程管理" className="card" style={{width:'28%'}}>
             <Button className="card-btn">健康管理方案</Button>
@@ -145,9 +154,9 @@ class Welcome extends React.Component {
             <Button className="card-btn">年度健康总结</Button>
           </Card>
           <Card title="会员服务预约" className="card" style={{width:'22%'}}>
-            <Button className="card-btn" >体检服务预约单</Button>
+            <Button className="card-btn">体检服务预约单</Button>
             <Button className="card-btn">就医服务预约单</Button>
-            <Button className="card-btn" >其他服务预约单</Button>
+            <Button className="card-btn">其他服务预约单</Button>
           </Card>
         </div>
       </div>

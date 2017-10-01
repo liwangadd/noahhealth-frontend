@@ -197,8 +197,8 @@ class SecondCategoryManage extends React.Component {
 
     return (
         <div>
-          <Breadcrumb separator=">" className="category-path">
-            <Breadcrumb.Item><Link to={ROUTE.FIRST_CATEGORY_MANAGE.URL_PREFIX + "/" + ROUTE.FIRST_CATEGORY_MANAGE.MENU_KEY + "/" + this.props.params.tabKey}>首页</Link></Breadcrumb.Item>
+          <Breadcrumb className="category-path">
+            <Breadcrumb.Item><Link to={ROUTE.FIRST_CATEGORY_MANAGE.URL_PREFIX + "/" + ROUTE.FIRST_CATEGORY_MANAGE.MENU_KEY + "/" + this.props.params.tabKey}>检查项目管理</Link></Breadcrumb.Item>
             <Breadcrumb.Item>{this.props.params.firstName}</Breadcrumb.Item>
           </Breadcrumb>
           <Table className='second-category-table' columns={secondCategoryColumns} dataSource={this.state.secondCategoryData} rowKey='id' loading={this.state.secondCategoryTableLoading} pagination={this.state.pager} onChange={this.changePager}/>

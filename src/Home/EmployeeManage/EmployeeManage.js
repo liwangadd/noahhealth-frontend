@@ -395,11 +395,11 @@ class EmployeeManage extends React.Component {
             :
             null
           }
+          <a onClick={() => this.showEmployeeEditModal(record)}>修改</a>
           {
             role === ROLE.EMPLOYEE_ADMIN
             ?
             <span>
-              <a onClick={() => this.showEmployeeEditModal(record)}>修改</a>
               <span className="ant-divider" />
               <Popconfirm title="您确定要删除该职员吗?" onConfirm={() => this.handleDeleteEmployee(record)}>
                 <a className='user-table-delete'>删除</a>

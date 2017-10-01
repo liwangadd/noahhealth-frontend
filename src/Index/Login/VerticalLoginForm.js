@@ -1,4 +1,5 @@
 import {SERVER, ROUTE, SESSION, RESULT} from './../../App/PublicConstant.js';
+import {isAdviser, isMember} from './../../App/PublicMethod.js';
 import React from 'react';
 import {Form, Icon, Input, Button, message, Card} from 'antd';
 import $ from 'jquery';
@@ -38,7 +39,14 @@ class VerticalLoginForm_ extends React.Component {
                     sessionStorage.setItem(SESSION.EXPIRED_TIME, result.content.duration);
 
                     //跳转
-                    browserHistory.push(ROUTE.HOME.URL_PREFIX + "/" + ROUTE.HOME.MENU_KEY);
+                    if(isAdviser(result.content.role)) {
+                      browserHistory.push(ROUTE.MEMBER_MANAGE.URL_PREFIX + "/" + ROUTE.MEMBER_MANAGE.MENU_KEY);
+                    } else if(isMember(result.content.role)) {
+                      browserHistory.push(ROUTE.MEMBER_DETAIL.URL_PREFIX + "/" + ROUTE.MEMBER_DETAIL.MENU_KEY + "/" + result.content.id + "/" + result.content.name);
+                    } else {
+                      browserHistory.push(ROUTE.HOME.URL_PREFIX + "/" + ROUTE.HOME.MENU_KEY);
+                    }
+
                     message.success(result.reason, 2);
                     return;
                 } else {

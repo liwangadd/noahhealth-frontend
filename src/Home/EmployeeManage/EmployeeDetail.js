@@ -642,8 +642,8 @@ class EmployeeDetail extends React.Component {
     return (
         <div>
           <BackTop visibilityHeight="200"/>
-          <Breadcrumb separator=">" className="category-path">
-            <Breadcrumb.Item><Link to={ROUTE.EMPLOYEE_MANAGE.URL_PREFIX + "/" + ROUTE.EMPLOYEE_MANAGE.MENU_KEY}>首页</Link></Breadcrumb.Item>
+          <Breadcrumb className="category-path">
+            <Breadcrumb.Item><Link to={ROUTE.EMPLOYEE_MANAGE.URL_PREFIX + "/" + ROUTE.EMPLOYEE_MANAGE.MENU_KEY}>职员管理</Link></Breadcrumb.Item>
             <Breadcrumb.Item>{this.props.params.employeeRole + ' ' + this.props.params.employeeName}</Breadcrumb.Item>
           </Breadcrumb>
 

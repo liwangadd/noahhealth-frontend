@@ -1,6 +1,6 @@
 import './Home.css';
 import {SESSION, ROUTE, ROLE, STYLE, COLOR, FILE_SERVER, SERVER, RESULT} from './../App/PublicConstant.js';
-import {clearSession, isEmployee} from './../App/PublicMethod.js';
+import {clearSession, isEmployee, isMember} from './../App/PublicMethod.js';
 import React from 'react';
 import { Layout, Menu, Icon, Avatar, notification, Button, Tag, message} from 'antd';
 import {browserHistory} from 'react-router';
@@ -64,21 +64,22 @@ class Home extends React.Component {
     let layoutStyle;
 
     //主色调、用户管理、检查项目、原始资料、化验/医技数据、健康管理
-    if(role === ROLE.EMPLOYEE_ADMIN) layoutStyle = this.getLayoutStyle(COLOR.RED, STYLE.BLOCK, STYLE.BLOCK, STYLE.BLOCK, STYLE.BLOCK, STYLE.BLOCK, STYLE.BLOCK, STYLE.BLOCK);
-    else if(role === ROLE.EMPLOYEE_FINANCER) layoutStyle = this.getLayoutStyle(COLOR.RED, STYLE.BLOCK, STYLE.NONE, STYLE.BLOCK, STYLE.BLOCK, STYLE.BLOCK, STYLE.BLOCK, STYLE.BLOCK);
-    else if(role === ROLE.EMPLOYEE_ARCHIVER) layoutStyle = this.getLayoutStyle(COLOR.PINK, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.BLOCK, STYLE.BLOCK, STYLE.BLOCK, STYLE.BLOCK);
-    else if(role === ROLE.EMPLOYEE_ARCHIVE_MANAGER) layoutStyle = this.getLayoutStyle(COLOR.PINK, STYLE.NONE, STYLE.BLOCK, STYLE.NONE, STYLE.BLOCK, STYLE.BLOCK, STYLE.BLOCK, STYLE.BLOCK);
-    else if(role === ROLE.EMPLOYEE_ADVISER) layoutStyle = this.getLayoutStyle(COLOR.ORANGE, STYLE.NONE, STYLE.NONE, STYLE.BLOCK, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.NONE);
-    else if(role === ROLE.EMPLOYEE_ADVISE_MANAGER) layoutStyle = this.getLayoutStyle(COLOR.ORANGE, STYLE.NONE, STYLE.BLOCK, STYLE.BLOCK, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.NONE);
-    else if(role === ROLE.MEMBER_1) layoutStyle = this.getLayoutStyle(COLOR.GREEN, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.NONE);
-    else if(role === ROLE.MEMBER_2) layoutStyle = this.getLayoutStyle(COLOR.CYAN, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.NONE);
-    else if(role === ROLE.MEMBER_3) layoutStyle = this.getLayoutStyle(COLOR.BLUE, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.NONE);
-    else layoutStyle = this.getLayoutStyle(COLOR.BLUE, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.NONE);
+    if(role === ROLE.EMPLOYEE_ADMIN) layoutStyle = this.getLayoutStyle(COLOR.RED, STYLE.BLOCK, STYLE.BLOCK, STYLE.BLOCK, STYLE.BLOCK, STYLE.BLOCK, STYLE.BLOCK, STYLE.BLOCK, STYLE.BLOCK);
+    else if(role === ROLE.EMPLOYEE_FINANCER) layoutStyle = this.getLayoutStyle(COLOR.RED, STYLE.NONE, STYLE.BLOCK, STYLE.NONE, STYLE.BLOCK, STYLE.BLOCK, STYLE.BLOCK, STYLE.BLOCK, STYLE.BLOCK);
+    else if(role === ROLE.EMPLOYEE_ARCHIVER) layoutStyle = this.getLayoutStyle(COLOR.PINK, STYLE.BLOCK, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.BLOCK, STYLE.BLOCK, STYLE.BLOCK, STYLE.BLOCK);
+    else if(role === ROLE.EMPLOYEE_ARCHIVE_MANAGER) layoutStyle = this.getLayoutStyle(COLOR.PINK, STYLE.BLOCK, STYLE.NONE, STYLE.BLOCK, STYLE.NONE, STYLE.BLOCK, STYLE.BLOCK, STYLE.BLOCK, STYLE.BLOCK);
+    else if(role === ROLE.EMPLOYEE_ADVISER) layoutStyle = this.getLayoutStyle(COLOR.ORANGE, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.BLOCK, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.NONE);
+    else if(role === ROLE.EMPLOYEE_ADVISE_MANAGER) layoutStyle = this.getLayoutStyle(COLOR.ORANGE, STYLE.NONE, STYLE.NONE, STYLE.BLOCK, STYLE.BLOCK, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.NONE);
+    else if(role === ROLE.MEMBER_1) layoutStyle = this.getLayoutStyle(COLOR.GREEN, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.BLOCK, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.NONE);
+    else if(role === ROLE.MEMBER_2) layoutStyle = this.getLayoutStyle(COLOR.CYAN, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.BLOCK, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.NONE);
+    else if(role === ROLE.MEMBER_3) layoutStyle = this.getLayoutStyle(COLOR.BLUE, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.BLOCK, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.NONE);
+    else layoutStyle = this.getLayoutStyle(COLOR.BLUE, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.NONE);
 
     return layoutStyle;
   }
 
   getLayoutStyle(roleTagColor,
+                 welcomeMenuItemDisplay,
                  financeManageMenuItemDisplay,
                  employeeManageMenuItemDisplay,
                  memberManageMenuItemDisplay,
@@ -89,6 +90,7 @@ class Home extends React.Component {
 
       let layoutStyle = {
         roleTagColor: roleTagColor,
+        welcomeMenuItemDisplay: welcomeMenuItemDisplay,
         financeManageMenuItemDisplay: financeManageMenuItemDisplay,
         employeeManageMenuItemDisplay: employeeManageMenuItemDisplay,
         memberManageMenuItemDisplay: memberManageMenuItemDisplay,
@@ -110,13 +112,20 @@ class Home extends React.Component {
     let targetUrl = ROUTE.WELCOME.URL_PREFIX + "/" + ROUTE.WELCOME.MENU_KEY;
     switch(e.key) {
       case ROUTE.WELCOME.MENU_KEY: targetUrl = ROUTE.WELCOME.URL_PREFIX + "/" + ROUTE.WELCOME.MENU_KEY; break;
+
       case ROUTE.FINANCE_MANAGE.MENU_KEY: targetUrl = ROUTE.FINANCE_MANAGE.URL_PREFIX + "/" + ROUTE.FINANCE_MANAGE.MENU_KEY; break;
+
       case ROUTE.EMPLOYEE_MANAGE.MENU_KEY: targetUrl = ROUTE.EMPLOYEE_MANAGE.URL_PREFIX + "/" + ROUTE.EMPLOYEE_MANAGE.MENU_KEY; break;
-      case ROUTE.MEMBER_MANAGE.MENU_KEY: targetUrl = ROUTE.MEMBER_MANAGE.URL_PREFIX + "/" + ROUTE.MEMBER_MANAGE.MENU_KEY; break;
+      case ROUTE.MEMBER_MANAGE.MENU_KEY: targetUrl = isEmployee(role) ? ROUTE.MEMBER_MANAGE.URL_PREFIX + "/" + ROUTE.MEMBER_MANAGE.MENU_KEY : ROUTE.MEMBER_DETAIL.URL_PREFIX + "/" + ROUTE.MEMBER_DETAIL.MENU_KEY + "/" + memberId + "/" + memberName; break;
+
       case ROUTE.FIRST_CATEGORY_MANAGE.MENU_KEY: targetUrl = ROUTE.FIRST_CATEGORY_MANAGE.URL_PREFIX + "/" + ROUTE.FIRST_CATEGORY_MANAGE.MENU_KEY + "/1"; break;
-      case ROUTE.ORIGIN_RESULT_MANAGE.MENU_KEY: targetUrl = ROUTE.ORIGIN_RESULT_MANAGE.URL_PREFIX + "/" + ROUTE.ORIGIN_RESULT_MANAGE.MENU_KEY; break;
-      case ROUTE.EXAM_RESULT_MANAGE.MENU_KEY: targetUrl = isEmployee(role) ? (ROUTE.EXAM_RESULT_MANAGE.URL_PREFIX + "/" + ROUTE.EXAM_RESULT_MANAGE.MENU_KEY) : (ROUTE.EXAM_RESULT_DETAIL.URL_PREFIX + "/" + ROUTE.EXAM_RESULT_DETAIL.MENU_KEY + "/" + memberId + "/" + memberName);break;
-      case ROUTE.HEALTH_RESULT_MANAGE.MENU_KEY: targetUrl = isEmployee(role) ? (ROUTE.HEALTH_RESULT_MANAGE.URL_PREFIX + "/" + ROUTE.HEALTH_RESULT_MANAGE.MENU_KEY) : (ROUTE.HEALTH_RESULT_DETAIL.URL_PREFIX + "/" + ROUTE.HEALTH_RESULT_DETAIL.MENU_KEY + "/" + memberId + "/" + memberName);break;
+
+      case ROUTE.ORIGIN_RESULT_MENZHEN_MANAGE.MENU_KEY: targetUrl = ROUTE.ORIGIN_RESULT_MENZHEN_MANAGE.URL_PREFIX + "/" + ROUTE.ORIGIN_RESULT_MENZHEN_MANAGE.MENU_KEY; break;
+
+      case ROUTE.EXAM_RESULT_ASSAY_MANAGE.MENU_KEY: targetUrl = ROUTE.EXAM_RESULT_ASSAY_MANAGE.URL_PREFIX + "/" + ROUTE.EXAM_RESULT_ASSAY_MANAGE.MENU_KEY; break;
+      case ROUTE.EXAM_RESULT_TECH_MANAGE.MENU_KEY: targetUrl = ROUTE.EXAM_RESULT_TECH_MANAGE.URL_PREFIX + "/" + ROUTE.EXAM_RESULT_TECH_MANAGE.MENU_KEY; break;
+
+      case ROUTE.HEALTH_RESULT_MANAGE.MENU_KEY: targetUrl =  ROUTE.HEALTH_RESULT_MANAGE.URL_PREFIX + "/" + ROUTE.HEALTH_RESULT_MANAGE.MENU_KEY; break;
       default:;break;
     }
 
@@ -173,7 +182,7 @@ class Home extends React.Component {
           collapsed={this.state.collapsed}>
           <div className="logo"/>
           <Menu theme="dark" mode="inline" selectedKeys={[this.props.params.menuKey]} onClick={this.handleMenuItemClick}>
-            <Menu.Item key={ROUTE.WELCOME.MENU_KEY}>
+            <Menu.Item key={ROUTE.WELCOME.MENU_KEY} style={{display: layoutStyle.welcomeMenuItemDisplay}}>
               <Icon type="home" className="menu-item-font"/>
               <span className="nav-text menu-item-font">首页</span>
             </Menu.Item>
@@ -187,20 +196,14 @@ class Home extends React.Component {
             </Menu.Item>
             <Menu.Item key={ROUTE.MEMBER_MANAGE.MENU_KEY} style={{display: layoutStyle.memberManageMenuItemDisplay}}>
               <Icon type="team" className="menu-item-font"/>
-              <span className="nav-text menu-item-font">会员管理</span>
+              <span className="nav-text menu-item-font">{isMember(role) ? '个人资料' : '会员管理'}</span>
             </Menu.Item>
 
             {
               layoutStyle.documentBankMenuItemDisplay === STYLE.BLOCK
               ?
               <SubMenu key="health_bank" title={<span className="menu-item-font"><Icon type="file" /><span>电子健康银行</span></span>}>
-                <Menu.Item key={ROUTE.FIRST_CATEGORY_MANAGE.MENU_KEY} >
-                  <span className="menu-item-font">检查项目X</span>
-                </Menu.Item>
-                <Menu.Item key={ROUTE.ORIGIN_RESULT_MANAGE.MENU_KEY} >
-                  <span className="nav-text menu-item-font">电子资料X</span>
-                </Menu.Item>
-                <Menu.Item key="11">
+                <Menu.Item key={ROUTE.ORIGIN_RESULT_MENZHEN_MANAGE.MENU_KEY}>
                   <span className="menu-item-font">门诊资料</span>
                 </Menu.Item>
                 <Menu.Item key="22">
@@ -233,17 +236,17 @@ class Home extends React.Component {
               layoutStyle.healthDatabaseMenuItemDisplay === STYLE.BLOCK
               ?
               <SubMenu key="health_store" title={<span className="menu-item-font"><Icon type="medicine-box" /><span>健康大数据库</span></span>} >
-                <Menu.Item key={ROUTE.EXAM_RESULT_MANAGE.MENU_KEY} >
-                  <span className="nav-text menu-item-font">辅检数据库X</span>
-                </Menu.Item>
-                <Menu.Item key="662">
+                <Menu.Item key={ROUTE.HEALTH_RESULT_MANAGE.MENU_KEY} >
                   <span className="menu-item-font">健康摘要库</span>
                 </Menu.Item>
-                <Menu.Item key="77">
+                <Menu.Item key={ROUTE.EXAM_RESULT_ASSAY_MANAGE.MENU_KEY} >
                   <span className="menu-item-font">化验数据库</span>
                 </Menu.Item>
-                <Menu.Item key="100">
+                <Menu.Item key={ROUTE.EXAM_RESULT_TECH_MANAGE.MENU_KEY} >
                   <span className="menu-item-font">医技数据库</span>
+                </Menu.Item>
+                <Menu.Item key={ROUTE.FIRST_CATEGORY_MANAGE.MENU_KEY} >
+                  <span className="menu-item-font">检查项目管理</span>
                 </Menu.Item>
               </SubMenu>
               :

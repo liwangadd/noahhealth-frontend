@@ -5,19 +5,19 @@ const FormItem = Form.Item;
 const Option = Select.Option;
 const { RangePicker } = DatePicker;
 
-class ExamResultDetailSearchForm_ extends React.Component {
+class ExamResultOverviewSearchForm_ extends React.Component {
   state = {
     expand: false,
   };
 
   handleSearch = (e) => {
     e.preventDefault();
-    this.props.requestExamResultDetailOfMember(this.props.type);
+    this.props.requestExamResultOfAssayOrTechData(this.props.type, 1);
   }
 
   handleReset = () => {
     this.props.form.resetFields();
-    this.props.requestExamResultDetailOfMember(this.props.type);
+    this.props.requestExamResultOfAssayOrTechData(this.props.type, 1);
   }
 
   toggle = () => {
@@ -78,5 +78,5 @@ class ExamResultDetailSearchForm_ extends React.Component {
 }
 
 //当值改变时回调上层修改表单域的值
-const ExamResultDetailSearchForm = Form.create()(ExamResultDetailSearchForm_);
-export default ExamResultDetailSearchForm;
+const ExamResultOverviewSearchForm = Form.create()(ExamResultOverviewSearchForm_);
+export default ExamResultOverviewSearchForm;
