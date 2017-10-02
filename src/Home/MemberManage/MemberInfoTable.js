@@ -127,9 +127,9 @@ class MemberInfoTable_ extends React.Component {
           </tbody>
         </table>
 
-        <Row className="member-info-table" style={{marginBottom: '30px'}}>
+        <Row className="member-info-table" style={{marginBottom: '30px', margin: '0 auto'}}>
           <Col span={24} style={{ textAlign: 'right' }}>
-            <Button type="primary" htmlType="submit" loading={this.props.updateMemberInfoLoading} onClick={this.props.onClick}>更新</Button>
+            <Button type="primary" htmlType="submit" loading={this.props.updateMemberInfoLoading} onClick={this.props.onClick} style={{marginTop: 15}}>更新</Button>
           </Col>
         </Row>
 
