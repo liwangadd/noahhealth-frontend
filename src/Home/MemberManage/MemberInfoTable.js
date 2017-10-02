@@ -16,14 +16,14 @@ class MemberInfoTable_ extends React.Component {
               <td>姓名</td>
               <td>
                 {getFieldDecorator('name', { initialValue: memberInfo.name })(
-                <Input className='member-info-table-input'/>
+                <Input className='member-info-table-input' style={{border: '0'}}/>
                 )}
               </td>
 
               <td>出生日期</td>
               <td>
                 {getFieldDecorator('birth', { initialValue: memberInfo.birth })(
-                <Input className='member-info-table-input'/>
+                <Input className='member-info-table-input' style={{border: '0'}}/>
                 )}
               </td>
             </tr>
@@ -32,14 +32,14 @@ class MemberInfoTable_ extends React.Component {
               <td>性别</td>
               <td>
                 {getFieldDecorator('gender', { initialValue: memberInfo.gender })(
-                <Input className='member-info-table-input'/>
+                <Input className='member-info-table-input' style={{border: '0'}}/>
                 )}
               </td>
 
               <td>身份证号码</td>
               <td>
                 {getFieldDecorator('idCard', { initialValue: memberInfo.idCard })(
-                <Input className='member-info-table-input'/>
+                <Input className='member-info-table-input' style={{border: '0'}}/>
                 )}
               </td>
             </tr>
@@ -92,7 +92,7 @@ class MemberInfoTable_ extends React.Component {
               <td>医保定点医院</td>
               <td colSpan={3}>
                 {getFieldDecorator('hospital', { initialValue: memberInfo.hospital })(
-                <Input className='member-info-table-input'/>
+                <Input className='member-info-table-input' style={{border: '0'}}/>
                 )}
               </td>
             </tr>
@@ -101,7 +101,7 @@ class MemberInfoTable_ extends React.Component {
               <td>商业健康保险</td>
               <td colSpan={3}>
                 {getFieldDecorator('insurance', { initialValue: memberInfo.insurance })(
-                <Input className='member-info-table-input'/>
+                <Input className='member-info-table-input' style={{border: '0'}}/>
                 )}
               </td>
             </tr>
@@ -111,7 +111,7 @@ class MemberInfoTable_ extends React.Component {
               <td>药物</td>
               <td colSpan={2}>
                 {getFieldDecorator('allergyDrug', { initialValue: memberInfo.allergyDrug })(
-                <Input className='member-info-table-input'/>
+                <Input className='member-info-table-input' style={{border: '0'}}/>
                 )}
               </td>
             </tr>
@@ -120,7 +120,7 @@ class MemberInfoTable_ extends React.Component {
               <td>其他</td>
               <td colSpan={2}>
                 {getFieldDecorator('allergyOthers', { initialValue: memberInfo.allergyOthers })(
-                <Input className='member-info-table-input'/>
+                <Input className='member-info-table-input' style={{border: '0'}}/>
                 )}
               </td>
             </tr>
