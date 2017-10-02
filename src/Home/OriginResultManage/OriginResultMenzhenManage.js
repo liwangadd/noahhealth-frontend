@@ -13,11 +13,15 @@ import $ from 'jquery';
 const TabPane = Tabs.TabPane;
 const confirm = Modal.confirm;
 
+
 class OriginResultMenzhenManage extends React.Component {
 
   state = {
 
     //执行情况
+    typeName: '门诊资料',
+    secondId: -1,
+
     originResultData: [],
     originResultTableLoading: false,
     originResultPager: {pageSize: PAGE_SIZE, total: 0},
@@ -45,6 +49,18 @@ class OriginResultMenzhenManage extends React.Component {
   };
 
 
+  findSecondIdByTypeName = (originResultTypeData) => {
+
+    for(let i = 0; i < originResultTypeData.length; i++) {
+
+      if(originResultTypeData[i].label === this.state.typeName) {
+
+        return originResultTypeData[i].value;
+      }
+    }
+  }
+
+
   /**
   * 执行情况表格
   **/
@@ -63,7 +79,8 @@ class OriginResultMenzhenManage extends React.Component {
             url : SERVER + '/api/origin/list',
             type : 'POST',
             contentType: 'application/json',
-            data : JSON.stringify({userName : values.userName,
+            data : JSON.stringify({secondId: this.state.secondId,
+                                   userName : values.userName,
                                    memberNum: values.memberNum,
                                    uploaderName : values.uploaderName,
                                    checkerName: values.checkerName,
@@ -467,7 +484,7 @@ class OriginResultMenzhenManage extends React.Component {
         dataType : 'json',
         beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
         success : (result) => {
-            console.log("=======");
+
             console.log(result);
             if(result.code !== RESULT.SUCCESS) {
                 message.error(result.reason, 2);
@@ -483,12 +500,15 @@ class OriginResultMenzhenManage extends React.Component {
               originResultTypeData.push(firstTypeData);
             }
 
-console.log("*********");
-console.log(originResultTypeData);
+            let secondId = this.findSecondIdByTypeName(originResultTypeData);
+            this.setState({originResultTypeData: originResultTypeData,
+                           secondId: secondId});
 
-            this.setState({originResultTypeData: originResultTypeData});
             if(this.refs.uploadForm == null) return;
             this.refs.uploadForm.setFieldsValue({secondId: originResultTypeData.length > 0 ? originResultTypeData[0].value.toString() : "-1"});
+
+
+            this.handleSearchOriginResultList(1);
         }
     });
   }
@@ -496,8 +516,6 @@ console.log(originResultTypeData);
 
 
   componentDidMount = () => {
-
-    this.handleSearchOriginResultList(1);
 
     this.requestMembersUnderEmployee(); //拉取上传对话框中的会员信息(该employee旗下的)
     this.requestOriginResultSecondType(); //拉取电子资料类别的级联数据
@@ -521,14 +539,10 @@ console.log(originResultTypeData);
       dataIndex: 'note',
       key: 'note'
     },{
-      title: '资料类别',
-      dataIndex: 'secondName',
-      key: 'secondName'
-    },{
       title: '异常判断',
       dataIndex: 'normal',
       key: 'normal',
-      render: (normal) => normal === '异常' ? <span className="abnormal">异常</span> : normal
+      render: (normal) => normal === '异常' ? <span className="abnormal">异常</span> : null
     },{
       title: '检查医院',
       dataIndex: 'hospital',

@@ -262,19 +262,20 @@ class MemberDetailTechResult extends React.Component {
     return (
       <Spin spinning={this.state.examResultPageLoading}>
         <BackTop visibilityHeight="200"/>
+        {
+          isEmployee(role)
+          ?
           <Breadcrumb className="category-path">
-            {
-              isEmployee(role)
-              ?
-              <span>
-                <Breadcrumb.Item><Link to={ROUTE.MEMBER_MANAGE.URL_PREFIX + "/" + ROUTE.MEMBER_MANAGE.MENU_KEY}>会员管理</Link></Breadcrumb.Item>
-                <Breadcrumb.Item><Link to={ROUTE.MEMBER_DETAIL.URL_PREFIX + "/" + ROUTE.MEMBER_DETAIL.MENU_KEY + "/" + this.props.params.memberId + "/" + this.props.params.memberName}>{this.props.params.memberName}</Link></Breadcrumb.Item>
-              </span>
-              :
-              <Breadcrumb.Item><Link to={ROUTE.MEMBER_DETAIL.URL_PREFIX + "/" + ROUTE.MEMBER_DETAIL.MENU_KEY + "/" + this.props.params.memberId + "/" + this.props.params.memberName}>个人资料</Link></Breadcrumb.Item>
-            }
+            <Breadcrumb.Item><Link to={ROUTE.MEMBER_MANAGE.URL_PREFIX + "/" + ROUTE.MEMBER_MANAGE.MENU_KEY}>会员管理</Link></Breadcrumb.Item>
+            <Breadcrumb.Item><Link to={ROUTE.MEMBER_DETAIL.URL_PREFIX + "/" + ROUTE.MEMBER_DETAIL.MENU_KEY + "/" + this.props.params.memberId + "/" + this.props.params.memberName}>{this.props.params.memberName}</Link></Breadcrumb.Item>
             <Breadcrumb.Item>医技数据库</Breadcrumb.Item>
           </Breadcrumb>
+          :
+          <Breadcrumb className="category-path">
+            <Breadcrumb.Item><Link to={ROUTE.MEMBER_DETAIL.URL_PREFIX + "/" + ROUTE.MEMBER_DETAIL.MENU_KEY + "/" + this.props.params.memberId + "/" + this.props.params.memberName}>个人资料</Link></Breadcrumb.Item>
+            <Breadcrumb.Item>医技数据库</Breadcrumb.Item>
+          </Breadcrumb>
+        }
           <Tabs defaultActiveKey="1">
 
             {

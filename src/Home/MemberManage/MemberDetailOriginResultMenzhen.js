@@ -25,6 +25,10 @@ class MemberDetailOriginResultMenzhen extends React.Component {
     /*
     *电子资料库
     */
+    typeName: '门诊资料',
+    secondId: -1,
+    originResultTypeData: [],
+
     originResultTableLoading: false,
     originResultData: [],
     originResultPager: {pageSize: PAGE_SIZE, total: 0},
@@ -32,6 +36,17 @@ class MemberDetailOriginResultMenzhen extends React.Component {
     fileList: [],
 
   };
+
+  findSecondIdByTypeName = (originResultTypeData) => {
+
+    for(let i = 0; i < originResultTypeData.length; i++) {
+
+      if(originResultTypeData[i].label === this.state.typeName) {
+
+        return originResultTypeData[i].value;
+      }
+    }
+  }
 
   /**
   * 电子资料库
@@ -51,7 +66,8 @@ class MemberDetailOriginResultMenzhen extends React.Component {
             url : SERVER + '/api/origin/list/' + this.props.params.memberId,
             type : 'POST',
             contentType: 'application/json',
-            data : JSON.stringify({userName : values.userName,
+            data : JSON.stringify({secondId: this.state.secondId,
+                                   userName : values.userName,
                                    memberNum: values.memberNum,
                                    uploaderName : values.uploaderName,
                                    checkerName: values.checkerName,
@@ -128,9 +144,46 @@ class MemberDetailOriginResultMenzhen extends React.Component {
     });
   }
 
+  //拉取电子资料类别级联数据
+  requestOriginResultSecondType = () => {
+
+    console.log('拉取电子资料类别数据');
+    $.ajax({
+        url : SERVER + '/api/origin_category/level',
+        type : 'GET',
+        dataType : 'json',
+        beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
+        success : (result) => {
+
+            console.log(result);
+            if(result.code !== RESULT.SUCCESS) {
+                message.error(result.reason, 2);
+                return;
+            }
+
+            //将后端返回的map整理成级联列表识别的数据结构
+            let originResultTypeData = [];
+            for(let firstType in result.content) {
+
+              //加入大类
+              let firstTypeData = {value: result.content[firstType][0].id, label: firstType};
+              originResultTypeData.push(firstTypeData);
+            }
+
+            let secondId = this.findSecondIdByTypeName(originResultTypeData);
+            this.setState({originResultTypeData: originResultTypeData,
+                           secondId: secondId});
+
+            this.requestOriginResultOfMember(1);
+        }
+    });
+  }
+
+
+
   componentDidMount = () => {
 
-      this.requestOriginResultOfMember(1);
+      this.requestOriginResultSecondType();
   }
 
   render(){
@@ -142,14 +195,10 @@ class MemberDetailOriginResultMenzhen extends React.Component {
       dataIndex: 'note',
       key: 'note'
     },{
-      title: '资料类别',
-      dataIndex: 'secondName',
-      key: 'secondName'
-    },{
       title: '异常判断',
       dataIndex: 'normal',
       key: 'normal',
-      render: (normal) => normal === '异常' ? <span className="abnormal">异常</span> : normal
+      render: (normal) => normal === '异常' ? <span className="abnormal">异常</span> : null
     },{
       title: '检查医院',
       dataIndex: 'hospital',
@@ -182,24 +231,25 @@ class MemberDetailOriginResultMenzhen extends React.Component {
     return (
       <div>
         <BackTop visibilityHeight="200"/>
-          <Breadcrumb className="category-path">
-            {
-              isEmployee(role)
-              ?
-              <span>
-                <Breadcrumb.Item><Link to={ROUTE.MEMBER_MANAGE.URL_PREFIX + "/" + ROUTE.MEMBER_MANAGE.MENU_KEY}>会员管理</Link></Breadcrumb.Item>
-                <Breadcrumb.Item><Link to={ROUTE.MEMBER_DETAIL.URL_PREFIX + "/" + ROUTE.MEMBER_DETAIL.MENU_KEY + "/" + this.props.params.memberId + "/" + this.props.params.memberName}>{this.props.params.memberName}</Link></Breadcrumb.Item>
-              </span>
-              :
+          {
+            isEmployee(role)
+            ?
+            <Breadcrumb className="category-path">
+              <Breadcrumb.Item><Link to={ROUTE.MEMBER_MANAGE.URL_PREFIX + "/" + ROUTE.MEMBER_MANAGE.MENU_KEY}>会员管理</Link></Breadcrumb.Item>
+              <Breadcrumb.Item><Link to={ROUTE.MEMBER_DETAIL.URL_PREFIX + "/" + ROUTE.MEMBER_DETAIL.MENU_KEY + "/" + this.props.params.memberId + "/" + this.props.params.memberName}>{this.props.params.memberName}</Link></Breadcrumb.Item>
+              <Breadcrumb.Item>门诊资料</Breadcrumb.Item>
+            </Breadcrumb>
+            :
+            <Breadcrumb className="category-path">
               <Breadcrumb.Item><Link to={ROUTE.MEMBER_DETAIL.URL_PREFIX + "/" + ROUTE.MEMBER_DETAIL.MENU_KEY + "/" + this.props.params.memberId + "/" + this.props.params.memberName}>个人资料</Link></Breadcrumb.Item>
-            }
-            <Breadcrumb.Item>门诊资料</Breadcrumb.Item>
-          </Breadcrumb>
+              <Breadcrumb.Item>门诊资料</Breadcrumb.Item>
+            </Breadcrumb>
+          }
           <Tabs defaultActiveKey="1">
 
             {
               role === ROLE.EMPLOYEE_ADVISER || role === ROLE.EMPLOYEE_ADVISE_MANAGER || role === ROLE.EMPLOYEE_ADMIN
-              || role === ROLE.MEMBER_2 || role === ROLE.MEMBER_3
+              || role === ROLE.MEMBER_1 || role === ROLE.MEMBER_2 || role === ROLE.MEMBER_3
               ?
               <TabPane tab="门诊资料" key="1">
                 <MemberDetailOriginResultSearchForm ref="originResultSearchForm" requestOriginResultOfMember={this.requestOriginResultOfMember}/>

@@ -19,6 +19,13 @@ import MemberManage from './Home/MemberManage/MemberManage.js';
 import MemberDetail from './Home/MemberManage/MemberDetail.js';
 
 import MemberDetailOriginResultMenzhen from './Home/MemberManage/MemberDetailOriginResultMenzhen.js';
+import MemberDetailOriginResultZhuyuan from './Home/MemberManage/MemberDetailOriginResultZhuyuan.js';
+import MemberDetailOriginResultTijian from './Home/MemberManage/MemberDetailOriginResultTijian.js';
+import MemberDetailOriginResultYingxiang from './Home/MemberManage/MemberDetailOriginResultYingxiang.js';
+import MemberDetailOriginResultYake from './Home/MemberManage/MemberDetailOriginResultYake.js';
+import MemberDetailOriginResultZhongyi from './Home/MemberManage/MemberDetailOriginResultZhongyi.js';
+import MemberDetailOriginResultXinli from './Home/MemberManage/MemberDetailOriginResultXinli.js';
+import MemberDetailOriginResultQita from './Home/MemberManage/MemberDetailOriginResultQita.js';
 
 import MemberDetailHealthResult from './Home/MemberManage/MemberDetailHealthResult.js';
 import MemberDetailAssayResult from './Home/MemberManage/MemberDetailAssayResult.js';
@@ -29,6 +36,13 @@ import SecondCategoryManage from './Home/CategoryManage/SecondCategoryManage.js'
 import ThirdCategoryManage from './Home/CategoryManage/ThirdCategoryManage.js';
 
 import OriginResultMenzhenManage from './Home/OriginResultManage/OriginResultMenzhenManage.js';
+import OriginResultZhuyuanManage from './Home/OriginResultManage/OriginResultZhuyuanManage.js';
+import OriginResultTijianManage from './Home/OriginResultManage/OriginResultTijianManage.js';
+import OriginResultYingxiangManage from './Home/OriginResultManage/OriginResultYingxiangManage.js';
+import OriginResultYakeManage from './Home/OriginResultManage/OriginResultYakeManage.js';
+import OriginResultZhongyiManage from './Home/OriginResultManage/OriginResultZhongyiManage.js';
+import OriginResultXinliManage from './Home/OriginResultManage/OriginResultXinliManage.js';
+import OriginResultQitaManage from './Home/OriginResultManage/OriginResultQitaManage.js';
 
 import ExamResultAssayManage from './Home/ExamResultManage/ExamResultAssayManage.js';
 import ExamResultTechManage from './Home/ExamResultManage/ExamResultTechManage.js';
@@ -102,6 +116,14 @@ const certifyAccess = function(nextState, replace){
       case ROUTE.THIRD_CATEGORY_MANAGE.URL_PREFIX:certifyRole(replace, role, ROUTE.THIRD_CATEGORY_MANAGE.PERMISSION);break;
 
       case ROUTE.ORIGIN_RESULT_MENZHEN_MANAGE.URL_PREFIX:certifyRole(replace, role, ROUTE.ORIGIN_RESULT_MENZHEN_MANAGE.PERMISSION);break;
+      case ROUTE.ORIGIN_RESULT_ZHUYUAN_MANAGE.URL_PREFIX:certifyRole(replace, role, ROUTE.ORIGIN_RESULT_ZHUYUAN_MANAGE.PERMISSION);break;
+      case ROUTE.ORIGIN_RESULT_TIJIAN_MANAGE.URL_PREFIX:certifyRole(replace, role, ROUTE.ORIGIN_RESULT_TIJIAN_MANAGE.PERMISSION);break;
+      case ROUTE.ORIGIN_RESULT_YINGXIANG_MANAGE.URL_PREFIX:certifyRole(replace, role, ROUTE.ORIGIN_RESULT_YINGXIANG_MANAGE.PERMISSION);break;
+      case ROUTE.ORIGIN_RESULT_YAKE_MANAGE.URL_PREFIX:certifyRole(replace, role, ROUTE.ORIGIN_RESULT_YAKE_MANAGE.PERMISSION);break;
+      case ROUTE.ORIGIN_RESULT_ZHONGYI_MANAGE.URL_PREFIX:certifyRole(replace, role, ROUTE.ORIGIN_RESULT_ZHONGYI_MANAGE.PERMISSION);break;
+      case ROUTE.ORIGIN_RESULT_XINLI_MANAGE.URL_PREFIX:certifyRole(replace, role, ROUTE.ORIGIN_RESULT_XINLI_MANAGE.PERMISSION);break;
+      case ROUTE.ORIGIN_RESULT_QITA_MANAGE.URL_PREFIX:certifyRole(replace, role, ROUTE.ORIGIN_RESULT_QITA_MANAGE.PERMISSION);break;
+
 
       case ROUTE.EXAM_RESULT_ASSAY_MANAGE.URL_PREFIX:certifyRole(replace, role, ROUTE.EXAM_RESULT_ASSAY_MANAGE.PERMISSION);break;
       case ROUTE.EXAM_RESULT_ASSAY_CLOSEUP.URL_PREFIX:certifyRole(replace, role, ROUTE.EXAM_RESULT_ASSAY_CLOSEUP.PERMISSION);break;
@@ -154,6 +176,13 @@ class AppRouter extends React.Component {
                       <Route path={ROUTE.MEMBER_DETAIL.URL} component={MemberDetail}/>
 
                       <Route path={ROUTE.MEMBER_DETAIL_ORIGIN_RESULT_MENZHEN.URL} component={MemberDetailOriginResultMenzhen}/>
+                      <Route path={ROUTE.MEMBER_DETAIL_ORIGIN_RESULT_ZHUYUAN.URL} component={MemberDetailOriginResultZhuyuan}/>
+                      <Route path={ROUTE.MEMBER_DETAIL_ORIGIN_RESULT_TIJIAN.URL} component={MemberDetailOriginResultTijian}/>
+                      <Route path={ROUTE.MEMBER_DETAIL_ORIGIN_RESULT_YINGXIANG.URL} component={MemberDetailOriginResultYingxiang}/>
+                      <Route path={ROUTE.MEMBER_DETAIL_ORIGIN_RESULT_YAKE.URL} component={MemberDetailOriginResultYake}/>
+                      <Route path={ROUTE.MEMBER_DETAIL_ORIGIN_RESULT_ZHONGYI.URL} component={MemberDetailOriginResultZhongyi}/>
+                      <Route path={ROUTE.MEMBER_DETAIL_ORIGIN_RESULT_XINLI.URL} component={MemberDetailOriginResultXinli}/>
+                      <Route path={ROUTE.MEMBER_DETAIL_ORIGIN_RESULT_QITA.URL} component={MemberDetailOriginResultQita}/>
 
 
                       <Route path={ROUTE.MEMBER_DETAIL_HEALTH_RESULT.URL} component={MemberDetailHealthResult}/>
@@ -165,6 +194,13 @@ class AppRouter extends React.Component {
                       <Route path={ROUTE.THIRD_CATEGORY_MANAGE.URL} component={ThirdCategoryManage}/>
 
                       <Route path={ROUTE.ORIGIN_RESULT_MENZHEN_MANAGE.URL} component={OriginResultMenzhenManage}/>
+                      <Route path={ROUTE.ORIGIN_RESULT_ZHUYUAN_MANAGE.URL} component={OriginResultZhuyuanManage}/>
+                      <Route path={ROUTE.ORIGIN_RESULT_TIJIAN_MANAGE.URL} component={OriginResultTijianManage}/>
+                      <Route path={ROUTE.ORIGIN_RESULT_YINGXIANG_MANAGE.URL} component={OriginResultYingxiangManage}/>
+                      <Route path={ROUTE.ORIGIN_RESULT_YAKE_MANAGE.URL} component={OriginResultYakeManage}/>
+                      <Route path={ROUTE.ORIGIN_RESULT_ZHONGYI_MANAGE.URL} component={OriginResultZhongyiManage}/>
+                      <Route path={ROUTE.ORIGIN_RESULT_XINLI_MANAGE.URL} component={OriginResultXinliManage}/>
+                      <Route path={ROUTE.ORIGIN_RESULT_QITA_MANAGE.URL} component={OriginResultQitaManage}/>
 
                       <Route path={ROUTE.EXAM_RESULT_ASSAY_MANAGE.URL} component={ExamResultAssayManage}/>
                       <Route path={ROUTE.EXAM_RESULT_TECH_MANAGE.URL} component={ExamResultTechManage}/>

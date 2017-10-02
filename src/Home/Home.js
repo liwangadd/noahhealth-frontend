@@ -121,6 +121,13 @@ class Home extends React.Component {
       case ROUTE.FIRST_CATEGORY_MANAGE.MENU_KEY: targetUrl = ROUTE.FIRST_CATEGORY_MANAGE.URL_PREFIX + "/" + ROUTE.FIRST_CATEGORY_MANAGE.MENU_KEY + "/1"; break;
 
       case ROUTE.ORIGIN_RESULT_MENZHEN_MANAGE.MENU_KEY: targetUrl = ROUTE.ORIGIN_RESULT_MENZHEN_MANAGE.URL_PREFIX + "/" + ROUTE.ORIGIN_RESULT_MENZHEN_MANAGE.MENU_KEY; break;
+      case ROUTE.ORIGIN_RESULT_ZHUYUAN_MANAGE.MENU_KEY: targetUrl = ROUTE.ORIGIN_RESULT_ZHUYUAN_MANAGE.URL_PREFIX + "/" + ROUTE.ORIGIN_RESULT_ZHUYUAN_MANAGE.MENU_KEY; break;
+      case ROUTE.ORIGIN_RESULT_TIJIAN_MANAGE.MENU_KEY: targetUrl = ROUTE.ORIGIN_RESULT_TIJIAN_MANAGE.URL_PREFIX + "/" + ROUTE.ORIGIN_RESULT_TIJIAN_MANAGE.MENU_KEY; break;
+      case ROUTE.ORIGIN_RESULT_YINGXIANG_MANAGE.MENU_KEY: targetUrl = ROUTE.ORIGIN_RESULT_YINGXIANG_MANAGE.URL_PREFIX + "/" + ROUTE.ORIGIN_RESULT_YINGXIANG_MANAGE.MENU_KEY; break;
+      case ROUTE.ORIGIN_RESULT_YAKE_MANAGE.MENU_KEY: targetUrl = ROUTE.ORIGIN_RESULT_YAKE_MANAGE.URL_PREFIX + "/" + ROUTE.ORIGIN_RESULT_YAKE_MANAGE.MENU_KEY; break;
+      case ROUTE.ORIGIN_RESULT_ZHONGYI_MANAGE.MENU_KEY: targetUrl = ROUTE.ORIGIN_RESULT_ZHONGYI_MANAGE.URL_PREFIX + "/" + ROUTE.ORIGIN_RESULT_ZHONGYI_MANAGE.MENU_KEY; break;
+      case ROUTE.ORIGIN_RESULT_XINLI_MANAGE.MENU_KEY: targetUrl = ROUTE.ORIGIN_RESULT_XINLI_MANAGE.URL_PREFIX + "/" + ROUTE.ORIGIN_RESULT_XINLI_MANAGE.MENU_KEY; break;
+      case ROUTE.ORIGIN_RESULT_QITA_MANAGE.MENU_KEY: targetUrl = ROUTE.ORIGIN_RESULT_QITA_MANAGE.URL_PREFIX + "/" + ROUTE.ORIGIN_RESULT_QITA_MANAGE.MENU_KEY; break;
 
       case ROUTE.EXAM_RESULT_ASSAY_MANAGE.MENU_KEY: targetUrl = ROUTE.EXAM_RESULT_ASSAY_MANAGE.URL_PREFIX + "/" + ROUTE.EXAM_RESULT_ASSAY_MANAGE.MENU_KEY; break;
       case ROUTE.EXAM_RESULT_TECH_MANAGE.MENU_KEY: targetUrl = ROUTE.EXAM_RESULT_TECH_MANAGE.URL_PREFIX + "/" + ROUTE.EXAM_RESULT_TECH_MANAGE.MENU_KEY; break;
@@ -206,25 +213,25 @@ class Home extends React.Component {
                 <Menu.Item key={ROUTE.ORIGIN_RESULT_MENZHEN_MANAGE.MENU_KEY}>
                   <span className="menu-item-font">门诊资料</span>
                 </Menu.Item>
-                <Menu.Item key="22">
+                <Menu.Item key={ROUTE.ORIGIN_RESULT_ZHUYUAN_MANAGE.MENU_KEY}>
                   <span className="menu-item-font">住院资料</span>
                 </Menu.Item>
-                <Menu.Item key="33">
+                <Menu.Item key={ROUTE.ORIGIN_RESULT_TIJIAN_MANAGE.MENU_KEY}>
                   <span className="menu-item-font">体检资料</span>
                 </Menu.Item>
-                <Menu.Item key="66">
+                <Menu.Item key={ROUTE.ORIGIN_RESULT_YINGXIANG_MANAGE.MENU_KEY}>
                   <span className="menu-item-font">影像资料</span>
                 </Menu.Item>
-                <Menu.Item key="44">
+                <Menu.Item key={ROUTE.ORIGIN_RESULT_YAKE_MANAGE.MENU_KEY}>
                   <span className="menu-item-font">牙科资料</span>
                 </Menu.Item>
-                <Menu.Item key="55">
+                <Menu.Item key={ROUTE.ORIGIN_RESULT_ZHONGYI_MANAGE.MENU_KEY}>
                   <span className="menu-item-font">中医资料</span>
                 </Menu.Item>
-                <Menu.Item key="771">
+                <Menu.Item key={ROUTE.ORIGIN_RESULT_XINLI_MANAGE.MENU_KEY}>
                   <span className="menu-item-font">心理资料</span>
                 </Menu.Item>
-                <Menu.Item key="883">
+                <Menu.Item key={ROUTE.ORIGIN_RESULT_QITA_MANAGE.MENU_KEY}>
                   <span className="menu-item-font">其他资料</span>
                 </Menu.Item>
               </SubMenu>
