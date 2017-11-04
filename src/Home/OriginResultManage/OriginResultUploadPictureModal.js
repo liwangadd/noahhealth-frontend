@@ -25,7 +25,7 @@ class OriginResultUploadPictureModal_ extends React.Component {
               <Icon type="upload" /> 上传
             </Button>
             <Tag color="orange" className="upload-file-warning">文件名请勿包含下划线</Tag>
-            <Tag color="orange">文件大小请勿超过10MB</Tag>
+            <Tag color="orange">文件大小请勿超过50MB</Tag>
           </Upload>
         </Modal>
     );
