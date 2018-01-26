@@ -1,10 +1,10 @@
-import {LOADING_DELAY_TIME} from './../../App/PublicConstant.js';
+import { LOADING_DELAY_TIME } from './../../App/PublicConstant.js';
 import React from 'react';
-import { Layout, Spin} from 'antd';
+import { Layout, Spin } from 'antd';
 import VerticalRegisterForm from './VerticalRegisterForm.js';
 import IndexHeader from './../IndexHeader.js';
 import IndexFooter from './../IndexFooter.js';
-const { Header, Content} = Layout;
+const { Header, Content } = Layout;
 
 class Register extends React.Component {
   state = {
@@ -23,7 +23,7 @@ class Register extends React.Component {
   handleLoading = (onoff, e) => {
     e.preventDefault();
     this.setState({
-      loading : onoff
+      loading: onoff
     })
   }
 
@@ -31,15 +31,15 @@ class Register extends React.Component {
 
     return (
 
-        <Spin spinning={this.state.loading} delay={LOADING_DELAY_TIME} tip='注册中'>
-          <Layout>
-            <IndexHeader />
-            <Content className="index-content">
-              <VerticalRegisterForm  handleLoading={this.handleLoading}/>
-            </Content>
-            <IndexFooter />
-          </Layout>
-        </Spin>
+      <Spin spinning={this.state.loading} delay={LOADING_DELAY_TIME} tip='注册中'>
+        <Layout>
+          <IndexHeader />
+          <Content className="index-content">
+            <VerticalRegisterForm handleLoading={this.handleLoading} />
+          </Content>
+          <IndexFooter />
+        </Layout>
+      </Spin>
     );
   }
 }

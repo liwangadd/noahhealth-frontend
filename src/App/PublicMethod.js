@@ -1,21 +1,21 @@
-import {SESSION, ROLE} from './PublicConstant.js'
+import { SESSION, ROLE } from './PublicConstant.js'
 
 //清空登录状态信息
-const clearSession = function() {
+const clearSession = function () {
 
-    sessionStorage.removeItem(SESSION.TOKEN);
-    sessionStorage.removeItem(SESSION.USER_ID);
-    sessionStorage.removeItem(SESSION.USERNAME);
-    sessionStorage.removeItem(SESSION.ROLE);
-    sessionStorage.removeItem(SESSION.NAME);
-    sessionStorage.removeItem(SESSION.EXPIRED_TIME);
-    sessionStorage.removeItem(SESSION.MENUITEM_KEY);
+  sessionStorage.removeItem(SESSION.TOKEN);
+  sessionStorage.removeItem(SESSION.USER_ID);
+  sessionStorage.removeItem(SESSION.USERNAME);
+  sessionStorage.removeItem(SESSION.ROLE);
+  sessionStorage.removeItem(SESSION.NAME);
+  sessionStorage.removeItem(SESSION.EXPIRED_TIME);
+  sessionStorage.removeItem(SESSION.MENUITEM_KEY);
 };
 
 //判断一个用户是否为职员
-const isEmployee = function(role) {
+const isEmployee = function (role) {
 
-  switch(role){
+  switch (role) {
 
     case ROLE.EMPLOYEE_ADMIN:
     case ROLE.EMPLOYEE_FINANCER:
@@ -28,18 +28,18 @@ const isEmployee = function(role) {
 }
 
 //判断一个用户是否为系统管理员
-const isAdmin = function(role) {
+const isAdmin = function (role) {
 
-  switch(role){
+  switch (role) {
     case ROLE.EMPLOYEE_ADMIN: return true;
     default: return false;
   }
 }
 
 //判断一个用户是否为顾问员工/主管
-const isAdviser = function(role) {
+const isAdviser = function (role) {
 
-  switch(role){
+  switch (role) {
     case ROLE.EMPLOYEE_ADVISER:
     case ROLE.EMPLOYEE_ADVISE_MANAGER: return true;
     default: return false;
@@ -47,27 +47,27 @@ const isAdviser = function(role) {
 }
 
 //判断一个用户是否为顾问员工
-const isAdviserReal = function(role) {
+const isAdviserReal = function (role) {
 
-  switch(role){
+  switch (role) {
     case ROLE.EMPLOYEE_ADVISER: return true;
     default: return false;
   }
 }
 
 //判断一个用户是否为顾问主管
-const isAdviserManager = function(role) {
+const isAdviserManager = function (role) {
 
-  switch(role){
+  switch (role) {
     case ROLE.EMPLOYEE_ADVISE_MANAGER: return true;
     default: return false;
   }
 }
 
 //判断一个用户是否为档案员工/主管
-const isArchiver = function(role) {
+const isArchiver = function (role) {
 
-  switch(role){
+  switch (role) {
     case ROLE.EMPLOYEE_ARCHIVER:
     case ROLE.EMPLOYEE_ARCHIVE_MANAGER: return true;
     default: return false;
@@ -75,39 +75,39 @@ const isArchiver = function(role) {
 }
 
 //判断一个用户是否为档案员工
-const isArchiverReal = function(role) {
+const isArchiverReal = function (role) {
 
-  switch(role){
+  switch (role) {
     case ROLE.EMPLOYEE_ARCHIVER: return true;
     default: return false;
   }
 }
 
 //判断一个用户是否为档案主管
-const isArchiverManager = function(role) {
+const isArchiverManager = function (role) {
 
-  switch(role){
+  switch (role) {
     case ROLE.EMPLOYEE_ARCHIVE_MANAGER: return true;
     default: return false;
   }
 }
 
 //判断一个用户是否为会员
-const isMember = function(role) {
+const isMember = function (role) {
 
-  switch(role){
+  switch (role) {
 
     case ROLE.MEMBER_1:
     case ROLE.MEMBER_2:
-    case ROLE.MEMBER_3:return true;
+    case ROLE.MEMBER_3: return true;
     default: return false;
   }
 }
 
 //判断一个用户是否为主管
-const isManager = function(role) {
+const isManager = function (role) {
 
-  switch(role){
+  switch (role) {
     case ROLE.EMPLOYEE_ARCHIVE_MANAGER:
     case ROLE.EMPLOYEE_ADVISE_MANAGER: return true;
     default: return false;
@@ -115,9 +115,9 @@ const isManager = function(role) {
 }
 
 //判断一个用户是否为顾问部主管、顾问部员工、档案部主管
-const isRoleHasChildren = function(role) {
+const isRoleHasChildren = function (role) {
 
-  switch(role){
+  switch (role) {
     case ROLE.EMPLOYEE_ADVISER:
     case ROLE.EMPLOYEE_ARCHIVE_MANAGER:
     case ROLE.EMPLOYEE_ADVISE_MANAGER: return true;
@@ -126,7 +126,7 @@ const isRoleHasChildren = function(role) {
 }
 
 //判断数组中是否存在obj元素
-const containsElement = function(obj, arr) {
+const containsElement = function (obj, arr) {
 
   var i = arr.length;
   while (i--) {
@@ -138,7 +138,7 @@ const containsElement = function(obj, arr) {
 };
 
 //判断imgUrl对应图片资源是否存在
-const isImgExist = function(imgurl) {
+const isImgExist = function (imgurl) {
   var ImgObj = new Image(); //判断图片是否存在
   ImgObj.src = imgurl;
   //没有图片，则返回-1

@@ -1,6 +1,6 @@
 import React from 'react';
-import {ROLE, SESSION} from './../../App/PublicConstant.js';
-import { Form, Row, Col, Input, Button, Select} from 'antd';
+import { ROLE, SESSION } from './../../App/PublicConstant.js';
+import { Form, Row, Col, Input, Button, Select } from 'antd';
 const FormItem = Form.Item;
 const Option = Select.Option;
 
@@ -30,7 +30,7 @@ class EmployeeSearchForm_ extends React.Component {
 
     //角色级别选择器
     let roleData = [];
-    if(role === ROLE.EMPLOYEE_ADMIN) roleData = [ROLE.EMPLOYEE_ADMIN, ROLE.EMPLOYEE_FINANCER, ROLE.EMPLOYEE_ARCHIVE_MANAGER, ROLE.EMPLOYEE_ARCHIVER, ROLE.EMPLOYEE_ADVISE_MANAGER, ROLE.EMPLOYEE_ADVISER];
+    if (role === ROLE.EMPLOYEE_ADMIN) roleData = [ROLE.EMPLOYEE_ADMIN, ROLE.EMPLOYEE_FINANCER, ROLE.EMPLOYEE_ARCHIVE_MANAGER, ROLE.EMPLOYEE_ARCHIVER, ROLE.EMPLOYEE_ADVISE_MANAGER, ROLE.EMPLOYEE_ADVISER];
     const roleOptions = roleData.map((roleName, index) => <Option value={roleName} key={index}>{roleName}</Option>);
 
 
@@ -56,7 +56,7 @@ class EmployeeSearchForm_ extends React.Component {
                   <Option value="">全部</Option>
                   {roleOptions}
                 </Select>
-              )}
+                )}
             </FormItem>
           </Col>
         </Row>

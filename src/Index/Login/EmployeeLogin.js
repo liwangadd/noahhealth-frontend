@@ -1,10 +1,10 @@
-import {LOADING_DELAY_TIME} from './../../App/PublicConstant.js';
+import { LOADING_DELAY_TIME } from './../../App/PublicConstant.js';
 import React from 'react';
-import { Layout, Spin} from 'antd';
+import { Layout, Spin } from 'antd';
 import VerticalLoginForm from './VerticalLoginForm.js';
 import IndexHeaderOfEmployee from './../IndexHeaderOfEmployee.js';
 import IndexFooter from './../IndexFooter.js';
-const { Header, Content} = Layout;
+const { Header, Content } = Layout;
 
 class EmployeeLogin extends React.Component {
   state = {
@@ -20,21 +20,21 @@ class EmployeeLogin extends React.Component {
     });
   }
 
-  handleLoading = (onoff) => this.setState({loading : onoff})
+  handleLoading = (onoff) => this.setState({ loading: onoff })
 
   render() {
 
     return (
 
-        <Spin spinning={this.state.loading} delay={LOADING_DELAY_TIME} tip='登录中'>
-          <Layout>
-            <IndexHeaderOfEmployee />
-            <Content className="index-content">
-                <VerticalLoginForm handleLoading={this.handleLoading} roleType="employee"/>
-            </Content>
-            <IndexFooter />
-          </Layout>
-        </Spin>
+      <Spin spinning={this.state.loading} delay={LOADING_DELAY_TIME} tip='登录中'>
+        <Layout>
+          <IndexHeaderOfEmployee />
+          <Content className="index-content">
+            <VerticalLoginForm handleLoading={this.handleLoading} roleType="employee" />
+          </Content>
+          <IndexFooter />
+        </Layout>
+      </Spin>
     );
   }
 }

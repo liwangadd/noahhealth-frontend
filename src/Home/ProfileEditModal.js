@@ -1,10 +1,10 @@
 import './Home.css';
 import React from 'react';
-import {SERVER, SESSION, FILE_SERVER, RESULT} from './../App/PublicConstant.js';
-import {isMember} from './../App/PublicMethod.js';
-import {formatDate} from './../App/PublicUtil.js';
-import {REGEX} from './../App/PublicRegex.js';
-import { Form, Input,Modal, Icon, Button, Upload, message, Tabs} from 'antd';
+import { SERVER, SESSION, FILE_SERVER, RESULT } from './../App/PublicConstant.js';
+import { isMember } from './../App/PublicMethod.js';
+import { formatDate } from './../App/PublicUtil.js';
+import { REGEX } from './../App/PublicRegex.js';
+import { Form, Input, Modal, Icon, Button, Upload, message, Tabs } from 'antd';
 import $ from 'jquery';
 const FormItem = Form.Item;
 const TabPane = Tabs.TabPane;
@@ -15,7 +15,7 @@ class ProfileEditModal_ extends React.Component {
   state = {
     isSendSmsBtnDisabled: false,
     sendSmsBtnStr: '发送',
-    countDown: 60 ,//倒计时
+    countDown: 60,//倒计时
     imageUrl: FILE_SERVER + sessionStorage.getItem(SESSION.AVATAR),
 
     //加载圈
@@ -61,30 +61,30 @@ class ProfileEditModal_ extends React.Component {
     this.props.form.validateFields(['name'], (err, values) => {
       if (!err) {
 
-        console.log('修改用户'+ sessionStorage.getItem(SESSION.USER_ID) +'基本信息', values);
+        console.log('修改用户' + sessionStorage.getItem(SESSION.USER_ID) + '基本信息', values);
 
-        this.setState({submitProfileInfoLoading: true});
+        this.setState({ submitProfileInfoLoading: true });
         $.ajax({
-            url : SERVER + '/api/user/' + sessionStorage.getItem(SESSION.USER_ID),
-            type : 'PUT',
-            contentType: 'application/json',
-            dataType : 'json',
-            data : JSON.stringify({name: values.name}),
-            beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
-            success : (result) => {
-              console.log(result);
-              if(result.code === RESULT.SUCCESS) {
+          url: SERVER + '/api/user/' + sessionStorage.getItem(SESSION.USER_ID),
+          type: 'PUT',
+          contentType: 'application/json',
+          dataType: 'json',
+          data: JSON.stringify({ name: values.name }),
+          beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
+          success: (result) => {
+            console.log(result);
+            if (result.code === RESULT.SUCCESS) {
 
-                //关闭加载圈、对话框
-                this.setState({submitProfileInfoLoading: false});
-                message.success(result.reason, 2);
-              } else {
+              //关闭加载圈、对话框
+              this.setState({ submitProfileInfoLoading: false });
+              message.success(result.reason, 2);
+            } else {
 
-                //关闭加载圈
-                this.setState({ submitProfileInfoLoading: false });
-                message.error(result.reason, 2);
-              }
+              //关闭加载圈
+              this.setState({ submitProfileInfoLoading: false });
+              message.error(result.reason, 2);
             }
+          }
         });
       }
     });
@@ -96,30 +96,30 @@ class ProfileEditModal_ extends React.Component {
     e.preventDefault();
     this.props.form.validateFields(['oldPassword', 'newPassword', 'confirmPassword'], (err, values) => {
       if (!err) {
-        console.log('修改用户'+ sessionStorage.getItem(SESSION.USER_ID) +'密码', values);
+        console.log('修改用户' + sessionStorage.getItem(SESSION.USER_ID) + '密码', values);
 
-        this.setState({submitPasswordChangeLoading: true});
+        this.setState({ submitPasswordChangeLoading: true });
         $.ajax({
-            url : SERVER + '/api/user/password/' + sessionStorage.getItem(SESSION.USER_ID),
-            type : 'PUT',
-            contentType: 'application/json',
-            dataType : 'json',
-            data : JSON.stringify({oldPassword: values.oldPassword, newPassword: values.newPassword}),
-            beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
-            success : (result) => {
-              console.log(result);
-              if(result.code === RESULT.SUCCESS) {
+          url: SERVER + '/api/user/password/' + sessionStorage.getItem(SESSION.USER_ID),
+          type: 'PUT',
+          contentType: 'application/json',
+          dataType: 'json',
+          data: JSON.stringify({ oldPassword: values.oldPassword, newPassword: values.newPassword }),
+          beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
+          success: (result) => {
+            console.log(result);
+            if (result.code === RESULT.SUCCESS) {
 
-                //关闭加载圈、对话框
-                this.setState({submitPasswordChangeLoading: false});
-                message.success(result.reason, 2);
-              } else {
+              //关闭加载圈、对话框
+              this.setState({ submitPasswordChangeLoading: false });
+              message.success(result.reason, 2);
+            } else {
 
-                //关闭加载圈
-                this.setState({ submitPasswordChangeLoading: false });
-                message.error(result.reason, 2);
-              }
+              //关闭加载圈
+              this.setState({ submitPasswordChangeLoading: false });
+              message.error(result.reason, 2);
             }
+          }
         });
       }
     });
@@ -127,12 +127,12 @@ class ProfileEditModal_ extends React.Component {
   //两次输入的密码匹配
   handleConfirmPassword = (rule, value, callback) => {
 
-      let password = this.props.form.getFieldValue('newPassword');
-      let confirmPassword = this.props.form.getFieldValue('confirmPassword');
-      if(password !== undefined && confirmPassword !== undefined && password !== confirmPassword) {
-          callback("两次密码输入不一致");
-      }
-      callback();
+    let password = this.props.form.getFieldValue('newPassword');
+    let confirmPassword = this.props.form.getFieldValue('confirmPassword');
+    if (password !== undefined && confirmPassword !== undefined && password !== confirmPassword) {
+      callback("两次密码输入不一致");
+    }
+    callback();
   }
 
   //提交手机更改
@@ -142,30 +142,30 @@ class ProfileEditModal_ extends React.Component {
     this.props.form.validateFields(['phone', 'inputCode'], (err, values) => {
       if (!err) {
 
-        console.log('修改用户'+ sessionStorage.getItem(SESSION.USER_ID) +'手机号', values);
+        console.log('修改用户' + sessionStorage.getItem(SESSION.USER_ID) + '手机号', values);
 
-        this.setState({submitPhoneChangeLoading: true});
+        this.setState({ submitPhoneChangeLoading: true });
         $.ajax({
-            url : SERVER + '/api/user/' + sessionStorage.getItem(SESSION.USER_ID),
-            type : 'PUT',
-            contentType: 'application/json',
-            dataType : 'json',
-            data : JSON.stringify({phone: values.phone, inputCode: values.inputCode}),
-            beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
-            success : (result) => {
-              console.log(result);
-              if(result.code === RESULT.SUCCESS) {
+          url: SERVER + '/api/user/' + sessionStorage.getItem(SESSION.USER_ID),
+          type: 'PUT',
+          contentType: 'application/json',
+          dataType: 'json',
+          data: JSON.stringify({ phone: values.phone, inputCode: values.inputCode }),
+          beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
+          success: (result) => {
+            console.log(result);
+            if (result.code === RESULT.SUCCESS) {
 
-                //关闭加载圈、对话框
-                this.setState({submitPhoneChangeLoading: false});
-                message.success(result.reason, 2);
-              } else {
+              //关闭加载圈、对话框
+              this.setState({ submitPhoneChangeLoading: false });
+              message.success(result.reason, 2);
+            } else {
 
-                //关闭加载圈
-                this.setState({ submitPhoneChangeLoading: false });
-                message.error(result.reason, 2);
-              }
+              //关闭加载圈
+              this.setState({ submitPhoneChangeLoading: false });
+              message.error(result.reason, 2);
             }
+          }
         });
       }
     });
@@ -173,54 +173,54 @@ class ProfileEditModal_ extends React.Component {
 
   //请求发送验证码
   handleSendSms = (e) => {
-      e.preventDefault();
+    e.preventDefault();
 
-      this.props.form.validateFields(['phone'], (err, values) => {
+    this.props.form.validateFields(['phone'], (err, values) => {
 
-        if (!err) {
-          $.ajax({
-              url : SERVER + '/api/auth/send_sms',
-              type : 'POST',
-              contentType: 'application/json',
-              data : JSON.stringify({action: '修改手机', phone : values.phone}),
-              dataType : 'json',
-              success : (result) => {
+      if (!err) {
+        $.ajax({
+          url: SERVER + '/api/auth/send_sms',
+          type: 'POST',
+          contentType: 'application/json',
+          data: JSON.stringify({ action: '修改手机', phone: values.phone }),
+          dataType: 'json',
+          success: (result) => {
 
-                if(result.code === RESULT.SUCCESS) {
+            if (result.code === RESULT.SUCCESS) {
 
-                  message.success(result.reason, 2);
-                  var timer = setInterval(() => {
-                      this.setState({
-                          isSendSmsBtnDisabled: true,
-                          sendSmsBtnStr: '重新发送 ' + (--this.state.countDown),
-                      });
+              message.success(result.reason, 2);
+              var timer = setInterval(() => {
+                this.setState({
+                  isSendSmsBtnDisabled: true,
+                  sendSmsBtnStr: '重新发送 ' + (--this.state.countDown),
+                });
 
-                      if(this.state.countDown === 0) {
-                          this.setState({
-                              isSendSmsBtnDisabled: false,
-                              sendSmsBtnStr: '重新发送',
-                              countDown: 60 //倒计时
-                          });
+                if (this.state.countDown === 0) {
+                  this.setState({
+                    isSendSmsBtnDisabled: false,
+                    sendSmsBtnStr: '重新发送',
+                    countDown: 60 //倒计时
+                  });
 
-                          //停止倒计时
-                          clearInterval(timer);
-                      }
-                  }, 1000);
-                } else {
-
-                  message.error(result.reason, 2);
+                  //停止倒计时
+                  clearInterval(timer);
                 }
-              },
-              error : () => message.error("内部错误", 2)
-            });
-          }
-      });
+              }, 1000);
+            } else {
+
+              message.error(result.reason, 2);
+            }
+          },
+          error: () => message.error("内部错误", 2)
+        });
+      }
+    });
   }
 
   render() {
 
-    const formItemLayout = {labelCol: { xs: { span: 24 }, sm: { span: 7 },}, wrapperCol: { xs: { span: 24 }, sm: { span: 12 },}};
-    const formItemLayoutWithoutLabel = {wrapperCol: { xs: { span: 24 , offset: 0}, sm: { span: 12 , offset: 7},}};
+    const formItemLayout = { labelCol: { xs: { span: 24 }, sm: { span: 7 }, }, wrapperCol: { xs: { span: 24 }, sm: { span: 12 }, } };
+    const formItemLayoutWithoutLabel = { wrapperCol: { xs: { span: 24, offset: 0 }, sm: { span: 12, offset: 7 }, } };
 
     const { getFieldDecorator } = this.props.form;
     return (
@@ -234,20 +234,21 @@ class ProfileEditModal_ extends React.Component {
                   className="avatar-uploader"
                   name="file"
                   showUploadList={false}
-                  data = {{id: sessionStorage.getItem(SESSION.USER_ID)}}
-                  headers={{'TOKEN' : sessionStorage.getItem(SESSION.TOKEN)}}
-                  action= {SERVER + "/api/user/avatar" }
+                  data={{ id: sessionStorage.getItem(SESSION.USER_ID) }}
+                  headers={{ 'TOKEN': sessionStorage.getItem(SESSION.TOKEN) }}
+                  action={SERVER + "/api/user/avatar"}
                   beforeUpload={this.beforeUpload}
                   onChange={this.handleChange}
                 >
-                  <img src={this.state.imageUrl} className="avatar" style={{backgroundColor: 'white'}} alt=""/>
+                  <img src={this.state.imageUrl} className="avatar" style={{ backgroundColor: 'white' }} alt="" />
                 </Upload>
               </FormItem>
               <FormItem {...formItemLayout} label="姓名" hasFeedback={true}>
-                {getFieldDecorator('name', {'initialValue': sessionStorage.getItem(SESSION.NAME), rules: [{ required: true, message: '请输入姓名' }]
+                {getFieldDecorator('name', {
+                  'initialValue': sessionStorage.getItem(SESSION.NAME), rules: [{ required: true, message: '请输入姓名' }]
                 })(
-                <Input />
-                )}
+                  <Input />
+                  )}
               </FormItem>
               <FormItem {...formItemLayoutWithoutLabel}>
                 <Button type="primary" htmlType="submit" loading={this.state.submitProfileInfoLoading}>保存</Button>
@@ -258,21 +259,24 @@ class ProfileEditModal_ extends React.Component {
           <TabPane tab={<span><Icon type="lock" />密码更改</span>} key="2">
             <Form onSubmit={this.submitPasswordChange}>
               <FormItem {...formItemLayout} label="旧密码" hasFeedback={true}>
-                  {getFieldDecorator('oldPassword', {rules: [{ required: true, message: '请输入旧密码' }],
-                  })(
-                  <Input type="password"/>
+                {getFieldDecorator('oldPassword', {
+                  rules: [{ required: true, message: '请输入旧密码' }],
+                })(
+                  <Input type="password" />
                   )}
               </FormItem>
               <FormItem {...formItemLayout} label="新密码" hasFeedback={true}>
-                  {getFieldDecorator('newPassword', {rules: [{ required: true, message: '请输入新密码' }, { validator: this.handleConfirmPassword}],
-                  })(
-                  <Input type="password"/>
+                {getFieldDecorator('newPassword', {
+                  rules: [{ required: true, message: '请输入新密码' }, { validator: this.handleConfirmPassword }],
+                })(
+                  <Input type="password" />
                   )}
               </FormItem>
               <FormItem {...formItemLayout} label="确认密码" hasFeedback={true}>
-                  {getFieldDecorator('confirmPassword', {rules: [{required: true, message: '请输入确认密码' }, {validator: this.handleConfirmPassword}],
-                  })(
-                  <Input type="password"/>
+                {getFieldDecorator('confirmPassword', {
+                  rules: [{ required: true, message: '请输入确认密码' }, { validator: this.handleConfirmPassword }],
+                })(
+                  <Input type="password" />
                   )}
               </FormItem>
               <FormItem {...formItemLayoutWithoutLabel}>
@@ -284,18 +288,19 @@ class ProfileEditModal_ extends React.Component {
           <TabPane tab={<span><Icon type="phone" />手机更换</span>} key="3">
             <Form onSubmit={this.submitPhoneChange}>
               <FormItem {...formItemLayout} label="手机" hasFeedback={true}>
-                  {getFieldDecorator('phone', {rules: [{ required: true, message: '请输入手机号' },{pattern: REGEX.PHONE, message:'请输入合法手机号'}],
-                  })(
+                {getFieldDecorator('phone', {
+                  rules: [{ required: true, message: '请输入手机号' }, { pattern: REGEX.PHONE, message: '请输入合法手机号' }],
+                })(
                   <Input />
                   )}
               </FormItem>
               <FormItem {...formItemLayout} label="验证码">
-                  {getFieldDecorator('inputCode', { rules: [{ required: true, message: '请输入验证码' }]})(
-                  <Input style={{width:'37%'}}/>
-                  )}
-                  <Button disabled={this.state.isSendSmsBtnDisabled} onClick={this.handleSendSms} className="sendsms-form-button">
-                      <span>{this.state.sendSmsBtnStr}</span>
-                  </Button>
+                {getFieldDecorator('inputCode', { rules: [{ required: true, message: '请输入验证码' }] })(
+                  <Input style={{ width: '37%' }} />
+                )}
+                <Button disabled={this.state.isSendSmsBtnDisabled} onClick={this.handleSendSms} className="sendsms-form-button">
+                  <span>{this.state.sendSmsBtnStr}</span>
+                </Button>
               </FormItem>
               <FormItem {...formItemLayoutWithoutLabel}>
                 <Button type="primary" htmlType="submit" loading={this.state.submitPhoneChangeLoading}>更换</Button>
@@ -305,16 +310,16 @@ class ProfileEditModal_ extends React.Component {
 
           {
             isMember(sessionStorage.getItem(SESSION.ROLE))
-            ?
-            <TabPane tab={<span><Icon type="star-o" />会员信息</span>} key="4">
-              <Form >
+              ?
+              <TabPane tab={<span><Icon type="star-o" />会员信息</span>} key="4">
+                <Form >
                   <FormItem {...formItemLayout} label="有效期至">
                     <span>{formatDate(this.props.userInfo.valid)}</span>
                   </FormItem>
-              </Form>
-            </TabPane>
-            :
-            null
+                </Form>
+              </TabPane>
+              :
+              null
           }
         </Tabs>
       </Modal>

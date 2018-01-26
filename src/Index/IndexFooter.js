@@ -1,8 +1,8 @@
-import { Layout} from 'antd';
+import { Layout } from 'antd';
 import React from 'react';
-const {Header} = Layout;
+const { Header } = Layout;
 
-class IndexFooter extends React.Component{
+class IndexFooter extends React.Component {
 
   render() {
     return (
