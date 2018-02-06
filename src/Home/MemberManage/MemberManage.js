@@ -126,6 +126,7 @@ class MemberManage extends React.Component {
 
                 if(this.refs.memberEditForm == null) return;
                 this.refs.memberEditForm.setFieldsValue({name: member.name,
+                                                        username: member.username,
                                                          role: member.role,
                                                          adviserAndManager: [member.staffMgrName, Number(member.staffId)],
                                                          validTime: moment(formatDate(member.valid), DATE_FORMAT)});
@@ -210,7 +211,7 @@ class MemberManage extends React.Component {
             url : SERVER + '/api/user',
             type : 'PUT',
             contentType: 'application/json',
-            data : JSON.stringify({userId: this.memberId, role: values.role, staffId: values.adviserAndManager[1], valid: formatDate(values.validTime)}),
+            data : JSON.stringify({userId: this.memberId, name: values.name, phone: values.username, role: values.role, staffId: values.adviserAndManager[1], valid: formatDate(values.validTime)}),
             dataType : 'json',
             beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
             success : (result) => {

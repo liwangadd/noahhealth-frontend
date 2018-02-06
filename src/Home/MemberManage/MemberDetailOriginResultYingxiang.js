@@ -25,7 +25,7 @@ class MemberDetailOriginResultYingxiang extends React.Component {
     /*
     *电子资料库
     */
-    typeName: '影像资料',
+    typeName: '门诊医技',
     secondId: -1,
     originResultTypeData: [],
 
@@ -40,9 +40,7 @@ class MemberDetailOriginResultYingxiang extends React.Component {
   findSecondIdByTypeName = (originResultTypeData) => {
 
     for(let i = 0; i < originResultTypeData.length; i++) {
-
       if(originResultTypeData[i].label === this.state.typeName) {
-
         return originResultTypeData[i].value;
       }
     }
@@ -166,7 +164,9 @@ class MemberDetailOriginResultYingxiang extends React.Component {
             for(let firstType in result.content) {
 
               //加入大类
-              let firstTypeData = {value: result.content[firstType][0].id, label: firstType};
+              let secondList = result.content[firstType]['secondList']
+              let firstTypeData = {value: secondList[0].id, label: result.content[firstType]['typeName']}
+              // let firstTypeData = {value: result.content[firstType][0].id, label: firstType};
               originResultTypeData.push(firstTypeData);
             }
 
@@ -237,12 +237,12 @@ class MemberDetailOriginResultYingxiang extends React.Component {
             <Breadcrumb className="category-path">
               <Breadcrumb.Item><Link to={ROUTE.MEMBER_MANAGE.URL_PREFIX + "/" + ROUTE.MEMBER_MANAGE.MENU_KEY}>会员管理</Link></Breadcrumb.Item>
               <Breadcrumb.Item><Link to={ROUTE.MEMBER_DETAIL.URL_PREFIX + "/" + ROUTE.MEMBER_DETAIL.MENU_KEY + "/" + this.props.params.memberId + "/" + this.props.params.memberName}>{this.props.params.memberName}</Link></Breadcrumb.Item>
-              <Breadcrumb.Item>影像资料</Breadcrumb.Item>
+              <Breadcrumb.Item>门诊医技</Breadcrumb.Item>
             </Breadcrumb>
             :
             <Breadcrumb className="category-path">
               <Breadcrumb.Item><Link to={ROUTE.MEMBER_DETAIL.URL_PREFIX + "/" + ROUTE.MEMBER_DETAIL.MENU_KEY + "/" + this.props.params.memberId + "/" + this.props.params.memberName}>个人资料</Link></Breadcrumb.Item>
-              <Breadcrumb.Item>影像资料</Breadcrumb.Item>
+              <Breadcrumb.Item>门诊医技</Breadcrumb.Item>
             </Breadcrumb>
           }
           <Tabs defaultActiveKey="1">
@@ -251,7 +251,7 @@ class MemberDetailOriginResultYingxiang extends React.Component {
               role === ROLE.EMPLOYEE_ADVISER || role === ROLE.EMPLOYEE_ADVISE_MANAGER || role === ROLE.EMPLOYEE_ADMIN
               || role === ROLE.MEMBER_1 || role === ROLE.MEMBER_2 || role === ROLE.MEMBER_3
               ?
-              <TabPane tab="影像资料" key="1">
+              <TabPane tab="门诊医技" key="1">
                 <MemberDetailOriginResultSearchForm ref="originResultSearchForm" requestOriginResultOfMember={this.requestOriginResultOfMember}/>
                 <Table className='origin-result-table' columns={originResultColumns} dataSource={this.state.originResultData} rowKey='id' loading={this.state.originResultTableLoading} pagination={this.state.originResultPager} onChange={this.changeOriginResultPager}/>
               </TabPane>

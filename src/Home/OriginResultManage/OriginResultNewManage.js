@@ -19,7 +19,7 @@ class OriginResultXinliManage extends React.Component {
   state = {
 
     //执行情况
-    typeName: '心理资料',
+    typeName: '门诊化验',
     secondId: -1,
 
     originResultData: [],
@@ -80,7 +80,8 @@ class OriginResultXinliManage extends React.Component {
           type: 'POST',
           contentType: 'application/json',
           data: JSON.stringify({
-            secondId: this.state.secondId,
+            // secondId: this.state.secondId,
+            secondId: -1,
             userName: values.userName,
             memberNum: values.memberNum,
             uploaderName: values.uploaderName,

@@ -19,7 +19,7 @@ class OriginResultXinliManage extends React.Component {
   state = {
 
     //执行情况
-    typeName: '心理资料',
+    typeName: '门诊化验',
     secondId: -1,
 
     originResultData: [],
@@ -496,7 +496,9 @@ class OriginResultXinliManage extends React.Component {
             for(let firstType in result.content) {
 
               //加入大类
-              let firstTypeData = {value: result.content[firstType][0].id, label: firstType};
+              let secondList = result.content[firstType]['secondList']
+              let firstTypeData = {value: secondList[0].id, label: result.content[firstType]['typeName']}
+              // let firstTypeData = {value: result.content[firstType][0].id, label: firstType};
               originResultTypeData.push(firstTypeData);
             }
 
@@ -654,7 +656,7 @@ class OriginResultXinliManage extends React.Component {
       <div>
         <BackTop visibilityHeight="200"/>
         <Tabs defaultActiveKey={"1"} tabBarExtraContent={role === ROLE.EMPLOYEE_ARCHIVER || role === ROLE.EMPLOYEE_ARCHIVE_MANAGER || role === ROLE.EMPLOYEE_ADMIN ? <Button type="primary" onClick={this.showUploadModal}>添加健康档案</Button> : null}>
-          <TabPane tab="心理资料" key="1">
+          <TabPane tab="门诊化验" key="1">
             <OriginResultSearchForm ref="searchForm" handleSearchOriginResultList={this.handleSearchOriginResultList}/>
             <Table className='origin-result-table' columns={originResultColumns} dataSource={this.state.originResultData} rowKey='id' loading={this.state.originResultTableLoading} pagination={this.state.originResultPager} onChange={this.changeOriginResultPager}/>
           </TabPane>

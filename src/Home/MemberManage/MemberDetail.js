@@ -1018,13 +1018,13 @@ requestHealthResultDetailOfMember = () => {
         <div style={{textAlign: 'center'}}>
           <h2 style={{marginBottom: '15px', color:'#1DA57A'}}>健康详情入口</h2>
           <Card title="电子健康银行" className="card">
-            <Button className="card-btn" onClick={() => this.handleClickJumpBtn(ROUTE.MEMBER_DETAIL_ORIGIN_RESULT_MENZHEN)}>门诊资料</Button>
+            <Button className="card-btn" onClick={() => this.handleClickJumpBtn(ROUTE.MEMBER_DETAIL_ORIGIN_RESULT_MENZHEN)}>门诊病历</Button>
             <Button className="card-btn" onClick={() => this.handleClickJumpBtn(ROUTE.MEMBER_DETAIL_ORIGIN_RESULT_ZHUYUAN)}>住院资料</Button>
             <Button className="card-btn" onClick={() => this.handleClickJumpBtn(ROUTE.MEMBER_DETAIL_ORIGIN_RESULT_TIJIAN)}>体检资料</Button>
-            <Button className="card-btn" onClick={() => this.handleClickJumpBtn(ROUTE.MEMBER_DETAIL_ORIGIN_RESULT_YINGXIANG)}>影像资料</Button>
+            <Button className="card-btn" onClick={() => this.handleClickJumpBtn(ROUTE.MEMBER_DETAIL_ORIGIN_RESULT_YINGXIANG)}>门诊医技</Button>
             <Button className="card-btn" onClick={() => this.handleClickJumpBtn(ROUTE.MEMBER_DETAIL_ORIGIN_RESULT_YAKE)}>牙科资料</Button>
             <Button className="card-btn" onClick={() => this.handleClickJumpBtn(ROUTE.MEMBER_DETAIL_ORIGIN_RESULT_ZHONGYI)}>中医资料</Button>
-            <Button className="card-btn" onClick={() => this.handleClickJumpBtn(ROUTE.MEMBER_DETAIL_ORIGIN_RESULT_XINLI)}>心理资料</Button>
+            <Button className="card-btn" onClick={() => this.handleClickJumpBtn(ROUTE.MEMBER_DETAIL_ORIGIN_RESULT_XINLI)}>门诊化验</Button>
             <Button className="card-btn" onClick={() => this.handleClickJumpBtn(ROUTE.MEMBER_DETAIL_ORIGIN_RESULT_QITA)}>其他资料</Button>
           </Card>
           <Card title="健康大数据库" className="card" style={{width:'20%'}}>

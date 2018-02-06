@@ -136,10 +136,10 @@ class Welcome extends React.Component {
             <Button className="card-btn" onClick={() => this.handleClickJumpBtn(ROUTE.ORIGIN_RESULT_MENZHEN_MANAGE)}>门诊资料</Button>
             <Button className="card-btn" onClick={() => this.handleClickJumpBtn(ROUTE.ORIGIN_RESULT_ZHUYUAN_MANAGE)}>住院资料</Button>
             <Button className="card-btn" onClick={() => this.handleClickJumpBtn(ROUTE.ORIGIN_RESULT_TIJIAN_MANAGE)}>体检资料</Button>
-            <Button className="card-btn" onClick={() => this.handleClickJumpBtn(ROUTE.ORIGIN_RESULT_YINGXIANG_MANAGE)}>影像资料</Button>
+            <Button className="card-btn" onClick={() => this.handleClickJumpBtn(ROUTE.ORIGIN_RESULT_YINGXIANG_MANAGE)}>门诊医技</Button>
             <Button className="card-btn" onClick={() => this.handleClickJumpBtn(ROUTE.ORIGIN_RESULT_YAKE_MANAGE)}>牙科资料</Button>
             <Button className="card-btn" onClick={() => this.handleClickJumpBtn(ROUTE.ORIGIN_RESULT_ZHONGYI_MANAGE)}>中医资料</Button>
-            <Button className="card-btn" onClick={() => this.handleClickJumpBtn(ROUTE.ORIGIN_RESULT_XINLI_MANAGE)}>心理资料</Button>
+            <Button className="card-btn" onClick={() => this.handleClickJumpBtn(ROUTE.ORIGIN_RESULT_XINLI_MANAGE)}>门诊化验</Button>
             <Button className="card-btn" onClick={() => this.handleClickJumpBtn(ROUTE.ORIGIN_RESULT_QITA_MANAGE)}>其他资料</Button>
           </Card>
           <Card title="健康大数据库" className="card" style={{ width: '20%' }}>

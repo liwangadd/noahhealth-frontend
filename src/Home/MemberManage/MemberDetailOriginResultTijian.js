@@ -166,7 +166,9 @@ class MemberDetailOriginResultTijian extends React.Component {
             for(let firstType in result.content) {
 
               //加入大类
-              let firstTypeData = {value: result.content[firstType][0].id, label: firstType};
+              let secondList = result.content[firstType]['secondList']
+              let firstTypeData = {value: secondList[0].id, label: result.content[firstType]['typeName']}
+              // let firstTypeData = {value: result.content[firstType][0].id, label: firstType};
               originResultTypeData.push(firstTypeData);
             }
 
