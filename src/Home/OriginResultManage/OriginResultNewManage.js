@@ -6,9 +6,12 @@ import OriginResultUploadModal from './OriginResultUploadModal.js';
 import OriginResultUploadPictureModal from './OriginResultUploadPictureModal.js';
 import OriginResultCheckPictureModal from './OriginResultCheckPictureModal.js';
 import OriginResultWatchPictureModal from './OriginResultWatchPictureModal.js';
+import OriginResultEditModal from './OriginResultEditModal.js'
 import React from 'react';
+import moment from 'moment';
 import { Tabs, Table, message, Popconfirm, Button, BackTop, Modal, Tooltip, Row, Col } from 'antd';
 import $ from 'jquery';
+import Tree from 'antd/lib/tree';
 
 const TabPane = Tabs.TabPane;
 const confirm = Modal.confirm;
@@ -31,6 +34,9 @@ class OriginResultXinliManage extends React.Component {
     confirmUploadModalLoading: false,
     memberUnderEmployeeData: [],
     originResultTypeData: [],
+
+    editModalVisible: false,
+    confirmEditModalLoading: false,
 
     //上传扫描件对话框
     uploadPictureModalVisible: false,
@@ -80,8 +86,8 @@ class OriginResultXinliManage extends React.Component {
           type: 'POST',
           contentType: 'application/json',
           data: JSON.stringify({
-            // secondId: this.state.secondId,
-            secondId: -1,
+            secondId: this.state.secondId,
+            // secondId: -1,
             userName: values.userName,
             memberNum: values.memberNum,
             uploaderName: values.uploaderName,
@@ -127,6 +133,24 @@ class OriginResultXinliManage extends React.Component {
   showUploadModal = () => this.setState({ uploadModalVisible: true })
   closeUploadModal = () => this.setState({ uploadModalVisible: false })
 
+  /*
+  * 修改原始资料对话框
+  */
+  showEditModal = (record) => {
+    this.setState({editModalVisible: true});
+    this.originId = record.id
+    this.refs.editForm.setFieldsValue({
+      userName: record.userName,
+      memberNum: record.memberNum,
+      hospital: record.hospital,
+      note: record.note,
+      secondName: record.secondName,
+      normal: record.normal,
+      time: moment(formatDate(record.time), 'YYYY-MM-DD')
+    });
+  }
+  closeEditModal = () => this.setState({ editModalVisible: false })
+
   //确认添加原始资料信息
   confirmUploadModal = () => {
 
@@ -160,16 +184,50 @@ class OriginResultXinliManage extends React.Component {
               this.setState({ uploadModalVisible: false, confirmUploadModalLoading: false });
 
               //询问是否弹出上传对话框继续上传扫描件
-              let originResultId = result.content;
-              confirm({
-                title: '添加成功! 是否继续上传该原始资料的扫描件?',
-                onOk: () => this.showUploadPictureModal(originResultId)
-              });
+              // let originResultId = result.content;
+              // confirm({
+              //   title: '添加成功! 是否继续上传该原始资料的扫描件?',
+              //   onOk: () => this.showUploadPictureModal(originResultId)
+              // });
 
             } else {
 
               //关闭加载圈
               this.setState({ confirmUploadModalLoading: false });
+              message.error(result.reason, 2);
+            }
+          }
+        });
+      }
+    });
+  }
+
+  confirmEditModal=()=>{
+    this.refs.editForm.validateFields((err, values)=>{
+      if(!err){
+        console.log("修改原始资料", values);
+        this.setState({confirmEditModalLoading: true});
+        $.ajax({
+          url: SERVER + '/api/origin',
+          type: 'PUT',
+          contentType: 'application/json',
+          data: JSON.stringify({
+            originId: this.originId,
+            note: values.note,
+            normal: values.normal,
+            hospital: values.hospital,
+            time: formatDate(values.time)
+          }),
+          dataType: 'json',
+          beforeSend: (request)=>request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
+          success: (result)=>{
+            console.log(result);
+            if(result.code == RESULT.SUCCESS){
+              this.handleSearchOriginResultList(this.state.originResultPager.current);
+              this.setState({editModalVisible: false, confirmEditModalLoading: false});
+              message.success(result.reason, 2);
+            }else{
+              this.setState({confirmEditModalLoading: false});
               message.error(result.reason, 2);
             }
           }
@@ -449,10 +507,6 @@ class OriginResultXinliManage extends React.Component {
     });
   }
 
-
-
-
-
   requestMembersUnderEmployee = () => {
 
     console.log('拉取' + sessionStorage.getItem(SESSION.NAME) + '旗下的所有会员信息');
@@ -507,14 +561,14 @@ class OriginResultXinliManage extends React.Component {
           //加入大类
           // let firstTypeData = { value: result.content[firstType][0].id, label: firstType };
           let secondList = result.content[firstType]['secondList']
-          let firstTypeData = {value: secondList[0].id, label: result.content[firstType]['typeName']}
+          let firstTypeData = { value: secondList[0].id, label: result.content[firstType]['typeName'] }
           originResultTypeData.push(firstTypeData);
         }
 
-        let secondId = this.findSecondIdByTypeName(originResultTypeData);
+        // let secondId = this.findSecondIdByTypeName(originResultTypeData);
         this.setState({
           originResultTypeData: originResultTypeData,
-          secondId: secondId
+          // secondId: secondId
         });
 
         if (this.refs.uploadForm == null) return;
@@ -564,7 +618,7 @@ class OriginResultXinliManage extends React.Component {
       title: '档案名称',
       dataIndex: 'note',
       key: 'note'
-    }, 
+    },
     // {
     //   title: '异常判断',
     //   dataIndex: 'normal',
@@ -654,6 +708,17 @@ class OriginResultXinliManage extends React.Component {
           }
 
           {
+             (role === ROLE.EMPLOYEE_ADMIN) || ((record.status === '待审核' || record.status === '上传中') && (role === ROLE.EMPLOYEE_ARCHIVER || role === ROLE.EMPLOYEE_ADMIN || role == ROLE.EMPLOYEE_ARCHIVE_MANAGER))
+              ?
+              <span>
+                <span className="ant-divider" />
+                <a onClick={() => this.showEditModal(record)}>修改</a>
+              </span>
+              :
+              null
+          }
+
+          {
             ((record.status === '上传中' || record.status === '待审核' || record.status === '未通过') && role === ROLE.EMPLOYEE_ARCHIVE_MANAGER) || role === ROLE.EMPLOYEE_ADMIN
               ?
               <span>
@@ -668,12 +733,12 @@ class OriginResultXinliManage extends React.Component {
 
           {
             (record.status === '已通过' || record.status === '待审核') && (role === ROLE.EMPLOYEE_ARCHIVER || role == ROLE.EMPLOYEE_ADMIN || role === ROLE.EMPLOYEE_ARCHIVE_MANAGER)
-            ?
-            <span>
-              <span className="ant-divider"/>
-              <a onClick = {() => this.showUploadPictureModal(record.id)}>添加扫描件</a>
-            </span>
-            :null
+              ?
+              <span>
+                <span className="ant-divider" />
+                <a onClick={() => this.showUploadPictureModal(record.id)}>添加扫描件</a>
+              </span>
+              : null
           }
         </span>
       )
@@ -699,6 +764,7 @@ class OriginResultXinliManage extends React.Component {
             <Table className='origin-result-table' columns={originResultColumns} dataSource={this.state.originResultData} rowKey='id' loading={this.state.originResultTableLoading} pagination={this.state.originResultPager} onChange={this.changeOriginResultPager} />
           </TabPane>
         </Tabs>
+        <OriginResultEditModal ref="editForm" visible={this.state.editModalVisible} confirmLoading={this.state.confirmEditModalLoading} onCancel={this.closeEditModal} onConfirm={this.confirmEditModal} memberUnderEmployeeData={this.state.memberUnderEmployeeData} originResultTypeData={this.state.originResultTypeData}/>
         <OriginResultUploadModal ref="uploadForm" visible={this.state.uploadModalVisible} confirmLoading={this.state.confirmUploadModalLoading} onCancel={this.closeUploadModal} onConfirm={this.confirmUploadModal} memberUnderEmployeeData={this.state.memberUnderEmployeeData} originResultTypeData={this.state.originResultTypeData} />
         <OriginResultUploadPictureModal visible={this.state.uploadPictureModalVisible} onCancel={this.closeUploadPictureModal} submitLoading={this.state.submitLoading} onSubmit={this.handleSubmitPicture} fileList={this.state.fileList} originResultId={this.state.originResultId} onChange={this.handleUploadPictureChange} />
         <OriginResultCheckPictureModal visible={this.state.checkPictureModalVisible} onCancel={this.closeCheckPictureModal} passLoading={this.state.passLoading} unpassLoading={this.state.unpassLoading} onPass={this.handlePassPicture} onUnpass={this.handleUnpassPicture} fileList={this.state.fileList} originResultId={this.state.originResultId} />
