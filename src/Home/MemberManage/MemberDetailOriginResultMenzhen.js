@@ -209,21 +209,23 @@ class MemberDetailOriginResultMenzhen extends React.Component {
       dataIndex: 'time',
       key: 'time',
       render: (time) => formatDate(time)
-    },{
-      title: '上传者',
-      dataIndex: 'uploaderName',
-      key: 'uploaderName'
-    },{
-      title: '上传日期',
-      dataIndex: 'uploadTime',
-      key: 'uploadTime',
-      render: (uploadTime) => formatDate(uploadTime)
-    },{
-      title: '审核者',
-      dataIndex: 'checkerName',
-      key: 'checkerName',
-      render: (checkerName) => checkerName === null ? '/' : checkerName
-    }, {
+    },
+    // {
+    //   title: '上传者',
+    //   dataIndex: 'uploaderName',
+    //   key: 'uploaderName'
+    // },{
+    //   title: '上传日期',
+    //   dataIndex: 'uploadTime',
+    //   key: 'uploadTime',
+    //   render: (uploadTime) => formatDate(uploadTime)
+    // },{
+    //   title: '审核者',
+    //   dataIndex: 'checkerName',
+    //   key: 'checkerName',
+    //   render: (checkerName) => checkerName === null ? '/' : checkerName
+    // },
+     {
       title: '操作',
       key: 'action',
       render: (record) =>  <a onClick={() => this.showWatchPictureModal(record.id)}>查看扫描件</a>

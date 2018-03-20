@@ -129,28 +129,28 @@ class VerticalRegisterForm_ extends React.Component {
                             rules: [{ required: true, message: '请输入姓名' }],
                         })(
                             <Input prefix={<Icon type="user" style={{ fontSize: 13 }} />} placeholder="姓名" />
-                            )}
+                        )}
                     </FormItem>
                     <FormItem {...formItemLayoutWithoutLabel} hasFeedback={true}>
                         {getFieldDecorator('phone', {
                             rules: [{ required: true, message: '请输入手机号' }, { pattern: REGEX.PHONE, message: '请输入合法手机号' }],
                         })(
                             <Input prefix={<Icon type="phone" style={{ fontSize: 13 }} />} placeholder="手机" />
-                            )}
+                        )}
                     </FormItem>
                     <FormItem {...formItemLayoutWithoutLabel} hasFeedback={true}>
                         {getFieldDecorator('password', {
                             rules: [{ required: true, message: '请输入密码' }, { validator: this.handleConfirmPassword }],
                         })(
                             <Input prefix={<Icon type="lock" style={{ fontSize: 13 }} />} type="password" placeholder="密码" />
-                            )}
+                        )}
                     </FormItem>
                     <FormItem {...formItemLayoutWithoutLabel} hasFeedback={true}>
                         {getFieldDecorator('confirmPassword', {
                             rules: [{ required: true, message: '请输入确认密码' }, { validator: this.handleConfirmPassword }],
                         })(
                             <Input prefix={<Icon type="lock" style={{ fontSize: 13 }} />} type="password" placeholder="确认密码" />
-                            )}
+                        )}
                     </FormItem>
 
                     <FormItem {...formItemLayoutWithoutLabel}>
@@ -169,7 +169,7 @@ class VerticalRegisterForm_ extends React.Component {
                     <FormItem {...formItemLayoutWithoutLabel}>
                         <Button type="primary" htmlType="submit" className="login-form-button" style={{ width: '100%' }}>
                             注&nbsp;&nbsp;册
-              </Button>
+                        </Button>
                         <Link to={ROUTE.MEMBER_LOGIN.URL} style={{ float: 'right' }}>已有账号?</Link>
                     </FormItem>
                 </Form>

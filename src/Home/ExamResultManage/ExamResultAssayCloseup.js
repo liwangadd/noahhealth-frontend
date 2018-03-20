@@ -1,12 +1,12 @@
 import './ExamResultManage.css';
-import {SERVER, SESSION, RESULT, ROLE, FILE_SERVER, ROUTE, LOADING_DELAY_TIME} from './../../App/PublicConstant.js';
-import {formatDate} from './../../App/PublicUtil.js';
-import {isEmployee, isAdviser} from './../../App/PublicMethod.js';
+import { SERVER, SESSION, RESULT, ROLE, FILE_SERVER, ROUTE, LOADING_DELAY_TIME } from './../../App/PublicConstant.js';
+import { formatDate } from './../../App/PublicUtil.js';
+import { isEmployee, isAdviser } from './../../App/PublicMethod.js';
 import ExamResultDetailItem from './ExamResultDetailItem.js';
 import React from 'react';
-import {browserHistory} from 'react-router';
-import {message, Button, BackTop, Breadcrumb, Timeline, Anchor, Alert, Spin, Tabs} from 'antd';
-import {Link} from 'react-router';
+import { browserHistory } from 'react-router';
+import { message, Button, BackTop, Breadcrumb, Timeline, Anchor, Alert, Spin, Tabs } from 'antd';
+import { Link } from 'react-router';
 import $ from 'jquery';
 
 const TabPane = Tabs.TabPane;
@@ -51,32 +51,32 @@ class ExamResultAssayCloseup extends React.Component {
     console.log('保存录入了的检查结果', id);
 
     form.validateFields((err, values) => {
-      if(!err) {
+      if (!err) {
         console.log(values);
         //显示加载圈
         this.setState({ saveLoading: true });
         $.ajax({
-            url : SERVER + '/api/detail',
-            type : 'PUT',
-            contentType: 'application/json',
-            dataType : 'json',
-            data : JSON.stringify(values),
-            beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
-            success : (result) => {
-              console.log(result);
-              if(result.code === RESULT.SUCCESS) {
+          url: SERVER + '/api/detail',
+          type: 'PUT',
+          contentType: 'application/json',
+          dataType: 'json',
+          data: JSON.stringify(values),
+          beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
+          success: (result) => {
+            console.log(result);
+            if (result.code === RESULT.SUCCESS) {
 
-                //重新查一遍
-                this.requestExamResultDetailById();
-                message.success(result.reason, 2);
-              } else {
+              //重新查一遍
+              this.requestExamResultDetailById();
+              message.success(result.reason, 2);
+            } else {
 
-                message.error(result.reason, 2);
-              }
-
-              //关闭加载圈
-              this.setState({ saveLoading: false });
+              message.error(result.reason, 2);
             }
+
+            //关闭加载圈
+            this.setState({ saveLoading: false });
+          }
         });
       }
     });
@@ -93,29 +93,29 @@ class ExamResultAssayCloseup extends React.Component {
     //再提交
     this.setState({ submitLoading: true });
     $.ajax({
-        url : SERVER + '/api/input/status/' + id,
-        type : 'PUT',
-        contentType: 'application/json',
-        dataType : 'json',
-        data : JSON.stringify({status: '待审核'}),
-        beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
-        success : (result) => {
-          console.log(result);
-          if(result.code === RESULT.SUCCESS) {
+      url: SERVER + '/api/input/status/' + id,
+      type: 'PUT',
+      contentType: 'application/json',
+      dataType: 'json',
+      data: JSON.stringify({ status: '待审核' }),
+      beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
+      success: (result) => {
+        console.log(result);
+        if (result.code === RESULT.SUCCESS) {
 
-            //关闭加载圈、对话框
-            this.setState({ submitLoading: false});
+          //关闭加载圈、对话框
+          this.setState({ submitLoading: false });
 
-            //重新查一遍
-            this.requestExamResultDetailById();
-            message.success(result.reason, 2);
-          } else {
+          //重新查一遍
+          this.requestExamResultDetailById();
+          message.success(result.reason, 2);
+        } else {
 
-            //关闭加载圈
-            this.setState({ submitLoading: false });
-            message.error(result.reason, 2);
-          }
+          //关闭加载圈
+          this.setState({ submitLoading: false });
+          message.error(result.reason, 2);
         }
+      }
     });
   }
 
@@ -127,31 +127,33 @@ class ExamResultAssayCloseup extends React.Component {
 
     console.log('通过一份检查结果,变为已通过', id);
 
+    // 先保存
+    this.saveInputDetail(form, id);
     //显示加载圈
     this.setState({ passLoading: true });
     $.ajax({
-        url : SERVER + '/api/input/status/' + id,
-        type : 'PUT',
-        contentType: 'application/json',
-        dataType : 'json',
-        data : JSON.stringify({status: '已通过'}),
-        beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
-        success : (result) => {
-          console.log(result);
-          if(result.code === RESULT.SUCCESS) {
+      url: SERVER + '/api/input/status/' + id,
+      type: 'PUT',
+      contentType: 'application/json',
+      dataType: 'json',
+      data: JSON.stringify({ status: '已通过' }),
+      beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
+      success: (result) => {
+        console.log(result);
+        if (result.code === RESULT.SUCCESS) {
 
-            //关闭加载圈、对话框
-            this.setState({ passLoading: false });
+          //关闭加载圈、对话框
+          this.setState({ passLoading: false });
 
-            this.requestExamResultDetailById();
-            message.success(result.reason, 2);
-          } else {
+          this.requestExamResultDetailById();
+          message.success(result.reason, 2);
+        } else {
 
-            //关闭加载圈
-            this.setState({ passLoading: false });
-            message.error(result.reason, 2);
-          }
+          //关闭加载圈
+          this.setState({ passLoading: false });
+          message.error(result.reason, 2);
         }
+      }
     });
   }
 
@@ -162,28 +164,28 @@ class ExamResultAssayCloseup extends React.Component {
     //显示加载圈
     this.setState({ unpassLoading: true });
     $.ajax({
-        url : SERVER + '/api/input/status/' + id,
-        type : 'PUT',
-        contentType: 'application/json',
-        dataType : 'json',
-        data : JSON.stringify({status: '未通过', reason: unpassReason}),
-        beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
-        success : (result) => {
-          console.log(result);
-          if(result.code === RESULT.SUCCESS) {
+      url: SERVER + '/api/input/status/' + id,
+      type: 'PUT',
+      contentType: 'application/json',
+      dataType: 'json',
+      data: JSON.stringify({ status: '未通过', reason: unpassReason }),
+      beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
+      success: (result) => {
+        console.log(result);
+        if (result.code === RESULT.SUCCESS) {
 
-            //关闭加载圈、对话框
-            this.setState({ unpassLoading: false});
+          //关闭加载圈、对话框
+          this.setState({ unpassLoading: false });
 
-            this.requestExamResultDetailById();
-            message.success(result.reason, 2);
-          } else {
+          this.requestExamResultDetailById();
+          message.success(result.reason, 2);
+        } else {
 
-            //关闭加载圈
-            this.setState({ unpassLoading: false });
-            message.error(result.reason, 2);
-          }
+          //关闭加载圈
+          this.setState({ unpassLoading: false });
+          message.error(result.reason, 2);
         }
+      }
     });
   }
 
@@ -195,27 +197,27 @@ class ExamResultAssayCloseup extends React.Component {
     //显示加载圈
     this.setState({ downloadLoading: true });
     $.ajax({
-        url : SERVER + '/api/input/download/' + id,
-        type : 'GET',
-        dataType : 'json',
-        beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
-        success : (result) => {
-          console.log(result);
-          if(result.code === RESULT.SUCCESS) {
+      url: SERVER + '/api/input/download/' + id,
+      type: 'GET',
+      dataType: 'json',
+      beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
+      success: (result) => {
+        console.log(result);
+        if (result.code === RESULT.SUCCESS) {
 
-            //下载
-            window.location.href = FILE_SERVER + result.content;
+          //下载
+          window.location.href = FILE_SERVER + result.content;
 
-            //关闭加载圈、对话框
-            this.setState({downloadLoading: false});
-            message.success(result.reason, 2);
-          } else {
+          //关闭加载圈、对话框
+          this.setState({ downloadLoading: false });
+          message.success(result.reason, 2);
+        } else {
 
-            //关闭加载圈
-            this.setState({ downloadLoading: false });
-            message.error(result.reason, 2);
-          }
+          //关闭加载圈
+          this.setState({ downloadLoading: false });
+          message.error(result.reason, 2);
         }
+      }
     });
   }
 
@@ -226,27 +228,27 @@ class ExamResultAssayCloseup extends React.Component {
     console.log('删除一条检查记录', id);
 
     $.ajax({
-        url : SERVER + '/api/input/' + id,
-        type : 'DELETE',
-        dataType : 'json',
-        beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
-        success : (result) => {
+      url: SERVER + '/api/input/' + id,
+      type: 'DELETE',
+      dataType: 'json',
+      beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
+      success: (result) => {
 
-            console.log(result);
-            if(result.code === RESULT.SUCCESS) {
+        console.log(result);
+        if (result.code === RESULT.SUCCESS) {
 
-                this.setState({deleteLoading: false});
-                message.success(result.reason, 2);
+          this.setState({ deleteLoading: false });
+          message.success(result.reason, 2);
 
-                //返回首页
-                browserHistory.push(ROUTE.EXAM_RESULT_MANAGE.URL_PREFIX + "/" + ROUTE.EXAM_RESULT_MANAGE.MENU_KEY);
-                return;
-            } else {
-                this.setState({deleteLoading: false});
-                message.error(result.reason, 2);
-                return;
-            }
+          //返回首页
+          browserHistory.push(ROUTE.EXAM_RESULT_MANAGE.URL_PREFIX + "/" + ROUTE.EXAM_RESULT_MANAGE.MENU_KEY);
+          return;
+        } else {
+          this.setState({ deleteLoading: false });
+          message.error(result.reason, 2);
+          return;
         }
+      }
     });
   }
 
@@ -256,23 +258,23 @@ class ExamResultAssayCloseup extends React.Component {
 
     console.log('查询' + this.props.params.detailId + '检查记录');
     $.ajax({
-        url : SERVER + '/api/input/' + this.props.params.detailId,
-        type : 'GET',
-        contentType: 'application/json',
-        dataType : 'json',
-        beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
-        success : (result) => {
+      url: SERVER + '/api/input/' + this.props.params.detailId,
+      type: 'GET',
+      contentType: 'application/json',
+      dataType: 'json',
+      beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
+      success: (result) => {
 
-            console.log(result);
-            if(result.code === RESULT.SUCCESS) {
+        console.log(result);
+        if (result.code === RESULT.SUCCESS) {
 
-                this.setState({detail: result.content, pageLoading: false});
-            } else {
+          this.setState({ detail: result.content, pageLoading: false });
+        } else {
 
-              message.error(result.reason, 2);
-              this.setState({pageLoading: false});
-            }
+          message.error(result.reason, 2);
+          this.setState({ pageLoading: false });
         }
+      }
     });
   }
 
@@ -283,41 +285,46 @@ class ExamResultAssayCloseup extends React.Component {
   }
 
 
-  render(){
+  render() {
 
     const role = sessionStorage.getItem(SESSION.ROLE);
+
     return (
       <Spin spinning={this.state.pageLoading} delay={LOADING_DELAY_TIME} tip='加载中'>
-        <BackTop visibilityHeight="200"/>
+        <BackTop visibilityHeight="200" />
         <Breadcrumb className="category-path">
           <Breadcrumb.Item><Link to={ROUTE.EXAM_RESULT_ASSAY_MANAGE.URL_PREFIX + "/" + ROUTE.EXAM_RESULT_ASSAY_MANAGE.MENU_KEY}>化验数据库</Link></Breadcrumb.Item>
           <Breadcrumb.Item>{this.props.params.memberName}</Breadcrumb.Item>
         </Breadcrumb>
         {
           this.state.detail !== null
-          ?
-          <ExamResultDetailItem detail={this.state.detail}
-                                type={this.state.detail.type}
+            ?
+            <ExamResultDetailItem
 
-                                onSave={this.saveInputDetail}
-                                saveLoading={this.state.saveLoading}
+              role={role}
 
-                                onSubmit={this.submitInputDetail}
-                                submitLoading={this.state.submitLoading}
+              detail={this.state.detail}
+              type={this.state.detail.type}
 
-                                onPass={this.passInputDetail}
-                                passLoading={this.state.passLoading}
+              onSave={this.saveInputDetail}
+              saveLoading={this.state.saveLoading}
 
-                                onUnpass={this.unpassInputDetail}
-                                unpassLoading={this.state.unpassLoading}
+              onSubmit={this.submitInputDetail}
+              submitLoading={this.state.submitLoading}
 
-                                onDownload={this.downloadInputDetail}
-                                downloadLoading={this.state.downloadLoading}
+              onPass={this.passInputDetail}
+              passLoading={this.state.passLoading}
 
-                                onDelete={this.deleteInputDetail}
-                                deleteLoading={this.state.deleteLoading} />
-          :
-          null
+              onUnpass={this.unpassInputDetail}
+              unpassLoading={this.state.unpassLoading}
+
+              onDownload={this.downloadInputDetail}
+              downloadLoading={this.state.downloadLoading}
+
+              onDelete={this.deleteInputDetail}
+              deleteLoading={this.state.deleteLoading} />
+            :
+            null
         }
 
       </Spin>

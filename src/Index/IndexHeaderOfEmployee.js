@@ -14,8 +14,7 @@ class IndexHeaderOfEmployee extends React.Component {
           <Menu
             theme="dark"
             mode="horizontal"
-            style={{ lineHeight: '64px', float: 'left' }}
-          >
+            style={{ lineHeight: '64px', float: 'left' }}>
             {/* <Menu.Item key="1"><Link to={ROUTE.MAIN.URL}>首页</Link></Menu.Item>
             <Menu.Item key="2">功能详情</Menu.Item>
             <Menu.Item key="3">帮助</Menu.Item> */}

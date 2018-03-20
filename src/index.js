@@ -136,7 +136,11 @@ const certifyAccess = function (nextState, replace) {
     case ROUTE.HEALTH_RESULT_MANAGE.URL_PREFIX: certifyRole(replace, role, ROUTE.HEALTH_RESULT_MANAGE.PERMISSION); break;
     case ROUTE.HEALTH_RESULT_DETAIL.URL_PREFIX: certifyRole(replace, role, ROUTE.HEALTH_RESULT_DETAIL.PERMISSION); break;
 
-    default: clearSession(); isEmployee(role) ? replace({ pathname: ROUTE.EMPLOYEE_LOGIN.URL }) : replace({ pathname: ROUTE.MEMBER_LOGIN.URL }); message.error('暂无该页面，请重新登录'); break;
+    default:
+      clearSession();
+      isEmployee(role) ? replace({ pathname: ROUTE.EMPLOYEE_LOGIN.URL }) : replace({ pathname: ROUTE.MEMBER_LOGIN.URL });
+      message.error('暂无该页面，请重新登录');
+      break;
   }
 
   //放行
@@ -203,7 +207,7 @@ class AppRouter extends React.Component {
             <Route path={ROUTE.ORIGIN_RESULT_ZHONGYI_MANAGE.URL} component={OriginResultZhongyiManage} />
             <Route path={ROUTE.ORIGIN_RESULT_XINLI_MANAGE.URL} component={OriginResultXinliManage} />
             <Route path={ROUTE.ORIGIN_RESULT_QITA_MANAGE.URL} component={OriginResultQitaManage} />
-            <Route path={ROUTE.ORIGIN_RESULT_NEW_MANAGE.URL} component={OriginResultNewManage}/>
+            <Route path={ROUTE.ORIGIN_RESULT_NEW_MANAGE.URL} component={OriginResultNewManage} />
 
             <Route path={ROUTE.EXAM_RESULT_ASSAY_MANAGE.URL} component={ExamResultAssayManage} />
             <Route path={ROUTE.EXAM_RESULT_TECH_MANAGE.URL} component={ExamResultTechManage} />
