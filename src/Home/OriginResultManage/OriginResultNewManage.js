@@ -719,7 +719,7 @@ class OriginResultXinliManage extends React.Component {
           }
 
           {
-            ((record.status === '上传中' || record.status === '待审核' || record.status === '未通过') && role === ROLE.EMPLOYEE_ARCHIVE_MANAGER) || role === ROLE.EMPLOYEE_ADMIN
+            ((record.status === '上传中' || record.status === '待审核' || record.status === '未通过') && role === ROLE.EMPLOYEE_ARCHIVE_MANAGER) || role === ROLE.EMPLOYEE_ADMIN || role === ROLE.EMPLOYEE_ARCHIVER
               ?
               <span>
                 <span className="ant-divider" />
@@ -732,7 +732,8 @@ class OriginResultXinliManage extends React.Component {
           }
 
           {
-            (record.status === '已通过' || record.status === '待审核') && (role === ROLE.EMPLOYEE_ARCHIVER || role == ROLE.EMPLOYEE_ADMIN || role === ROLE.EMPLOYEE_ARCHIVE_MANAGER)
+            (record.status === '已通过' || record.status === '待审核') && (role == ROLE.EMPLOYEE_ADMIN || role === ROLE.EMPLOYEE_ARCHIVE_MANAGER)
+            || (record.status === '待审核' && role == ROLE.EMPLOYEE_ADVISER)
               ?
               <span>
                 <span className="ant-divider" />

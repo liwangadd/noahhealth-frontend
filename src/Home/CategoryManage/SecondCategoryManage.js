@@ -143,7 +143,7 @@ class SecondCategoryManage extends React.Component {
             url : SERVER + '/api/second/' + this.categoryId,
             type : 'PUT',
             contentType: 'application/json',
-            data : JSON.stringify({firstId: Number(this.props.params.firstId), name: values.name}),
+            data : JSON.stringify({firstId: Number(this.props.params.firstId), name: values.name, number: values.number}),
             dataType : 'json',
             beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
             success : (result) => {

@@ -111,10 +111,19 @@ class CategoryAddModal_ extends React.Component {
               <Input />
               )}
             </FormItem>
-
+            <FormItem {...formItemLayout} label="检查分类编号" style={{display: this.state.firstCategoryLevelVisible}} hasFeedback={true}>
+              {getFieldDecorator('firstCategoryNumber', {rules:[{required: true, message:"请输入检查分类编号!"}]})(
+                <Input />
+              )}
+            </FormItem>
 
             <FormItem {...formItemLayout} label="检查亚类名称" style={{display: this.state.secondCategoryLevelVisible}} hasFeedback={true}>
               {getFieldDecorator('secondCategoryName', {rules: [{ required: true, message: '请输入检查亚类名称!' }]})(
+              <Input />
+              )}
+            </FormItem>
+            <FormItem {...formItemLayout} label="检查亚类编号" style={{display: this.state.secondCategoryLevelVisible}} hasFeedback={true}>
+              {getFieldDecorator('secondCategoryNumber', {rules: [{ required: true, message: '请输入检查亚类编号!' }]})(
               <Input />
               )}
             </FormItem>

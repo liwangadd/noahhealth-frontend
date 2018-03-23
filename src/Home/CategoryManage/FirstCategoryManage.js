@@ -150,7 +150,7 @@ class FirstCategoryManage extends React.Component {
             url : SERVER + '/api/first/' + this.categoryId,
             type : 'PUT',
             contentType: 'application/json',
-            data : JSON.stringify({type: this.categoryType, name: values.name}),
+            data : JSON.stringify({type: this.categoryType, name: values.name, number: values.number}),
             dataType : 'json',
             beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
             success : (result) => {
@@ -289,9 +289,9 @@ class FirstCategoryManage extends React.Component {
   //添加检查分类
   requestAddFirstCategory = () => {
 
-    this.refs.addForm.validateFields(['type', 'firstCategoryName'], (err, values) => {
+    this.refs.addForm.validateFields(['type', 'firstCategoryName', 'firstCategoryNumber'], (err, values) => {
       if (!err) {
-        console.log('添加'+ values.type + '检查分类' + values.firstCategoryName);
+        console.log('添加'+ values.type + '检查分类' + values.firstCategoryName + "检查编号" + values.firstCategoryNumber);
 
         this.setState({confirmLoading: true});
         $.ajax({
@@ -299,7 +299,7 @@ class FirstCategoryManage extends React.Component {
             type : 'POST',
             contentType: 'application/json',
             dataType : 'json',
-            data : JSON.stringify({type : values.type, name: values.firstCategoryName}),
+            data : JSON.stringify({type : values.type, name: values.firstCategoryName, number: values.firstCategoryNumber}),
             beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
             success : (result) => {
 
@@ -330,7 +330,7 @@ class FirstCategoryManage extends React.Component {
   //添加检查亚类
   requestAddSecondCategory = () => {
 
-    this.refs.addForm.validateFields(['type', 'firstCategoryParentOfAssayId', 'firstCategoryParentOfTechId', 'secondCategoryName'], (err, values) => {
+    this.refs.addForm.validateFields(['type', 'firstCategoryParentOfAssayId', 'firstCategoryParentOfTechId', 'secondCategoryName', 'secondCategoryNumber'], (err, values) => {
       if (!err) {
         console.log('添加'+ values.type + '检查亚类' + values.secondCategoryName);
 
@@ -341,7 +341,7 @@ class FirstCategoryManage extends React.Component {
             type : 'POST',
             contentType: 'application/json',
             dataType : 'json',
-            data : JSON.stringify({firstId : firstId, name: values.secondCategoryName}),
+            data : JSON.stringify({firstId : firstId, name: values.secondCategoryName, number: values.secondCategoryNumber}),
             beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
             success : (result) => {
 
