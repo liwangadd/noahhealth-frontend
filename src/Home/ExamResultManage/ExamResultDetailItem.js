@@ -3,6 +3,7 @@ import { STYLE, SESSION, ROLE } from './../../App/PublicConstant.js';
 import { formatDate } from './../../App/PublicUtil.js';
 import React from 'react';
 import { Table, Button, Timeline, Card, Icon, Form, Input, Popconfirm, Checkbox } from 'antd';
+const { TextArea } = Input
 
 //判断是否含有异常项
 const hasAbnormal = (tableItem) => {
@@ -61,16 +62,14 @@ class ExamResultDetailItem_ extends React.Component {
         title: '参考值',
         dataIndex: 'referenceValue',
         key: 'referenceValue'
-      }
-      :
-      {},
-    detail.status === "录入中" || detail.status === "未通过" || detail.status === "待审核" && (role === ROLE.EMPLOYEE_ARCHIVE_MANAGER || role === ROLE.EMPLOYEE_ADMIN)
+      } : {},
+    (detail.status === "录入中" || detail.status === "未通过" || detail.status === "待审核") && (role === ROLE.EMPLOYEE_ARCHIVE_MANAGER || role === ROLE.EMPLOYEE_ADMIN)
       ?
       {
         title: type === '化验' ? '化验数据' : '医技数据',
         key: 'value',
         render: (record) => {
-          return getFieldDecorator(record.id.toString() + "-value", { 'initialValue': record.value })(<Input size="small" />)
+          return getFieldDecorator(record.id.toString() + "-value", { 'initialValue': record.value })(<TextArea autosize={{ minRows: 1, maxRows: 6 }} />)
         }
       }
       :
@@ -88,8 +87,7 @@ class ExamResultDetailItem_ extends React.Component {
               ? false : true} />)
       }
     },
-    type === '化验'
-      ?
+    type === '化验' ?
       {
         title: '备注',
         dataIndex: 'hospital',
@@ -106,9 +104,40 @@ class ExamResultDetailItem_ extends React.Component {
           }
           return obj;
         }
-      }
-      :
-      {}
+      } : {},
+    type === '医技' ?
+      {
+        title: '操作',
+        key: 'action',
+        render: (record) => (
+          <span>
+            {
+              detail.status === '录入中' && (role === ROLE.EMPLOYEE_ARCHIVE_MANAGER || role === ROLE.EMPLOYEE_ADMIN) ?
+                <span>
+                  <a onClick={() => this.props.onUpload(record.resultInputId)}>
+                    {
+                      "上传扫描件"
+                    }
+                  </a>
+                </span>
+                :
+                null
+            }
+            {
+              (detail.status === '未通过' || detail.status === '待审核' || detail.status === '已通过') ?
+                <span>
+                  <a onClick={() => this.props.onWatch(record.resultInputId)}>
+                    {
+                      "查看扫描件"
+                    }
+                  </a>
+                </span>
+                :
+                null
+            }
+          </span>
+        )
+      } : {}
     ];
 
     //操作栏
@@ -190,7 +219,7 @@ class ExamResultDetailItem_ extends React.Component {
           <p>录入者：{detail.inputerName}</p>
           {detail.status !== "录入中" && detail.status !== "待审核" ? <p>审核者：{detail.checkerName}</p> : null}
           {detail.status === "未通过" ? <p>审核结果：{detail.reason}</p> : null}
-          {/* <p>备注：{detail.note}</p> */}
+          {detail.type === '医技' ? <p>备注: {detail.note}</p> : null}
         </Card>
         <Form className="exam-result-detail-item-form" style={{ display: this.state.formVisible }}>
           <Table columns={detailColumns} dataSource={detail.data} pagination={false} size="small" rowKey='id' />
