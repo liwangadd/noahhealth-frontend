@@ -258,68 +258,98 @@ class MemberDetailOriginResultZhuyuan extends React.Component {
       key: 'time',
       render: (time) => formatDate(time)
     },
-    // {
-    //   title: '上传者',
-    //   dataIndex: 'uploaderName',
-    //   key: 'uploaderName'
-    // },{
-    //   title: '上传日期',
-    //   dataIndex: 'uploadTime',
-    //   key: 'uploadTime',
-    //   render: (uploadTime) => formatDate(uploadTime)
-    // },{
-    //   title: '审核者',
-    //   dataIndex: 'checkerName',
-    //   key: 'checkerName',
-    //   render: (checkerName) => checkerName === null ? '/' : checkerName
-    // },
-    {
-      title: '操作',
-      key: 'action',
-      render: (record) => (
-        <span>
-          {
-            (record.status === '待审核') && (role === ROLE.EMPLOYEE_ARCHIVE_MANAGER || role === ROLE.EMPLOYEE_ADMIN || role === ROLE.EMPLOYEE_ARCHIVER)
-              ?
-              <span>
+     // {
+      //   title: '上传者',
+      //   dataIndex: 'uploaderName',
+      //   key: 'uploaderName'
+      // },{
+      //   title: '上传日期',
+      //   dataIndex: 'uploadTime',
+      //   key: 'uploadTime',
+      //   render: (uploadTime) => formatDate(uploadTime)
+      // },{
+      //   title: '审核者',
+      //   dataIndex: 'checkerName',
+      //   key: 'checkerName',
+      //   render: (checkerName) => checkerName === null ? '/' : checkerName
+      // }, 
+    ];
+
+    if (role === ROLE.MEMBER_1 || role === ROLE.MEMBER_2 || role === ROLE.MEMBER_3) {
+
+    } else {
+      originResultColumns.push(
+        {
+          title: '上传者',
+          dataIndex: 'uploaderName',
+          key: 'uploaderName'
+        });
+      originResultColumns.push(
+        {
+          title: '上传日期',
+          dataIndex: 'uploadTime',
+          key: 'uploadTime',
+          render: (uploadTime) => formatDate(uploadTime)
+        }
+      );
+      originResultColumns.push(
+        {
+          title: '审核者',
+          dataIndex: 'checkerName',
+          key: 'checkerName',
+          render: (checkerName) => checkerName === null ? '/' : checkerName
+        }
+      );
+    }
+    originResultColumns.push(
+      {
+        title: '操作',
+        key: 'action',
+        render: (record) => (
+          <span>
+            {
+              (record.status === '待审核') && (role === ROLE.EMPLOYEE_ARCHIVE_MANAGER || role === ROLE.EMPLOYEE_ADMIN || role === ROLE.EMPLOYEE_ARCHIVER)
+                ?
+                <span>
+                  <a onClick={() => this.showWatchPictureModal(record.id)}>查看扫描件</a>
+                </span>
+                : null
+            }
+            {
+              (record.status === '已通过') && (role === ROLE.EMPLOYEE_ADVISER || role === ROLE.EMPLOYEE_ADVISE_MANAGER || role === ROLE.MEMBER_1 || role === ROLE.MEMBER_2 || role === ROLE.MEMBER_3 || role === ROLE.EMPLOYEE_ADMIN)
+                ?
                 <a onClick={() => this.showWatchPictureModal(record.id)}>查看扫描件</a>
-              </span>
-              : null
-          }
-          {
-            (record.status === '已通过') && (role === ROLE.EMPLOYEE_ADVISER || role === ROLE.EMPLOYEE_ADVISE_MANAGER || role === ROLE.MEMBER_1 || role === ROLE.MEMBER_2 || role === ROLE.MEMBER_3 || role === ROLE.EMPLOYEE_ADMIN)
-              ?
-              <a onClick={() => this.showWatchPictureModal(record.id)}>查看扫描件</a>
-              :
-              null
-          }
+                :
+                null
+            }
 
-          {
-            (role === ROLE.EMPLOYEE_ADMIN) || ((record.status === '待审核' || record.status === '上传中') && (role === ROLE.EMPLOYEE_ARCHIVER || role === ROLE.EMPLOYEE_ADMIN || role == ROLE.EMPLOYEE_ARCHIVE_MANAGER || role == ROLE.EMPLOYEE_ADVISER))
-              ?
-              <span>
-                <span className="ant-divider" />
-                <a onClick={() => this.showEditModal(record)}>修改</a>
-              </span>
-              :
-              null
-          }
+            {
+              (role === ROLE.EMPLOYEE_ADMIN) || ((record.status === '待审核' || record.status === '上传中') && (role === ROLE.EMPLOYEE_ARCHIVER || role === ROLE.EMPLOYEE_ADMIN || role == ROLE.EMPLOYEE_ARCHIVE_MANAGER || role == ROLE.EMPLOYEE_ADVISER))
+                ?
+                <span>
+                  <span className="ant-divider" />
+                  <a onClick={() => this.showEditModal(record)}>修改</a>
+                </span>
+                :
+                null
+            }
 
-          {
-            ((record.status === '上传中' || record.status === '待审核' || record.status === '未通过') && (role === ROLE.EMPLOYEE_ARCHIVE_MANAGER || role === ROLE.EMPLOYEE_ADVISER)) || role === ROLE.EMPLOYEE_ADMIN
-              ?
-              <span>
-                <span className="ant-divider" />
-                <Popconfirm title="您确定要删除该条原始资料吗?" onConfirm={() => this.handleDeleteOriginResult(record.id)}>
-                  <a className='operation-delete'>删除</a>
-                </Popconfirm>
-              </span>
-              :
-              null
-          }
-        </span>
-      )
-    }];
+            {
+              ((record.status === '上传中' || record.status === '待审核' || record.status === '未通过') && (role === ROLE.EMPLOYEE_ARCHIVE_MANAGER || role === ROLE.EMPLOYEE_ADVISER)) || role === ROLE.EMPLOYEE_ADMIN
+                ?
+                <span>
+                  <span className="ant-divider" />
+                  <Popconfirm title="您确定要删除该条原始资料吗?" onConfirm={() => this.handleDeleteOriginResult(record.id)}>
+                    <a className='operation-delete'>删除</a>
+                  </Popconfirm>
+                </span>
+                :
+                null
+            }
+          </span>
+        )
+      }
+    )
 
     return (
       <div>

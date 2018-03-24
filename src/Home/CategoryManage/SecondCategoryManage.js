@@ -117,7 +117,7 @@ class SecondCategoryManage extends React.Component {
             if(result.code === RESULT.SUCCESS) {
 
                 let category = result.content;
-                this.refs.editForm.setFieldsValue({name: category.name});
+                this.refs.editForm.setFieldsValue({name: category.name, number:category.number});
 
                 return;
             } else {
