@@ -248,7 +248,7 @@ class ProfileEditModal_ extends React.Component {
                   'initialValue': sessionStorage.getItem(SESSION.NAME), rules: [{ required: true, message: '请输入姓名' }]
                 })(
                   <Input />
-                  )}
+                )}
               </FormItem>
               <FormItem {...formItemLayoutWithoutLabel}>
                 <Button type="primary" htmlType="submit" loading={this.state.submitProfileInfoLoading}>保存</Button>
@@ -263,21 +263,21 @@ class ProfileEditModal_ extends React.Component {
                   rules: [{ required: true, message: '请输入旧密码' }],
                 })(
                   <Input type="password" />
-                  )}
+                )}
               </FormItem>
               <FormItem {...formItemLayout} label="新密码" hasFeedback={true}>
                 {getFieldDecorator('newPassword', {
                   rules: [{ required: true, message: '请输入新密码' }, { validator: this.handleConfirmPassword }],
                 })(
                   <Input type="password" />
-                  )}
+                )}
               </FormItem>
               <FormItem {...formItemLayout} label="确认密码" hasFeedback={true}>
                 {getFieldDecorator('confirmPassword', {
                   rules: [{ required: true, message: '请输入确认密码' }, { validator: this.handleConfirmPassword }],
                 })(
                   <Input type="password" />
-                  )}
+                )}
               </FormItem>
               <FormItem {...formItemLayoutWithoutLabel}>
                 <Button type="primary" htmlType="submit" loading={this.state.submitPasswordChangeLoading}>更改</Button>
@@ -292,7 +292,7 @@ class ProfileEditModal_ extends React.Component {
                   rules: [{ required: true, message: '请输入手机号' }, { pattern: REGEX.PHONE, message: '请输入合法手机号' }],
                 })(
                   <Input />
-                  )}
+                )}
               </FormItem>
               <FormItem {...formItemLayout} label="验证码">
                 {getFieldDecorator('inputCode', { rules: [{ required: true, message: '请输入验证码' }] })(

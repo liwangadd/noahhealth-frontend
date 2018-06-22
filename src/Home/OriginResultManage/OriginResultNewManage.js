@@ -144,6 +144,7 @@ class OriginResultXinliManage extends React.Component {
       memberNum: record.memberNum,
       hospital: record.hospital,
       note: record.note,
+      secondId: record.secondId,
       secondName: record.secondName,
       normal: record.normal,
       time: moment(formatDate(record.time), 'YYYY-MM-DD')
@@ -216,6 +217,7 @@ class OriginResultXinliManage extends React.Component {
             note: values.note,
             normal: values.normal,
             hospital: values.hospital,
+            secondName: values.secondName,
             time: formatDate(values.time)
           }),
           dataType: 'json',

@@ -49,6 +49,9 @@ class MemberManage extends React.Component {
           data: JSON.stringify({
             memberNum: values.memberNum,
             name: values.name,
+            advisor: values.advisor,
+            beginTime: values.time !== undefined ? formatDate(values.time[0], DATE_FORMAT) : undefined,
+            endTime: values.time !== undefined ? formatDate(values.time[1], DATE_FORMAT) : undefined,
             role: values.role === "全部" ? "" : values.role,
             pageNow: pageNow,
             pageSize: PAGE_SIZE
@@ -326,11 +329,13 @@ class MemberManage extends React.Component {
       title: '所属顾问',
       dataIndex: 'staffName',
       key: 'staffName',
-    }, {
-      title: '所属顾问主管',
-      dataIndex: 'staffMgrName',
-      key: 'staffMgrName',
-    }, {
+    },
+    // {
+    //   title: '所属顾问主管',
+    //   dataIndex: 'staffMgrName',
+    //   key: 'staffMgrName',
+    // }, 
+    {
       title: '有效日期',
       dataIndex: 'valid',
       key: 'valid',

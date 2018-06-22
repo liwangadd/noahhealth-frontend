@@ -11,6 +11,8 @@ class OriginResultEditModal_ extends React.Component {
     render() {
         const formItemLayout = { labelCol: { xs: { span: 24 }, sm: { span: 7 }, }, wrapperCol: { xs: { span: 24 }, sm: { span: 12 } } };
         const { getFieldDecorator } = this.props.form;
+        console.log(this.props.originResultTypeData)
+        const originResultTypeOptions = this.props.originResultTypeData.map((type, index) => <Option value={type.label.toString()} key={type.value}>{type.label}</Option>);
         return (
             <Modal title="修改原始资料" visible={this.props.visible} onOk={this.props.onConfirm} confirmLoading={this.props.confirmLoading} onCancel={this.props.onCancel}>
                 <Form className='add-form'>
@@ -29,15 +31,21 @@ class OriginResultEditModal_ extends React.Component {
                             <Input />
                         )}
                     </FormItem>
-
-                    <FormItem {...formItemLayout} label="是否异常">
+                    <FormItem {...formItemLayout} label="资料类别">
+                        {getFieldDecorator('secondName', { rules: [{ required: true, message: '请选择资料类别!' }] })(
+                            <Select>
+                                {originResultTypeOptions}
+                            </Select>
+                        )}
+                    </FormItem>
+                    {/* <FormItem {...formItemLayout} label="是否异常">
                         {getFieldDecorator('normal', { rules: [{ required: true, message: '请选择是否异常' }] })(
                             <Radio.Group>
                                 <Radio.Button value="正常">正常</Radio.Button>
                                 <Radio.Button value="异常">异常</Radio.Button>
                             </Radio.Group>
                         )}
-                    </FormItem>
+                    </FormItem> */}
                     <FormItem {...formItemLayout} label="检查医院">
                         {getFieldDecorator('hospital', { rules: [{ required: true, message: '请输入检查医院名称！' }] })(
                             <Input />

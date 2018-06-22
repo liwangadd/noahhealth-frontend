@@ -7,6 +7,7 @@ import React from 'react';
 import {Tabs, Table, message, BackTop, Tooltip, Popconfirm, Button} from 'antd';
 import {Link} from 'react-router';
 import $ from 'jquery';
+import { format } from 'path';
 const TabPane = Tabs.TabPane;
 
 
@@ -286,21 +287,25 @@ class ExamResultAssayManage extends React.Component {
       dataIndex: 'time',
       key: 'time',
       render: (time) => formatDate(time)
-    },{
-      title: '录入者',
-      dataIndex: 'inputerName',
-      key: 'inputerName'
-    },{
-      title: '录入日期',
+    },
+    // {
+    //   title: '录入者',
+    //   dataIndex: 'inputerName',
+    //   key: 'inputerName'
+    // },
+    {
+      title: '检查日期',
       dataIndex: 'uploadTime',
       key: 'uploadTime',
       render: (uploadTime) => formatDate(uploadTime)
-    },{
-      title: '审核者',
-      dataIndex: 'checkerName',
-      key: 'checkerName',
-      render: (checkerName) => checkerName === null ? '/' : checkerName
-    }, {
+    },
+    {
+      title: "审核日期",
+      dataIndex: 'checkTime',
+      key: 'checkTime',
+      render: (checkTime) => formatDate(checkTime)
+    },
+     {
       title: '执行状态',
       dataIndex: 'status',
       key: 'status',

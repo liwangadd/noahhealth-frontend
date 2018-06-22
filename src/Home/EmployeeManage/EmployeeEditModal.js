@@ -19,7 +19,6 @@ class EmployeeEditModal_ extends React.Component {
     else if (role === ROLE.EMPLOYEE_ARCHIVE_MANAGER) { roleData = [ROLE.EMPLOYEE_ARCHIVER]; }
     const roleOptions = roleData.map((roleName, index) => <Option value={roleName} key={index}>{roleName}</Option>);
 
-
     const formItemLayout = { labelCol: { xs: { span: 24 }, sm: { span: 7 }, }, wrapperCol: { xs: { span: 24 }, sm: { span: 12 }, } };
 
     //生成顾问主管、档案主管的选择器
@@ -28,6 +27,7 @@ class EmployeeEditModal_ extends React.Component {
     const adviseManagerOptions = adviseManagerData.map((manager, index) => <Option value={manager.id.toString()} key={index}>{manager.name}</Option>);
 
     const { getFieldDecorator } = this.props.form;
+
     return (
       <Modal title="修改职员信息" visible={this.props.visible} onOk={this.props.onConfirm} confirmLoading={this.props.confirmLoading} onCancel={this.props.onCancel}>
         <Form className="login-form">

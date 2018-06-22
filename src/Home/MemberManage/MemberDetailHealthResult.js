@@ -196,7 +196,8 @@ class MemberDetailHealthResult extends React.Component {
             ?
             <TabPane tab="健康摘要库" key="1">
               <HealthResultDetailSearchForm ref="healthResultDetailSearchForm" requestOverviewOfHealthData={this.requestOverviewOfHealthData} healthResultTypeData={this.state.healthResultTypeData} requestHealthResultDetailOfMember={this.requestOverviewOfHealthData}/>
-              <Table columns={overviewColumns} dataSource={this.state.overviewData} loading={this.state.tableLoading} size="small" rowKey='id' style={{marginTop: 20}}/>
+              <Table columns={overviewColumns} dataSource={this.state.overviewData} 
+                loading={this.state.tableLoading} size="small" rowKey='id' style={{marginTop: 20}}/>
             </TabPane>
             :
             null

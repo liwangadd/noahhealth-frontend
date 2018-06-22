@@ -2,7 +2,7 @@ import './ExamResultManage.css';
 import { SERVER, SESSION, RESULT, ROLE, FILE_SERVER, ROUTE, LOADING_DELAY_TIME } from './../../App/PublicConstant.js';
 import { formatDate } from './../../App/PublicUtil.js';
 import { isEmployee, isAdviser } from './../../App/PublicMethod.js';
-import ExamResultDetailItem from './ExamResultDetailItem.js';
+import ExamAssayResultDetailItem from './ExamAssayResultDetailItem.js';
 import React from 'react';
 import { browserHistory } from 'react-router';
 import { message, Button, BackTop, Breadcrumb, Timeline, Anchor, Alert, Spin, Tabs } from 'antd';
@@ -46,15 +46,15 @@ class ExamResultAssayCloseup extends React.Component {
   };
 
   //保存录入的检查结果
-  saveInputDetail = (form, id) => {
+  saveInputDetail = (form, id, note) => {
 
     console.log('保存录入了的检查结果', id);
 
     form.validateFields((err, values) => {
       if (!err) {
-        console.log(values);
         //显示加载圈
         this.setState({ saveLoading: true });
+        values['note'] = note
         $.ajax({
           url: SERVER + '/api/detail',
           type: 'PUT',
@@ -123,12 +123,12 @@ class ExamResultAssayCloseup extends React.Component {
   * 审核检查结果对话框
   **/
 
-  passInputDetail = (form, id) => {
+  passInputDetail = (form, id, note) => {
 
     console.log('通过一份检查结果,变为已通过', id);
 
     // 先保存
-    this.saveInputDetail(form, id);
+    this.saveInputDetail(form, id, note);
     //显示加载圈
     this.setState({ passLoading: true });
     $.ajax({
@@ -267,7 +267,12 @@ class ExamResultAssayCloseup extends React.Component {
 
         console.log(result);
         if (result.code === RESULT.SUCCESS) {
-
+          for(var i=0;i<result.content.data.length;i++){
+            if(result.content.data[i].normal){
+              result.content['normal'] = true
+              break
+            }
+          }
           this.setState({ detail: result.content, pageLoading: false });
         } else {
 
@@ -299,7 +304,7 @@ class ExamResultAssayCloseup extends React.Component {
         {
           this.state.detail !== null
             ?
-            <ExamResultDetailItem
+            <ExamAssayResultDetailItem
 
               role={role}
 

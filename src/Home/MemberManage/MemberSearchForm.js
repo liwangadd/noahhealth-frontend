@@ -1,8 +1,9 @@
 import React from 'react';
 import {ROLE} from './../../App/PublicConstant.js';
-import { Form, Row, Col, Input, Button, Select} from 'antd';
+import { Form, Row, Col, Input, Button, Select, DatePicker} from 'antd';
 const FormItem = Form.Item;
 const Option = Select.Option;
+const { RangePicker } = DatePicker;
 
 class MemberSearchForm_ extends React.Component {
   state = {
@@ -32,21 +33,35 @@ class MemberSearchForm_ extends React.Component {
         onSubmit={this.handleSearch}
       >
         <Row gutter={20}>
-          <Col span={8}>
+          <Col span={5}>
+            <FormItem>
+              {getFieldDecorator('time')(
+                <RangePicker style={{width:'100%'}}/>
+              )}
+            </FormItem>
+          </Col>
+          <Col span={5}>
             <FormItem>
               {getFieldDecorator('memberNum')(
                 <Input placeholder="会员编号" />
               )}
             </FormItem>
           </Col>
-          <Col span={8}>
+          <Col span={5}>
             <FormItem>
               {getFieldDecorator('name')(
                 <Input placeholder="姓名" />
               )}
             </FormItem>
           </Col>
-          <Col span={8}>
+          <Col span={5}>
+            <FormItem>
+              {getFieldDecorator('advisor')(
+                <Input placeholder="所属顾问"/>
+              )}
+            </FormItem>
+          </Col>
+          <Col span={4}>
             <FormItem>
               {getFieldDecorator('role', {
                 initialValue: '全部'

@@ -51,6 +51,7 @@ class ExamResultDetailItem_ extends React.Component {
     const detailColumns = [{
       title: type === '化验' ? '化验项目' : '医技项目',
       key: 'thirdName',
+      width: '20%',
       render: (record) => {
         return <span className={record.normal === true ? "abnormal" : ""}>{record.thirdName}{record.enShort === null || record.enShort === '' || record.enShort === undefined ?
           '' : '(' + record.enShort + ')'}</span>
@@ -61,6 +62,7 @@ class ExamResultDetailItem_ extends React.Component {
       {
         title: '参考值',
         dataIndex: 'referenceValue',
+        width: '30%',
         key: 'referenceValue'
       } : {},
     (detail.status === "录入中" || detail.status === "未通过" || detail.status === "待审核") && (role === ROLE.EMPLOYEE_ARCHIVE_MANAGER || role === ROLE.EMPLOYEE_ADMIN)
