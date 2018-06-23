@@ -14,12 +14,11 @@ const hasAbnormal = (tableItem) => {
 }
 
 
-class ExamAssayResultDetailItem_ extends React.Component {
+class ExamTechResultDetailItem_ extends React.Component {
 
     state = {
         formVisible: STYLE.BLOCK,
         switchText: '收起',
-        note: '',
 
         unpassReason: ''
     }
@@ -41,8 +40,7 @@ class ExamAssayResultDetailItem_ extends React.Component {
         this.setState({ popoverVisible: false, unpassReason: '' })
     }
 
-    handleNote = (e)=>{
-        // this.setState({note: e.target.value})
+    handleNote = (e) => {
         this.props.detail.note = e.target.value
     }
 
@@ -55,35 +53,30 @@ class ExamAssayResultDetailItem_ extends React.Component {
         const { detail, type } = this.props;
 
         const detailColumns = [{
-            title: '化验项目',
+            title: '医技项目',
             key: 'thirdName',
-            width: '20%',
+            width: '10%',
             render: (record) => {
                 return <span className={record.normal === true ? "abnormal" : ""}>{record.thirdName}{record.enShort === null || record.enShort === '' || record.enShort === undefined ?
                     '' : '(' + record.enShort + ')'}</span>
             }
-        }, {
-            title: '参考值',
-            dataIndex: 'referenceValue',
-            width: '30%',
-            key: 'referenceValue'
         },
         (detail.status === "录入中" || detail.status === "未通过" || detail.status === "待审核") && (role === ROLE.EMPLOYEE_ARCHIVE_MANAGER || role === ROLE.EMPLOYEE_ADMIN)
             ?
             {
-                title: '化验数据',
+                title: '医技数据',
                 key: 'value',
-                width: '20%',
+                width: '40%',
                 render: (record) => {
                     return getFieldDecorator(record.id.toString() + "-value", { 'initialValue': record.value })(<TextArea autosize={{ minRows: 1, maxRows: 6 }} />)
                 }
             }
             :
             {
-                title: '化验数据',
+                title: '医技数据',
                 dataIndex: 'value',
                 key: 'value',
-                width: '20%'
+                width: '40%',
             }, {
             title: '异常判断',
             key: 'normal',
@@ -100,10 +93,10 @@ class ExamAssayResultDetailItem_ extends React.Component {
             {
                 title: '备注',
                 key: 'note',
-                width: '30%',
+                width: '25%',
                 render: (value, row, index) => {
                     const obj = {
-                        children: <TextArea autosize={{ minRows: 8, }} onChange={this.handleNote} defaultValue={detail.note}/>,
+                        children: <TextArea autosize={{ minRows: true, }} onChange={this.handleNote} defaultValue={detail.note} />,
                         props: {}
                     }
                     if (index === 0) {
@@ -119,7 +112,7 @@ class ExamAssayResultDetailItem_ extends React.Component {
                 title: '备注',
                 dataIndex: 'note',
                 key: 'note',
-                width: '30%',
+                width: '25%',
                 render: (value, row, index) => {
                     const obj = {
                         children: detail.note,
@@ -132,7 +125,42 @@ class ExamAssayResultDetailItem_ extends React.Component {
                     }
                     return obj;
                 }
-            }
+            },
+        {
+            title: '操作',
+            key: 'action',
+            width: '25%',
+            render: (record) => (
+                <span>
+                    {
+                        (detail.status === '录入中' || detail.status === '待审核') && (role === ROLE.EMPLOYEE_ARCHIVE_MANAGER || role === ROLE.EMPLOYEE_ADMIN) ?
+                            <span>
+                                <a onClick={() => this.props.onUpload(record.resultInputId)}>
+                                    {
+                                        "上传扫描件"
+                                    }
+                                </a>
+                                <span className="ant-divider" />
+                            </span>
+                            :
+                            null
+                    }
+
+                    {
+                        (detail.status === '未通过' || detail.status === '待审核' || detail.status === '已通过') ?
+                            <span>
+                                <a onClick={() => this.props.onWatch(record.resultInputId)}>
+                                    {
+                                        "查看扫描件"
+                                    }
+                                </a>
+                            </span>
+                            :
+                            null
+                    }
+                </span>
+            )
+        }
         ];
 
         //操作栏
@@ -193,6 +221,7 @@ class ExamAssayResultDetailItem_ extends React.Component {
                     <Button size="default" type="primary" onClick={() => this.props.onDownload(detail.id)} loading={this.props.downloadLoading}>下载</Button>
                 </div>
 
+
         //时间轴节点图标
         let iconType = "plus-circle-o";
         let iconColor = "#ffce3d";
@@ -207,8 +236,8 @@ class ExamAssayResultDetailItem_ extends React.Component {
             <Timeline.Item dot={timeLineIcon}>
                 <h4 id={detail.id.toString()} className={hasAbnormal(detail.data) ? "abnormal" : ""}>{detail.secondName + " " + formatDate(detail.time)}</h4>
                 <Card title={detail.status} extra={<a onClick={this.switchForm}>{this.state.switchText}</a>} className="exam-result-detail-item-card">
-                    <p className={hasAbnormal(detail.data)?"abnormal":""}>检查亚类：{detail.secondName}</p>
-                    <p >检查医院：{detail.hospital}</p>
+                    <p className={hasAbnormal(detail.data) ? "abnormal" : ""}>检查亚类：{detail.secondName}</p>
+                    <p>检查医院：{detail.hospital}</p>
                     <p>录入时间：{formatDate(detail.uploadTime)}</p>
                     <p>录入者：{detail.inputerName}</p>
                     {detail.status !== "录入中" && detail.status !== "待审核" ? <p>审核者：{detail.checkerName}</p> : null}
@@ -226,5 +255,5 @@ class ExamAssayResultDetailItem_ extends React.Component {
     }
 }
 
-const ExamAssayResultDetailItem = Form.create()(ExamAssayResultDetailItem_);
-export default ExamAssayResultDetailItem;
+const ExamTechResultDetailItem = Form.create()(ExamTechResultDetailItem_);
+export default ExamTechResultDetailItem;

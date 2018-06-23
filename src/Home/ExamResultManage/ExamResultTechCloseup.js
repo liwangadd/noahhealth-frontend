@@ -2,7 +2,7 @@ import './ExamResultManage.css';
 import { SERVER, SESSION, RESULT, ROLE, FILE_SERVER, ROUTE, LOADING_DELAY_TIME } from './../../App/PublicConstant.js';
 import { formatDate } from './../../App/PublicUtil.js';
 import { isEmployee, isAdviser } from './../../App/PublicMethod.js';
-import ExamResultDetailItem from './ExamResultDetailItem.js';
+import ExamTechResultDetailItem from './ExamTechResultDetailItem.js';
 import ExamResultUploadPictureModal from './ExamResultUploadPictureModal'
 import OriginResultWatchPictureModal from './../OriginResultManage/OriginResultWatchPictureModal'
 import React from 'react';
@@ -176,15 +176,15 @@ class ExamResultTechCloseup extends React.Component {
   }
 
   //保存录入的检查结果
-  saveInputDetail = (form, id) => {
+  saveInputDetail = (form, id, note) => {
 
     console.log('保存录入了的检查结果', id);
 
     form.validateFields((err, values) => {
       if (!err) {
-        console.log(values);
-        //显示加载圈
+        //显示加载圈l
         this.setState({ saveLoading: true });
+        values['note'] = note
         $.ajax({
           url: SERVER + '/api/detail',
           type: 'PUT',
@@ -213,12 +213,12 @@ class ExamResultTechCloseup extends React.Component {
   }
 
   //提交录入的检查结果（先请求保存、再请求改变状态）
-  submitInputDetail = (form, id) => {
+  submitInputDetail = (form, id, note) => {
 
     console.log('提交一份检查结果,变为待审核', id);
 
     //先保存
-    this.saveInputDetail(form, id);
+    this.saveInputDetail(form, id, note);
 
     //再提交
     this.setState({ submitLoading: true });
@@ -253,10 +253,12 @@ class ExamResultTechCloseup extends React.Component {
   * 审核检查结果对话框
   **/
 
-  passInputDetail = (form, id) => {
+  passInputDetail = (form, id, note) => {
 
     console.log('通过一份检查结果,变为已通过', id);
 
+    // 先保存
+    this.saveInputDetail(form, id, note);
     //显示加载圈
     this.setState({ passLoading: true });
     $.ajax({
@@ -426,7 +428,7 @@ class ExamResultTechCloseup extends React.Component {
         {
           this.state.detail !== null
             ?
-            <ExamResultDetailItem detail={this.state.detail}
+            <ExamTechResultDetailItem detail={this.state.detail}
               type={this.state.detail.type}
 
               onSave={this.saveInputDetail}

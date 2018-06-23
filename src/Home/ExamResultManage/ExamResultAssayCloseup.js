@@ -55,6 +55,8 @@ class ExamResultAssayCloseup extends React.Component {
         //显示加载圈
         this.setState({ saveLoading: true });
         values['note'] = note
+
+        console.log(values)
         $.ajax({
           url: SERVER + '/api/detail',
           type: 'PUT',
@@ -83,12 +85,12 @@ class ExamResultAssayCloseup extends React.Component {
   }
 
   //提交录入的检查结果（先请求保存、再请求改变状态）
-  submitInputDetail = (form, id) => {
+  submitInputDetail = (form, id, note) => {
 
     console.log('提交一份检查结果,变为待审核', id);
 
     //先保存
-    this.saveInputDetail(form, id);
+    this.saveInputDetail(form, id, note);
 
     //再提交
     this.setState({ submitLoading: true });
@@ -267,12 +269,7 @@ class ExamResultAssayCloseup extends React.Component {
 
         console.log(result);
         if (result.code === RESULT.SUCCESS) {
-          for(var i=0;i<result.content.data.length;i++){
-            if(result.content.data[i].normal){
-              result.content['normal'] = true
-              break
-            }
-          }
+          
           this.setState({ detail: result.content, pageLoading: false });
         } else {
 

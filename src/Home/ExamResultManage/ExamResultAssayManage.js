@@ -2,7 +2,7 @@ import './ExamResultManage.css';
 import {SERVER, SESSION, RESULT, PAGE_SIZE, ROUTE, ROLE} from './../../App/PublicConstant.js';
 import {formatDate} from './../../App/PublicUtil.js';
 import ExamResultOfWorkflowSearchForm from './ExamResultOfWorkflowSearchForm.js';
-import ExamResultDetailAddModal from './ExamResultDetailAddModal.js';
+import ExamAssayDetailAddModal from './ExamAssayDetailAddModal.js';
 import React from 'react';
 import {Tabs, Table, message, BackTop, Tooltip, Popconfirm, Button} from 'antd';
 import {Link} from 'react-router';
@@ -104,13 +104,13 @@ class ExamResultAssayManage extends React.Component {
         //显示加载圈
         this.setState({ confirmAddModalLoading: true });
 
-        let secondId = values.type === '化验' ? values.secondCategoryParentOfAssayId[1] : values.secondCategoryParentOfTechId[1];
+        // let secondId = values.type === '化验' ? values.secondCategoryParentOfAssayId[1] : values.secondCategoryParentOfTechId[1];
         $.ajax({
             url : SERVER + '/api/input',
             type : 'POST',
             contentType: 'application/json',
             data : JSON.stringify({userId: Number(values.userId),
-                                   secondId: secondId,
+                                   secondId: values.secondCategoryParentOfAssayId[1],
                                    hospital: values.hospital,
                                    time: values.time,
                                    note: values.note}),
@@ -373,7 +373,8 @@ class ExamResultAssayManage extends React.Component {
             <Table className='exam-result-table' columns={examResultOfWorkflowColumns} dataSource={this.state.examResultOfWorkflowData} rowKey='id' loading={this.state.examResultOfWorkflowTableLoading} pagination={this.state.examResultOfWorkflowPager} onChange={this.changeExamResultOfWorkflowPager}/>
           </TabPane>
         </Tabs>
-        <ExamResultDetailAddModal ref="addForm" visible={this.state.addModalVisible} confirmLoading={this.state.confirmAddModalLoading} onCancel={this.closeAddModal} onConfirm={this.confirmAddModal} memberUnderEmployeeData={this.state.memberUnderEmployeeData} secondCategoryParentOfAssayData={this.state.secondCategoryParentOfAssayData} secondCategoryParentOfTechData={this.state.secondCategoryParentOfTechData}/>
+        <ExamAssayDetailAddModal ref="addForm" visible={this.state.addModalVisible} confirmLoading={this.state.confirmAddModalLoading} onCancel={this.closeAddModal} onConfirm={this.confirmAddModal} 
+        memberUnderEmployeeData={this.state.memberUnderEmployeeData} secondCategoryParentOfAssayData={this.state.secondCategoryParentOfAssayData}/>
       </div>
     );
   }

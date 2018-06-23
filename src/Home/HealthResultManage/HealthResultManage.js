@@ -319,6 +319,10 @@ class HealthResultManage extends React.Component {
       dataIndex: 'valid',
       key: 'valid',
       render: (valid) => formatDate(valid)
+    },{
+      title: '执行状态',
+      dataIndex: 'status',
+      key: 'status'
     }, {
       title: '操作',
       key: 'action',
