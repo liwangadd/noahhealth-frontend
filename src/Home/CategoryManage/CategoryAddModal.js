@@ -1,7 +1,7 @@
 import './CategoryManage.css';
-import {STYLE} from './../../App/PublicConstant.js';
+import { STYLE } from './../../App/PublicConstant.js';
 import React from 'react';
-import {Form, Input, Radio, Select, Cascader, Modal} from 'antd';
+import { Form, Input, Radio, Select, Cascader, Modal } from 'antd';
 const FormItem = Form.Item;
 const Option = Select.Option;
 
@@ -11,6 +11,7 @@ class CategoryAddModal_ extends React.Component {
   state = {
 
     techRadioDisabled: false,
+    healthRadioDisabled: false,
     thirdCategoryRadioDisabled: false,
 
 
@@ -19,6 +20,7 @@ class CategoryAddModal_ extends React.Component {
     secondCategoryLevelVisible: STYLE.NONE,
     secondCategoryLevelOfAssayVisible: STYLE.NONE,
     secondCategoryLevelOfTechVisible: STYLE.NONE,
+    secondCategoryLevelOfHealthVisiable: STYLE.NONE,
 
     thirdCategoryLevelVisible: STYLE.NONE,
     thirdCategoryLevelOfAssayVisible: STYLE.NONE,
@@ -27,36 +29,45 @@ class CategoryAddModal_ extends React.Component {
 
   //根据 化验/医技  and 检查分类/检查亚类/检查项目 决定输入组件的显示/消失
   changeFormByTypeAndLevel = (type, level) => {
-    switch(level) {
-      case '检查分类':this.setState({firstCategoryLevelVisible: STYLE.BLOCK,
-                                    secondCategoryLevelVisible: STYLE.NONE,
-                                    secondCategoryLevelOfAssayVisible: STYLE.NONE,
-                                    secondCategoryLevelOfTechVisible: STYLE.NONE,
-                                    thirdCategoryLevelVisible: STYLE.NONE,
-                                    thirdCategoryLevelOfAssayVisible: STYLE.NONE,
-                                    thirdCategoryLevelOfTechVisible: STYLE.NONE});break;
-      case '检查亚类':this.setState({firstCategoryLevelVisible: STYLE.NONE,
-                                    secondCategoryLevelVisible: STYLE.BLOCK,
-                                    secondCategoryLevelOfAssayVisible: type === "化验" ? STYLE.BLOCK : STYLE.NONE,
-                                    secondCategoryLevelOfTechVisible: type === "医技" ? STYLE.BLOCK : STYLE.NONE,
-                                    thirdCategoryLevelVisible: STYLE.NONE,
-                                    thirdCategoryLevelOfAssayVisible: STYLE.NONE,
-                                    thirdCategoryLevelOfTechVisible: STYLE.NONE});break;
-      case '检查项目':this.setState({firstCategoryLevelVisible: STYLE.NONE,
-                                    secondCategoryLevelVisible: STYLE.NONE,
-                                    secondCategoryLevelOfAssayVisible: STYLE.NONE,
-                                    secondCategoryLevelOfTechVisible: STYLE.NONE,
-                                    thirdCategoryLevelVisible: STYLE.BLOCK,
-                                    thirdCategoryLevelOfAssayVisible: type === "化验" ? STYLE.BLOCK : STYLE.NONE,
-                                    thirdCategoryLevelOfTechVisible: type === "医技" ? STYLE.BLOCK : STYLE.NONE});break;
-      default:;break;
+    switch (level) {
+      case '检查分类': this.setState({
+        firstCategoryLevelVisible: STYLE.BLOCK,
+        secondCategoryLevelVisible: STYLE.NONE,
+        secondCategoryLevelOfAssayVisible: STYLE.NONE,
+        secondCategoryLevelOfTechVisible: STYLE.NONE,
+        secondCategoryLevelOfHealthVisiable: STYLE.NONE,
+        thirdCategoryLevelVisible: STYLE.NONE,
+        thirdCategoryLevelOfAssayVisible: STYLE.NONE,
+        thirdCategoryLevelOfTechVisible: STYLE.NONE
+      }); break;
+      case '检查亚类': this.setState({
+        firstCategoryLevelVisible: STYLE.NONE,
+        secondCategoryLevelVisible: STYLE.BLOCK,
+        secondCategoryLevelOfAssayVisible: type === "化验" ? STYLE.BLOCK : STYLE.NONE,
+        secondCategoryLevelOfTechVisible: type === "医技" ? STYLE.BLOCK : STYLE.NONE,
+        secondCategoryLevelOfHealthVisiable: type === "健康摘要" ? STYLE.BLOCK : STYLE.NONE,
+        thirdCategoryLevelVisible: STYLE.NONE,
+        thirdCategoryLevelOfAssayVisible: STYLE.NONE,
+        thirdCategoryLevelOfTechVisible: STYLE.NONE
+      }); break;
+      case '检查项目': this.setState({
+        firstCategoryLevelVisible: STYLE.NONE,
+        secondCategoryLevelVisible: STYLE.NONE,
+        secondCategoryLevelOfAssayVisible: STYLE.NONE,
+        secondCategoryLevelOfTechVisible: STYLE.NONE,
+        secondCategoryLevelOfHealthVisiable: STYLE.NONE,
+        thirdCategoryLevelVisible: STYLE.BLOCK,
+        thirdCategoryLevelOfAssayVisible: type === "化验" ? STYLE.BLOCK : STYLE.NONE,
+        thirdCategoryLevelOfTechVisible: type === "医技" ? STYLE.BLOCK : STYLE.NONE
+      }); break;
+      default: ; break;
     }
   }
 
   handleTypeChange = (e) => {
 
     let type = e.target.value;
-    type === "医技" ? this.setState({thirdCategoryRadioDisabled: true}) : this.setState({thirdCategoryRadioDisabled: false})
+    type === "化验" ? this.setState({ thirdCategoryRadioDisabled: false }) : this.setState({ thirdCategoryRadioDisabled: true });
 
     let level = this.props.form.getFieldValue("level");
     this.changeFormByTypeAndLevel(type, level);
@@ -68,7 +79,7 @@ class CategoryAddModal_ extends React.Component {
 
     let type = this.props.form.getFieldValue("type");
     let level = e.target.value;
-    level === "检查项目" ? this.setState({techRadioDisabled: true}) : this.setState({techRadioDisabled: false})
+    level === "检查项目" ? this.setState({ techRadioDisabled: true, healthRadioDisabled: true }) : this.setState({ techRadioDisabled: false, healthRadioDisabled: false })
 
     this.changeFormByTypeAndLevel(type, level);
   }
@@ -76,100 +87,105 @@ class CategoryAddModal_ extends React.Component {
 
   render() {
 
-    const formItemLayout = {labelCol: { xs: { span: 24 }, sm: { span: 7 },}, wrapperCol: { xs: { span: 24 }, sm: { span: 15 }}};
+    const formItemLayout = { labelCol: { xs: { span: 24 }, sm: { span: 7 }, }, wrapperCol: { xs: { span: 24 }, sm: { span: 15 } } };
 
     //生成所属分类下拉列表、所属亚类级联选择器
     const firstCategoryOfAssayOptions = this.props.firstCategoryParentOfAssayData.map((firstCategory, index) => <Option value={firstCategory.id.toString()} key={index}>{firstCategory.name}</Option>);
     const firstCategoryOfTechOptions = this.props.firstCategoryParentOfTechData.map((firstCategory, index) => <Option value={firstCategory.id.toString()} key={index}>{firstCategory.name}</Option>);
+    const firstCategoryOfHealthOptions = this.props.firstCategoryParentOfHealthData.map((firstCategory, index) => <Option value={firstCategory.id.toString()} key={index}>{firstCategory.name}</Option>);
 
 
     const { getFieldDecorator } = this.props.form;
     return (
-        <Modal title="添加检查项目" visible={this.props.visible} onOk={this.props.onConfirm} confirmLoading={this.props.confirmLoading} onCancel={this.props.onCancel}>
-          <Form className="add-form">
-            <FormItem {...formItemLayout} label="检查类型">
-              {getFieldDecorator('type', {rules: [{ required: true, message: '请选择检查类型!' }], initialValue: "化验"})(
+      <Modal title="添加检查项目" visible={this.props.visible} onOk={this.props.onConfirm} confirmLoading={this.props.confirmLoading} onCancel={this.props.onCancel}>
+        <Form className="add-form">
+          <FormItem {...formItemLayout} label="检查类型">
+            {getFieldDecorator('type', { rules: [{ required: true, message: '请选择检查类型!' }], initialValue: "化验" })(
               <Radio.Group onChange={this.handleTypeChange}>
                 <Radio.Button value="化验">化验</Radio.Button>
                 <Radio.Button value="医技" disabled={this.state.techRadioDisabled}>医技</Radio.Button>
+                <Radio.Button value="健康摘要" disabled={this.state.healthRadioDisabled}>健康摘要</Radio.Button>
               </Radio.Group>
-              )}
-            </FormItem>
-            <FormItem {...formItemLayout} label="添加层级">
-              {getFieldDecorator('level', {rules: [{ required: true, message: '请选择添加层级!' }], initialValue: "检查分类"})(
+            )}
+          </FormItem>
+          <FormItem {...formItemLayout} label="添加层级">
+            {getFieldDecorator('level', { rules: [{ required: true, message: '请选择添加层级!' }], initialValue: "检查分类" })(
               <Radio.Group onChange={this.handleLevelChange}>
                 <Radio.Button value="检查分类">检查分类</Radio.Button>
                 <Radio.Button value="检查亚类">检查亚类</Radio.Button>
                 <Radio.Button value="检查项目" disabled={this.state.thirdCategoryRadioDisabled}>检查项目</Radio.Button>
               </Radio.Group>
-              )}
-            </FormItem>
+            )}
+          </FormItem>
 
 
-            <FormItem {...formItemLayout} label="检查分类名称" style={{display: this.state.firstCategoryLevelVisible}} hasFeedback={true}>
-              {getFieldDecorator('firstCategoryName', {rules: [{ required: true, message: '请输入检查分类名称!' }]})(
+          <FormItem {...formItemLayout} label="检查分类名称" style={{ display: this.state.firstCategoryLevelVisible }} hasFeedback={true}>
+            {getFieldDecorator('firstCategoryName', { rules: [{ required: true, message: '请输入检查分类名称!' }] })(
               <Input />
-              )}
-            </FormItem>
-            <FormItem {...formItemLayout} label="检查分类编号" style={{display: this.state.firstCategoryLevelVisible}} hasFeedback={true}>
-              {getFieldDecorator('firstCategoryNumber', {rules:[{required: true, message:"请输入检查分类编号!"}]})(
-                <Input />
-              )}
-            </FormItem>
+            )}
+          </FormItem>
 
-            <FormItem {...formItemLayout} label="检查亚类名称" style={{display: this.state.secondCategoryLevelVisible}} hasFeedback={true}>
-              {getFieldDecorator('secondCategoryName', {rules: [{ required: true, message: '请输入检查亚类名称!' }]})(
+          <FormItem {...formItemLayout} label="检查亚类名称" style={{ display: this.state.secondCategoryLevelVisible }} hasFeedback={true}>
+            {getFieldDecorator('secondCategoryName', { rules: [{ required: true, message: '请输入检查亚类名称!' }] })(
               <Input />
-              )}
-            </FormItem>
-            <FormItem {...formItemLayout} label="检查亚类编号" style={{display: this.state.secondCategoryLevelVisible}} hasFeedback={true}>
-              {getFieldDecorator('secondCategoryNumber', {rules: [{ required: true, message: '请输入检查亚类编号!' }]})(
-              <Input />
-              )}
-            </FormItem>
-            <FormItem {...formItemLayout} label="所属分类" style={{display: this.state.secondCategoryLevelOfAssayVisible}} hasFeedback={true}>
-              {getFieldDecorator('firstCategoryParentOfAssayId', {rules: [{ required: true, message: '请选择所属分类!' }]})(
-                <Select>
-                  {firstCategoryOfAssayOptions}
-                </Select>
-              )}
-            </FormItem>
-            <FormItem {...formItemLayout} label="所属分类" style={{display: this.state.secondCategoryLevelOfTechVisible}} hasFeedback={true}>
-              {getFieldDecorator('firstCategoryParentOfTechId', {rules: [{ required: true, message: '请选择所属分类!' }]})(
-                <Select>
-                  {firstCategoryOfTechOptions}
-                </Select>
-              )}
-            </FormItem>
+            )}
+          </FormItem>
+
+          <FormItem {...formItemLayout} label="所属分类" style={{ display: this.state.secondCategoryLevelOfAssayVisible }} hasFeedback={true}>
+            {getFieldDecorator('firstCategoryParentOfAssayId', { rules: [{ required: true, message: '请选择所属分类!' }] })(
+              <Select>
+                {firstCategoryOfAssayOptions}
+              </Select>
+            )}
+          </FormItem>
+          <FormItem {...formItemLayout} label="所属分类" style={{ display: this.state.secondCategoryLevelOfTechVisible }} hasFeedback={true}>
+            {getFieldDecorator('firstCategoryParentOfTechId', { rules: [{ required: true, message: '请选择所属分类!' }] })(
+              <Select>
+                {firstCategoryOfTechOptions}
+              </Select>
+            )}
+          </FormItem>
+          <FormItem {...formItemLayout} label="所属分类" style={{ display: this.state.secondCategoryLevelOfHealthVisiable }} hasFeedback={true}>
+            {getFieldDecorator('firstCategoryParentOfHealthId', { rules: [{ required: true, message: '请选择所属亚类!' }] })(
+              <Select>
+                {firstCategoryOfHealthOptions}
+              </Select>
+            )}
+          </FormItem>
 
 
-            <FormItem {...formItemLayout} label="检查项目名称" style={{display: this.state.thirdCategoryLevelVisible}} hasFeedback={true}>
-              {getFieldDecorator('thirdCategoryName', {rules: [{ required: true, message: '请输入检查项目名称!' }]})(
+          <FormItem {...formItemLayout} label="检查项目名称" style={{ display: this.state.thirdCategoryLevelVisible }} hasFeedback={true}>
+            {getFieldDecorator('thirdCategoryName', { rules: [{ required: true, message: '请输入检查项目名称!' }] })(
               <Input />
-              )}
-            </FormItem>
-            <FormItem {...formItemLayout} label="所属亚类" style={{display: this.state.thirdCategoryLevelOfAssayVisible}} hasFeedback={true}>
-              {getFieldDecorator('secondCategoryParentOfAssayId', {rules: [{ required: true, message: '请选择所属亚类!' }]})(
-                <Cascader options={this.props.secondCategoryParentOfAssayData} placeholder="" allowClear={false}/>
-              )}
-            </FormItem>
-            <FormItem {...formItemLayout} label="所属亚类" style={{display: this.state.thirdCategoryLevelOfTechVisible}} hasFeedback={true}>
-              {getFieldDecorator('secondCategoryParentOfTechId', {rules: [{ required: true, message: '请选择所属亚类!' }]})(
-                <Cascader options={this.props.secondCategoryParentOfTechData} placeholder="" allowClear={false}/>
-              )}
-            </FormItem>
-            <FormItem {...formItemLayout} label="英文缩写" style={{display: this.state.thirdCategoryLevelVisible}} hasFeedback={true}>
-              {getFieldDecorator('enShort', {rules: [{ required: true, message: '请输入英文缩写!' }]})(
-                <Input />
-              )}
-            </FormItem>
-            <FormItem {...formItemLayout} label="参考值及单位" style={{display: this.state.thirdCategoryLevelVisible}} hasFeedback={true}>
-              {getFieldDecorator('referenceValue', {rules: [{ required: true, message: '请输入参考值及单位!' }]})(
+            )}
+          </FormItem>
+          <FormItem {...formItemLayout} label="检查项目编号" style={{ display: this.state.thirdCategoryLevelVisible }} hasFeedback={true}>
+            {getFieldDecorator('itemNumber', { rules: [{ required: true, message: '请输入检查项目编号!' }] })(
               <Input />
-              )}
-            </FormItem>
-          </Form>
-        </Modal>
+            )}
+          </FormItem>
+          <FormItem {...formItemLayout} label="所属亚类" style={{ display: this.state.thirdCategoryLevelOfAssayVisible }} hasFeedback={true}>
+            {getFieldDecorator('secondCategoryParentOfAssayId', { rules: [{ required: true, message: '请选择所属亚类!' }] })(
+              <Cascader options={this.props.secondCategoryParentOfAssayData} placeholder="" allowClear={false} />
+            )}
+          </FormItem>
+          <FormItem {...formItemLayout} label="所属亚类" style={{ display: this.state.thirdCategoryLevelOfTechVisible }} hasFeedback={true}>
+            {getFieldDecorator('secondCategoryParentOfTechId', { rules: [{ required: true, message: '请选择所属亚类!' }] })(
+              <Cascader options={this.props.secondCategoryParentOfTechData} placeholder="" allowClear={false} />
+            )}
+          </FormItem>
+          <FormItem {...formItemLayout} label="英文缩写" style={{ display: this.state.thirdCategoryLevelVisible }} hasFeedback={true}>
+            {getFieldDecorator('enShort', { rules: [{ required: true, message: '请输入英文缩写!' }] })(
+              <Input />
+            )}
+          </FormItem>
+          <FormItem {...formItemLayout} label="参考值及单位" style={{ display: this.state.thirdCategoryLevelVisible }} hasFeedback={true}>
+            {getFieldDecorator('referenceValue', { rules: [{ required: true, message: '请输入参考值及单位!' }] })(
+              <Input />
+            )}
+          </FormItem>
+        </Form>
+      </Modal>
     );
   }
 }

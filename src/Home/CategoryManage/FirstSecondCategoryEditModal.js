@@ -18,11 +18,6 @@ class FirstSecondCategoryEditModal_ extends React.Component {
             <Input />
             )}
           </FormItem>
-          <FormItem {...formItemLayout} label="编号" hasFeedback={true}>
-            {getFieldDecorator('number', {rules: [{ required: true, message: '请输入编号!' }]})(
-            <Input />
-            )}
-          </FormItem>
         </Form>
       </Modal>
     );

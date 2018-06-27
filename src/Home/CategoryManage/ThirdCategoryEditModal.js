@@ -18,6 +18,11 @@ class ThirdCategoryEditModal_ extends React.Component {
             <Input />
             )}
           </FormItem>
+          <FormItem {...formItemLayout} label="编号" hasFeedback={true}>
+            {getFieldDecorator('number', {rules: [{ required: true, message: '请输入编号!' }]})(
+            <Input />
+            )}
+          </FormItem>
           <FormItem {...formItemLayout} label="英文缩写" hasFeedback={true}>
             {getFieldDecorator('enShort', {rules: [{ required: true, message: '请输入英文缩写!' }]})(
             <Input />

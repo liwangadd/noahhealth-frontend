@@ -196,122 +196,97 @@ class Home extends React.Component {
               <Icon type="home" className="menu-item-font" />
               <span className="nav-text menu-item-font">首页</span>
             </Menu.Item>
-            {/* <Menu.Item key={ROUTE.FINANCE_MANAGE.MENU_KEY} style={{display: layoutStyle.financeManageMenuItemDisplay}}>
-              <Icon type="pay-circle-o" className="menu-item-font"/>
-              <span className="nav-text menu-item-font">财务管理</span>
-            </Menu.Item> */}
+
+            <SubMenu key="member_manage" title={<span className="menu-item-font"><Icon type="team" /><span>{isMember(role) ? "个人资料" : "客户管理"}</span></span>}
+              style={{ display: layoutStyle.memberManageMenuItemDisplay }} >
+              <Menu.Item key={ROUTE.MEMBER_MANAGE.MENU_KEY} >
+                <span className="menu-item-font">健康档案</span>
+              </Menu.Item>
+              <Menu.Item key="100" >
+                <span className="menu-item-font">资料上传</span>
+              </Menu.Item>
+              <Menu.Item key="101" >
+                <span className="menu-item-font">服务预约</span>
+              </Menu.Item>
+              <Menu.Item key="102" >
+                <span className="menu-item-font">意见反馈</span>
+              </Menu.Item>
+              <Menu.Item key="{ROUTE.FIRST_CATEGORY_MANAGE.MENU_KEY}" >
+                <span className="menu-item-font">账户管理</span>
+              </Menu.Item>
+            </SubMenu>
+
+            <SubMenu key="record_input" title={<span className="menu-item-font"><Icon type="file" /><span>档案录审</span></span>}>
+              {
+                layoutStyle.documentBankMenuItemDisplay === STYLE.BLOCK
+                  ?
+                  <Menu.Item key={ROUTE.ORIGIN_RESULT_NEW_MANAGE.MENU_KEY} style={{ display: layoutStyle.documentBankMenuItemDisplay }}>
+                    <span className="nav-text menu-item-font">电子健康银行</span>
+                  </Menu.Item>
+                  :
+                  null
+              }
+              {
+                layoutStyle.healthDatabaseMenuItemDisplay === STYLE.BLOCK
+                  ?
+                  <SubMenu key="health_store" title={<span className="menu-item-font"><span>健康大数据库</span></span>} >
+                    <Menu.Item key={ROUTE.HEALTH_RESULT_MANAGE.MENU_KEY} >
+                      <span className="menu-item-font">健康摘要库</span>
+                    </Menu.Item>
+                    <Menu.Item key={ROUTE.EXAM_RESULT_ASSAY_MANAGE.MENU_KEY} >
+                      <span className="menu-item-font">化验数据库</span>
+                    </Menu.Item>
+                    <Menu.Item key={ROUTE.EXAM_RESULT_TECH_MANAGE.MENU_KEY} >
+                      <span className="menu-item-font">医技数据库</span>
+                    </Menu.Item>
+                  </SubMenu>
+                  :
+                  null
+              }
+              {
+                layoutStyle.healthLongtermManageMenuItemDisplay === STYLE.BLOCK
+                  ?
+                  <SubMenu key="health_manage" title={<span className="menu-item-font"><span>健康长程管理</span></span>}>
+                    <Menu.Item key="88">
+                      <span className="menu-item-font">健康管理方案</span>
+                    </Menu.Item>
+                    <Menu.Item key="99">
+                      <span className="menu-item-font">健康问题记录</span>
+                    </Menu.Item>
+                    <Menu.Item key="00">
+                      <span className="menu-item-font">专病监测表格</span>
+                    </Menu.Item>
+                    <Menu.Item key="23">
+                      <span className="menu-item-font">调查评估量表</span>
+                    </Menu.Item>
+                    <Menu.Item key="235555">
+                      <span className="menu-item-font">私人定制体检</span>
+                    </Menu.Item>
+                    <Menu.Item key="2355551">
+                      <span className="menu-item-font">年度健康总结</span>
+                    </Menu.Item>
+                  </SubMenu>
+                  :
+                  null
+              }
+            </SubMenu>
+
             <Menu.Item key={ROUTE.EMPLOYEE_MANAGE.MENU_KEY} style={{ display: layoutStyle.employeeManageMenuItemDisplay }}>
               <Icon type="team" className="menu-item-font" />
               <span className="nav-text menu-item-font">职员管理</span>
             </Menu.Item>
-            <Menu.Item key={ROUTE.MEMBER_MANAGE.MENU_KEY} style={{ display: layoutStyle.memberManageMenuItemDisplay }}>
-              <Icon type="team" className="menu-item-font" />
-              <span className="nav-text menu-item-font">{isMember(role) ? '个人资料' : '会员管理'}</span>
-            </Menu.Item>
 
-            {
-              layoutStyle.documentBankMenuItemDisplay === STYLE.BLOCK
-                ?
-                // <SubMenu key="health_bank" title={<span className="menu-item-font"><Icon type="file" /><span>电子健康银行</span></span>}>
-                //   <Menu.Item key={ROUTE.ORIGIN_RESULT_MENZHEN_MANAGE.MENU_KEY}>
-                //     <span className="menu-item-font">门诊病例</span>
-                //   </Menu.Item>
-                //   <Menu.Item key={ROUTE.ORIGIN_RESULT_XINLI_MANAGE.MENU_KEY}>
-                //     <span className="menu-item-font">门诊化验</span>
-                //   </Menu.Item>
-                //   <Menu.Item key={ROUTE.ORIGIN_RESULT_YINGXIANG_MANAGE.MENU_KEY}>
-                //     <span className="menu-item-font">门诊医技</span>
-                //   </Menu.Item>
-                //   <Menu.Item key={ROUTE.ORIGIN_RESULT_ZHUYUAN_MANAGE.MENU_KEY}>
-                //     <span className="menu-item-font">住院资料</span>
-                //   </Menu.Item>
-                //   <Menu.Item key={ROUTE.ORIGIN_RESULT_TIJIAN_MANAGE.MENU_KEY}>
-                //     <span className="menu-item-font">体检资料</span>
-                //   </Menu.Item>
-                //   <Menu.Item key={ROUTE.ORIGIN_RESULT_YAKE_MANAGE.MENU_KEY}>
-                //     <span className="menu-item-font">牙科资料</span>
-                //   </Menu.Item>
-                //   <Menu.Item key={ROUTE.ORIGIN_RESULT_ZHONGYI_MANAGE.MENU_KEY}>
-                //     <span className="menu-item-font">中医资料</span>
-                //   </Menu.Item>
-                //   <Menu.Item key={ROUTE.ORIGIN_RESULT_QITA_MANAGE.MENU_KEY}>
-                //     <span className="menu-item-font">其他资料</span>
-                //   </Menu.Item>
-                // </SubMenu>
-                <Menu.Item key={ROUTE.ORIGIN_RESULT_NEW_MANAGE.MENU_KEY} style={{display: layoutStyle.documentBankMenuItemDisplay}}>
-                  <Icon type="file" className="mene-item-font"/>
-                  <span className="nav-text menu-item-font">电子健康银行</span>
-                </Menu.Item>
-                :
-                null
-            }
-
-            {
-              layoutStyle.healthDatabaseMenuItemDisplay === STYLE.BLOCK
-                ?
-                <SubMenu key="health_store" title={<span className="menu-item-font"><Icon type="medicine-box" /><span>健康大数据库</span></span>} >
-                  <Menu.Item key={ROUTE.HEALTH_RESULT_MANAGE.MENU_KEY} >
-                    <span className="menu-item-font">健康摘要库</span>
-                  </Menu.Item>
-                  <Menu.Item key={ROUTE.EXAM_RESULT_ASSAY_MANAGE.MENU_KEY} >
-                    <span className="menu-item-font">化验数据库</span>
-                  </Menu.Item>
-                  <Menu.Item key={ROUTE.EXAM_RESULT_TECH_MANAGE.MENU_KEY} >
-                    <span className="menu-item-font">医技数据库</span>
-                  </Menu.Item>
+            <SubMenu key="system_manage" title={<span className="menu-item-font"><Icon type="medicine-box" /><span>系统管理</span></span>}>
+              {
+                layoutStyle.healthDatabaseMenuItemDisplay === STYLE.BLOCK
+                  ?
                   <Menu.Item key={ROUTE.FIRST_CATEGORY_MANAGE.MENU_KEY} >
                     <span className="menu-item-font">检查项目管理</span>
                   </Menu.Item>
-                </SubMenu>
-                :
-                null
-            }
+                  : null
+              }
+            </SubMenu>
 
-
-            {
-              layoutStyle.healthLongtermManageMenuItemDisplay === STYLE.BLOCK
-                ?
-                <SubMenu key="health_manage" title={<span className="menu-item-font"><Icon type="book" /><span>健康长程管理</span></span>}>
-                  <Menu.Item key="88">
-                    <span className="menu-item-font">健康管理方案</span>
-                  </Menu.Item>
-                  <Menu.Item key="99">
-                    <span className="menu-item-font">健康问题记录</span>
-                  </Menu.Item>
-                  <Menu.Item key="00">
-                    <span className="menu-item-font">专病监测表格</span>
-                  </Menu.Item>
-                  <Menu.Item key="23">
-                    <span className="menu-item-font">调查评估量表</span>
-                  </Menu.Item>
-                  <Menu.Item key="235555">
-                    <span className="menu-item-font">私人定制体检</span>
-                  </Menu.Item>
-                  <Menu.Item key="2355551">
-                    <span className="menu-item-font">年度健康总结</span>
-                  </Menu.Item>
-                </SubMenu>
-                :
-                null
-            }
-
-            {
-              layoutStyle.memberServiceSubscribeMenuItemDisplay === STYLE.BLOCK
-                ?
-                <SubMenu key="member_service_subscribe" title={<span className="menu-item-font"><Icon type="phone" /><span>会员服务预约</span></span>}>
-                  <Menu.Item key="8866">
-                    <span className="menu-item-font">体检服务预约单</span>
-                  </Menu.Item>
-                  <Menu.Item key="9977">
-                    <span className="menu-item-font">就医服务预约单</span>
-                  </Menu.Item>
-                  <Menu.Item key="0088">
-                    <span className="menu-item-font">其他服务预约单</span>
-                  </Menu.Item>
-                </SubMenu>
-                :
-                null
-            }
           </Menu>
         </Sider>
         <Layout>
@@ -327,7 +302,7 @@ class Home extends React.Component {
           <Content style={{ margin: '24px 16px', padding: 24, background: '#fff', minHeight: 800 }}>
             {this.props.children}
           </Content>
-          
+
           <Footer style={{ textAlign: 'center' }}>
             诺亚健康 ©2017 Created by BUPT
           </Footer>
