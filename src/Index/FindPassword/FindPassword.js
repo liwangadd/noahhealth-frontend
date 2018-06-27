@@ -32,7 +32,7 @@ class FindPassword extends React.Component {
     this.refs.validatePhoneForm.validateFields(['phone', 'inputCode'], (err, values) => {
       if (!err) {
 
-        console.log('验证用户手机号', values);
+        
 
         this.setState({ nextStepBtnLoading: true });
         $.ajax({
@@ -43,7 +43,7 @@ class FindPassword extends React.Component {
           data: JSON.stringify({ phone: values.phone, inputCode: values.inputCode }),
           beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
           success: (result) => {
-            console.log(result);
+            
             if (result.code === RESULT.SUCCESS) {
 
               //杀死发送验证码的定时器
@@ -71,7 +71,7 @@ class FindPassword extends React.Component {
 
     this.refs.newPasswordForm.validateFields((err, values) => {
       if (!err) {
-        console.log('修改用户' + this.state.userId + '的密码', values);
+        
 
         this.setState({ nextStepBtnLoading: true });
         $.ajax({
@@ -82,7 +82,7 @@ class FindPassword extends React.Component {
           data: JSON.stringify({ newPassword: values.newPassword }),
           beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
           success: (result) => {
-            console.log(result);
+            
             if (result.code === RESULT.SUCCESS) {
 
               //启动第三步的定时跳转

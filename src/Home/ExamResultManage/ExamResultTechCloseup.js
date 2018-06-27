@@ -75,7 +75,7 @@ class ExamResultTechCloseup extends React.Component {
 
   requestUploadedPictures = (inputResultId) => {
 
-    console.log("拉取第" + inputResultId + "号已上传了的所有文件");
+    
     $.ajax({
       url: SERVER + '/api/input/file/' + inputResultId,
       type: 'GET',
@@ -83,7 +83,7 @@ class ExamResultTechCloseup extends React.Component {
       beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
       success: (result) => {
 
-        console.log(result);
+        
         if (result.code !== RESULT.SUCCESS) {
           message.error(result.reason, 2);
           return;
@@ -110,9 +110,9 @@ class ExamResultTechCloseup extends React.Component {
 
     //显示成功 失败消息提示
     if (info.file.status !== 'uploading') {
-      console.log(info.file, info.fileList);
+      
     }
-    console.log(info);
+    
     if (info.file.status === 'done') {
 
       if (info.file.response.code === RESULT.SUCCESS) {
@@ -151,7 +151,7 @@ class ExamResultTechCloseup extends React.Component {
   //删除上传好的图片（档案部员工）
   requestDeletePicture = (inputResultId, fileName) => {
 
-    console.log('删除' + inputResultId + '号原始数据记录的扫描件-', fileName);
+    
 
     $.ajax({
       url: SERVER + '/api/input/file/' + inputResultId,
@@ -162,7 +162,7 @@ class ExamResultTechCloseup extends React.Component {
       beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
       success: (result) => {
 
-        console.log(result);
+        
         if (result.code === RESULT.SUCCESS) {
 
           message.success(result.reason, 2);
@@ -178,7 +178,7 @@ class ExamResultTechCloseup extends React.Component {
   //保存录入的检查结果
   saveInputDetail = (form, id, note) => {
 
-    console.log('保存录入了的检查结果', id);
+    
 
     form.validateFields((err, values) => {
       if (!err) {
@@ -193,7 +193,7 @@ class ExamResultTechCloseup extends React.Component {
           data: JSON.stringify(values),
           beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
           success: (result) => {
-            console.log(result);
+            
             if (result.code === RESULT.SUCCESS) {
 
               //重新查一遍
@@ -215,7 +215,7 @@ class ExamResultTechCloseup extends React.Component {
   //提交录入的检查结果（先请求保存、再请求改变状态）
   submitInputDetail = (form, id, note) => {
 
-    console.log('提交一份检查结果,变为待审核', id);
+    
 
     //先保存
     this.saveInputDetail(form, id, note);
@@ -230,7 +230,7 @@ class ExamResultTechCloseup extends React.Component {
       data: JSON.stringify({ status: '待审核' }),
       beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
       success: (result) => {
-        console.log(result);
+        
         if (result.code === RESULT.SUCCESS) {
 
           //关闭加载圈、对话框
@@ -255,7 +255,7 @@ class ExamResultTechCloseup extends React.Component {
 
   passInputDetail = (form, id, note) => {
 
-    console.log('通过一份检查结果,变为已通过', id);
+    
 
     // 先保存
     this.saveInputDetail(form, id, note);
@@ -269,7 +269,7 @@ class ExamResultTechCloseup extends React.Component {
       data: JSON.stringify({ status: '已通过' }),
       beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
       success: (result) => {
-        console.log(result);
+        
         if (result.code === RESULT.SUCCESS) {
 
           //关闭加载圈、对话框
@@ -289,7 +289,7 @@ class ExamResultTechCloseup extends React.Component {
 
   unpassInputDetail = (id, unpassReason) => {
 
-    console.log('不通过一份检查结果,变为未通过', id);
+    
 
     //显示加载圈
     this.setState({ unpassLoading: true });
@@ -301,7 +301,7 @@ class ExamResultTechCloseup extends React.Component {
       data: JSON.stringify({ status: '未通过', reason: unpassReason }),
       beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
       success: (result) => {
-        console.log(result);
+        
         if (result.code === RESULT.SUCCESS) {
 
           //关闭加载圈、对话框
@@ -322,7 +322,7 @@ class ExamResultTechCloseup extends React.Component {
   //下载
   downloadInputDetail = (id) => {
 
-    console.log('请求下载检查结果', id);
+    
 
     //显示加载圈
     this.setState({ downloadLoading: true });
@@ -332,7 +332,7 @@ class ExamResultTechCloseup extends React.Component {
       dataType: 'json',
       beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
       success: (result) => {
-        console.log(result);
+        
         if (result.code === RESULT.SUCCESS) {
 
           //下载
@@ -355,7 +355,7 @@ class ExamResultTechCloseup extends React.Component {
   //删除
   deleteInputDetail = (id) => {
 
-    console.log('删除一条检查记录', id);
+    
 
     $.ajax({
       url: SERVER + '/api/input/' + id,
@@ -364,7 +364,7 @@ class ExamResultTechCloseup extends React.Component {
       beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
       success: (result) => {
 
-        console.log(result);
+        
         if (result.code === RESULT.SUCCESS) {
 
           this.setState({ deleteLoading: false });
@@ -386,7 +386,7 @@ class ExamResultTechCloseup extends React.Component {
   requestExamResultDetailById = () => {
 
 
-    console.log('查询' + this.props.params.detailId + '检查记录');
+    
     $.ajax({
       url: SERVER + '/api/input/' + this.props.params.detailId,
       type: 'GET',
@@ -395,7 +395,7 @@ class ExamResultTechCloseup extends React.Component {
       beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
       success: (result) => {
 
-        console.log(result);
+        
         if (result.code === RESULT.SUCCESS) {
 
           this.setState({ detail: result.content, pageLoading: false });

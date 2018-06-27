@@ -61,7 +61,7 @@ class ProfileEditModal_ extends React.Component {
     this.props.form.validateFields(['name'], (err, values) => {
       if (!err) {
 
-        console.log('修改用户' + sessionStorage.getItem(SESSION.USER_ID) + '基本信息', values);
+        
 
         this.setState({ submitProfileInfoLoading: true });
         $.ajax({
@@ -72,7 +72,7 @@ class ProfileEditModal_ extends React.Component {
           data: JSON.stringify({ name: values.name }),
           beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
           success: (result) => {
-            console.log(result);
+            
             if (result.code === RESULT.SUCCESS) {
 
               //关闭加载圈、对话框
@@ -96,7 +96,7 @@ class ProfileEditModal_ extends React.Component {
     e.preventDefault();
     this.props.form.validateFields(['oldPassword', 'newPassword', 'confirmPassword'], (err, values) => {
       if (!err) {
-        console.log('修改用户' + sessionStorage.getItem(SESSION.USER_ID) + '密码', values);
+        
 
         this.setState({ submitPasswordChangeLoading: true });
         $.ajax({
@@ -107,7 +107,7 @@ class ProfileEditModal_ extends React.Component {
           data: JSON.stringify({ oldPassword: values.oldPassword, newPassword: values.newPassword }),
           beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
           success: (result) => {
-            console.log(result);
+            
             if (result.code === RESULT.SUCCESS) {
 
               //关闭加载圈、对话框
@@ -142,7 +142,7 @@ class ProfileEditModal_ extends React.Component {
     this.props.form.validateFields(['phone', 'inputCode'], (err, values) => {
       if (!err) {
 
-        console.log('修改用户' + sessionStorage.getItem(SESSION.USER_ID) + '手机号', values);
+        
 
         this.setState({ submitPhoneChangeLoading: true });
         $.ajax({
@@ -153,7 +153,7 @@ class ProfileEditModal_ extends React.Component {
           data: JSON.stringify({ phone: values.phone, inputCode: values.inputCode }),
           beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
           success: (result) => {
-            console.log(result);
+            
             if (result.code === RESULT.SUCCESS) {
 
               //关闭加载圈、对话框

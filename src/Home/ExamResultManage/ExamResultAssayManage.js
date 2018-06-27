@@ -42,7 +42,7 @@ class ExamResultAssayManage extends React.Component {
 
         this.setState({ examResultOfWorkflowTableLoading: true});
 
-        console.log('拉取第'+ pageNow + "页化验/医技目录", values);
+        
 
         $.ajax({
             url : SERVER + '/api/input/list_by_arc',
@@ -62,7 +62,7 @@ class ExamResultAssayManage extends React.Component {
             beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
             success : (result) => {
 
-                console.log(result);
+                
                 if(result.code !== RESULT.SUCCESS) {
                     message.error(result.reason, 2);
                     return;
@@ -99,7 +99,7 @@ class ExamResultAssayManage extends React.Component {
 
     this.refs.addForm.validateFields((err, values) => {
       if(!err) {
-        console.log('添加一条检查记录', values);
+        
 
         //显示加载圈
         this.setState({ confirmAddModalLoading: true });
@@ -117,7 +117,7 @@ class ExamResultAssayManage extends React.Component {
             dataType : 'json',
             beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
             success : (result) => {
-              console.log(result);
+              
               if(result.code === RESULT.SUCCESS) {
 
 
@@ -141,7 +141,7 @@ class ExamResultAssayManage extends React.Component {
   //删除
   handleDeleteExamResult = (examResultId) => {
 
-    console.log('删除一条检查记录信息', examResultId);
+    
 
     $.ajax({
         url : SERVER + '/api/input/' + examResultId,
@@ -150,7 +150,7 @@ class ExamResultAssayManage extends React.Component {
         beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
         success : (result) => {
 
-            console.log(result);
+            
             if(result.code === RESULT.SUCCESS) {
 
                 //删除后重查一遍
@@ -169,7 +169,7 @@ class ExamResultAssayManage extends React.Component {
   //拉取系统中所有检查亚类
   requestSecondCategoryParentData = (type) => {
 
-    console.log('查询所有'+ type +'检查亚类');
+    
     $.ajax({
         url : SERVER + '/api/first/level',
         type : 'POST',
@@ -180,7 +180,7 @@ class ExamResultAssayManage extends React.Component {
         beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
         success : (result) => {
 
-            console.log(result);
+            
             if(result.code === RESULT.SUCCESS) {
 
                 //将后端返回的map整理成级联列表识别的数据结构
@@ -200,7 +200,7 @@ class ExamResultAssayManage extends React.Component {
                 }
 
                 if(type === "化验") {
-                  console.log(secondCategoryParentData);
+                  
                   this.setState({secondCategoryParentOfAssayData: secondCategoryParentData});
 
                   if(this.refs.addForm == null) return;
@@ -223,7 +223,7 @@ class ExamResultAssayManage extends React.Component {
   //拉取档案部管理的所有会员名单
   requestMembersUnderEmployee = () => {
 
-      console.log('拉取'+ sessionStorage.getItem(SESSION.NAME) +'旗下的所有会员信息');
+      
       $.ajax({
           url : SERVER + '/api/user/member_under_employee',
           type : 'POST',
@@ -233,7 +233,7 @@ class ExamResultAssayManage extends React.Component {
           beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
           success : (result) => {
 
-              console.log(result);
+              
               if(result.code !== RESULT.SUCCESS) {
                   message.error(result.reason, 2);
                   return;

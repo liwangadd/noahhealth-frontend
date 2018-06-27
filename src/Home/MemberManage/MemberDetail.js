@@ -1,7 +1,7 @@
 import './MemberManage.css';
 import { SERVER, SESSION, RESULT, ROLE, FILE_SERVER, ROUTE, LOADING_DELAY_TIME, DATE_FORMAT, PAGE_SIZE, STYLE } from './../../App/PublicConstant.js';
 import { formatDate } from './../../App/PublicUtil.js';
-import { isEmployee, isAdviser } from './../../App/PublicMethod.js';
+import { isEmployee, isAdviser, isMember } from './../../App/PublicMethod.js';
 import ExamResultDetailItem from './../ExamResultManage/ExamResultDetailItem.js';
 import HealthResultDetailItem from './../HealthResultManage/HealthResultDetailItem.js';
 import React from 'react';
@@ -95,7 +95,7 @@ class MemberDetail extends React.Component {
 
         this.setState({ originResultTableLoading: true });
 
-        console.log('拉取第' + pageNow + "页原始数据-执行情况信息", values);
+        
 
         $.ajax({
           url: SERVER + '/api/origin/list/' + this.props.params.memberId,
@@ -116,7 +116,7 @@ class MemberDetail extends React.Component {
           beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
           success: (result) => {
 
-            console.log(result);
+            
             if (result.code !== RESULT.SUCCESS) {
               this.setState({ originResultTableLoading: false });
               message.error(result.reason, 2);
@@ -142,7 +142,7 @@ class MemberDetail extends React.Component {
   //拉取健康摘要类别级联数据
   requestHealthResultSecondType = () => {
 
-    console.log('拉取健康摘要类别数据');
+    
     $.ajax({
       url: SERVER + '/api/health_category/level',
       type: 'GET',
@@ -150,7 +150,7 @@ class MemberDetail extends React.Component {
       beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
       success: (result) => {
 
-        console.log(result);
+        
         if (result.code !== RESULT.SUCCESS) {
           message.error(result.reason, 2);
           return;
@@ -183,7 +183,7 @@ class MemberDetail extends React.Component {
 
   requestUploadedPictures = (originResultId) => {
 
-    console.log("拉取第" + originResultId + "号已上传了的所有文件");
+    
     $.ajax({
       url: SERVER + '/api/origin/file/' + originResultId,
       type: 'GET',
@@ -191,7 +191,7 @@ class MemberDetail extends React.Component {
       beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
       success: (result) => {
 
-        console.log(result);
+        
         if (result.code !== RESULT.SUCCESS) {
           message.error(result.reason, 2);
           return;
@@ -216,11 +216,11 @@ class MemberDetail extends React.Component {
   //保存录入的检查结果
   saveInputDetail = (form, id) => {
 
-    console.log('保存录入了的检查结果', id);
+    
 
     form.validateFields((err, values) => {
       if (!err) {
-        console.log(values);
+        
         //显示加载圈
         this.setState({ saveLoading: true });
         $.ajax({
@@ -231,7 +231,7 @@ class MemberDetail extends React.Component {
           data: JSON.stringify(values),
           beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
           success: (result) => {
-            console.log(result);
+            
             if (result.code === RESULT.SUCCESS) {
 
               //重新查一遍
@@ -253,7 +253,7 @@ class MemberDetail extends React.Component {
   //提交录入的检查结果（先请求保存、再请求改变状态）
   submitInputDetail = (form, id) => {
 
-    console.log('提交一份检查结果,变为待审核', id);
+    
 
     //先保存
     this.saveInputDetail(form, id);
@@ -268,7 +268,7 @@ class MemberDetail extends React.Component {
       data: JSON.stringify({ status: '待审核' }),
       beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
       success: (result) => {
-        console.log(result);
+        
         if (result.code === RESULT.SUCCESS) {
 
           //关闭加载圈、对话框
@@ -293,7 +293,7 @@ class MemberDetail extends React.Component {
 
   passInputDetail = (form, id) => {
 
-    console.log('通过一份检查结果,变为已通过', id);
+    
 
     //显示加载圈
     this.setState({ passLoading: true });
@@ -305,7 +305,7 @@ class MemberDetail extends React.Component {
       data: JSON.stringify({ status: '已通过' }),
       beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
       success: (result) => {
-        console.log(result);
+        
         if (result.code === RESULT.SUCCESS) {
 
           //关闭加载圈、对话框
@@ -325,7 +325,7 @@ class MemberDetail extends React.Component {
 
   unpassInputDetail = (id, unpassReason) => {
 
-    console.log('不通过一份检查结果,变为未通过', id);
+    
 
     //显示加载圈
     this.setState({ unpassLoading: true });
@@ -337,7 +337,7 @@ class MemberDetail extends React.Component {
       data: JSON.stringify({ status: '未通过', reason: unpassReason }),
       beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
       success: (result) => {
-        console.log(result);
+        
         if (result.code === RESULT.SUCCESS) {
 
           //关闭加载圈、对话框
@@ -358,7 +358,7 @@ class MemberDetail extends React.Component {
   //下载
   downloadInputDetail = (id) => {
 
-    console.log('请求下载健康摘要', id);
+    
 
     //显示加载圈
     this.setState({ downloadLoading: true });
@@ -368,7 +368,7 @@ class MemberDetail extends React.Component {
       dataType: 'json',
       beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
       success: (result) => {
-        console.log(result);
+        
         if (result.code === RESULT.SUCCESS) {
 
           //下载
@@ -391,7 +391,7 @@ class MemberDetail extends React.Component {
   //删除
   deleteInputDetail = (id) => {
 
-    console.log('删除一条检查记录', id);
+    
 
     $.ajax({
       url: SERVER + '/api/input/' + id,
@@ -400,7 +400,7 @@ class MemberDetail extends React.Component {
       beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
       success: (result) => {
 
-        console.log(result);
+        
         if (result.code === RESULT.SUCCESS) {
 
           this.setState({ deleteLoading: false });
@@ -433,7 +433,7 @@ class MemberDetail extends React.Component {
       values = this.examResultOfTechSearchForm.getFieldsValue();
     }
 
-    console.log('查询' + this.props.params.memberId + '会员的所有' + type + '检查记录');
+    
     $.ajax({
       url: SERVER + '/api/input/list/' + this.props.params.memberId,
       type: 'POST',
@@ -449,7 +449,7 @@ class MemberDetail extends React.Component {
       beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
       success: (result) => {
 
-        console.log(result);
+        
         if (result.code === RESULT.SUCCESS) {
 
           const role = sessionStorage.getItem(SESSION.ROLE);
@@ -510,7 +510,7 @@ class MemberDetail extends React.Component {
   //拉取系统中所有检查亚类
   requestSecondCategoryParentData = (type) => {
 
-    console.log('查询所有' + type + '检查亚类');
+    
     $.ajax({
       url: SERVER + '/api/first/level',
       type: 'POST',
@@ -521,7 +521,7 @@ class MemberDetail extends React.Component {
       beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
       success: (result) => {
 
-        console.log(result);
+        
         if (result.code === RESULT.SUCCESS) {
 
           //将后端返回的map整理成级联列表识别的数据结构
@@ -541,7 +541,7 @@ class MemberDetail extends React.Component {
           }
 
           if (type === "化验") {
-            console.log(secondCategoryParentData);
+            
             this.setState({ secondCategoryParentOfAssayData: secondCategoryParentData });
           } else {
             this.setState({ secondCategoryParentOfTechData: secondCategoryParentData });
@@ -564,7 +564,7 @@ class MemberDetail extends React.Component {
 
     let values = this.healthResultSearchForm.getFieldsValue();
 
-    console.log('查询' + this.props.params.memberId + '会员的所有健康摘要');
+    
     $.ajax({
       url: SERVER + '/api/health/list/' + this.props.params.memberId,
       type: 'POST',
@@ -579,7 +579,7 @@ class MemberDetail extends React.Component {
       beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
       success: (result) => {
 
-        console.log(result);
+        
         if (result.code === RESULT.SUCCESS) {
 
           const role = sessionStorage.getItem(SESSION.ROLE);
@@ -643,7 +643,7 @@ class MemberDetail extends React.Component {
 
     this.refs.healthResultAddForm.validateFields((err, values) => {
       if (!err) {
-        console.log('添加一条健康摘要', values);
+        
 
         //显示加载圈
         this.setState({ confirmAddModalLoading: true });
@@ -661,7 +661,7 @@ class MemberDetail extends React.Component {
           dataType: 'json',
           beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
           success: (result) => {
-            console.log(result);
+            
             if (result.code === RESULT.SUCCESS) {
 
 
@@ -685,10 +685,10 @@ class MemberDetail extends React.Component {
   //保存录入的健康摘要
   saveHealthDetail = (form, id) => {
 
-    console.log('保存录入了的健康摘要', id);
+    
     form.validateFields((err, values) => {
       if (!err) {
-        console.log(values);
+        
         //显示加载圈
         this.setState({ saveLoading: true });
         $.ajax({
@@ -699,7 +699,7 @@ class MemberDetail extends React.Component {
           data: JSON.stringify({ problemNew: values.problemNew, contentNew: values.contentNew }),
           beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
           success: (result) => {
-            console.log(result);
+            
             if (result.code === RESULT.SUCCESS) {
 
               message.success(result.reason, 2);
@@ -719,7 +719,7 @@ class MemberDetail extends React.Component {
   //提交录入的健康摘要（先请求保存、再请求改变状态）
   submitHealthDetail = (form, id) => {
 
-    console.log('提交一份健康摘要,变为待审核', id);
+    
 
     //先保存
     this.saveHealthDetail(form, id);
@@ -734,7 +734,7 @@ class MemberDetail extends React.Component {
       data: JSON.stringify({ status: '待审核' }),
       beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
       success: (result) => {
-        console.log(result);
+        
         if (result.code === RESULT.SUCCESS) {
 
           //关闭加载圈、对话框
@@ -758,7 +758,7 @@ class MemberDetail extends React.Component {
   **/
   passHealthDetail = (form, id) => {
 
-    console.log('通过一份健康摘要,变为已通过', id);
+    
 
     //显示加载圈
     this.setState({ passLoading: true });
@@ -770,7 +770,7 @@ class MemberDetail extends React.Component {
       data: JSON.stringify({ status: '已通过' }),
       beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
       success: (result) => {
-        console.log(result);
+        
         if (result.code === RESULT.SUCCESS) {
 
           //关闭加载圈、对话框
@@ -791,7 +791,7 @@ class MemberDetail extends React.Component {
   //不通过
   unpassHealthDetail = (id, unpassReason) => {
 
-    console.log('不通过一份健康摘要,变为未通过', id);
+    
 
     //显示加载圈
     this.setState({ unpassLoading: true });
@@ -803,7 +803,7 @@ class MemberDetail extends React.Component {
       data: JSON.stringify({ status: '未通过', reason: unpassReason }),
       beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
       success: (result) => {
-        console.log(result);
+        
         if (result.code === RESULT.SUCCESS) {
 
           //关闭加载圈、对话框
@@ -824,7 +824,7 @@ class MemberDetail extends React.Component {
   // //下载
   // downloadHealthDetail = (id) => {
   //
-  //   console.log('请求下载健康摘要', id);
+  //   
   //
   //   //显示加载圈
   //   this.setState({ downloadLoading: true });
@@ -834,7 +834,7 @@ class MemberDetail extends React.Component {
   //       dataType : 'json',
   //       beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
   //       success : (result) => {
-  //         console.log(result);
+  //         
   //         if(result.code === RESULT.SUCCESS) {
   //
   //           //下载
@@ -857,7 +857,7 @@ class MemberDetail extends React.Component {
   //删除
   deleteHealthDetail = (id) => {
 
-    console.log('删除一条健康摘要', id);
+    
 
     $.ajax({
       url: SERVER + '/api/health/' + id,
@@ -866,7 +866,7 @@ class MemberDetail extends React.Component {
       beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
       success: (result) => {
 
-        console.log(result);
+        
         if (result.code === RESULT.SUCCESS) {
 
           this.setState({ deleteLoading: false });
@@ -918,7 +918,7 @@ class MemberDetail extends React.Component {
       beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
       success: (result) => {
 
-        console.log(result);
+        
         if (result.code !== RESULT.SUCCESS) {
           message.error(result.reason, 2);
         }
@@ -933,7 +933,7 @@ class MemberDetail extends React.Component {
 
     this.refs.memberInfoForm.validateFields((err, values) => {
       if (!err) {
-        console.log('更新会员的健康信息表', values);
+        
 
         //显示加载圈
         this.setState({ updateMemberInfoLoading: true });
@@ -957,7 +957,7 @@ class MemberDetail extends React.Component {
           }),
           beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
           success: (result) => {
-            console.log(result);
+            
             if (result.code === RESULT.SUCCESS) {
 
               //关闭加载圈、对话框
@@ -1054,14 +1054,13 @@ class MemberDetail extends React.Component {
             <Button className="card-btn">私人定制体检</Button>
             <Button className="card-btn">年度健康总结</Button>
           </Card>
-          <Card title="会员服务预约" className="card" style={{ width: '22%' }}>
-            <Button className="card-btn" >体检服务预约单</Button>
-            <Button className="card-btn">就医服务预约单</Button>
-            <Button className="card-btn" >其他服务预约单</Button>
+          <Card title="健康大事记" className="card" style={{ width: '22%' }}>
+            <Button className="card-btn" >健康大事记</Button>
           </Card>
         </div>
         <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
-        <MemberInfoTable ref="memberInfoForm" memberInfo={this.state.memberInfo} updateMemberInfoLoading={this.state.updateMemberInfoLoading} onClick={this.updateMemberInfoData} />
+        <MemberInfoTable ref="memberInfoForm" memberInfo={this.state.memberInfo} updateMemberInfoLoading={this.state.updateMemberInfoLoading} onClick={this.updateMemberInfoData} 
+          editable={isEmployee(role)}/>
         {/* <Tabs defaultActiveKey="1"  tabBarExtraContent={role === ROLE.EMPLOYEE_ADVISER || role === ROLE.EMPLOYEE_ADVISE_MANAGER || role === ROLE.EMPLOYEE_ADMIN ? <Button type="primary" onClick={this.showAddModal} style={{display: this.state.addHealthResultBtnVisible}}>添加健康摘要</Button> : null} onChange={this.handleMenuItemClick}>
           {
             role === ROLE.EMPLOYEE_ADVISER || role === ROLE.EMPLOYEE_ADVISE_MANAGER || role === ROLE.EMPLOYEE_ADMIN

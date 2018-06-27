@@ -39,7 +39,7 @@ class ExamResultOverviewOfAssay extends React.Component {
       }
     }
 
-    console.log(tableData);
+    
 
     const overviewColumns = [{
       title: '化验项目',

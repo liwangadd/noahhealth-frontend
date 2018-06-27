@@ -62,7 +62,7 @@ class MemberDetailOriginResultYingxiang extends React.Component {
 
         this.setState({ originResultTableLoading: true });
 
-        console.log('拉取第' + pageNow + "页原始数据-执行情况信息", values);
+        
 
         $.ajax({
           url: SERVER + '/api/origin/list/' + this.props.params.memberId,
@@ -84,7 +84,7 @@ class MemberDetailOriginResultYingxiang extends React.Component {
           beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
           success: (result) => {
 
-            console.log(result);
+            
             if (result.code !== RESULT.SUCCESS) {
               this.setState({ originResultTableLoading: false });
               message.error(result.reason, 2);
@@ -118,7 +118,7 @@ class MemberDetailOriginResultYingxiang extends React.Component {
 
   requestUploadedPictures = (originResultId) => {
 
-    console.log("拉取第" + originResultId + "号已上传了的所有文件");
+    
     $.ajax({
       url: SERVER + '/api/origin/file/' + originResultId,
       type: 'GET',
@@ -126,7 +126,7 @@ class MemberDetailOriginResultYingxiang extends React.Component {
       beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
       success: (result) => {
 
-        console.log(result);
+        
         if (result.code !== RESULT.SUCCESS) {
           message.error(result.reason, 2);
           return;
@@ -151,7 +151,7 @@ class MemberDetailOriginResultYingxiang extends React.Component {
   //拉取电子资料类别级联数据
   requestOriginResultSecondType = () => {
 
-    console.log('拉取电子资料类别数据');
+    
     $.ajax({
       url: SERVER + '/api/origin_category/level',
       type: 'GET',
@@ -159,7 +159,7 @@ class MemberDetailOriginResultYingxiang extends React.Component {
       beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
       success: (result) => {
 
-        console.log(result);
+        
         if (result.code !== RESULT.SUCCESS) {
           message.error(result.reason, 2);
           return;
@@ -204,7 +204,7 @@ class MemberDetailOriginResultYingxiang extends React.Component {
   //删除
   handleDeleteOriginResult = (originResultId) => {
 
-    console.log('删除一条原始资料信息', originResultId);
+    
 
     $.ajax({
       url: SERVER + '/api/origin/' + originResultId,
@@ -213,7 +213,7 @@ class MemberDetailOriginResultYingxiang extends React.Component {
       beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
       success: (result) => {
 
-        console.log(result);
+        
         if (result.code === RESULT.SUCCESS) {
 
           //删除后重查一遍

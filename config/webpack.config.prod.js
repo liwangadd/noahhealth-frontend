@@ -334,7 +334,6 @@ module.exports = {
           // This message occurs for every build and is a bit too noisy.
           return;
         }
-        console.log(message);
       },
       minify: true,
       // For unknown URLs, fallback to the index page

@@ -22,7 +22,7 @@ class VerticalRegisterForm_ extends React.Component {
 
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                console.log('表单值: ', values);
+                
 
                 $.ajax({
                     url: SERVER + '/api/auth/register',
@@ -37,7 +37,7 @@ class VerticalRegisterForm_ extends React.Component {
                     dataType: 'json',
                     success: (result) => {
 
-                        console.log(result);
+                        
                         if (result.code === RESULT.SUCCESS) {
                             message.success(result.reason, 2);
                             browserHistory.push(ROUTE.MEMBER_LOGIN.URL);

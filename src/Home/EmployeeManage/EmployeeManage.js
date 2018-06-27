@@ -48,7 +48,7 @@ class EmployeeManage extends React.Component {
 
         this.setState({ employeeTableLoading: true });
 
-        console.log('拉取第' + pageNow + "页职员信息", values);
+        
 
         $.ajax({
           url: SERVER + '/api/user/employee/list',
@@ -65,7 +65,7 @@ class EmployeeManage extends React.Component {
           beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
           success: (result) => {
 
-            console.log(result);
+            
             if (result.code !== RESULT.SUCCESS) {
               message.error(result.reason, 2);
               return;
@@ -92,7 +92,7 @@ class EmployeeManage extends React.Component {
   //删除职员
   handleDeleteEmployee(record) {
 
-    console.log('删除职员', record);
+    
 
     $.ajax({
       url: SERVER + '/api/user/' + record.id,
@@ -100,7 +100,7 @@ class EmployeeManage extends React.Component {
       beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
       success: (result) => {
 
-        console.log(result);
+        
         if (result.code === RESULT.SUCCESS) {
 
           //删除后重查一遍
@@ -118,7 +118,7 @@ class EmployeeManage extends React.Component {
   //查询employeeId会员信息显示到对话框内
   requestEmployee = (employeeId) => {
 
-    console.log('查询职员', employeeId);
+    
 
     $.ajax({
       url: SERVER + '/api/user/' + employeeId,
@@ -127,7 +127,7 @@ class EmployeeManage extends React.Component {
       beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
       success: (result) => {
 
-        console.log(result);
+        
         if (result.code === RESULT.SUCCESS) {
 
           let employee = result.content;
@@ -177,7 +177,7 @@ class EmployeeManage extends React.Component {
   //获取所有档案部、顾问部主管填充 编辑框、添加框中的选择器
   requestArchiveManagerAndAdviseManager = () => {
 
-    console.log('查询所有档案主管与顾问主管');
+    
 
     //档案部主管
     $.ajax({
@@ -190,7 +190,7 @@ class EmployeeManage extends React.Component {
       beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
       success: (result) => {
 
-        console.log(result);
+        
         if (result.code === RESULT.SUCCESS) {
 
           this.setState({ archiveManagerData: result.content }); //默认选上第一项
@@ -219,7 +219,7 @@ class EmployeeManage extends React.Component {
       beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
       success: (result) => {
 
-        console.log(result);
+        
         if (result.code === RESULT.SUCCESS) {
 
           this.setState({ adviseManagerData: result.content }); //默认选上第一项
@@ -254,7 +254,7 @@ class EmployeeManage extends React.Component {
     //请求修改职员
     this.refs.employeeEditForm.validateFields((err, values) => {
       if (!err) {
-        console.log('修改职员', values);
+        
 
         //根据角色传递staffMgrId
         let staffMgrId = null;
@@ -272,7 +272,7 @@ class EmployeeManage extends React.Component {
           dataType: 'json',
           beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
           success: (result) => {
-            console.log(result);
+            
             if (result.code === RESULT.SUCCESS) {
 
               //重查刷新一遍
@@ -308,7 +308,7 @@ class EmployeeManage extends React.Component {
     //请求修改职员
     this.refs.employeeAddForm.validateFields((err, values) => {
       if (!err) {
-        console.log('添加职员', values);
+        
 
         //根据角色传递staffMgrId
         let staffMgrId = null;
@@ -336,7 +336,7 @@ class EmployeeManage extends React.Component {
           dataType: 'json',
           beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
           success: (result) => {
-            console.log(result);
+            
             if (result.code === RESULT.SUCCESS) {
 
               //重查刷新一遍

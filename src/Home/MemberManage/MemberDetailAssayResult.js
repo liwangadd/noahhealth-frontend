@@ -46,7 +46,7 @@ class MemberDetailAssayResult extends React.Component {
     this.refs.examResultOfAssaySearchForm.validateFields((err, values) => {
       if(!err) {
 
-        console.log('查询' + this.props.params.memberId + '会员的所有' + type + '汇总检查记录');
+        
 
         this.setState({examResultPageLoading: true});
         $.ajax({
@@ -63,7 +63,7 @@ class MemberDetailAssayResult extends React.Component {
             beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
             success : (result) => {
 
-                console.log(result);
+                
                 if(result.code === RESULT.SUCCESS) {
 
                   const role = sessionStorage.getItem(SESSION.ROLE);
@@ -106,7 +106,7 @@ class MemberDetailAssayResult extends React.Component {
 
       this.refs.examResultOfAssaySearchForm.validateFields((err, values) => {
         if(!err) {
-        console.log('查询' + this.props.params.memberId + '会员的'  + secondId + '亚类的所有检查记录');
+        
         this.setState({examResultPageLoading: true});
         $.ajax({
             url : SERVER + '/api/input/list_page/' + this.props.params.memberId,
@@ -122,7 +122,7 @@ class MemberDetailAssayResult extends React.Component {
             beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
             success : (result) => {
 
-                console.log(result);
+                
                 if(result.code === RESULT.SUCCESS) {
 
 
@@ -163,7 +163,7 @@ class MemberDetailAssayResult extends React.Component {
 
     this.refs.examResultOfAssaySearchForm.validateFields((err, values) => {
       if(!err) {
-        console.log('下载' + this.props.params.memberId + '会员的'  + secondId + '亚类的所有化验检查记录');
+        
         $.ajax({
             url : SERVER + '/api/input/download/' + this.props.params.memberId,
             type : 'POST',
@@ -176,7 +176,7 @@ class MemberDetailAssayResult extends React.Component {
             beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
             success : (result) => {
 
-                console.log(result);
+                
                 if(result.code === RESULT.SUCCESS) {
 
                   //下载导出的文件
@@ -196,7 +196,7 @@ class MemberDetailAssayResult extends React.Component {
   //拉取系统中所有检查亚类
   requestSecondCategoryParentData = (type) => {
 
-    console.log('查询所有'+ type +'检查亚类');
+    
     $.ajax({
         url : SERVER + '/api/first/level',
         type : 'POST',
@@ -207,7 +207,7 @@ class MemberDetailAssayResult extends React.Component {
         beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
         success : (result) => {
 
-            console.log(result);
+            
             if(result.code === RESULT.SUCCESS) {
 
                 //将后端返回的map整理成级联列表识别的数据结构
@@ -227,7 +227,7 @@ class MemberDetailAssayResult extends React.Component {
                 }
 
                 if(type === "化验") {
-                  console.log(secondCategoryParentData);
+                  
                   this.setState({secondCategoryParentOfAssayData: secondCategoryParentData});
                 } else {
                   this.setState({secondCategoryParentOfTechData: secondCategoryParentData});
@@ -254,7 +254,7 @@ class MemberDetailAssayResult extends React.Component {
     //拆分examResultDetailData
     //1.组装成卡片+表格条目
     //2.组装成锚点目录
-    console.log(this.state.examResultOverviewOfAssayData);
+    
     const examResultOverviewOfAssayAnchors = this.state.examResultOverviewOfAssayData.map((overview, index) => <Anchor.Link href={"#" + overview.secondId.toString()} key={index} title={overview.secondName} />);
 
     return (

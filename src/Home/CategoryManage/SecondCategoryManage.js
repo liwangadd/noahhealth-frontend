@@ -23,7 +23,7 @@ class SecondCategoryManage extends React.Component {
   //拉取firstId下的所有亚类
   requestSecondCategoryData = (firstId, pageNow) => {
 
-    console.log('查询' + this.props.params.firstName + '下的所有检查亚类');
+    
 
     this.setState({ secondCategoryTableLoading: true });
     if (this.props.params.tabKey === '1' || this.props.params.tabKey === '2') {
@@ -36,7 +36,7 @@ class SecondCategoryManage extends React.Component {
         beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
         success: (result) => {
 
-          console.log(result);
+          
           if (result.code === RESULT.SUCCESS) {
 
             //更新页码
@@ -65,7 +65,7 @@ class SecondCategoryManage extends React.Component {
         beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
         success: (result) => {
 
-          console.log(result);
+          
           if (result.code === RESULT.SUCCESS) {
 
             //更新页码
@@ -94,7 +94,7 @@ class SecondCategoryManage extends React.Component {
   //删除亚类
   handleDelete(record) {
 
-    console.log('删除检查亚类', record);
+    
 
     this.setState({ secondCategoryTableLoading: true });
     if (this.props.params.tabKey === '1' || this.props.params.tabKey === '2') {
@@ -105,7 +105,7 @@ class SecondCategoryManage extends React.Component {
         beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
         success: (result) => {
 
-          console.log(result);
+          
           if (result.code === RESULT.SUCCESS) {
 
             //删除后重查一遍
@@ -127,7 +127,7 @@ class SecondCategoryManage extends React.Component {
         beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
         success: (result) => {
 
-          console.log(result);
+          
           if (result.code === RESULT.SUCCESS) {
 
             //删除后重查一遍
@@ -159,7 +159,7 @@ class SecondCategoryManage extends React.Component {
   //查询categoryId类别信息显示到对话框内
   requestCategory = (categoryId) => {
 
-    console.log('查询检查亚类', categoryId);
+    
     if (this.props.params.tabKey === '1' || this.props.params.tabKey === '2') {
       $.ajax({
         url: SERVER + '/api/second/' + categoryId,
@@ -168,7 +168,7 @@ class SecondCategoryManage extends React.Component {
         beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
         success: (result) => {
 
-          console.log(result);
+          
           if (result.code === RESULT.SUCCESS) {
 
             let category = result.content;
@@ -189,7 +189,7 @@ class SecondCategoryManage extends React.Component {
         beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
         success: (result) => {
 
-          console.log(result);
+          
           if (result.code === RESULT.SUCCESS) {
 
             let category = result.content;
@@ -211,7 +211,7 @@ class SecondCategoryManage extends React.Component {
     //请求修改亚亚类
     this.refs.editForm.validateFields((err, values) => {
       if (!err) {
-        console.log('修改检查亚类', values);
+        
 
         //显示加载圈
         this.setState({ confirmLoading: true });
@@ -224,7 +224,7 @@ class SecondCategoryManage extends React.Component {
             dataType: 'json',
             beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
             success: (result) => {
-              console.log(result);
+              
               if (result.code === RESULT.SUCCESS) {
 
                 //重查刷新一遍
@@ -253,7 +253,7 @@ class SecondCategoryManage extends React.Component {
             dataType: 'json',
             beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
             success: (result) => {
-              console.log(result);
+              
               if (result.code === RESULT.SUCCESS) {
 
                 //重查刷新一遍
@@ -280,7 +280,7 @@ class SecondCategoryManage extends React.Component {
 
   componentDidMount = () => {
     this.requestSecondCategoryData(this.props.params.firstId, 1)
-    console.log("tabKey: ", this.props.params.tabKey, "firstId: ", this.props.params.firstId)
+    
   }
 
   render() {

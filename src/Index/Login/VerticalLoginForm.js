@@ -15,7 +15,7 @@ class VerticalLoginForm_ extends React.Component {
 
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        console.log('表单值: ', values);
+        
 
         //在这里用正则验证输入合法性!!
         //const authUrl = this.props.roleType === "member" ? '/api/auth/login' : '/api/auth/login';
@@ -26,7 +26,7 @@ class VerticalLoginForm_ extends React.Component {
           data: JSON.stringify({ phone: values.phone, password: values.password }),
           dataType: 'json',
           success: (result) => {
-            console.log(result);
+            
             if (result.code === RESULT.SUCCESS) {
 
               //保存状态信息

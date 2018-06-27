@@ -40,7 +40,7 @@ class MemberManage extends React.Component {
 
         this.setState({ memberTableLoading: true });
 
-        console.log('拉取第' + pageNow + "页会员信息", values);
+        
 
         $.ajax({
           url: SERVER + '/api/user/member/list',
@@ -60,7 +60,7 @@ class MemberManage extends React.Component {
           beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
           success: (result) => {
 
-            console.log(result);
+            
             if (result.code !== RESULT.SUCCESS) {
               message.error(result.reason, 2);
               return;
@@ -87,7 +87,7 @@ class MemberManage extends React.Component {
   //删除会员
   handleDeleteMember(record) {
 
-    console.log('删除会员', record);
+    
 
     $.ajax({
       url: SERVER + '/api/user/' + record.id,
@@ -96,7 +96,7 @@ class MemberManage extends React.Component {
       beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
       success: (result) => {
 
-        console.log(result);
+        
         if (result.code === RESULT.SUCCESS) {
 
           //删除后重查一遍
@@ -115,7 +115,7 @@ class MemberManage extends React.Component {
   //查询memberId会员信息显示到对话框内
   requestMember = (memberId) => {
 
-    console.log('查询会员', memberId);
+    
 
     $.ajax({
       url: SERVER + '/api/user/' + memberId,
@@ -124,7 +124,7 @@ class MemberManage extends React.Component {
       beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
       success: (result) => {
 
-        console.log(result);
+        
         if (result.code === RESULT.SUCCESS) {
 
           let member = result.content;
@@ -150,7 +150,7 @@ class MemberManage extends React.Component {
   //获取所有顾问、顾问主管填充选择器
   requestAdviserAndAdviseManager = () => {
 
-    console.log('查询所有顾问员工与顾问主管');
+    
 
     $.ajax({
       url: SERVER + '/api/user/advise/list',
@@ -159,8 +159,8 @@ class MemberManage extends React.Component {
       dataType: 'json',
       beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
       success: (result) => {
-        console.log("+++++++++=");
-        console.log(result);
+        
+        
         if (result.code === RESULT.SUCCESS) {
 
           //将后端返回的map整理成顾问主管级联列表识别的数据结构
@@ -209,7 +209,7 @@ class MemberManage extends React.Component {
     //请求修改会员
     this.refs.memberEditForm.validateFields((err, values) => {
       if (!err) {
-        console.log('修改会员', values);
+        
 
         //显示加载圈
         this.setState({ confirmMemberLoading: true });
@@ -222,7 +222,7 @@ class MemberManage extends React.Component {
           dataType: 'json',
           beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
           success: (result) => {
-            console.log(result);
+            
             if (result.code === RESULT.SUCCESS) {
 
               //重查刷新一遍
@@ -259,7 +259,7 @@ class MemberManage extends React.Component {
     //请求修改职员
     this.refs.memberAddForm.validateFields((err, values) => {
       if (!err) {
-        console.log('添加会员', values);
+        
 
         //显示加载圈
         this.setState({ confirmMemberAddModalLoading: true });
@@ -279,7 +279,7 @@ class MemberManage extends React.Component {
           dataType: 'json',
           beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
           success: (result) => {
-            console.log(result);
+            
             if (result.code === RESULT.SUCCESS) {
 
               //重查刷新一遍

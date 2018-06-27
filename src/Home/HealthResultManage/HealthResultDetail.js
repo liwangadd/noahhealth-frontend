@@ -48,7 +48,7 @@ class HealthResultDetail extends React.Component {
   //拉取健康摘要类别级联数据
   requestHealthResultSecondType = () => {
 
-    console.log('拉取健康摘要类别数据');
+    
     $.ajax({
         url : SERVER + '/api/health_category/level',
         type : 'GET',
@@ -56,7 +56,7 @@ class HealthResultDetail extends React.Component {
         beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
         success : (result) => {
 
-            console.log(result);
+            
             if(result.code !== RESULT.SUCCESS) {
                 message.error(result.reason, 2);
                 return;
@@ -89,7 +89,7 @@ requestHealthResultDetailOfMember = () => {
 
   let values = this.refs.healthResultSearchForm.getFieldsValue();
 
-  console.log('查询' + this.props.params.memberId + '会员的所有健康摘要');
+  
   $.ajax({
       url : SERVER + '/api/health/list/' + this.props.params.memberId,
       type : 'POST',
@@ -102,7 +102,7 @@ requestHealthResultDetailOfMember = () => {
       beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
       success : (result) => {
 
-          console.log(result);
+          
           if(result.code === RESULT.SUCCESS) {
 
             const role = sessionStorage.getItem(SESSION.ROLE);
@@ -164,7 +164,7 @@ requestHealthResultDetailOfMember = () => {
 
     this.refs.healthResultAddForm.validateFields((err, values) => {
       if(!err) {
-        console.log('添加一条健康摘要', values);
+        
 
         //显示加载圈
         this.setState({ confirmAddModalLoading: true });
@@ -180,7 +180,7 @@ requestHealthResultDetailOfMember = () => {
             dataType : 'json',
             beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
             success : (result) => {
-              console.log(result);
+              
               if(result.code === RESULT.SUCCESS) {
 
 
@@ -204,10 +204,10 @@ requestHealthResultDetailOfMember = () => {
   //保存录入的健康摘要
   saveHealthDetail = (form, id) => {
 
-    console.log('保存录入了的健康摘要', id);
+    
     form.validateFields((err, values) => {
       if(!err) {
-        console.log(values);
+        
         //显示加载圈
         this.setState({ saveLoading: true });
         $.ajax({
@@ -218,7 +218,7 @@ requestHealthResultDetailOfMember = () => {
             data : JSON.stringify({problemNew: values.problemNew, contentNew: values.contentNew}),
             beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
             success : (result) => {
-              console.log(result);
+              
               if(result.code === RESULT.SUCCESS) {
 
                 message.success(result.reason, 2);
@@ -238,7 +238,7 @@ requestHealthResultDetailOfMember = () => {
   //提交录入的健康摘要（先请求保存、再请求改变状态）
   submitHealthDetail = (form, id) => {
 
-    console.log('提交一份健康摘要,变为待审核', id);
+    
 
     //先保存
     this.saveHealthDetail(form, id);
@@ -253,7 +253,7 @@ requestHealthResultDetailOfMember = () => {
         data : JSON.stringify({status: '待审核'}),
         beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
         success : (result) => {
-          console.log(result);
+          
           if(result.code === RESULT.SUCCESS) {
 
             //关闭加载圈、对话框
@@ -277,7 +277,7 @@ requestHealthResultDetailOfMember = () => {
   **/
   passHealthDetail = (form, id) => {
 
-    console.log('通过一份健康摘要,变为已通过', id);
+    
 
     //显示加载圈
     this.setState({ passLoading: true });
@@ -289,7 +289,7 @@ requestHealthResultDetailOfMember = () => {
         data : JSON.stringify({status: '已通过'}),
         beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
         success : (result) => {
-          console.log(result);
+          
           if(result.code === RESULT.SUCCESS) {
 
             //关闭加载圈、对话框
@@ -310,7 +310,7 @@ requestHealthResultDetailOfMember = () => {
   //不通过
   unpassHealthDetail = (id, unpassReason) => {
 
-    console.log('不通过一份健康摘要,变为未通过', id);
+    
 
     //显示加载圈
     this.setState({ unpassLoading: true });
@@ -322,7 +322,7 @@ requestHealthResultDetailOfMember = () => {
         data : JSON.stringify({status: '未通过', reason: unpassReason}),
         beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
         success : (result) => {
-          console.log(result);
+          
           if(result.code === RESULT.SUCCESS) {
 
             //关闭加载圈、对话框
@@ -343,7 +343,7 @@ requestHealthResultDetailOfMember = () => {
   // //下载
   // downloadHealthDetail = (id) => {
   //
-  //   console.log('请求下载健康摘要', id);
+  //   
   //
   //   //显示加载圈
   //   this.setState({ downloadLoading: true });
@@ -353,7 +353,7 @@ requestHealthResultDetailOfMember = () => {
   //       dataType : 'json',
   //       beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
   //       success : (result) => {
-  //         console.log(result);
+  //         
   //         if(result.code === RESULT.SUCCESS) {
   //
   //           //下载
@@ -376,7 +376,7 @@ requestHealthResultDetailOfMember = () => {
   //删除
   deleteHealthDetail = (id) => {
 
-    console.log('删除一条健康摘要', id);
+    
 
     $.ajax({
         url : SERVER + '/api/health/' + id,
@@ -385,7 +385,7 @@ requestHealthResultDetailOfMember = () => {
         beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
         success : (result) => {
 
-            console.log(result);
+            
             if(result.code === RESULT.SUCCESS) {
 
                 this.setState({deleteLoading: false});

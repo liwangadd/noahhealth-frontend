@@ -36,7 +36,7 @@ class MemberDetailHealthResult extends React.Component {
     this.refs.healthResultDetailSearchForm.validateFields((err, values) => {
       if(!err) {
 
-        console.log('查询' + this.props.params.memberId + '会员的所有健康摘要信息');
+        
 
         this.setState({tableLoading: true});
         $.ajax({
@@ -51,7 +51,7 @@ class MemberDetailHealthResult extends React.Component {
             beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
             success : (result) => {
 
-                console.log(result);
+                
                 if(result.code === RESULT.SUCCESS) {
 
                   this.setState({overviewData: result.content,
@@ -74,7 +74,7 @@ class MemberDetailHealthResult extends React.Component {
     this.refs.healthResultDetailSearchForm.validateFields((err, values) => {
         if(!err) {
 
-        console.log('下载' + this.props.params.memberId + '会员的所有健康摘要');
+        
         $.ajax({
             url : SERVER + '/api/health/download/' + this.props.params.memberId,
             type : 'POST',
@@ -87,7 +87,7 @@ class MemberDetailHealthResult extends React.Component {
             beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
             success : (result) => {
 
-                console.log(result);
+                
                 if(result.code === RESULT.SUCCESS) {
 
                   //下载导出的文件
@@ -106,7 +106,7 @@ class MemberDetailHealthResult extends React.Component {
   //拉取健康摘要类别级联数据
   requestHealthResultSecondType = () => {
 
-    console.log('拉取健康摘要类别数据');
+    
     $.ajax({
         url : SERVER + '/api/health_category/level',
         type : 'GET',
@@ -114,7 +114,7 @@ class MemberDetailHealthResult extends React.Component {
         beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
         success : (result) => {
 
-            console.log(result);
+            
             if(result.code !== RESULT.SUCCESS) {
                 message.error(result.reason, 2);
                 return;

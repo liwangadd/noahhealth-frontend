@@ -13,7 +13,7 @@ class EmployeeLogin extends React.Component {
     loading: false
   };
   onCollapse = (collapsed) => {
-    console.log(collapsed);
+    
     this.setState({
       collapsed,
       mode: collapsed ? 'vertical' : 'inline',

@@ -23,8 +23,6 @@ class ThirdCategoryManage extends React.Component {
   //拉取secondId下的所有亚亚类
   requestThirdCategoryData = (secondId, pageNow) => {
 
-    console.log('查询'+ this.props.params.secondName +'下的所有检查项目');
-
     this.setState({ thirdCategoryTableLoading: true});
     $.ajax({
         url : SERVER + '/api/third/' + secondId + '/list',
@@ -34,8 +32,6 @@ class ThirdCategoryManage extends React.Component {
         data : JSON.stringify({pageNow: pageNow, pageSize: PAGE_SIZE}),
         beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
         success : (result) => {
-
-            console.log(result);
             if(result.code === RESULT.SUCCESS) {
 
                 //更新页码
@@ -62,8 +58,6 @@ class ThirdCategoryManage extends React.Component {
   //删除亚亚类
   handleDelete(record) {
 
-    console.log('删除检查项目', record);
-
     this.setState({ thirdCategoryTableLoading: true});
     $.ajax({
         url : SERVER + '/api/third/' + record.id,
@@ -72,7 +66,6 @@ class ThirdCategoryManage extends React.Component {
         beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
         success : (result) => {
 
-            console.log(result);
             if(result.code === RESULT.SUCCESS) {
 
                 //删除后重查一遍
@@ -105,8 +98,6 @@ class ThirdCategoryManage extends React.Component {
   //查询categoryId类别信息显示到对话框内
   requestCategory = (categoryId) => {
 
-    console.log('查询检查项目', categoryId);
-
     $.ajax({
         url : SERVER + '/api/third/' + categoryId,
         type : 'GET',
@@ -114,7 +105,6 @@ class ThirdCategoryManage extends React.Component {
         beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
         success : (result) => {
 
-            console.log(result);
             if(result.code === RESULT.SUCCESS) {
 
                 let category = result.content;
@@ -137,7 +127,6 @@ class ThirdCategoryManage extends React.Component {
     //请求修改亚亚类
     this.refs.editForm.validateFields((err, values) => {
       if(!err) {
-        console.log('修改检查项目', values);
 
         //显示加载圈
         this.setState({ confirmLoading: true });
@@ -153,7 +142,6 @@ class ThirdCategoryManage extends React.Component {
             dataType : 'json',
             beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
             success : (result) => {
-              console.log(result);
               if(result.code === RESULT.SUCCESS) {
 
                 //重查刷新一遍

@@ -73,7 +73,7 @@ class OriginResultQitaManage extends React.Component {
 
         this.setState({ originResultTableLoading: true});
 
-        console.log('拉取第'+ pageNow + "页原始数据-执行情况信息", values);
+        
 
         $.ajax({
             url : SERVER + '/api/origin/list',
@@ -93,7 +93,7 @@ class OriginResultQitaManage extends React.Component {
             beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
             success : (result) => {
 
-                console.log(result);
+                
                 if(result.code !== RESULT.SUCCESS) {
                     this.setState({ originResultTableLoading: false});
                     message.error(result.reason, 2);
@@ -129,7 +129,7 @@ class OriginResultQitaManage extends React.Component {
 
     this.refs.uploadForm.validateFields((err, values) => {
       if(!err) {
-        console.log('添加一份原始资料', values);
+        
 
         //显示加载圈
         this.setState({ confirmUploadModalLoading: true });
@@ -146,7 +146,7 @@ class OriginResultQitaManage extends React.Component {
             dataType : 'json',
             beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
             success : (result) => {
-              console.log(result);
+              
               if(result.code === RESULT.SUCCESS) {
 
                 this.handleSearchOriginResultList(this.state.originResultPager.current); //更新表格数据
@@ -183,7 +183,7 @@ class OriginResultQitaManage extends React.Component {
 
   requestUploadedPictures = (originResultId) => {
 
-    console.log("拉取第" + originResultId + "号已上传了的所有文件");
+    
     $.ajax({
         url : SERVER + '/api/origin/file/' + originResultId,
         type : 'GET',
@@ -191,7 +191,7 @@ class OriginResultQitaManage extends React.Component {
         beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
         success : (result) => {
 
-          console.log(result);
+          
           if(result.code !== RESULT.SUCCESS) {
             message.error(result.reason, 2);
             return;
@@ -219,9 +219,9 @@ class OriginResultQitaManage extends React.Component {
 
     //显示成功 失败消息提示
     if (info.file.status !== 'uploading') {
-      console.log(info.file, info.fileList);
+      
     }
-    console.log(info);
+    
     if (info.file.status === 'done') {
 
       if(info.file.response.code === RESULT.SUCCESS) {
@@ -260,7 +260,7 @@ class OriginResultQitaManage extends React.Component {
   //删除上传好的图片（档案部员工）
   requestDeletePicture = (originResultId, fileName) => {
 
-    console.log('删除' + originResultId + '号原始数据记录的扫描件-', fileName);
+    
 
     $.ajax({
         url : SERVER + '/api/origin/file/' + originResultId,
@@ -271,7 +271,7 @@ class OriginResultQitaManage extends React.Component {
         beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
         success : (result) => {
 
-            console.log(result);
+            
             if(result.code === RESULT.SUCCESS) {
 
                 message.success(result.reason, 2);
@@ -287,7 +287,7 @@ class OriginResultQitaManage extends React.Component {
   //提交上传的图片
   handleSubmitPicture = () => {
 
-      console.log('提交一份原始资料,变为待审核', this.state.originResultId);
+      
 
       //显示加载圈
       this.setState({ submitLoading: true });
@@ -299,7 +299,7 @@ class OriginResultQitaManage extends React.Component {
           data : JSON.stringify({status: '待审核'}),
           beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
           success : (result) => {
-            console.log(result);
+            
             if(result.code === RESULT.SUCCESS) {
 
               this.handleSearchOriginResultList(this.state.originResultPager.current);
@@ -336,7 +336,7 @@ class OriginResultQitaManage extends React.Component {
 
   handlePassPicture = () => {
 
-    console.log('通过一份原始资料,变为已通过', this.state.originResultId);
+    
 
     //显示加载圈
     this.setState({ passLoading: true });
@@ -348,7 +348,7 @@ class OriginResultQitaManage extends React.Component {
         data : JSON.stringify({status: '已通过'}),
         beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
         success : (result) => {
-          console.log(result);
+          
           if(result.code === RESULT.SUCCESS) {
 
             this.handleSearchOriginResultList(this.state.originResultPager.current);
@@ -368,7 +368,7 @@ class OriginResultQitaManage extends React.Component {
 
   handleUnpassPicture = (unpassReason) => {
 
-    console.log('不通过一份原始资料,变为未通过', this.state.originResultId);
+    
 
     //显示加载圈
     this.setState({ unpassLoading: true });
@@ -380,7 +380,7 @@ class OriginResultQitaManage extends React.Component {
         data : JSON.stringify({status: '未通过', reason: unpassReason}),
         beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
         success : (result) => {
-          console.log(result);
+          
           if(result.code === RESULT.SUCCESS) {
 
             this.handleSearchOriginResultList(this.state.originResultPager.current);
@@ -418,7 +418,7 @@ class OriginResultQitaManage extends React.Component {
   //删除
   handleDeleteOriginResult = (originResultId) => {
 
-    console.log('删除一条原始资料信息', originResultId);
+    
 
     $.ajax({
         url : SERVER + '/api/origin/' + originResultId,
@@ -427,7 +427,7 @@ class OriginResultQitaManage extends React.Component {
         beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
         success : (result) => {
 
-            console.log(result);
+            
             if(result.code === RESULT.SUCCESS) {
 
                 //删除后重查一遍
@@ -448,7 +448,7 @@ class OriginResultQitaManage extends React.Component {
 
   requestMembersUnderEmployee = () => {
 
-      console.log('拉取'+ sessionStorage.getItem(SESSION.NAME) +'旗下的所有会员信息');
+      
       $.ajax({
           url : SERVER + '/api/user/member_under_employee',
           type : 'POST',
@@ -458,7 +458,7 @@ class OriginResultQitaManage extends React.Component {
           beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
           success : (result) => {
 
-              console.log(result);
+              
               if(result.code !== RESULT.SUCCESS) {
                   message.error(result.reason, 2);
                   return;
@@ -477,15 +477,15 @@ class OriginResultQitaManage extends React.Component {
   //拉取电子资料类别级联数据
   requestOriginResultSecondType = () => {
 
-    console.log('拉取电子资料类别数据');
+    
     $.ajax({
         url : SERVER + '/api/origin_category/level',
         type : 'GET',
         dataType : 'json',
         beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
         success : (result) => {
-            console.log("=======");
-            console.log(result);
+            
+            
             if(result.code !== RESULT.SUCCESS) {
                 message.error(result.reason, 2);
                 return;

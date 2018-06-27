@@ -43,7 +43,7 @@ class FirstCategoryManage extends React.Component {
   //拉取所有大类
   requestFirstCategoryData = (type) => {
 
-    console.log('查询所有' + type + '检查分类');
+    
 
     // type === "化验" ? this.setState({ assayTableLoading: true }) : this.setState({ techTableLoading: true });
     if (type === "化验") {
@@ -62,7 +62,7 @@ class FirstCategoryManage extends React.Component {
         beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
         success: (result) => {
 
-          console.log(result);
+          
           if (result.code === RESULT.SUCCESS) {
             type === "化验" ? this.setState({ assayData: result.content }) : this.setState({ techData: result.content });
           } else {
@@ -79,7 +79,7 @@ class FirstCategoryManage extends React.Component {
         dataType: 'json',
         beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
         success: (result) => {
-          console.log(result);
+          
           if (result.code === RESULT.SUCCESS) {
             this.setState({ healthData: result.content, healthTableLoading: false });
           } else {
@@ -93,7 +93,7 @@ class FirstCategoryManage extends React.Component {
   //删除大类
   handleDelete(record, type) {
 
-    console.log('删除' + type + '检查分类', record);
+    
 
     if (type === "化验") {
       this.setState({ assayTableLoading: true })
@@ -110,7 +110,7 @@ class FirstCategoryManage extends React.Component {
         beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
         success: (result) => {
 
-          console.log(result);
+          
           if (result.code === RESULT.SUCCESS) {
 
             this.requestFirstCategoryParentData(type); //更新添加对话框中大类列表数据
@@ -133,7 +133,7 @@ class FirstCategoryManage extends React.Component {
         dataType: 'json',
         beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
         success: (result) => {
-          console.log(result);
+          
           if (result.code === RESULT.SUCCESS) {
             this.requestFirstCategoryData(type);
             this.requestFirstCategoryParentData(type);
@@ -167,7 +167,7 @@ class FirstCategoryManage extends React.Component {
   //查询categoryId类别信息显示到对话框内
   requestCategory = (type, categoryId) => {
 
-    console.log('查询检查分类', type, categoryId);
+    
 
     if (type === '医技' || type === '化验') {
       $.ajax({
@@ -177,7 +177,7 @@ class FirstCategoryManage extends React.Component {
         beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
         success: (result) => {
 
-          console.log(result);
+          
           if (result.code === RESULT.SUCCESS) {
 
             let category = result.content;
@@ -197,7 +197,7 @@ class FirstCategoryManage extends React.Component {
         dataType: 'json',
         beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
         success: (result) => {
-          console.log(result);
+          
           if (result.code === RESULT.SUCCESS) {
             let category = result.content;
             this.refs.editForm.setFieldsValue({ name: category.name, number: category.number });
@@ -217,7 +217,7 @@ class FirstCategoryManage extends React.Component {
     //请求修改亚亚类
     this.refs.editForm.validateFields((err, values) => {
       if (!err) {
-        console.log('修改检查分类', values);
+        
 
         //显示加载圈
         this.setState({ confirmEditModalLoading: true });
@@ -231,7 +231,7 @@ class FirstCategoryManage extends React.Component {
             dataType: 'json',
             beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
             success: (result) => {
-              console.log(result);
+              
               if (result.code === RESULT.SUCCESS) {
 
                 this.requestFirstCategoryParentData(this.categoryType); //更新添加对话框中大类列表数据
@@ -260,7 +260,7 @@ class FirstCategoryManage extends React.Component {
             dataType: 'json',
             beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
             success: (result) => {
-              console.log(result);
+              
               if (result.code === RESULT.SUCCESS) {
 
                 this.requestFirstCategoryParentData(this.categoryType); //更新添加对话框中大类列表数据
@@ -294,7 +294,7 @@ class FirstCategoryManage extends React.Component {
   //拉取系统中所有检查分类
   requestFirstCategoryParentData = (type) => {
 
-    console.log('查询所有' + type + '检查分类');
+    
     if (type === '医技' || type === '化验') {
       $.ajax({
         url: SERVER + '/api/first/' + type + '/list',
@@ -304,7 +304,7 @@ class FirstCategoryManage extends React.Component {
         beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
         success: (result) => {
 
-          console.log(result);
+          
           if (result.code === RESULT.SUCCESS) {
 
             if (type === "化验") {
@@ -349,7 +349,7 @@ class FirstCategoryManage extends React.Component {
   //拉取系统中所有检查亚类
   requestSecondCategoryParentData = (type) => {
 
-    console.log('查询所有' + type + '检查亚类');
+    
     $.ajax({
       url: SERVER + '/api/first/level',
       type: 'POST',
@@ -360,7 +360,7 @@ class FirstCategoryManage extends React.Component {
       beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
       success: (result) => {
 
-        console.log(result);
+        
         if (result.code === RESULT.SUCCESS) {
 
           //将后端返回的map整理成级联列表识别的数据结构
@@ -416,7 +416,7 @@ class FirstCategoryManage extends React.Component {
 
     this.refs.addForm.validateFields(['type', 'firstCategoryName', 'firstCategoryNumber'], (err, values) => {
       if (!err) {
-        console.log('添加' + values.type + '检查分类' + values.firstCategoryName + "检查编号" + values.firstCategoryNumber);
+        
 
         this.setState({ confirmLoading: true });
 
@@ -431,7 +431,7 @@ class FirstCategoryManage extends React.Component {
             beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
             success: (result) => {
 
-              console.log(result);
+              
               if (result.code === RESULT.SUCCESS) {
 
                 this.requestFirstCategoryParentData(values.type); //更新添加对话框中大类列表数据
@@ -461,7 +461,7 @@ class FirstCategoryManage extends React.Component {
             beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
             success: (result) => {
 
-              console.log(result);
+              
               if (result.code === RESULT.SUCCESS) {
 
                 this.requestFirstCategoryParentData(values.type); //更新添加对话框中大类列表数据
@@ -491,8 +491,8 @@ class FirstCategoryManage extends React.Component {
 
     this.refs.addForm.validateFields(['type', 'firstCategoryParentOfAssayId', 'firstCategoryParentOfTechId', 'firstCategoryParentOfHealthId', 'secondCategoryName', 'secondCategoryNumber'], (err, values) => {
       if (!err) {
-        console.log('添加' + values.type + '检查亚类' + values.secondCategoryName);
-        console.log(values.firstCategoryParentOfHealthId)
+        
+        
 
         this.setState({ confirmLoading: true });
         let firstId;
@@ -513,7 +513,7 @@ class FirstCategoryManage extends React.Component {
             beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
             success: (result) => {
 
-              console.log(result);
+              
               if (result.code === RESULT.SUCCESS) {
 
                 this.requestSecondCategoryParentData(values.type); //更新添加对话框中大类列表数据
@@ -541,7 +541,7 @@ class FirstCategoryManage extends React.Component {
             beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
             success: (result) => {
 
-              console.log(result);
+              
               if (result.code === RESULT.SUCCESS) {
 
                 this.requestSecondCategoryParentData(values.type); //更新添加对话框中大类列表数据
@@ -569,7 +569,7 @@ class FirstCategoryManage extends React.Component {
 
     this.refs.addForm.validateFields(['type', 'secondCategoryParentOfAssayId', 'secondCategoryParentOfTechId', 'thirdCategoryName', 'enShort', 'referenceValue', 'hospital'], (err, values) => {
       if (!err) {
-        console.log('添加' + values.type + '检查项目' + values.thirdCategoryName);
+        
 
         this.setState({ confirmLoading: true });
         let secondId = values.type === '化验' ? values.secondCategoryParentOfAssayId[1] : values.secondCategoryParentOfTechId[1];
@@ -588,7 +588,7 @@ class FirstCategoryManage extends React.Component {
           beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
           success: (result) => {
 
-            console.log(result);
+            
             if (result.code === RESULT.SUCCESS) {
 
               //关闭加载圈、对话框

@@ -48,7 +48,7 @@ class ExamResultAssayCloseup extends React.Component {
   //保存录入的检查结果
   saveInputDetail = (form, id, note) => {
 
-    console.log('保存录入了的检查结果', id);
+    
 
     form.validateFields((err, values) => {
       if (!err) {
@@ -56,7 +56,7 @@ class ExamResultAssayCloseup extends React.Component {
         this.setState({ saveLoading: true });
         values['note'] = note
 
-        console.log(values)
+        
         $.ajax({
           url: SERVER + '/api/detail',
           type: 'PUT',
@@ -65,7 +65,7 @@ class ExamResultAssayCloseup extends React.Component {
           data: JSON.stringify(values),
           beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
           success: (result) => {
-            console.log(result);
+            
             if (result.code === RESULT.SUCCESS) {
 
               //重新查一遍
@@ -87,7 +87,7 @@ class ExamResultAssayCloseup extends React.Component {
   //提交录入的检查结果（先请求保存、再请求改变状态）
   submitInputDetail = (form, id, note) => {
 
-    console.log('提交一份检查结果,变为待审核', id);
+    
 
     //先保存
     this.saveInputDetail(form, id, note);
@@ -102,7 +102,7 @@ class ExamResultAssayCloseup extends React.Component {
       data: JSON.stringify({ status: '待审核' }),
       beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
       success: (result) => {
-        console.log(result);
+        
         if (result.code === RESULT.SUCCESS) {
 
           //关闭加载圈、对话框
@@ -127,7 +127,7 @@ class ExamResultAssayCloseup extends React.Component {
 
   passInputDetail = (form, id, note) => {
 
-    console.log('通过一份检查结果,变为已通过', id);
+    
 
     // 先保存
     this.saveInputDetail(form, id, note);
@@ -141,7 +141,7 @@ class ExamResultAssayCloseup extends React.Component {
       data: JSON.stringify({ status: '已通过' }),
       beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
       success: (result) => {
-        console.log(result);
+        
         if (result.code === RESULT.SUCCESS) {
 
           //关闭加载圈、对话框
@@ -161,7 +161,7 @@ class ExamResultAssayCloseup extends React.Component {
 
   unpassInputDetail = (id, unpassReason) => {
 
-    console.log('不通过一份检查结果,变为未通过', id);
+    
 
     //显示加载圈
     this.setState({ unpassLoading: true });
@@ -173,7 +173,7 @@ class ExamResultAssayCloseup extends React.Component {
       data: JSON.stringify({ status: '未通过', reason: unpassReason }),
       beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
       success: (result) => {
-        console.log(result);
+        
         if (result.code === RESULT.SUCCESS) {
 
           //关闭加载圈、对话框
@@ -194,7 +194,7 @@ class ExamResultAssayCloseup extends React.Component {
   //下载
   downloadInputDetail = (id) => {
 
-    console.log('请求下载检查结果', id);
+    
 
     //显示加载圈
     this.setState({ downloadLoading: true });
@@ -204,7 +204,7 @@ class ExamResultAssayCloseup extends React.Component {
       dataType: 'json',
       beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
       success: (result) => {
-        console.log(result);
+        
         if (result.code === RESULT.SUCCESS) {
 
           //下载
@@ -227,7 +227,7 @@ class ExamResultAssayCloseup extends React.Component {
   //删除
   deleteInputDetail = (id) => {
 
-    console.log('删除一条检查记录', id);
+    
 
     $.ajax({
       url: SERVER + '/api/input/' + id,
@@ -236,7 +236,7 @@ class ExamResultAssayCloseup extends React.Component {
       beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
       success: (result) => {
 
-        console.log(result);
+        
         if (result.code === RESULT.SUCCESS) {
 
           this.setState({ deleteLoading: false });
@@ -258,7 +258,7 @@ class ExamResultAssayCloseup extends React.Component {
   requestExamResultDetailById = () => {
 
 
-    console.log('查询' + this.props.params.detailId + '检查记录');
+    
     $.ajax({
       url: SERVER + '/api/input/' + this.props.params.detailId,
       type: 'GET',
@@ -267,7 +267,7 @@ class ExamResultAssayCloseup extends React.Component {
       beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
       success: (result) => {
 
-        console.log(result);
+        
         if (result.code === RESULT.SUCCESS) {
           
           this.setState({ detail: result.content, pageLoading: false });

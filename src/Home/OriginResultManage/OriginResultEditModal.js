@@ -11,7 +11,7 @@ class OriginResultEditModal_ extends React.Component {
     render() {
         const formItemLayout = { labelCol: { xs: { span: 24 }, sm: { span: 7 }, }, wrapperCol: { xs: { span: 24 }, sm: { span: 12 } } };
         const { getFieldDecorator } = this.props.form;
-        console.log(this.props.originResultTypeData)
+        
         const originResultTypeOptions = this.props.originResultTypeData.map((type, index) => <Option value={type.label.toString()} key={type.value}>{type.label}</Option>);
         return (
             <Modal title="修改原始资料" visible={this.props.visible} onOk={this.props.onConfirm} confirmLoading={this.props.confirmLoading} onCancel={this.props.onCancel}>

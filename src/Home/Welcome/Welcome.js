@@ -39,7 +39,7 @@ class Welcome extends React.Component {
       beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
       success: (result) => {
 
-        console.log(result);
+        
         if (result.code !== RESULT.SUCCESS) {
           message.error(result.reason, 2);
         }
@@ -54,7 +54,7 @@ class Welcome extends React.Component {
 
     this.refs.memberInfoForm.validateFields((err, values) => {
       if (!err) {
-        console.log('更新会员的健康信息表', values);
+        
 
         //显示加载圈
         this.setState({ updateMemberInfoLoading: true });
@@ -78,7 +78,7 @@ class Welcome extends React.Component {
           }),
           beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
           success: (result) => {
-            console.log(result);
+            
             if (result.code === RESULT.SUCCESS) {
 
               //关闭加载圈、对话框

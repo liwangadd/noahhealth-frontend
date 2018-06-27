@@ -11,7 +11,7 @@ const { Header, Content, Footer, Sider } = Layout;
 const { SubMenu } = Menu;
 
 var close = () => {
-  console.log('Notification was closed. Either the close button was clicked or duration time elapsed.');
+  
 }
 
 class Home extends React.Component {
@@ -157,7 +157,7 @@ class Home extends React.Component {
   //查询memberId会员信息显示到对话框内
   requestMember = (memberId) => {
 
-    console.log('查询会员', memberId);
+    
 
     $.ajax({
       url: SERVER + '/api/user/' + memberId,
@@ -166,7 +166,7 @@ class Home extends React.Component {
       beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
       success: (result) => {
 
-        console.log(result);
+        
         if (result.code === RESULT.SUCCESS) {
 
           this.setState({ userInfo: result.content });
@@ -216,77 +216,80 @@ class Home extends React.Component {
               </Menu.Item>
             </SubMenu>
 
-            <SubMenu key="record_input" title={<span className="menu-item-font"><Icon type="file" /><span>档案录审</span></span>}>
-              {
-                layoutStyle.documentBankMenuItemDisplay === STYLE.BLOCK
-                  ?
-                  <Menu.Item key={ROUTE.ORIGIN_RESULT_NEW_MANAGE.MENU_KEY} style={{ display: layoutStyle.documentBankMenuItemDisplay }}>
-                    <span className="nav-text menu-item-font">电子健康银行</span>
-                  </Menu.Item>
-                  :
-                  null
-              }
-              {
-                layoutStyle.healthDatabaseMenuItemDisplay === STYLE.BLOCK
-                  ?
-                  <SubMenu key="health_store" title={<span className="menu-item-font"><span>健康大数据库</span></span>} >
-                    <Menu.Item key={ROUTE.HEALTH_RESULT_MANAGE.MENU_KEY} >
-                      <span className="menu-item-font">健康摘要库</span>
+            {layoutStyle.documentBankMenuItemDisplay === STYLE.BLOCK || layoutStyle.healthDatabaseMenuItemDisplay === STYLE.BLOCK || layoutStyle.healthLongtermManageMenuItemDisplay === STYLE.BLOCK ?
+              <SubMenu key="record_input" title={<span className="menu-item-font"><Icon type="file" /><span>档案录审</span></span>}>
+                {
+                  layoutStyle.documentBankMenuItemDisplay === STYLE.BLOCK
+                    ?
+                    <Menu.Item key={ROUTE.ORIGIN_RESULT_NEW_MANAGE.MENU_KEY} style={{ display: layoutStyle.documentBankMenuItemDisplay }}>
+                      <span className="nav-text menu-item-font">电子健康银行</span>
                     </Menu.Item>
-                    <Menu.Item key={ROUTE.EXAM_RESULT_ASSAY_MANAGE.MENU_KEY} >
-                      <span className="menu-item-font">化验数据库</span>
-                    </Menu.Item>
-                    <Menu.Item key={ROUTE.EXAM_RESULT_TECH_MANAGE.MENU_KEY} >
-                      <span className="menu-item-font">医技数据库</span>
-                    </Menu.Item>
-                  </SubMenu>
-                  :
-                  null
-              }
-              {
-                layoutStyle.healthLongtermManageMenuItemDisplay === STYLE.BLOCK
-                  ?
-                  <SubMenu key="health_manage" title={<span className="menu-item-font"><span>健康长程管理</span></span>}>
-                    <Menu.Item key="88">
-                      <span className="menu-item-font">健康管理方案</span>
-                    </Menu.Item>
-                    <Menu.Item key="99">
-                      <span className="menu-item-font">健康问题记录</span>
-                    </Menu.Item>
-                    <Menu.Item key="00">
-                      <span className="menu-item-font">专病监测表格</span>
-                    </Menu.Item>
-                    <Menu.Item key="23">
-                      <span className="menu-item-font">调查评估量表</span>
-                    </Menu.Item>
-                    <Menu.Item key="235555">
-                      <span className="menu-item-font">私人定制体检</span>
-                    </Menu.Item>
-                    <Menu.Item key="2355551">
-                      <span className="menu-item-font">年度健康总结</span>
-                    </Menu.Item>
-                  </SubMenu>
-                  :
-                  null
-              }
-            </SubMenu>
+                    :
+                    null
+                }
+                {
+                  layoutStyle.healthDatabaseMenuItemDisplay === STYLE.BLOCK
+                    ?
+                    <SubMenu key="health_store" title={<span className="menu-item-font"><span>健康大数据库</span></span>} >
+                      <Menu.Item key={ROUTE.HEALTH_RESULT_MANAGE.MENU_KEY} >
+                        <span className="menu-item-font">健康摘要库</span>
+                      </Menu.Item>
+                      <Menu.Item key={ROUTE.EXAM_RESULT_ASSAY_MANAGE.MENU_KEY} >
+                        <span className="menu-item-font">化验数据库</span>
+                      </Menu.Item>
+                      <Menu.Item key={ROUTE.EXAM_RESULT_TECH_MANAGE.MENU_KEY} >
+                        <span className="menu-item-font">医技数据库</span>
+                      </Menu.Item>
+                    </SubMenu>
+                    :
+                    null
+                }
+                {
+                  layoutStyle.healthLongtermManageMenuItemDisplay === STYLE.BLOCK
+                    ?
+                    <SubMenu key="health_manage" title={<span className="menu-item-font"><span>健康长程管理</span></span>}>
+                      <Menu.Item key="88">
+                        <span className="menu-item-font">健康管理方案</span>
+                      </Menu.Item>
+                      <Menu.Item key="99">
+                        <span className="menu-item-font">健康问题记录</span>
+                      </Menu.Item>
+                      <Menu.Item key="00">
+                        <span className="menu-item-font">专病监测表格</span>
+                      </Menu.Item>
+                      <Menu.Item key="23">
+                        <span className="menu-item-font">调查评估量表</span>
+                      </Menu.Item>
+                      <Menu.Item key="235555">
+                        <span className="menu-item-font">私人定制体检</span>
+                      </Menu.Item>
+                      <Menu.Item key="2355551">
+                        <span className="menu-item-font">年度健康总结</span>
+                      </Menu.Item>
+                    </SubMenu>
+                    :
+                    null
+                }
+              </SubMenu>
+              :
+              null
+            }
 
             <Menu.Item key={ROUTE.EMPLOYEE_MANAGE.MENU_KEY} style={{ display: layoutStyle.employeeManageMenuItemDisplay }}>
               <Icon type="team" className="menu-item-font" />
               <span className="nav-text menu-item-font">职员管理</span>
             </Menu.Item>
 
-            <SubMenu key="system_manage" title={<span className="menu-item-font"><Icon type="medicine-box" /><span>系统管理</span></span>}>
-              {
-                layoutStyle.healthDatabaseMenuItemDisplay === STYLE.BLOCK
-                  ?
+            {
+              layoutStyle.healthDatabaseMenuItemDisplay === STYLE.BLOCK
+                ?
+                <SubMenu key="system_manage" title={<span className="menu-item-font"><Icon type="medicine-box" /><span>系统管理</span></span>}>
                   <Menu.Item key={ROUTE.FIRST_CATEGORY_MANAGE.MENU_KEY} >
                     <span className="menu-item-font">检查项目管理</span>
                   </Menu.Item>
-                  : null
-              }
-            </SubMenu>
-
+                </SubMenu>
+                : null
+            }
           </Menu>
         </Sider>
         <Layout>
