@@ -369,7 +369,7 @@ class MemberManage extends React.Component {
         <BackTop visibilityHeight="200" />
         <Tabs defaultActiveKey={"1"}
           tabBarExtraContent={role === ROLE.EMPLOYEE_ADMIN ? <Button type="primary" onClick={this.showMemberAddModal}>添加会员</Button> : null}>
-          <TabPane tab="会员管理" key="1">
+          <TabPane tab="健康档案" key="1">
             <MemberSearchForm ref="memberSearchForm" handleSearchMemberList={this.handleSearchMemberList} />
             <Table className='user-table' columns={memberColumns} dataSource={this.state.memberData} pagination={this.state.memberPager} onChange={this.changeMemberPager} rowKey='id' loading={this.state.memberTableLoading} />
           </TabPane>

@@ -1,4 +1,3 @@
-import './OriginResultManage.css';
 import React from 'react';
 import moment from 'moment';
 import {DATE_FORMAT} from './../../App/PublicConstant.js';
@@ -8,7 +7,7 @@ const FormItem = Form.Item;
 const Option = Select.Option;
 
 //添加原始资料表单
-class OriginResultUploadModal_ extends React.Component {
+class MemorabiliaAddModel_ extends React.Component {
 
   onMemberChange = (memberId) => {
 
@@ -25,7 +24,6 @@ class OriginResultUploadModal_ extends React.Component {
 
     const formItemLayout = {labelCol: { xs: { span: 24 }, sm: { span: 7 },}, wrapperCol: { xs: { span: 24 }, sm: { span: 12 }}};
     const memberNameOptions = this.props.memberUnderEmployeeData.map((member, index) => <Option value={member.id.toString()} key={index}>{member.name}</Option>);
-    const originResultTypeOptions = this.props.originResultTypeData.map((type, index) => <Option value={type.value.toString()} key={index}>{type.label}</Option>);
 
     const { getFieldDecorator } = this.props.form;
     return (
@@ -44,34 +42,18 @@ class OriginResultUploadModal_ extends React.Component {
                 <Input disabled/>
               )}
             </FormItem>
-            <FormItem {...formItemLayout} label="资料名称">
-              {getFieldDecorator('note', {rules: [{ required: true, message: '请输入资料名称!' }]})(
+            <FormItem {...formItemLayout} label="标题">
+              {getFieldDecorator('title', {rules: [{ required: true, message: '请输入标题名称!' }]})(
                 <Input />
               )}
             </FormItem>
-            <FormItem {...formItemLayout} label="资料类别">
-              {getFieldDecorator('secondId', {rules: [{ required: true, message: '请选择资料类别!' }]})(
-                //<Cascader options={this.props.originResultSecondTypeData} placeholder="" allowClear={false}/>
-                <Select>
-                  {originResultTypeOptions}
-                </Select>
+            <FormItem {...formItemLayout} label="健康大事件">
+              {getFieldDecorator('content', {rules: [{ required: true, message: '请输入事件内容!' }]})(
+                <Input type="textarea" rows={10} />
               )}
             </FormItem>
-            <FormItem {...formItemLayout} label="是否异常">
-              {getFieldDecorator('normal', {rules: [{ required: true, message: '请选择是否异常!' }], initialValue: "正常"})(
-              <Radio.Group>
-                <Radio.Button value="正常">正常</Radio.Button>
-                <Radio.Button value="异常">异常</Radio.Button>
-              </Radio.Group>
-              )}
-            </FormItem>
-            <FormItem {...formItemLayout} label="检查医院">
-              {getFieldDecorator('hospital', {rules: [{ required: true, message: '请输入检查医院名称!' }], initialValue: '301医院'})(
-                <Input />
-              )}
-            </FormItem>
-            <FormItem {...formItemLayout} label="检查日期" hasFeedback={true}>
-              {getFieldDecorator('time', {rules: [{ required: true, message: '请选择检查日期!' }], initialValue:  moment(new Date(), DATE_FORMAT)})(
+            <FormItem {...formItemLayout} label="上传日期" hasFeedback={true}>
+              {getFieldDecorator('time', {rules: [{ required: true, message: '请选择上传日期!' }], initialValue:  moment(new Date(), DATE_FORMAT)})(
                 <DatePicker style={{width: '100%'}}/>
               )}
             </FormItem>
@@ -82,5 +64,5 @@ class OriginResultUploadModal_ extends React.Component {
   }
 }
 
-const OriginResultUploadModal = Form.create()(OriginResultUploadModal_);
-export default OriginResultUploadModal;
+const MemorabiliaAddModel = Form.create()(MemorabiliaAddModel_);
+export default MemorabiliaAddModel;

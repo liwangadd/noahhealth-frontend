@@ -266,7 +266,7 @@ class MemberDetailTechResult extends React.Component {
           isEmployee(role)
           ?
           <Breadcrumb className="category-path">
-            <Breadcrumb.Item><Link to={ROUTE.MEMBER_MANAGE.URL_PREFIX + "/" + ROUTE.MEMBER_MANAGE.MENU_KEY}>会员管理</Link></Breadcrumb.Item>
+            <Breadcrumb.Item><Link to={ROUTE.MEMBER_MANAGE.URL_PREFIX + "/" + ROUTE.MEMBER_MANAGE.MENU_KEY}>健康档案</Link></Breadcrumb.Item>
             <Breadcrumb.Item><Link to={ROUTE.MEMBER_DETAIL.URL_PREFIX + "/" + ROUTE.MEMBER_DETAIL.MENU_KEY + "/" + this.props.params.memberId + "/" + this.props.params.memberName}>{this.props.params.memberName}</Link></Breadcrumb.Item>
             <Breadcrumb.Item>医技数据库</Breadcrumb.Item>
           </Breadcrumb>

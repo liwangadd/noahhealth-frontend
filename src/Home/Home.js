@@ -11,7 +11,7 @@ const { Header, Content, Footer, Sider } = Layout;
 const { SubMenu } = Menu;
 
 var close = () => {
-  
+
 }
 
 class Home extends React.Component {
@@ -136,6 +136,9 @@ class Home extends React.Component {
       case ROUTE.EXAM_RESULT_TECH_MANAGE.MENU_KEY: targetUrl = ROUTE.EXAM_RESULT_TECH_MANAGE.URL_PREFIX + "/" + ROUTE.EXAM_RESULT_TECH_MANAGE.MENU_KEY; break;
 
       case ROUTE.HEALTH_RESULT_MANAGE.MENU_KEY: targetUrl = ROUTE.HEALTH_RESULT_MANAGE.URL_PREFIX + "/" + ROUTE.HEALTH_RESULT_MANAGE.MENU_KEY; break;
+
+      case ROUTE.MEMORABILIA_MANAGE.MENU_KEY: targetUrl = ROUTE.MEMORABILIA_MANAGE.URL_PREFIX + "/" + ROUTE.MEMORABILIA_MANAGE.MENU_KEY; break;
+      case ROUTE.MEMORABILIA_EDITABLE_MANAGE.MENU_KEY: targetUrl = ROUTE.MEMORABILIA_EDITABLE_MANAGE.URL_PREFIX + "/" + ROUTE.MEMORABILIA_EDITABLE_MANAGE.MENU_KEY; break;
       default: ; break;
     }
 
@@ -157,7 +160,7 @@ class Home extends React.Component {
   //查询memberId会员信息显示到对话框内
   requestMember = (memberId) => {
 
-    
+
 
     $.ajax({
       url: SERVER + '/api/user/' + memberId,
@@ -166,7 +169,7 @@ class Home extends React.Component {
       beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
       success: (result) => {
 
-        
+
         if (result.code === RESULT.SUCCESS) {
 
           this.setState({ userInfo: result.content });
@@ -197,10 +200,13 @@ class Home extends React.Component {
               <span className="nav-text menu-item-font">首页</span>
             </Menu.Item>
 
-            <SubMenu key="member_manage" title={<span className="menu-item-font"><Icon type="team" /><span>{isMember(role) ? "个人资料" : "客户管理"}</span></span>}
+            <SubMenu key="member_manage" title={<span className="menu-item-font"><Icon type="team" /><span>{isMember(role) ? "个人资料" : "会员管理"}</span></span>}
               style={{ display: layoutStyle.memberManageMenuItemDisplay }} >
               <Menu.Item key={ROUTE.MEMBER_MANAGE.MENU_KEY} >
                 <span className="menu-item-font">健康档案</span>
+              </Menu.Item>
+              <Menu.Item key={ROUTE.MEMORABILIA_MANAGE.MENU_KEY} >
+                <span className="menu-item-font">健康大事记</span>
               </Menu.Item>
               <Menu.Item key="100" >
                 <span className="menu-item-font">资料上传</span>
@@ -223,6 +229,15 @@ class Home extends React.Component {
                     ?
                     <Menu.Item key={ROUTE.ORIGIN_RESULT_NEW_MANAGE.MENU_KEY} style={{ display: layoutStyle.documentBankMenuItemDisplay }}>
                       <span className="nav-text menu-item-font">电子健康银行</span>
+                    </Menu.Item>
+                    :
+                    null
+                }
+                {
+                  layoutStyle.documentBankMenuItemDisplay === STYLE.BLOCK
+                    ?
+                    <Menu.Item key={ROUTE.MEMORABILIA_EDITABLE_MANAGE.MENU_KEY} >
+                      <span className="menu-item-font">健康大事记</span>
                     </Menu.Item>
                     :
                     null

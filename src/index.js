@@ -52,6 +52,9 @@ import ExamResultTechCloseup from './Home/ExamResultManage/ExamResultTechCloseup
 import HealthResultManage from './Home/HealthResultManage/HealthResultManage.js';
 import HealthResultDetail from './Home/HealthResultManage/HealthResultDetail.js';
 
+import MemorabiliaManage from './Home/HealthMemorabiliaManage/MemorabiliaManage.js';
+import MemorabiliaEditableManage from './Home/HealthMemorabiliaManage/MemorabiliaEditableManage.js';
+
 import { message } from 'antd'
 import { Router, Route, browserHistory, IndexRoute } from 'react-router';
 import OriginResultNewManage from './Home/OriginResultManage/OriginResultNewManage';
@@ -81,6 +84,7 @@ const certifyAccess = function (nextState, replace) {
   }
 
   //判断当前用户的role是否能进入targetUrl页面
+  console.log(nextState.location.pathname);
   let targetUrl = "/" + nextState.location.pathname.split('/')[1];
   switch (targetUrl) {
     case ROUTE.MEMBER_LOGIN.URL_PREFIX: certifyRole(replace, role, ROUTE.MEMBER_LOGIN.PERMISSION); break;
@@ -135,6 +139,9 @@ const certifyAccess = function (nextState, replace) {
 
     case ROUTE.HEALTH_RESULT_MANAGE.URL_PREFIX: certifyRole(replace, role, ROUTE.HEALTH_RESULT_MANAGE.PERMISSION); break;
     case ROUTE.HEALTH_RESULT_DETAIL.URL_PREFIX: certifyRole(replace, role, ROUTE.HEALTH_RESULT_DETAIL.PERMISSION); break;
+
+    case ROUTE.MEMORABILIA_MANAGE.URL_PREFIX: certifyRole(replace, role, ROUTE.MEMORABILIA_MANAGE.PERMISSION); break;
+    case ROUTE.MEMORABILIA_EDITABLE_MANAGE.URL_PREFIX: certifyRole(replace, role, ROUTE.MEMORABILIA_EDITABLE_MANAGE.PERMISSION); break;
 
     default:
       clearSession();
@@ -217,6 +224,9 @@ class AppRouter extends React.Component {
 
             <Route path={ROUTE.HEALTH_RESULT_MANAGE.URL} component={HealthResultManage} />
             <Route path={ROUTE.HEALTH_RESULT_DETAIL.URL} component={HealthResultDetail} />
+
+            <Route path={ROUTE.MEMORABILIA_MANAGE.URL} component={MemorabiliaManage} />
+            <Route path={ROUTE.MEMORABILIA_EDITABLE_MANAGE.URL} component={MemorabiliaEditableManage}/>
 
           </Route>
         </Route>

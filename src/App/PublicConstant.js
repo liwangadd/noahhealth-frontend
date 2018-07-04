@@ -1,12 +1,12 @@
 
 //服务器地址
-const SERVER = 'http://localhost:8080' //yaochenkun
+// const SERVER = 'http://localhost:8080' //yaochenkun
 //const SERVER = 'http://10.109.247.12:8080' //lab
-// const SERVER = 'http://noahhealth.cn:8080' //alicloud
+const SERVER = 'http://47.104.223.237:8080' //alicloud
 
 //文件服务器地址
 //const FILE_SERVER = 'http://10.109.247.12:8088' //lab
-const FILE_SERVER = 'http://noahhealth.cn:8088' //alicloud
+const FILE_SERVER = 'http://47.104.223.237:8088' //alicloud
 
 
 
@@ -63,6 +63,8 @@ const ROUTE = {
   MEMBER_DETAIL_ORIGIN_RESULT_XINLI: { URL: '/member_detail_origin_result_xinli/:menuKey/:memberId/:memberName', URL_PREFIX: '/member_detail_origin_result_xinli', MENU_KEY: '6', PERMISSION: [ROLE.EMPLOYEE_ADMIN, ROLE.EMPLOYEE_ADVISE_MANAGER, ROLE.EMPLOYEE_ADVISER, ROLE.MEMBER_1, ROLE.MEMBER_2, ROLE.MEMBER_3] },
   MEMBER_DETAIL_ORIGIN_RESULT_QITA: { URL: '/member_detail_origin_result_qita/:menuKey/:memberId/:memberName', URL_PREFIX: '/member_detail_origin_result_qita', MENU_KEY: '6', PERMISSION: [ROLE.EMPLOYEE_ADMIN, ROLE.EMPLOYEE_ADVISE_MANAGER, ROLE.EMPLOYEE_ADVISER, ROLE.MEMBER_1, ROLE.MEMBER_2, ROLE.MEMBER_3] },
 
+  MEMORABILIA_MANAGE: {URL: '/memorabilia_manage/:menuKey', URL_PREFIX: '/memorabilia_manage', MENU_KEY: '9-1', PERMISSION: [ROLE.EMPLOYEE_ADMIN, ROLE.EMPLOYEE_ADVISE_MANAGER, ROLE.EMPLOYEE_ADVISER, ROLE.EMPLOYEE_ARCHIVE_MANAGER, ROLE.EMPLOYEE_ARCHIVER, ROLE.MEMBER_1, ROLE.MEMBER_2, ROLE.MEMBER_3]},
+  MEMORABILIA_EDITABLE_MANAGE: {URL: '/memorabilia_editable_manage/:menuKey', URL_PREFIX: '/memorabilia_editable_manage', MENU_KEY: '9-2', PERMISSION: [ROLE.EMPLOYEE_ADMIN, ROLE.EMPLOYEE_ADVISE_MANAGER, ROLE.EMPLOYEE_ADVISER, ROLE.EMPLOYEE_ARCHIVE_MANAGER, ROLE.EMPLOYEE_ARCHIVER, ROLE.MEMBER_1, ROLE.MEMBER_2, ROLE.MEMBER_3]},
 
   FINANCE_MANAGE: { URL: '/finance_manage/:menuKey', URL_PREFIX: '/finance_manage', MENU_KEY: '7', PERMISSION: [ROLE.EMPLOYEE_ADMIN, ROLE.EMPLOYEE_FINANCER] },
 

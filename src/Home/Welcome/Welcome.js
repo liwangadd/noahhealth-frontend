@@ -122,14 +122,6 @@ class Welcome extends React.Component {
           <h1>欢迎来到诺亚健康信息管理系统</h1>
         </div>
 
-        {
-          isMember(sessionStorage.getItem(SESSION.ROLE))
-            ?
-            <MemberInfoTable ref="memberInfoForm" memberInfo={this.state.memberInfo} updateMemberInfoLoading={this.state.updateMemberInfoLoading} onClick={this.updateMemberInfoData} />
-            :
-            null
-        }
-
         <div style={{ textAlign: 'center' }}>
           <h2 style={{ marginBottom: '15px', color: '#1DA57A' }}>健康详情入口</h2>
           <Card title="电子健康银行" className="card">
@@ -155,12 +147,18 @@ class Welcome extends React.Component {
             <Button className="card-btn">私人定制体检</Button>
             <Button className="card-btn">年度健康总结</Button>
           </Card>
-          <Card title="会员服务预约" className="card" style={{ width: '22%' }}>
-            <Button className="card-btn">体检服务预约单</Button>
-            <Button className="card-btn">就医服务预约单</Button>
-            <Button className="card-btn">其他服务预约单</Button>
+          <Card title="健康大事记" className="card" style={{ width: '22%' }}>
+            <Button className="card-btn" >健康大事记</Button>
           </Card>
         </div>
+        <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+        {
+          isMember(sessionStorage.getItem(SESSION.ROLE))
+            ?
+            <MemberInfoTable ref="memberInfoForm" memberInfo={this.state.memberInfo} updateMemberInfoLoading={this.state.updateMemberInfoLoading} onClick={this.updateMemberInfoData} />
+            :
+            null
+        }
       </div>
     );
   }
