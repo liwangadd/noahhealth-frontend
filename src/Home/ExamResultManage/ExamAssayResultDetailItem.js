@@ -41,7 +41,7 @@ class ExamAssayResultDetailItem_ extends React.Component {
         this.setState({ popoverVisible: false, unpassReason: '' })
     }
 
-    handleNote = (e)=>{
+    handleNote = (e) => {
         // this.setState({note: e.target.value})
         this.props.detail.note = e.target.value
     }
@@ -68,7 +68,8 @@ class ExamAssayResultDetailItem_ extends React.Component {
             width: '30%',
             key: 'referenceValue'
         },
-        (detail.status === "录入中" || detail.status === "未通过" || detail.status === "待审核") && (role === ROLE.EMPLOYEE_ARCHIVE_MANAGER || role === ROLE.EMPLOYEE_ADMIN)
+        (detail.status === "录入中" || detail.status === "未通过" || detail.status === "待审核") &&
+            (role === ROLE.EMPLOYEE_ARCHIVE_MANAGER || role === ROLE.EMPLOYEE_ADMIN || role === ROLE.EMPLOYEE_ARCHIVER)
             ?
             {
                 title: '化验数据',
@@ -95,7 +96,8 @@ class ExamAssayResultDetailItem_ extends React.Component {
                             ? false : true} />)
             }
         },
-        (detail.status === "录入中" || detail.status === "未通过" || detail.status === "待审核") && (role === ROLE.EMPLOYEE_ARCHIVE_MANAGER || role === ROLE.EMPLOYEE_ADMIN)
+        (detail.status === "录入中" || detail.status === "未通过" || detail.status === "待审核") &&
+            (role === ROLE.EMPLOYEE_ARCHIVE_MANAGER || role === ROLE.EMPLOYEE_ADMIN || role === ROLE.EMPLOYEE_ARCHIVER)
             ?
             {
                 title: '备注',
@@ -103,7 +105,7 @@ class ExamAssayResultDetailItem_ extends React.Component {
                 width: '30%',
                 render: (value, row, index) => {
                     const obj = {
-                        children: <TextArea autosize={{ minRows: 8, }} onChange={this.handleNote} defaultValue={detail.note}/>,
+                        children: <TextArea autosize={{ minRows: 8, }} onChange={this.handleNote} defaultValue={detail.note} />,
                         props: {}
                     }
                     if (index === 0) {
@@ -207,7 +209,7 @@ class ExamAssayResultDetailItem_ extends React.Component {
             <Timeline.Item dot={timeLineIcon}>
                 <h4 id={detail.id.toString()} className={hasAbnormal(detail.data) ? "abnormal" : ""}>{detail.secondName + " " + formatDate(detail.time)}</h4>
                 <Card title={detail.status} extra={<a onClick={this.switchForm}>{this.state.switchText}</a>} className="exam-result-detail-item-card">
-                    <p className={hasAbnormal(detail.data)?"abnormal":""}>检查亚类：{detail.secondName}</p>
+                    <p className={hasAbnormal(detail.data) ? "abnormal" : ""}>检查亚类：{detail.secondName}</p>
                     <p >检查医院：{detail.hospital}</p>
                     <p>录入时间：{formatDate(detail.uploadTime)}</p>
                     <p>录入者：{detail.inputerName}</p>

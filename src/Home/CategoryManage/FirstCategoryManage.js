@@ -624,14 +624,14 @@ class FirstCategoryManage extends React.Component {
     //选项卡中两个表格数据
     this.requestFirstCategoryData("化验");
     this.requestFirstCategoryData("医技");
-    this.requestFirstCategoryData("健康摘要")
+    this.requestFirstCategoryData("健康摘要");
 
     //添加对话框下拉列表数据
     this.requestFirstCategoryParentData("化验");
     this.requestSecondCategoryParentData("化验");
     this.requestFirstCategoryParentData("医技");
     this.requestSecondCategoryParentData("医技");
-    this.requestFirstCategoryParentData("健康摘要")
+    this.requestFirstCategoryParentData("健康摘要");
   }
 
   render() {
@@ -691,7 +691,7 @@ class FirstCategoryManage extends React.Component {
           </Popconfirm>
         </span>
       )
-    }]
+    }];
 
     return (
       <div>

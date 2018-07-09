@@ -65,40 +65,38 @@ class Home extends React.Component {
     let layoutStyle;
 
     //主色调、用户管理、检查项目、原始资料、化验/医技数据、健康管理
-    if (role === ROLE.EMPLOYEE_ADMIN) layoutStyle = this.getLayoutStyle(COLOR.RED, STYLE.BLOCK, STYLE.BLOCK, STYLE.BLOCK, STYLE.BLOCK, STYLE.BLOCK, STYLE.BLOCK, STYLE.BLOCK, STYLE.BLOCK);
-    else if (role === ROLE.EMPLOYEE_FINANCER) layoutStyle = this.getLayoutStyle(COLOR.RED, STYLE.NONE, STYLE.BLOCK, STYLE.NONE, STYLE.BLOCK, STYLE.BLOCK, STYLE.BLOCK, STYLE.BLOCK, STYLE.BLOCK);
+    if (role === ROLE.EMPLOYEE_ADMIN) layoutStyle = this.getLayoutStyle(COLOR.RED, STYLE.BLOCK, STYLE.BLOCK, STYLE.BLOCK, STYLE.BLOCK, STYLE.BLOCK, STYLE.BLOCK, STYLE.BLOCK);
+    else if (role === ROLE.EMPLOYEE_FINANCER) layoutStyle = this.getLayoutStyle(COLOR.RED, STYLE.NONE, STYLE.NONE, STYLE.BLOCK, STYLE.BLOCK, STYLE.BLOCK, STYLE.BLOCK, STYLE.NONE);
     else if (role === ROLE.EMPLOYEE_ARCHIVER) layoutStyle = this.getLayoutStyle(COLOR.PINK, STYLE.BLOCK, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.BLOCK, STYLE.BLOCK, STYLE.NONE, STYLE.NONE);
-    else if (role === ROLE.EMPLOYEE_ARCHIVE_MANAGER) layoutStyle = this.getLayoutStyle(COLOR.PINK, STYLE.BLOCK, STYLE.NONE, STYLE.BLOCK, STYLE.NONE, STYLE.BLOCK, STYLE.BLOCK, STYLE.BLOCK, STYLE.BLOCK);
-    else if (role === ROLE.EMPLOYEE_ADVISER) layoutStyle = this.getLayoutStyle(COLOR.ORANGE, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.BLOCK, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.NONE);
-    else if (role === ROLE.EMPLOYEE_ADVISE_MANAGER) layoutStyle = this.getLayoutStyle(COLOR.ORANGE, STYLE.NONE, STYLE.NONE, STYLE.BLOCK, STYLE.BLOCK, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.NONE);
-    else if (role === ROLE.MEMBER_1) layoutStyle = this.getLayoutStyle(COLOR.GREEN, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.BLOCK, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.NONE);
-    else if (role === ROLE.MEMBER_2) layoutStyle = this.getLayoutStyle(COLOR.CYAN, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.BLOCK, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.NONE);
-    else if (role === ROLE.MEMBER_3) layoutStyle = this.getLayoutStyle(COLOR.BLUE, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.BLOCK, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.NONE);
-    else layoutStyle = this.getLayoutStyle(COLOR.BLUE, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.NONE);
+    else if (role === ROLE.EMPLOYEE_ARCHIVE_MANAGER) layoutStyle = this.getLayoutStyle(COLOR.PINK, STYLE.BLOCK, STYLE.NONE, STYLE.NONE, STYLE.BLOCK, STYLE.BLOCK, STYLE.BLOCK, STYLE.NONE);
+    else if (role === ROLE.EMPLOYEE_ADVISER) layoutStyle = this.getLayoutStyle(COLOR.ORANGE, STYLE.NONE, STYLE.NONE, STYLE.BLOCK, STYLE.BLOCK, STYLE.BLOCK, STYLE.NONE, STYLE.NONE);
+    else if (role === ROLE.EMPLOYEE_ADVISE_MANAGER) layoutStyle = this.getLayoutStyle(COLOR.ORANGE, STYLE.NONE, STYLE.NONE, STYLE.BLOCK, STYLE.BLOCK, STYLE.BLOCK, STYLE.NONE, STYLE.NONE);
+    else if (role === ROLE.MEMBER_1) layoutStyle = this.getLayoutStyle(COLOR.GREEN, STYLE.NONE, STYLE.NONE, STYLE.BLOCK, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.NONE);
+    else if (role === ROLE.MEMBER_2) layoutStyle = this.getLayoutStyle(COLOR.CYAN, STYLE.NONE, STYLE.NONE, STYLE.BLOCK, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.NONE);
+    else if (role === ROLE.MEMBER_3) layoutStyle = this.getLayoutStyle(COLOR.BLUE, STYLE.NONE, STYLE.NONE, STYLE.BLOCK, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.NONE);
+    else layoutStyle = this.getLayoutStyle(COLOR.BLUE, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.NONE, STYLE.NONE);
 
     return layoutStyle;
   }
 
   getLayoutStyle(roleTagColor,
     welcomeMenuItemDisplay,
-    financeManageMenuItemDisplay,
     employeeManageMenuItemDisplay,
     memberManageMenuItemDisplay,
     documentBankMenuItemDisplay,
     healthDatabaseMenuItemDisplay,
     healthLongtermManageMenuItemDisplay,
-    memberServiceSubscribeMenuItemDisplay) {
+    systemManageMenuItemDisplay) {
 
     let layoutStyle = {
       roleTagColor: roleTagColor,
       welcomeMenuItemDisplay: welcomeMenuItemDisplay,
-      financeManageMenuItemDisplay: financeManageMenuItemDisplay,
       employeeManageMenuItemDisplay: employeeManageMenuItemDisplay,
       memberManageMenuItemDisplay: memberManageMenuItemDisplay,
       documentBankMenuItemDisplay: documentBankMenuItemDisplay,
       healthDatabaseMenuItemDisplay: healthDatabaseMenuItemDisplay,
       healthLongtermManageMenuItemDisplay: healthLongtermManageMenuItemDisplay,
-      memberServiceSubscribeMenuItemDisplay: memberServiceSubscribeMenuItemDisplay
+      systemManageMenuItemDisplay: systemManageMenuItemDisplay
     };
 
     return layoutStyle;
@@ -200,27 +198,30 @@ class Home extends React.Component {
               <span className="nav-text menu-item-font">首页</span>
             </Menu.Item>
 
-            <SubMenu key="member_manage" title={<span className="menu-item-font"><Icon type="team" /><span>{isMember(role) ? "个人资料" : "会员管理"}</span></span>}
-              style={{ display: layoutStyle.memberManageMenuItemDisplay }} >
-              <Menu.Item key={ROUTE.MEMBER_MANAGE.MENU_KEY} >
-                <span className="menu-item-font">健康档案</span>
-              </Menu.Item>
-              <Menu.Item key={ROUTE.MEMORABILIA_MANAGE.MENU_KEY} >
-                <span className="menu-item-font">健康大事记</span>
-              </Menu.Item>
-              <Menu.Item key="100" >
-                <span className="menu-item-font">资料上传</span>
-              </Menu.Item>
-              <Menu.Item key="101" >
-                <span className="menu-item-font">服务预约</span>
-              </Menu.Item>
-              <Menu.Item key="102" >
-                <span className="menu-item-font">意见反馈</span>
-              </Menu.Item>
-              <Menu.Item key="{ROUTE.FIRST_CATEGORY_MANAGE.MENU_KEY}" >
-                <span className="menu-item-font">账户管理</span>
-              </Menu.Item>
-            </SubMenu>
+            {
+              layoutStyle.memberManageMenuItemDisplay === STYLE.BLOCK ?
+                <SubMenu key="member_manage" title={<span className="menu-item-font"><Icon type="team" /><span>{isMember(role) ? "个人资料" : "会员管理"}</span></span>} >
+                  <Menu.Item key={ROUTE.MEMBER_MANAGE.MENU_KEY} >
+                    <span className="menu-item-font">健康档案</span>
+                  </Menu.Item>
+                  <Menu.Item key={ROUTE.MEMORABILIA_MANAGE.MENU_KEY} >
+                    <span className="menu-item-font">健康大事记</span>
+                  </Menu.Item>
+                  <Menu.Item key="100" >
+                    <span className="menu-item-font">资料上传</span>
+                  </Menu.Item>
+                  <Menu.Item key="101" >
+                    <span className="menu-item-font">服务预约</span>
+                  </Menu.Item>
+                  <Menu.Item key="102" >
+                    <span className="menu-item-font">意见反馈</span>
+                  </Menu.Item>
+                  <Menu.Item key="{ROUTE.FIRST_CATEGORY_MANAGE.MENU_KEY}" >
+                    <span className="menu-item-font">账户管理</span>
+                  </Menu.Item>
+                </SubMenu>
+                : null
+            }
 
             {layoutStyle.documentBankMenuItemDisplay === STYLE.BLOCK || layoutStyle.healthDatabaseMenuItemDisplay === STYLE.BLOCK || layoutStyle.healthLongtermManageMenuItemDisplay === STYLE.BLOCK ?
               <SubMenu key="record_input" title={<span className="menu-item-font"><Icon type="file" /><span>档案录审</span></span>}>
@@ -296,7 +297,7 @@ class Home extends React.Component {
             </Menu.Item>
 
             {
-              layoutStyle.healthDatabaseMenuItemDisplay === STYLE.BLOCK
+              layoutStyle.systemManageMenuItemDisplay === STYLE.BLOCK
                 ?
                 <SubMenu key="system_manage" title={<span className="menu-item-font"><Icon type="medicine-box" /><span>系统管理</span></span>}>
                   <Menu.Item key={ROUTE.FIRST_CATEGORY_MANAGE.MENU_KEY} >

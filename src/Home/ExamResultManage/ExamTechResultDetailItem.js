@@ -61,7 +61,8 @@ class ExamTechResultDetailItem_ extends React.Component {
                     '' : '(' + record.enShort + ')'}</span>
             }
         },
-        (detail.status === "录入中" || detail.status === "未通过" || detail.status === "待审核") && (role === ROLE.EMPLOYEE_ARCHIVE_MANAGER || role === ROLE.EMPLOYEE_ADMIN)
+        (detail.status === "录入中" || detail.status === "未通过" || detail.status === "待审核") &&
+            (role === ROLE.EMPLOYEE_ARCHIVE_MANAGER || role === ROLE.EMPLOYEE_ADMIN || role === ROLE.EMPLOYEE_ARCHIVER)
             ?
             {
                 title: '医技数据',
@@ -88,7 +89,8 @@ class ExamTechResultDetailItem_ extends React.Component {
                             ? false : true} />)
             }
         },
-        (detail.status === "录入中" || detail.status === "未通过" || detail.status === "待审核") && (role === ROLE.EMPLOYEE_ARCHIVE_MANAGER || role === ROLE.EMPLOYEE_ADMIN)
+        (detail.status === "录入中" || detail.status === "未通过" || detail.status === "待审核") &&
+            (role === ROLE.EMPLOYEE_ARCHIVE_MANAGER || role === ROLE.EMPLOYEE_ADMIN || role === ROLE.EMPLOYEE_ARCHIVER)
             ?
             {
                 title: '备注',
