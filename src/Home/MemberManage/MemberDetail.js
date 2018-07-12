@@ -95,7 +95,7 @@ class MemberDetail extends React.Component {
 
         this.setState({ originResultTableLoading: true });
 
-        
+
 
         $.ajax({
           url: SERVER + '/api/origin/list/' + this.props.params.memberId,
@@ -116,7 +116,7 @@ class MemberDetail extends React.Component {
           beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
           success: (result) => {
 
-            
+
             if (result.code !== RESULT.SUCCESS) {
               this.setState({ originResultTableLoading: false });
               message.error(result.reason, 2);
@@ -142,7 +142,7 @@ class MemberDetail extends React.Component {
   //拉取健康摘要类别级联数据
   requestHealthResultSecondType = () => {
 
-    
+
     $.ajax({
       url: SERVER + '/api/health_category/level',
       type: 'GET',
@@ -150,7 +150,7 @@ class MemberDetail extends React.Component {
       beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
       success: (result) => {
 
-        
+
         if (result.code !== RESULT.SUCCESS) {
           message.error(result.reason, 2);
           return;
@@ -183,7 +183,7 @@ class MemberDetail extends React.Component {
 
   requestUploadedPictures = (originResultId) => {
 
-    
+
     $.ajax({
       url: SERVER + '/api/origin/file/' + originResultId,
       type: 'GET',
@@ -191,7 +191,7 @@ class MemberDetail extends React.Component {
       beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
       success: (result) => {
 
-        
+
         if (result.code !== RESULT.SUCCESS) {
           message.error(result.reason, 2);
           return;
@@ -216,11 +216,11 @@ class MemberDetail extends React.Component {
   //保存录入的检查结果
   saveInputDetail = (form, id) => {
 
-    
+
 
     form.validateFields((err, values) => {
       if (!err) {
-        
+
         //显示加载圈
         this.setState({ saveLoading: true });
         $.ajax({
@@ -231,7 +231,7 @@ class MemberDetail extends React.Component {
           data: JSON.stringify(values),
           beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
           success: (result) => {
-            
+
             if (result.code === RESULT.SUCCESS) {
 
               //重新查一遍
@@ -253,7 +253,7 @@ class MemberDetail extends React.Component {
   //提交录入的检查结果（先请求保存、再请求改变状态）
   submitInputDetail = (form, id) => {
 
-    
+
 
     //先保存
     this.saveInputDetail(form, id);
@@ -268,7 +268,7 @@ class MemberDetail extends React.Component {
       data: JSON.stringify({ status: '待审核' }),
       beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
       success: (result) => {
-        
+
         if (result.code === RESULT.SUCCESS) {
 
           //关闭加载圈、对话框
@@ -293,7 +293,7 @@ class MemberDetail extends React.Component {
 
   passInputDetail = (form, id) => {
 
-    
+
 
     //显示加载圈
     this.setState({ passLoading: true });
@@ -305,7 +305,7 @@ class MemberDetail extends React.Component {
       data: JSON.stringify({ status: '已通过' }),
       beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
       success: (result) => {
-        
+
         if (result.code === RESULT.SUCCESS) {
 
           //关闭加载圈、对话框
@@ -325,7 +325,7 @@ class MemberDetail extends React.Component {
 
   unpassInputDetail = (id, unpassReason) => {
 
-    
+
 
     //显示加载圈
     this.setState({ unpassLoading: true });
@@ -337,7 +337,7 @@ class MemberDetail extends React.Component {
       data: JSON.stringify({ status: '未通过', reason: unpassReason }),
       beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
       success: (result) => {
-        
+
         if (result.code === RESULT.SUCCESS) {
 
           //关闭加载圈、对话框
@@ -358,7 +358,7 @@ class MemberDetail extends React.Component {
   //下载
   downloadInputDetail = (id) => {
 
-    
+
 
     //显示加载圈
     this.setState({ downloadLoading: true });
@@ -368,7 +368,7 @@ class MemberDetail extends React.Component {
       dataType: 'json',
       beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
       success: (result) => {
-        
+
         if (result.code === RESULT.SUCCESS) {
 
           //下载
@@ -391,7 +391,7 @@ class MemberDetail extends React.Component {
   //删除
   deleteInputDetail = (id) => {
 
-    
+
 
     $.ajax({
       url: SERVER + '/api/input/' + id,
@@ -400,7 +400,7 @@ class MemberDetail extends React.Component {
       beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
       success: (result) => {
 
-        
+
         if (result.code === RESULT.SUCCESS) {
 
           this.setState({ deleteLoading: false });
@@ -433,7 +433,7 @@ class MemberDetail extends React.Component {
       values = this.examResultOfTechSearchForm.getFieldsValue();
     }
 
-    
+
     $.ajax({
       url: SERVER + '/api/input/list/' + this.props.params.memberId,
       type: 'POST',
@@ -449,7 +449,7 @@ class MemberDetail extends React.Component {
       beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
       success: (result) => {
 
-        
+
         if (result.code === RESULT.SUCCESS) {
 
           const role = sessionStorage.getItem(SESSION.ROLE);
@@ -510,7 +510,7 @@ class MemberDetail extends React.Component {
   //拉取系统中所有检查亚类
   requestSecondCategoryParentData = (type) => {
 
-    
+
     $.ajax({
       url: SERVER + '/api/first/level',
       type: 'POST',
@@ -521,7 +521,7 @@ class MemberDetail extends React.Component {
       beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
       success: (result) => {
 
-        
+
         if (result.code === RESULT.SUCCESS) {
 
           //将后端返回的map整理成级联列表识别的数据结构
@@ -541,7 +541,7 @@ class MemberDetail extends React.Component {
           }
 
           if (type === "化验") {
-            
+
             this.setState({ secondCategoryParentOfAssayData: secondCategoryParentData });
           } else {
             this.setState({ secondCategoryParentOfTechData: secondCategoryParentData });
@@ -564,7 +564,7 @@ class MemberDetail extends React.Component {
 
     let values = this.healthResultSearchForm.getFieldsValue();
 
-    
+
     $.ajax({
       url: SERVER + '/api/health/list/' + this.props.params.memberId,
       type: 'POST',
@@ -579,7 +579,7 @@ class MemberDetail extends React.Component {
       beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
       success: (result) => {
 
-        
+
         if (result.code === RESULT.SUCCESS) {
 
           const role = sessionStorage.getItem(SESSION.ROLE);
@@ -643,7 +643,7 @@ class MemberDetail extends React.Component {
 
     this.refs.healthResultAddForm.validateFields((err, values) => {
       if (!err) {
-        
+
 
         //显示加载圈
         this.setState({ confirmAddModalLoading: true });
@@ -661,7 +661,7 @@ class MemberDetail extends React.Component {
           dataType: 'json',
           beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
           success: (result) => {
-            
+
             if (result.code === RESULT.SUCCESS) {
 
 
@@ -685,10 +685,10 @@ class MemberDetail extends React.Component {
   //保存录入的健康摘要
   saveHealthDetail = (form, id) => {
 
-    
+
     form.validateFields((err, values) => {
       if (!err) {
-        
+
         //显示加载圈
         this.setState({ saveLoading: true });
         $.ajax({
@@ -699,7 +699,7 @@ class MemberDetail extends React.Component {
           data: JSON.stringify({ problemNew: values.problemNew, contentNew: values.contentNew }),
           beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
           success: (result) => {
-            
+
             if (result.code === RESULT.SUCCESS) {
 
               message.success(result.reason, 2);
@@ -719,7 +719,7 @@ class MemberDetail extends React.Component {
   //提交录入的健康摘要（先请求保存、再请求改变状态）
   submitHealthDetail = (form, id) => {
 
-    
+
 
     //先保存
     this.saveHealthDetail(form, id);
@@ -734,7 +734,7 @@ class MemberDetail extends React.Component {
       data: JSON.stringify({ status: '待审核' }),
       beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
       success: (result) => {
-        
+
         if (result.code === RESULT.SUCCESS) {
 
           //关闭加载圈、对话框
@@ -758,7 +758,7 @@ class MemberDetail extends React.Component {
   **/
   passHealthDetail = (form, id) => {
 
-    
+
 
     //显示加载圈
     this.setState({ passLoading: true });
@@ -770,7 +770,7 @@ class MemberDetail extends React.Component {
       data: JSON.stringify({ status: '已通过' }),
       beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
       success: (result) => {
-        
+
         if (result.code === RESULT.SUCCESS) {
 
           //关闭加载圈、对话框
@@ -791,7 +791,7 @@ class MemberDetail extends React.Component {
   //不通过
   unpassHealthDetail = (id, unpassReason) => {
 
-    
+
 
     //显示加载圈
     this.setState({ unpassLoading: true });
@@ -803,7 +803,7 @@ class MemberDetail extends React.Component {
       data: JSON.stringify({ status: '未通过', reason: unpassReason }),
       beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
       success: (result) => {
-        
+
         if (result.code === RESULT.SUCCESS) {
 
           //关闭加载圈、对话框
@@ -857,7 +857,7 @@ class MemberDetail extends React.Component {
   //删除
   deleteHealthDetail = (id) => {
 
-    
+
 
     $.ajax({
       url: SERVER + '/api/health/' + id,
@@ -866,7 +866,7 @@ class MemberDetail extends React.Component {
       beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
       success: (result) => {
 
-        
+
         if (result.code === RESULT.SUCCESS) {
 
           this.setState({ deleteLoading: false });
@@ -918,7 +918,7 @@ class MemberDetail extends React.Component {
       beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
       success: (result) => {
 
-        
+
         if (result.code !== RESULT.SUCCESS) {
           message.error(result.reason, 2);
         }
@@ -933,7 +933,7 @@ class MemberDetail extends React.Component {
 
     this.refs.memberInfoForm.validateFields((err, values) => {
       if (!err) {
-        
+
 
         //显示加载圈
         this.setState({ updateMemberInfoLoading: true });
@@ -946,18 +946,32 @@ class MemberDetail extends React.Component {
             name: values.name,
             birth: values.birth,
             gender: values.gender,
-            idCard: values.idCard,
+            bloodType: values.bloodType,
+            baseTemperature: values.baseTemperature,
+            breath: values.breath,
+            bloodPressure: values.bloodPressure,
+            heartRate: values.heartRate,
+            heartRate2: values.heartRate2,
+            height: values.height,
+            weight: values.weight,
+            weightRate: values.weightRate,
+            waistCircum: values.waistCircum,
+            armCircum: values.armCircum,
+            waistArmRate: values.waistArmRate,
             physicalCondition: values.physicalCondition,
-            maritalStatus: values.maritalStatus,
             medicalCare: values.medicalCare,
             hospital: values.hospital,
             insurance: values.insurance,
             allergyDrug: values.allergyDrug,
-            allergyOthers: values.allergyOthers
+            surgery: values.surgery,
+            family: values.family,
+            disease: values.disease,
+            medication: values.medication,
+            special: values.special,
           }),
           beforeSend: (request) => request.setRequestHeader(SESSION.TOKEN, sessionStorage.getItem(SESSION.TOKEN)),
           success: (result) => {
-            
+
             if (result.code === RESULT.SUCCESS) {
 
               //关闭加载圈、对话框
@@ -1029,7 +1043,7 @@ class MemberDetail extends React.Component {
             null
         }
 
-        <div style={{ textAlign: 'center'}}>
+        <div style={{ textAlign: 'center' }}>
           <h2 style={{ marginBottom: '15px', color: '#1DA57A' }}>健康详情入口</h2>
           <Card title="电子健康银行" className="card">
             <Button className="card-btn" onClick={() => this.handleClickJumpBtn(ROUTE.MEMBER_DETAIL_ORIGIN_RESULT_MENZHEN)}>门诊病历</Button>
@@ -1058,9 +1072,9 @@ class MemberDetail extends React.Component {
             <Button className="card-btn" >健康大事记</Button>
           </Card>
         </div>
-        <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
-        <MemberInfoTable ref="memberInfoForm" memberInfo={this.state.memberInfo} updateMemberInfoLoading={this.state.updateMemberInfoLoading} onClick={this.updateMemberInfoData} 
-          editable={isEmployee(role)}/>
+        <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+        <MemberInfoTable ref="memberInfoForm" memberInfo={this.state.memberInfo} updateMemberInfoLoading={this.state.updateMemberInfoLoading} onClick={this.updateMemberInfoData}
+          editable={isEmployee(role)} />
         {/* <Tabs defaultActiveKey="1"  tabBarExtraContent={role === ROLE.EMPLOYEE_ADVISER || role === ROLE.EMPLOYEE_ADVISE_MANAGER || role === ROLE.EMPLOYEE_ADMIN ? <Button type="primary" onClick={this.showAddModal} style={{display: this.state.addHealthResultBtnVisible}}>添加健康摘要</Button> : null} onChange={this.handleMenuItemClick}>
           {
             role === ROLE.EMPLOYEE_ADVISER || role === ROLE.EMPLOYEE_ADVISE_MANAGER || role === ROLE.EMPLOYEE_ADMIN

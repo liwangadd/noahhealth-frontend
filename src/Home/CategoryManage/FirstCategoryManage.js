@@ -1,12 +1,11 @@
 import './CategoryManage.css'
-import { SERVER, SESSION, RESULT, ROUTE } from './../../App/PublicConstant.js'
+import {SERVER, SESSION, RESULT, ROUTE} from './../../App/PublicConstant.js'
 import CategoryAddModal from './CategoryAddModal.js'
 import FirstSecondCategoryEditModal from './FirstSecondCategoryEditModal.js'
 import React from 'react';
-import { Tabs, Table, message, Popconfirm, Button, BackTop } from 'antd';
+import {Tabs, Table, message, Popconfirm, Button, BackTop} from 'antd';
 import $ from 'jquery';
-import { Link, browserHistory } from 'react-router';
-import { router } from 'sw-toolbox';
+import {Link,browserHistory} from 'react-router';
 const TabPane = Tabs.TabPane;
 
 
@@ -611,13 +610,12 @@ class FirstCategoryManage extends React.Component {
 
   handleMenuItemClick = (key) => {
 
-    switch (key) {
-      case '2': browserHistory.push(ROUTE.FIRST_CATEGORY_MANAGE.URL_PREFIX + "/" + ROUTE.FIRST_CATEGORY_MANAGE.MENU_KEY + "/2"); break;
+    switch(key) {
+      case '2':browserHistory.push(ROUTE.FIRST_CATEGORY_MANAGE.URL_PREFIX + "/" + ROUTE.FIRST_CATEGORY_MANAGE.MENU_KEY + "/2");break;
       case '1':
-      default: browserHistory.push(ROUTE.FIRST_CATEGORY_MANAGE.URL_PREFIX + "/" + ROUTE.FIRST_CATEGORY_MANAGE.MENU_KEY + "/1"); break;
+      default:browserHistory.push(ROUTE.FIRST_CATEGORY_MANAGE.URL_PREFIX + "/" + ROUTE.FIRST_CATEGORY_MANAGE.MENU_KEY + "/1");break;
     }
   }
-
 
   componentDidMount = () => {
 
@@ -678,7 +676,7 @@ class FirstCategoryManage extends React.Component {
       title: '健康摘要分类名称',
       dataIndex: 'name',
       key: 'name',
-      render: (name, record) => <Link to={ROUTE.SECOND_CATEGORY_MANAGE.URL_PREFIX + "/" + ROUTE.SECOND_CATEGORY_MANAGE.MENU_KEY + "/3/" + record.id + "/" + name}>{name}</Link>
+      render: (name, record) => <Link to={ROUTE.SECOND_CATEGORY_MANAGE.URL_PREFIX + "/" + ROUTE.SECOND_CATEGORY_MANAGE.MENU_KEY + "/3/" + record.id + "/" + name}>{name}</Link>,
     }, {
       title: '操作',
       key: 'action',

@@ -24,6 +24,17 @@ class MemberInfoTable_ extends React.Component {
                   <p>{memberInfo.name}</p>
                 }
               </td>
+              
+              <td>性别</td>
+              <td>
+                {editable ?
+                  getFieldDecorator('gender', { initialValue: memberInfo.gender })(
+                    <Input className='member-info-table-input' style={{ border: '0' }} />
+                  )
+                  :
+                  <p>{memberInfo.gender}</p>
+                }
+              </td>
 
               <td>出生日期</td>
               <td>
@@ -38,32 +49,148 @@ class MemberInfoTable_ extends React.Component {
             </tr>
 
             <tr>
-              <td>性别</td>
+              <td>血型</td>
               <td>
                 {editable ?
-                  getFieldDecorator('gender', { initialValue: memberInfo.gender })(
+                  getFieldDecorator('bloodType', { initialValue: memberInfo.bloodType })(
                     <Input className='member-info-table-input' style={{ border: '0' }} />
                   )
                   :
-                  <p>{memberInfo.gender}</p>
+                  <p>{memberInfo.bloodType}</p>
                 }
               </td>
 
-              <td>身份证号码</td>
+              <td>基础体温</td>
               <td>
                 {editable ?
-                  getFieldDecorator('idCard', { initialValue: memberInfo.idCard })(
+                  getFieldDecorator('baseTemperature', { initialValue: memberInfo.baseTemperature })(
                     <Input className='member-info-table-input' style={{ border: '0' }} />
                   )
                   :
-                  <p>{memberInfo.idCard}</p>
+                  <p>{memberInfo.baseTemperature}</p>
+                }
+              </td>
+
+              <td>呼吸</td>
+              <td>
+                {editable ?
+                  getFieldDecorator('breath', { initialValue: memberInfo.breath })(
+                    <Input className='member-info-table-input' style={{ border: '0' }} />
+                  )
+                  :
+                  <p>{memberInfo.breath}</p>
+                }
+              </td>
+            </tr>
+
+            <tr>
+              <td>血压</td>
+              <td>
+                {editable ?
+                  getFieldDecorator('bloodPressure', { initialValue: memberInfo.bloodPressure })(
+                    <Input className='member-info-table-input' style={{ border: '0' }} />
+                  )
+                  :
+                  <p>{memberInfo.bloodPressure}</p>
+                }
+              </td>
+
+              <td>心率</td>
+              <td>
+                {editable ?
+                  getFieldDecorator('heartRate', { initialValue: memberInfo.heartRate })(
+                    <Input className='member-info-table-input' style={{ border: '0' }} />
+                  )
+                  :
+                  <p>{memberInfo.heartRate}</p>
+                }
+              </td>
+
+              <td>心律</td>
+              <td>
+                {editable ?
+                  getFieldDecorator('heartRate2', { initialValue: memberInfo.heartRate2 })(
+                    <Input className='member-info-table-input' style={{ border: '0' }} />
+                  )
+                  :
+                  <p>{memberInfo.heartRate2}</p>
+                }
+              </td>
+            </tr>
+
+            <tr>
+              <td>身高</td>
+              <td>
+                {editable ?
+                  getFieldDecorator('height', { initialValue: memberInfo.height })(
+                    <Input className='member-info-table-input' style={{ border: '0' }} />
+                  )
+                  :
+                  <p>{memberInfo.height}</p>
+                }
+              </td>
+
+              <td>体重</td>
+              <td>
+                {editable ?
+                  getFieldDecorator('weight', { initialValue: memberInfo.weight })(
+                    <Input className='member-info-table-input' style={{ border: '0' }} />
+                  )
+                  :
+                  <p>{memberInfo.weight}</p>
+                }
+              </td>
+
+              <td>体重指数</td>
+              <td>
+                {editable ?
+                  getFieldDecorator('weightRate', { initialValue: memberInfo.weightRate })(
+                    <Input className='member-info-table-input' style={{ border: '0' }} />
+                  )
+                  :
+                  <p>{memberInfo.weightRate}</p>
+                }
+              </td>
+            </tr>
+
+            <tr>
+              <td>腰围</td>
+              <td>
+                {editable ?
+                  getFieldDecorator('waistCircum', { initialValue: memberInfo.waistCircum })(
+                    <Input className='member-info-table-input' style={{ border: '0' }} />
+                  )
+                  :
+                  <p>{memberInfo.waistCircum}</p>
+                }
+              </td>
+
+              <td>臂围</td>
+              <td>
+                {editable ?
+                  getFieldDecorator('armCircum', { initialValue: memberInfo.armCircum })(
+                    <Input className='member-info-table-input' style={{ border: '0' }} />
+                  )
+                  :
+                  <p>{memberInfo.armCircum}</p>
+                }
+              </td>
+
+              <td>腰臂比</td>
+              <td>
+                {editable ?
+                  getFieldDecorator('waistArmRate', { initialValue: memberInfo.waistArmRate })(
+                    <Input className='member-info-table-input' style={{ border: '0' }} />
+                  )
+                  :
+                  <p>{memberInfo.waistArmRate}</p>
                 }
               </td>
             </tr>
 
             <tr>
               <td>身体状况</td>
-              <td colSpan={3}>
+              <td colSpan={5}>
                 {editable ?
                   getFieldDecorator('physicalCondition', { initialValue: memberInfo.physicalCondition })(
                     <Radio.Group>
@@ -81,26 +208,8 @@ class MemberInfoTable_ extends React.Component {
             </tr>
 
             <tr>
-              <td>婚姻状况</td>
-              <td colSpan={3}>
-                {editable ?
-                  getFieldDecorator('maritalStatus', { initialValue: memberInfo.maritalStatus })(
-                    <Radio.Group>
-                      <Radio value="未婚">未婚</Radio>
-                      <Radio value="已婚">已婚</Radio>
-                      <Radio value="离异">离异</Radio>
-                      <Radio value="丧偶">丧偶</Radio>
-                    </Radio.Group>
-                  )
-                  :
-                  <p>{memberInfo.maritalStatus}</p>
-                }
-              </td>
-            </tr>
-
-            <tr>
               <td>医疗费别</td>
-              <td colSpan={3}>
+              <td colSpan={5}>
                 {editable ?
                   getFieldDecorator('medicalCare', { initialValue: memberInfo.medicalCare })(
                     <Radio.Group>
@@ -118,8 +227,8 @@ class MemberInfoTable_ extends React.Component {
             </tr>
 
             <tr>
-              <td>医保定点医院</td>
-              <td colSpan={3}>
+              <td>定点医院</td>
+              <td colSpan={5}>
                 {editable ?
                   getFieldDecorator('hospital', { initialValue: memberInfo.hospital })(
                     <Input className='member-info-table-input' style={{ border: '0' }} />
@@ -131,8 +240,8 @@ class MemberInfoTable_ extends React.Component {
             </tr>
 
             <tr>
-              <td>商业健康保险</td>
-              <td colSpan={3}>
+              <td>医疗保险</td>
+              <td colSpan={5}>
                 {editable ?
                   getFieldDecorator('insurance', { initialValue: memberInfo.insurance })(
                     <Input className='member-info-table-input' style={{ border: '0' }} />
@@ -144,9 +253,8 @@ class MemberInfoTable_ extends React.Component {
             </tr>
 
             <tr>
-              <td rowSpan={2}>过敏史</td>
-              <td>药物</td>
-              <td colSpan={2}>
+              <td>过敏史</td>
+              <td colSpan={5}>
                 {editable ?
                   getFieldDecorator('allergyDrug', { initialValue: memberInfo.allergyDrug })(
                     <Input className='member-info-table-input' style={{ border: '0' }} />
@@ -158,14 +266,66 @@ class MemberInfoTable_ extends React.Component {
             </tr>
 
             <tr>
-              <td>其他</td>
-              <td colSpan={2}>
+              <td>手术史</td>
+              <td colSpan={5}>
                 {editable ?
-                  getFieldDecorator('allergyOthers', { initialValue: memberInfo.allergyOthers })(
+                  getFieldDecorator('surgery', { initialValue: memberInfo.surgery })(
                     <Input className='member-info-table-input' style={{ border: '0' }} />
                   )
                   :
-                  <p>{memberInfo.allergyDrug}</p>
+                  <p>{memberInfo.surgery}</p>
+                }
+              </td>
+            </tr>
+
+            <tr>
+              <td>家族史</td>
+              <td colSpan={5}>
+                {editable ?
+                  getFieldDecorator('family', { initialValue: memberInfo.family })(
+                    <Input className='member-info-table-input' style={{ border: '0' }} />
+                  )
+                  :
+                  <p>{memberInfo.family}</p>
+                }
+              </td>
+            </tr>
+
+            <tr>
+              <td>主要疾病</td>
+              <td colSpan={5}>
+                {editable ?
+                  getFieldDecorator('disease', { initialValue: memberInfo.disease })(
+                    <Input className='member-info-table-input' style={{ border: '0' }} />
+                  )
+                  :
+                  <p>{memberInfo.disease}</p>
+                }
+              </td>
+            </tr>
+
+            <tr>
+              <td>主要用药</td>
+              <td colSpan={5}>
+                {editable ?
+                  getFieldDecorator('medication', { initialValue: memberInfo.medication })(
+                    <Input className='member-info-table-input' style={{ border: '0' }} />
+                  )
+                  :
+                  <p>{memberInfo.medication}</p>
+                }
+              </td>
+            </tr>
+
+            <tr>
+              <td>特殊事项</td>
+              <td colSpan={5}>
+                {editable ?
+                  getFieldDecorator('special', { initialValue: memberInfo.special })(
+                    <Input className='member-info-table-input' style={{ border: '0' }} />
+                  )
+                  :
+                  <p>{memberInfo.special}</p>
                 }
               </td>
             </tr>
